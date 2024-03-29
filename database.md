@@ -1,35 +1,48 @@
 # Database
 
-**Player**
+**Players**
 
 - PlayerID (PK)
 - Username
 - PasswordHash
 - Salt
 
-**Gallery**
+**Galleries**
 
 - GalleryID (PK)
 - PlayerID (FK)
 
-**Game**
+**Games**
 
 - GameID (PK)
 - PlayerOneID (FK)
 - PlayerTwoID (FK)
+- State
+- Turn
 
-**Board**
+**GameMessage**
+
+- GameMessageID (PK)
+- GameID (FK)
+- Message
+
+**Boards**
 
 - BoardID (PK)
 - GameID (FK)
-- ChoosenCard (FK)
+- ChosenCard (FK)
 - PlayersLeft
 
-**Card**
+**Cards**
 
 - CardID (PK)
 - GalleryID (FK)
-- BoardID (FK)
 - Name
 - Url
 - Active
+
+**BoardCards**
+
+- BoardCardID (PK)
+- BoardID (FK)
+- CardID (FK)
