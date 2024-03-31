@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ExukjjwFRu8XgLRT2kPdEto+Dl4s9R7EVYz1U7zAu0QpM6n1yYLQLLN99No0byDaFxudjIhFe3z0FXxHyD1oUw==",
+  "dgSpecHash": "81DGOV5QDLb7ZhRC8ZTRSfY3vv9ccsbMEhXe/q0FRheWIe4jJkJG+9Do0tT5wLmtqb0EO28O56XO3rGLlcvxQw==",
   "success": true,
-  "projectFilePath": "/home/amund/Documents/Projects/WhoDat/RaptorProject/RaptorProject.csproj",
+  "projectFilePath": "/home/amund/Documents/Projects/WhoDat/backend/RaptorProject.csproj",
   "expectedPackageFiles": [
     "/home/amund/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/amund/.nuget/packages/microsoft.aspnetcore.openapi/8.0.1/microsoft.aspnetcore.openapi.8.0.1.nupkg.sha512",

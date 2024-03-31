@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/amund/Documents/Projects/WhoDat/RaptorProject/RaptorProject.csproj": {}
+    "/home/amund/Documents/Projects/WhoDat/backend/RaptorProject.csproj": {}
   },
   "projects": {
-    "/home/amund/Documents/Projects/WhoDat/RaptorProject/RaptorProject.csproj": {
+    "/home/amund/Documents/Projects/WhoDat/backend/RaptorProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/amund/Documents/Projects/WhoDat/RaptorProject/RaptorProject.csproj",
+        "projectUniqueName": "/home/amund/Documents/Projects/WhoDat/backend/RaptorProject.csproj",
         "projectName": "RaptorProject",
-        "projectPath": "/home/amund/Documents/Projects/WhoDat/RaptorProject/RaptorProject.csproj",
+        "projectPath": "/home/amund/Documents/Projects/WhoDat/backend/RaptorProject.csproj",
         "packagesPath": "/home/amund/.nuget/packages/",
-        "outputPath": "/home/amund/Documents/Projects/WhoDat/RaptorProject/obj/",
+        "outputPath": "/home/amund/Documents/Projects/WhoDat/backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/amund/.nuget/NuGet/NuGet.Config"

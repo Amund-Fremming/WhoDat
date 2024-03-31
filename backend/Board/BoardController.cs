@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using BoardEntity;
-using System;
 
 namespace BoardEntity;
 

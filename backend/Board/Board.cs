@@ -1,5 +1,6 @@
-namespace BoardEntity;
 using System.ComponentModel.DataAnnotations;
+
+namespace BoardEntity;
 
 public class Board
 {

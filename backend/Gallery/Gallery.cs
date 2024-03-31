@@ -8,4 +8,5 @@ public class Gallery
     public int GalleryID { get; set; }
     public int PlayerID { get; set; }
 
+    public Gallery() { }
 }

@@ -1,5 +1,6 @@
-namespace BoardCardEntity;
 using System.ComponentModel.DataAnnotations;
+
+namespace BoardCardEntity;
 
 public class BoardCard
 {
