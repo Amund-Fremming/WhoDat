@@ -14,7 +14,7 @@ with any other player they wish to invite.
 ## Resources
 
 - [Design](https://www.figma.com/file/oBgpl8HkiowbkUFe6HchFL/Untitled?type=design&node-id=0-1&mode=design&t=W4NL2TyfNhpunoWo-0)
-- [DB-diagram]()
+- [DB-diagram](https://dbdiagram.io/d/660ad5ff37b7e33fd739f990)
 
 ## Tech used
 
