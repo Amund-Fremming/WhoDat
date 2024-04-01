@@ -7,8 +7,8 @@ public class Game
 {
     [Key]
     public int GameID { get; set; }
-    public int PlayerOneID { get; set; }
-    public int PlayerTwoID { get; set; }
+    public string PlayerOneID { get; set; }
+    public string PlayerTwoID { get; set; }
     public State State { get; set; }
 
     public Game() { }
