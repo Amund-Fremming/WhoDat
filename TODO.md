@@ -2,7 +2,7 @@
 
 ## Backend
 
-- [] Implement interfaces
+- [x] Implement interfaces
 - [] Generate database
 - [] Create Repo methods
 - [] Create Service methods
