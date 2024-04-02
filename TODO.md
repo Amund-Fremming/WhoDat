@@ -2,16 +2,16 @@
 
 ## Backend
 
-[] Implement interfaces
-[] Generate database
-[] Create Repo methods
-[] Create Service methods
-[] Create Controller methods
-[] Generate Mock data
-[] Test Backend
-[] Implement JWT
-[] Test JWT implementation
-[] Look for Edge-cases and fix them
+- [] Implement interfaces
+- [] Generate database
+  [] Create Repo methods
+  [] Create Service methods
+  [] Create Controller methods
+  [] Generate Mock data
+  [] Test Backend
+  [] Implement JWT
+  [] Test JWT implementation
+  [] Look for Edge-cases and fix them
 
 <hr />
 
