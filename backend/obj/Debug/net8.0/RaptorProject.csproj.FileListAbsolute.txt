@@ -104,3 +104,14 @@
 /home/amund/Documents/Projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.pdb
 /home/amund/Documents/Projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.genruntimeconfig.cache
 /home/amund/Documents/Projects/WhoDat/backend/obj/Debug/net8.0/ref/RaptorProject.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.csproj.AssemblyReference.cache
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.GeneratedMSBuildEditorConfig.editorconfig
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.AssemblyInfoInputs.cache
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.AssemblyInfo.cs
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.csproj.CoreCompileInputs.cache
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.MvcApplicationPartsAssemblyInfo.cs
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.MvcApplicationPartsAssemblyInfo.cache
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.sourcelink.json
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/refint/RaptorProject.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.pdb
