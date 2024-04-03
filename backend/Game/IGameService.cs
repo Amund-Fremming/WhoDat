@@ -12,5 +12,5 @@ public interface IGameService
     /* Other */
     public Task<int> JoinGameById(int gameId);
     public Task<int> UpdateGameState(State state);
-    public Task UpdateCurrentPlayerTurn(string playerId);
+    public Task UpdateCurrentPlayerTurn(int playerNumber);
 }

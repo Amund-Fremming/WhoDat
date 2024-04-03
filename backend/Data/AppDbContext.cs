@@ -23,6 +23,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Player>()
+            .HasKey(p => p.PlayerID);
 
+        modelBuilder.Entity<Gallery>()
+            .HasKey(g => g.GalleryID);
+
+        modelBuilder.Entity<Gallery>()
+            .
+
+
+
+
+
+
+        modelBuilder.Entity<>();
     }
 }

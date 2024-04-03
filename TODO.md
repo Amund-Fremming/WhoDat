@@ -3,8 +3,9 @@
 ## Backend
 
 - [x] Implement interfaces
-- [ ] Generate database
+- [ ] Configure relations in AppContext
 - [ ] Create Repo methods
+- [ ] Generate database
 - [ ] Create Service methods
 - [ ] Create Controller methods
 - [ ] Generate Mock data

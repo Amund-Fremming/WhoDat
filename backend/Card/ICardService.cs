@@ -11,7 +11,6 @@ public interface ICardService
     public Task UpdateCard(Card card);
 
     /* Other */
-    public Task UpdateActive(bool active);
     public IEnumerable<Card> GetAllCards();
 }
 
