@@ -1,4 +1,3 @@
-using System;
 using Microsoft.EntityFrameworkCore;
 
 using PlayerEntity;
@@ -30,8 +29,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasKey(g => g.GalleryID);
 
         modelBuilder.Entity<Gallery>()
-            .
-
+            .HasOne(g => g.Player)
+            .WithOne(p => p.Gallery)
+            .HasForeignKey<Gallery>(g => g.PlayerID)
+            .OnDelete(DeleteBehavior.Cascade);
 
 
 
