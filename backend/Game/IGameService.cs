@@ -10,7 +10,7 @@ public interface IGameService
     public Task DeleteGame(int gameId);
 
     /* Other */
-    public Task<int> JoinGameById(int gameId);
+    public Task<int> JoinGameById(int gameId, string playerId);
     public Task<int> UpdateGameState(State state);
     public Task UpdateCurrentPlayerTurn(int playerNumber);
 }
