@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using PlayerEntity;
 using Enum;
+using MessageEntity;
+using BoardEntity;
 
 namespace GameEntity;
 
@@ -14,6 +16,9 @@ public class Game
     public Player? PlayerTwo { get; set; }
     public int CurrentPlayer { get; set; }
     public State State { get; set; }
+
+    public IEnumerable<Message> Messages { get; set; }
+    public IEnumerable<Board> Boards { get; set; }
 
     public Game() { }
 }

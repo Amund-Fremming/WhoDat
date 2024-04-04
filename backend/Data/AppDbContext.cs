@@ -25,6 +25,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Player>()
             .HasKey(p => p.PlayerID);
 
+        setupGallery(modelBuilder);
+        setupGame(modelBuilder);
+        setupMessage(modelBuilder);
+        setupBoard(modelBuilder);
+        setupCard(modelBuilder);
+        setupBoardCard(modelBuilder);
+
+    }
+
+    private void setupGallery(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Gallery>()
             .HasKey(g => g.GalleryID);
 
@@ -33,11 +44,81 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithOne(p => p.Gallery)
             .HasForeignKey<Gallery>(g => g.PlayerID)
             .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    private void setupGame(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Game>()
+            .HasKey(g => g.GameID);
+
+        modelBuilder.Entity<Game>()
+            .HasOne(g => g.PlayerOne)
+            .WithMany(p => p.Games)
+            .HasForeignKey(g => g.PlayerOneID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Game>()
+                    .HasOne(g => g.PlayerTwo)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(g => g.PlayerTwoID)
+                    .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    private void setupMessage(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Message>()
+            .HasKey(m => m.MessageID);
+
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Game)
+            .WithMany(m => m.Messages)
+            .HasForeignKey(m => m.GameID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Player)
+            .WithMany(p => p.Messages)
+            .HasForeignKey(m => m.PlayerID)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    private void setupBoard(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Board>()
+            .HasKey(b => b.BoardID);
+
+        modelBuilder.Entity<Board>()
+            .HasOne(b => b.Game)
+            .WithMany(g => g.Boards)
+            .HasForeignKey(b => b.BoardID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Board>()
+            .HasOne(b => b.Player)
+            .WithMany(p => p.Boards)
+            .HasForeignKey(b => b.PlayerID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Board>()
+            .HasOne(b => b.ChosenCard)
+            .WithMany()
+            .HasForeignKey(b => b.BoardID)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+
+    private void setupCard(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Card>()
 
 
+        modelBuilder.Entity<Card>()
 
 
+        modelBuilder.Entity<Card>()
+    }
 
+    private void setupBoardCard(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<>();
     }
 }
