@@ -58,10 +58,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Game>()
-                    .HasOne(g => g.PlayerTwo)
-                    .WithMany(p => p.Games)
-                    .HasForeignKey(g => g.PlayerTwoID)
-                    .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(g => g.PlayerTwo)
+            .WithMany(p => p.Games)
+            .HasForeignKey(g => g.PlayerTwoID)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private void setupMessage(ModelBuilder modelBuilder)
@@ -90,7 +90,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Board>()
             .HasOne(b => b.Game)
             .WithMany(g => g.Boards)
-            .HasForeignKey(b => b.BoardID)
+            .HasForeignKey(b => b.GameID)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Board>()
@@ -102,23 +102,37 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Board>()
             .HasOne(b => b.ChosenCard)
             .WithMany()
-            .HasForeignKey(b => b.BoardID)
+            .HasForeignKey(b => b.ChosenCardID)
             .OnDelete(DeleteBehavior.Cascade);
     }
 
     private void setupCard(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Card>()
-
-
-        modelBuilder.Entity<Card>()
-
+            .HasKey(c => c.CardID);
 
         modelBuilder.Entity<Card>()
+            .HasOne(c => c.Gallery)
+            .WithMany(g => g.Cards)
+            .HasForeignKey(c => c.GalleryID)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private void setupBoardCard(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<>();
+        modelBuilder.Entity<BoardCard>()
+            .HasKey(bc => bc.BoardCardID);
+
+        modelBuilder.Entity<BoardCard>()
+            .HasOne(bc => bc.Card)
+            .WithMany(c => c.BoardCards)
+            .HasForeignKey(bc => bc.CardID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<BoardCard>()
+            .HasOne(bc => bc.Board)
+            .WithMany(b => b.BoardCards)
+            .HasForeignKey(bc => bc.BoardID)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
