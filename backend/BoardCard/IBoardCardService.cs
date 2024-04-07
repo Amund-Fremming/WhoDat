@@ -5,8 +5,8 @@ public interface IBoardCardService
     /* Basic CRUD */
     public Task<BoardCard> GetBoardCardById(int boardId);
     public Task<int> CreateBoardCard(BoardCard boardCard);
-    public Task DeleteBoardCard(int boardCardId);
+    public Task<bool> DeleteBoardCard(int boardCardId);
 
     /* Other */
-    public Task UpdateActive(bool active);
+    public Task<bool> UpdateActive(bool active);
 }

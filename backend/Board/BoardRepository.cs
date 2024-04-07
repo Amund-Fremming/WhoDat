@@ -24,10 +24,20 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         }
     }
 
-    public async Task DeleteBoard(Board board)
+    public async Task<bool> DeleteBoard(Board board)
     {
-        _context.Board.Remove(board);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Board.Remove(board);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+            _logger.LogError(e, $"Error deleting board with id {board.BoardID}. (BoardRepository)");
+            return false;
+        }
     }
 
     public async Task<bool> ChooseCard(Board board, BoardCard boardCard)

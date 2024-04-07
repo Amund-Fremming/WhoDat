@@ -6,7 +6,7 @@ public class BoardService(BoardRepository boardRepository) : IBoardService
 {
     public readonly BoardRepository _boardRepository = boardRepository;
 
-    public Task<Board> GetBoardById(int boardId)
+    public Task<Board?> GetBoardById(int boardId)
     {
 
     }
@@ -16,17 +16,17 @@ public class BoardService(BoardRepository boardRepository) : IBoardService
 
     }
 
-    public Task DeleteBoard(int boardId)
+    public Task<bool> DeleteBoard(int boardId)
     {
 
     }
 
-    public Task ChooseCard(int cardId)
+    public Task<bool> ChooseCard(int cardId)
     {
 
     }
 
-    public Task UpdatePlayersLeft(int cardId)
+    public Task<bool> UpdatePlayersLeft(int cardId)
     {
 
     }

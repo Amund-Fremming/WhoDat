@@ -16,7 +16,12 @@ public class BoardCardService(BoardCardRepository boardcardRepository) : IBoardC
 
     }
 
-    public Task DeleteBoardCard(int boardCardId)
+    public Task<bool> DeleteBoardCard(int boardCardId)
+    {
+
+    }
+
+    public Task<bool> UpdateActive(bool active)
     {
 
     }
