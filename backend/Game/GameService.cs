@@ -16,22 +16,27 @@ public class GameService(GameRepository gameRepository) : IGameService
 
     }
 
-    public Task DeleteGame(int gameId)
+    public Task<bool> DeleteGame(int gameId)
     {
 
     }
 
-    public Task<int> JoinGameById(int gameId)
+    public Task<bool> JoinGameById(int gameId, string playerId)
     {
 
     }
 
-    public Task<int> UpdateGameState(State state)
+    public Task<bool> LeaveGameById(int gameId, string playerId)
     {
 
     }
 
-    public Task UpdateCurrentPlayerTurn(string playerId)
+    public Task<bool> UpdateGameState(int gameId, State state)
+    {
+
+    }
+
+    public Task<bool> UpdateCurrentPlayerTurn(int gameId, string playerId)
     {
 
     }
