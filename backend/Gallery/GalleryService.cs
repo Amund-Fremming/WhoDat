@@ -6,7 +6,7 @@ public class GalleryService(GalleryRepository galleryRepository) : IGalleryServi
 {
     public readonly GalleryRepository _galleryRepository = galleryRepository;
 
-    public Task<Gallery> GetGalleryById(int boardId)
+    public Task<Gallery?> GetGalleryById(int galleryId)
     {
 
     }
@@ -16,7 +16,7 @@ public class GalleryService(GalleryRepository galleryRepository) : IGalleryServi
 
     }
 
-    public Task DeleteGallery(int galleryId)
+    public Task<bool> DeleteGallery(int galleryId)
     {
 
     }

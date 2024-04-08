@@ -2,9 +2,10 @@ namespace GalleryEntity;
 
 public interface IGalleryService
 {
-    public Task<Gallery> GetGalleryById(int boardId);
+    /* Basic CRUD */
+    public Task<Gallery?> GetGalleryById(int galleryId);
     public Task<int> CreateGallery(Gallery gallery);
-    public Task DeleteGallery(int galleryId);
+    public Task<bool> DeleteGallery(int galleryId);
 }
 
 
