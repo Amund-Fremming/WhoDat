@@ -15,6 +15,7 @@ with any other player they wish to invite.
 
 - [Design](https://www.figma.com/file/oBgpl8HkiowbkUFe6HchFL/Untitled?type=design&node-id=0-1&mode=design&t=W4NL2TyfNhpunoWo-0)
 - [DB-diagram](https://dbdiagram.io/d/660ad5ff37b7e33fd739f990)
+- [timeliste](https://docs.google.com/spreadsheets/d/1KFKwdz5Q3xCVQ-m_2pZSbf9XOyshvaPcvhxkFS2Z6TE/edit#gid=0)
 
 ## Tech used
 
