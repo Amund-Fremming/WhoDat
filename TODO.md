@@ -3,7 +3,7 @@
 ## Backend
 
 - [x] Implement interfaces
-- [ ] Configure relations in AppContext
+- [x] Configure relations in AppContext
 - [ ] Create Repo methods
 - [ ] Generate database
 - [ ] Create Service methods
@@ -18,7 +18,7 @@
 
 ## Frontend
 
-- [ ] User test with Figma prototype
+- [x] User test with Figma prototype
 - [ ] Tweak Design
 - [ ] Implement generic components
 - [ ] Implement Navigation bar
@@ -27,4 +27,13 @@
 - [ ] Implement the LoginWall
 - [ ] Add Token handling for security
 - [ ] Test the app
-- [ ] User testing with Test Flight
+
+<hr />
+
+## Deploy
+
+- [ ] Deploy to Eas and App Store Connect
+- [ ] Deploy to Azure
+- [ ] User Test with Test Flight
+- [ ] Fix user feedback
+- [ ] Deploy to the AppStore
