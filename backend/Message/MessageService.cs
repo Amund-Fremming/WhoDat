@@ -1,5 +1,3 @@
-using System;
-
 namespace MessageEntity;
 
 public class MessageService(MessageRepository messageRepository) : IMessageService
@@ -16,17 +14,12 @@ public class MessageService(MessageRepository messageRepository) : IMessageServi
 
     }
 
-    public Task DeleteMessage(int messageId)
+    public Task<bool> DeleteMessage(int messageId)
     {
 
     }
 
-    public Task UpdateMessage(Message message)
-    {
-
-    }
-
-    public Task SendMessage(Message message)
+    public Task<bool> UpdateMessage(Message message)
     {
 
     }

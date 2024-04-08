@@ -11,7 +11,8 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
 
     public async Task<Game?> GetGameById(int gameId)
     {
-        return await _context.Game.FindAsync(gameId);
+        return await _context.Game
+            .FindAsync(gameId);
     }
 
     async public Task<int> CreateGame(Game game, Player player)

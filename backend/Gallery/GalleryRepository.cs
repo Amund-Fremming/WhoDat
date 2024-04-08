@@ -9,7 +9,8 @@ public class GalleryRepository(AppDbContext context, ILogger<GalleryRepository> 
 
     public async Task<Gallery?> GetGalleryById(int galleryId)
     {
-        return await _context.Gallery.FindAsync(galleryId);
+        return await _context.Gallery
+            .FindAsync(galleryId);
     }
 
     public async Task<int> CreateGallery(Gallery gallery)
