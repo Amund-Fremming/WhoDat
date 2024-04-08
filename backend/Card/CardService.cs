@@ -6,7 +6,7 @@ public class CardService(CardRepository cardRepository) : ICardService
 {
     public readonly CardRepository _cardRepository = cardRepository;
 
-    public Task<Card> GetCardById(int cardId)
+    public Task<Card?> GetCardById(int cardId)
     {
 
     }
@@ -16,17 +16,17 @@ public class CardService(CardRepository cardRepository) : ICardService
 
     }
 
-    public Task DeleteCard(int cardId)
+    public Task<bool> DeleteCard(int cardId)
     {
 
     }
 
-    public Task UpdateCard(Card card)
+    public Task<bool> UpdateCard(Card card)
     {
 
     }
 
-    public Task UpdateActive(bool active)
+    public Task<bool> UpdateActive(bool active)
     {
 
     }
