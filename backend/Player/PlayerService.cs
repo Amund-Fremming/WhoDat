@@ -1,22 +1,21 @@
-using System;
-
 namespace PlayerEntity;
 
 public class PlayerService(PlayerRepository playerRepository) : IPlayerService
 {
     public readonly PlayerRepository _playerRepository = playerRepository;
 
-    public Task<Player> GetPlayerById(int playerId)
+    public Task<Player?> GetPlayerById(int playerId)
     {
 
     }
 
-    public Task<int> CreatePlayer(Player player)
+    public Task<string> CreatePlayer(Player player)
     {
 
     }
 
-    public Task DeletePlayer(int playerId)
+    public Task<bool> DeletePlayer(int playerId)
+
     {
 
     }
@@ -26,12 +25,7 @@ public class PlayerService(PlayerRepository playerRepository) : IPlayerService
 
     }
 
-    public Task<bool> UpdateUsername(string newUsername)
-    {
-
-    }
-
-    public Task<bool> ChangePassword(string newPassword)
+    public Task<bool> UpdateUsername(string playerId, string newUsername)
     {
 
     }
