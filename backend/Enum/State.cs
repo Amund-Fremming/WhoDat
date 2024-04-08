@@ -26,5 +26,8 @@ public enum State
 
     // Finished
     P1_WON,
-    P2_WON
+    P2_WON,
+
+    // Someone left
+    FINISHED,
 }

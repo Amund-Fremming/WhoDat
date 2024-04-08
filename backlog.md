@@ -13,3 +13,4 @@
 ## Backend
 
 - AirDrop and snapchat sharing link
+- If host leaves the game, make the second player the host

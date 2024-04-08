@@ -5,7 +5,7 @@ namespace GameEntity;
 public interface IGameService
 {
     /* Basic Crud */
-    public Task<Game> GetGameById(int gameId);
+    public Task<Game?> GetGameById(int gameId);
     public Task<int> CreateGame(Game game);
     public Task<bool> DeleteGame(int gameId);
 

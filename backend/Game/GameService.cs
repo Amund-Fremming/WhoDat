@@ -6,7 +6,7 @@ public class GameService(GameRepository gameRepository) : IGameService
 {
     public readonly GameRepository _gameRepository = gameRepository;
 
-    public Task<Game> GetGameById(int gameId)
+    public Task<Game?> GetGameById(int gameId)
     {
 
     }
