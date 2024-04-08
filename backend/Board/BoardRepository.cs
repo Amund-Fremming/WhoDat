@@ -8,6 +8,12 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
     public readonly AppDbContext _context = context;
     private readonly ILogger<BoardRepository> _logger = logger;
 
+    public async Task<Board> GetBoardById(int boardId)
+    {
+        return await _context.Board
+            .FindAsync(boardId) ?? throw new KeyNotFoundException($"Board with id {boardId}, does not exist!");
+    }
+
     public async Task<int> CreateBoard(Board board)
     {
         try
@@ -33,7 +39,7 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception)
+        catch (Exception e)
         {
             _logger.LogError(e, $"Error deleting board with id {board.BoardID}. (BoardRepository)");
             return false;
@@ -75,9 +81,4 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         }
     }
 
-
-    public async Task<Board?> GetBoardById(int boardId)
-    {
-        return await _context.Board.FindAsync(boardId);
-    }
 }

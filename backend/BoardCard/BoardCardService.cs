@@ -6,7 +6,7 @@ public class BoardCardService(BoardCardRepository boardcardRepository) : IBoardC
 {
     public readonly BoardCardRepository _boardcardRepository = boardcardRepository;
 
-    public Task<BoardCard> GetBoardCardById(int boardId)
+    public Task<BoardCard> GetBoardCardById(int boardCardId)
     {
 
     }

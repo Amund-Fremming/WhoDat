@@ -8,10 +8,10 @@ public class CardRepository(AppDbContext context, ILogger<CardRepository> logger
     public readonly AppDbContext _context = context;
     public readonly ILogger<CardRepository> _logger = logger;
 
-    public async Task<Card?> GetCardById(int cardId)
+    public async Task<Card> GetCardById(int cardId)
     {
         return await _context.Card
-            .FindAsync(cardId);
+            .FindAsync(cardId) ?? throw new KeyNotFoundException($"Card with id {cardId}, does not exist!");
     }
 
     public async Task<int> CreateCard(Card card)
