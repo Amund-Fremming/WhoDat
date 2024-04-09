@@ -7,10 +7,10 @@ public class MessageRepository(AppDbContext context, ILogger<MessageRepository> 
     public readonly AppDbContext _context = context;
     public readonly ILogger<MessageRepository> _logger = logger;
 
-    public async Task<Message?> GetBoardCardById(int messageId)
+    public async Task<Message> GetMessageById(int messageId)
     {
         return await _context.Message
-            .FindAsync(messageId);
+            .FindAsync(messageId) ?? throw new KeyNotFoundException($"Message with id {messageId}, does not exist!");
     }
 
     public async Task<int> CreateMessage(Message message)
