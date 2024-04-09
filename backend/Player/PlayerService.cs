@@ -1,32 +1,55 @@
 namespace PlayerEntity;
 
-public class PlayerService(PlayerRepository playerRepository) : IPlayerService
+public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playerRepository) : IPlayerService
 {
     public readonly PlayerRepository _playerRepository = playerRepository;
+    public readonly ILogger<PlayerService> _logger = logger;
 
-    public Task<Player?> GetPlayerById(int playerId)
+    public async Task<string> CreatePlayer(Player player)
     {
+        try
+        {
+            await _playerRepository.GetPlayerById(player.PlayerID);
 
+            return await _playerRepository.CreatePlayer(player);
+        }
+        catch (Exception)
+        {
+            // ADD HANDLING
+            _logger.LogError($"Error while creating Player with id {player.PlayerID}. (PlayerService)");
+            throw;
+        }
     }
 
-    public Task<string> CreatePlayer(Player player)
+    public async Task<bool> DeletePlayer(string playerId)
     {
+        try
+        {
+            Player player = await _playerRepository.GetPlayerById(playerId);
 
+            return await _playerRepository.DeletePlayer(player);
+        }
+        catch (Exception)
+        {
+            // ADD HANDLING
+            _logger.LogError($"Error while deleting Player with id {playerId}. (PlayerService)");
+            throw;
+        }
     }
 
-    public Task<bool> DeletePlayer(int playerId)
-
+    public async Task<bool> UpdateUsername(string playerId, string newUsername)
     {
+        try
+        {
+            Player player = await _playerRepository.GetPlayerById(playerId);
 
-    }
-
-    public Task<bool> DoesUsernameExist(string username)
-    {
-
-    }
-
-    public Task<bool> UpdateUsername(string playerId, string newUsername)
-    {
-
+            return await _playerRepository.UpdateUsername(player, newUsername);
+        }
+        catch (Exception)
+        {
+            // ADD HANDLING
+            _logger.LogError($"Error while updating username for Player with id {playerId}. (PlayerService)");
+            throw;
+        }
     }
 }

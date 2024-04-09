@@ -8,10 +8,10 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
     public readonly AppDbContext _context = context;
     public readonly ILogger<PlayerRepository> _logger = logger;
 
-    public async Task<Player?> GetPlayerById(int playerId)
+    public async Task<Player> GetPlayerById(string playerId)
     {
         return await _context.Player
-            .FindAsync(playerId);
+            .FindAsync(playerId) ?? throw new KeyNotFoundException($"Player with id {playerId}, does not exist!");
     }
 
     public async Task<string> CreatePlayer(Player player)
