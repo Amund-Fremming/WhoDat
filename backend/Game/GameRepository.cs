@@ -9,10 +9,10 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
     public readonly AppDbContext _context = context;
     public readonly ILogger<GameRepository> _logger = logger;
 
-    public async Task<Game?> GetGameById(int gameId)
+    public async Task<Game> GetGameById(int gameId)
     {
         return await _context.Game
-            .FindAsync(gameId);
+            .FindAsync(gameId) ?? throw new KeyNotFoundException($"Game with id {gameId}, does not exist!");
     }
 
     async public Task<int> CreateGame(Game game, Player player)
@@ -113,11 +113,11 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         }
     }
 
-    public async Task<bool> UpdateCurrentPlayerTurn(Game game, int currentPlayer)
+    public async Task<bool> UpdateCurrentPlayerTurn(Game game, int playerNumber)
     {
         try
         {
-            game.CurrentPlayer = currentPlayer;
+            game.CurrentPlayer = playerNumber;
 
             _context.Game.Update(game);
             await _context.SaveChangesAsync();

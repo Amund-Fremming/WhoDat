@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using GameEntity;
-using System;
 
 namespace GameEntity;
 
