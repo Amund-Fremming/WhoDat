@@ -13,6 +13,8 @@
 - [ ] Implement JWT
 - [ ] Test JWT implementation
 - [ ] Look for Edge-cases and fix them
+- [ ] Add error handling for when wifi goes down
+- [ ] Add error handling
 
 <hr />
 

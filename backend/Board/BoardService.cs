@@ -1,15 +1,13 @@
 namespace BoardEntity;
-using CardEntity;
 using BoardCardEntity;
 using Data;
 
-public class BoardService(ILogger<BoardService> logger, AppDbContext context, BoardRepository boardRepository, CardRepository cardRepository, BoardCardRepository boardCardRepository) : IBoardService
+public class BoardService(ILogger<BoardService> logger, AppDbContext context, BoardRepository boardRepository, BoardCardRepository boardCardRepository) : IBoardService
 {
+    public readonly ILogger<BoardService> _logger = logger;
     public readonly AppDbContext _context = context;
     public readonly BoardRepository _boardRepository = boardRepository;
-    public readonly CardRepository _cardRepository = cardRepository;
     public readonly BoardCardRepository _boardCardRepository = boardCardRepository;
-    public readonly ILogger<BoardService> _logger = logger;
 
     public async Task<int> CreateBoard(Board board)
     {
@@ -25,8 +23,8 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         }
         catch (Exception)
         {
-            // ADD LOGGING
             // ADD HANDLING
+            _logger.LogError($"Error while deleting board with id {boardId}. (BoardService)");
             throw;
         }
     }
@@ -42,8 +40,8 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         }
         catch (Exception)
         {
-            // ADD LOGGING
             // ADD HANDLING
+            _logger.LogError($"Error chosing a card on board with id {boardId}. (BoardService)");
             throw;
         }
     }
@@ -57,8 +55,8 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         }
         catch (Exception)
         {
-            // ADD LOGGING
             // ADD HANDLING
+            _logger.LogError($"Error updating card on board with id {boardId}. (BoardService)");
             throw;
         }
     }
