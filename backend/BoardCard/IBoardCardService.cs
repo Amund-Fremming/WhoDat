@@ -7,5 +7,5 @@ public interface IBoardCardService
     public Task<bool> DeleteBoardCard(int boardCardId);
 
     /* Other */
-    public Task<bool> UpdateActive(bool active);
+    public Task<bool> UpdateActive(int boardCardId, bool active);
 }
