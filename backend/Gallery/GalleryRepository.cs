@@ -7,10 +7,10 @@ public class GalleryRepository(AppDbContext context, ILogger<GalleryRepository> 
     public readonly AppDbContext _context = context;
     public readonly ILogger<GalleryRepository> _logger = logger;
 
-    public async Task<Gallery?> GetGalleryById(int galleryId)
+    public async Task<Gallery> GetGalleryById(int galleryId)
     {
         return await _context.Gallery
-            .FindAsync(galleryId);
+            .FindAsync(galleryId) ?? throw new KeyNotFoundException($"Gallery with id {galleryId}, does not exist!");
     }
 
     public async Task<int> CreateGallery(Gallery gallery)
