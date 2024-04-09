@@ -10,7 +10,7 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
     public async Task<BoardCard> GetBoardCardById(int boardCardId)
     {
         return await _context.BoardCard
-            .FindAsync(boardId) ?? throw new KeyNotFoundException($"BoardCard with id {boardId}, does not exist!");
+            .FindAsync(boardCardId) ?? throw new KeyNotFoundException($"BoardCard with id {boardCardId}, does not exist!");
     }
 
     public async Task<int> CreateBoardCard(BoardCard boardCard)

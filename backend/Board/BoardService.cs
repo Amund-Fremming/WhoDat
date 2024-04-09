@@ -24,7 +24,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         catch (Exception)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while deleting board with id {boardId}. (BoardService)");
+            _logger.LogError($"Error while deleting Board with id {boardId}. (BoardService)");
             throw;
         }
     }
@@ -41,7 +41,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         catch (Exception)
         {
             // ADD HANDLING
-            _logger.LogError($"Error chosing a card on board with id {boardId}. (BoardService)");
+            _logger.LogError($"Error chosing a card on Board with id {boardId}. (BoardService)");
             throw;
         }
     }
@@ -56,7 +56,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         catch (Exception)
         {
             // ADD HANDLING
-            _logger.LogError($"Error updating card on board with id {boardId}. (BoardService)");
+            _logger.LogError($"Error updating card on Board with id {boardId}. (BoardService)");
             throw;
         }
     }
