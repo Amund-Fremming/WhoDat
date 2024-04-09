@@ -8,6 +8,6 @@ public interface ICardService
     public Task<bool> UpdateCard(Card card);
 
     /* Other */
-    public IEnumerable<Card> GetAllCards();
+    public Task<IEnumerable<Card>> GetAllCards();
 }
 
