@@ -18,8 +18,13 @@ public class Board
     public BoardCard? ChosenCard { get; set; }
     public int PlayersLeft { get; set; }
 
-    public IEnumerable<Message> Messages { get; set; }
-    public IEnumerable<BoardCard> BoardCards { get; set; }
+    public IEnumerable<Message>? Messages { get; set; }
+    public IEnumerable<BoardCard>? BoardCards { get; set; }
 
-    public Board() { }
+    public Board(string playerId, int gameId, int playersLeft)
+    {
+        PlayerID = playerId;
+        GameID = gameId;
+        playersLeft = 20;
+    }
 }

@@ -47,6 +47,11 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
         try
         {
             Game game = await _gameRepository.GetGameById(gameId);
+
+            if (!String.IsNullOrEmpty(game.PlayerOneID) || !String.IsNullOrEmpty(game.PlayerTwoID))
+                return false;
+
+
             Player player = await _playerRepository.GetPlayerById(playerId);
 
             return await _gameRepository.JoinGame(game, player);

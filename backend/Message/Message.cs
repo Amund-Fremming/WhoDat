@@ -9,10 +9,15 @@ public class Message
     [Key]
     public int MessageID { get; set; }
     public int GameID { get; set; }
-    public Game Game { get; set; }
+    public Game? Game { get; set; }
     public string PlayerID { get; set; }
-    public Player Player { get; set; }
-    public string? MessageText { get; set; }
+    public Player? Player { get; set; }
+    public string MessageText { get; set; }
 
-    public Message() { }
+    public Message(int gameId, string playerId, string messageText)
+    {
+        GameID = gameId;
+        PlayerID = playerId;
+        MessageText = messageText;
+    }
 }

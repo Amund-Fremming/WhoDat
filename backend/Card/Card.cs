@@ -13,8 +13,11 @@ public class Card
     public string? Name { get; set; }
     public string? Url { get; set; }
 
-    public IEnumerable<BoardCard> BoardCards { get; set; }
+    public IEnumerable<BoardCard>? BoardCards { get; set; }
 
-    public Card() { }
+    public Card(int galleryId)
+    {
+        GalleryID = galleryId;
+    }
 }
 

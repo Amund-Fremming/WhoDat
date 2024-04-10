@@ -11,7 +11,10 @@ public class Gallery
     public string PlayerID { get; set; }
     public Player? Player { get; set; }
 
-    public IEnumerable<Card> Cards { get; set; }
+    public IEnumerable<Card>? Cards { get; set; }
 
-    public Gallery() { }
+    public Gallery(string playerId)
+    {
+        PlayerID = playerId;
+    }
 }

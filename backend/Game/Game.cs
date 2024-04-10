@@ -12,13 +12,17 @@ public class Game
     public int GameID { get; set; }
     public string PlayerOneID { get; set; }
     public Player? PlayerOne { get; set; }
-    public string PlayerTwoID { get; set; }
+    public string? PlayerTwoID { get; set; }
     public Player? PlayerTwo { get; set; }
     public int CurrentPlayer { get; set; }
     public State State { get; set; }
 
-    public IEnumerable<Message> Messages { get; set; }
-    public IEnumerable<Board> Boards { get; set; }
+    public IEnumerable<Message>? Messages { get; set; }
+    public IEnumerable<Board>? Boards { get; set; }
 
-    public Game() { }
+    public Game(string playerOneId, State state)
+    {
+        PlayerOneID = playerOneId;
+        State = state;
+    }
 }
