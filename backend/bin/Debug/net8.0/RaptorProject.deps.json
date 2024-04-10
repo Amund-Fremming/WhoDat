@@ -9,6 +9,7 @@
       "RaptorProject/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "8.0.1",
+          "Microsoft.EntityFrameworkCore": "8.0.3",
           "Microsoft.EntityFrameworkCore.Design": "8.0.3",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.2",
           "Swashbuckle.AspNetCore": "6.5.0"

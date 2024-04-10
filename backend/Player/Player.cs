@@ -3,6 +3,7 @@ using GalleryEntity;
 using BoardEntity;
 using GameEntity;
 using MessageEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayerEntity;
 
@@ -16,8 +17,12 @@ public class Player
 
     public Gallery Gallery { get; set; }
     public IEnumerable<Board> Boards { get; set; }
-    public IEnumerable<Game> Games { get; set; }
     public IEnumerable<Message> Messages { get; set; }
+    public IEnumerable<Game> GamesAsPlayerOne { get; set; }
+    public IEnumerable<Game> GamesAsPlayerTwo { get; set; }
+
+    [NotMapped]
+    public IEnumerable<Game> Games => GamesAsPlayerOne.Concat(GamesAsPlayerTwo);
 
     public Player() { }
 }

@@ -53,13 +53,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<Game>()
             .HasOne(g => g.PlayerOne)
-            .WithMany(p => p.Games)
+            .WithMany(p => p.GamesAsPlayerOne)
             .HasForeignKey(g => g.PlayerOneID)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Game>()
             .HasOne(g => g.PlayerTwo)
-            .WithMany(p => p.Games)
+            .WithMany(p => p.GamesAsPlayerTwo)
             .HasForeignKey(g => g.PlayerTwoID)
             .OnDelete(DeleteBehavior.Cascade);
     }
