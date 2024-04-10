@@ -210,3 +210,11 @@
 /Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.csproj.CopyComplete
 /Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/RaptorProject.genruntimeconfig.cache
 /Users/amundfremming/Documents/projects/WhoDat/backend/obj/Debug/net8.0/ref/RaptorProject.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
