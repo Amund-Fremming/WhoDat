@@ -6,7 +6,7 @@
 - [x] Configure relations in AppContext
 - [x] Create basic Repo methods
 - [x] Create basic Service methods
-- [ ] Generate database
+- [x] Generate database
 - [ ] Create Controller methods
 - [ ] Generate Mock data
 - [ ] Test Backend
