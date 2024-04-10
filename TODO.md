@@ -4,8 +4,8 @@
 
 - [x] Implement interfaces
 - [x] Configure relations in AppContext
-- [x] Create Repo methods
-- [ ] Create Service methods
+- [x] Create basic Repo methods
+- [x] Create basic Service methods
 - [ ] Generate database
 - [ ] Create Controller methods
 - [ ] Generate Mock data
