@@ -1,6 +1,119 @@
+using PlayerEntity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
+using GalleryEntity;
+
 namespace Auth;
 
-public class AuthService
+public class AuthService(IConfiguration configuration, ILogger<AuthService> logger,
+        IPasswordHasher<Player> passwordHasher, PlayerRepository playerRepository, IGalleryService galleryService) : IAuthService
 {
-    // TODO
+    public readonly IConfiguration _configuration = configuration;
+    public readonly ILogger<AuthService> _logger = logger;
+    public readonly IPasswordHasher<Player> _passwordHasher = passwordHasher;
+    public readonly PlayerRepository _playerRepository = playerRepository;
+    public readonly IGalleryService _galleryService = galleryService;
+
+    public string GenerateToken(Player player)
+    {
+        try
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var configurationKey = _configuration["Jwt:Key"];
+
+            if (configurationKey == null) throw new KeyNotFoundException("Jwt key not present in appsettings. (AuthService)");
+
+            var key = Encoding.ASCII.GetBytes(configurationKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, player.PlayerID.ToString()),
+                    new Claim(ClaimTypes.Name, player.Username),
+                }),
+                Expires = DateTime.UtcNow.AddDays(1),       // TODO - JUSTER DENNE!!!
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"]
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError("Error while generating token. (AuthService)", e);
+            throw;
+        }
+    }
+
+    public string GenerateSalt()
+    {
+        try
+        {
+            var buffer = new byte[16];
+            RandomNumberGenerator.Fill(buffer);
+
+            return Convert.ToBase64String(buffer);
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError("Error while generating salt. (AuthService)", e);
+            throw;
+        }
+    }
+
+    public async Task<bool> ValidatePasswordWithSalt(LoginRequest request, string password)
+    {
+        try
+        {
+            Player player = await _playerRepository.GetPlayerByUsername(request.Username);
+
+            var saltedPassword = request.Password + player.PasswordSalt;
+            PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
+
+            return result == PasswordVerificationResult.Success;
+
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError("Error while validating password with salt. (AuthService)", e);
+            throw;
+        }
+    }
+
+    public async Task<Player?> RegisterNewPlayer(RegistrationRequest request)
+    {
+        {
+            try
+            {
+                bool usernameExist = await _playerRepository.DoesUsernameExist(request.Username);
+
+                if (usernameExist)
+                    return null;
+
+                string salt = GenerateSalt();
+                string saltedPassword = request.Password;
+                string hashedPassword = _passwordHasher.HashPassword(null, saltedPassword);
+
+                Player player = new Player(request.Username, hashedPassword, salt);
+                await _galleryService.CreateGallery(new Gallery(player.PlayerID));
+
+                return player;
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError("Error while validating password with salt. (AuthService)", e);
+                throw;
+            }
+        }
+    }
 }

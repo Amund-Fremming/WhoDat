@@ -73,14 +73,14 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         {
             if (playerNumber == 1)
             {
-                game.PlayerOneID = "";
+                game.PlayerOneID = -1;
                 game.PlayerOne = null;
                 game.State = State.P2_WON;
             }
 
             if (playerNumber == 2)
             {
-                game.PlayerTwoID = "";
+                game.PlayerTwoID = -1;
                 game.PlayerTwo = null;
                 game.State = State.P1_WON;
             }

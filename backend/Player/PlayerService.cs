@@ -5,7 +5,7 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
     public readonly PlayerRepository _playerRepository = playerRepository;
     public readonly ILogger<PlayerService> _logger = logger;
 
-    public async Task<string> CreatePlayer(Player player)
+    public async Task<int> CreatePlayer(Player player)
     {
         try
         {
@@ -21,7 +21,7 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         }
     }
 
-    public async Task<bool> DeletePlayer(string playerId)
+    public async Task<bool> DeletePlayer(int playerId)
     {
         try
         {
@@ -37,7 +37,7 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         }
     }
 
-    public async Task<bool> UpdateUsername(string playerId, string newUsername)
+    public async Task<bool> UpdateUsername(int playerId, string newUsername)
     {
         try
         {

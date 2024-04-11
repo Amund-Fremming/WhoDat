@@ -10,9 +10,9 @@ public class Game
 {
     [Key]
     public int GameID { get; set; }
-    public string PlayerOneID { get; set; }
+    public int PlayerOneID { get; set; }
     public Player? PlayerOne { get; set; }
-    public string? PlayerTwoID { get; set; }
+    public int? PlayerTwoID { get; set; }
     public Player? PlayerTwo { get; set; }
     public int CurrentPlayer { get; set; }
     public State State { get; set; }
@@ -20,7 +20,9 @@ public class Game
     public IEnumerable<Message>? Messages { get; set; }
     public IEnumerable<Board>? Boards { get; set; }
 
-    public Game(string playerOneId, State state)
+    public Game() { }
+
+    public Game(int playerOneId, State state)
     {
         PlayerOneID = playerOneId;
         State = state;

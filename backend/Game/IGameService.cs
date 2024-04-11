@@ -10,7 +10,7 @@ public interface IGameService
     public Task<bool> DeleteGame(int gameId);
 
     /* Other */
-    public Task<bool> JoinGameById(int gameId, string playerId);
+    public Task<bool> JoinGameById(int gameId, int playerId);
     public Task<bool> LeaveGameById(int gameId, int playerNumber);
     public Task<bool> UpdateGameState(int gameId, State state);
     public Task<bool> UpdateCurrentPlayerTurn(int gameId, int playerNumber);

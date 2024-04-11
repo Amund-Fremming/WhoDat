@@ -15,6 +15,8 @@ public class Card
 
     public IEnumerable<BoardCard>? BoardCards { get; set; }
 
+    public Card() { }
+
     public Card(int galleryId)
     {
         GalleryID = galleryId;

@@ -10,7 +10,7 @@ public class Board
 {
     [Key]
     public int BoardID { get; set; }
-    public string PlayerID { get; set; }
+    public int PlayerID { get; set; }
     public Player? Player { get; set; }
     public int GameID { get; set; }
     public Game? Game { get; set; }
@@ -21,7 +21,9 @@ public class Board
     public IEnumerable<Message>? Messages { get; set; }
     public IEnumerable<BoardCard>? BoardCards { get; set; }
 
-    public Board(string playerId, int gameId, int playersLeft)
+    public Board() { }
+
+    public Board(int playerId, int gameId, int playersLeft)
     {
         PlayerID = playerId;
         GameID = gameId;

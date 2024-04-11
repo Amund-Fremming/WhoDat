@@ -42,13 +42,13 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
         }
     }
 
-    public async Task<bool> JoinGameById(int gameId, string playerId)
+    public async Task<bool> JoinGameById(int gameId, int playerId)
     {
         try
         {
             Game game = await _gameRepository.GetGameById(gameId);
 
-            if (!String.IsNullOrEmpty(game.PlayerOneID) || !String.IsNullOrEmpty(game.PlayerTwoID))
+            if (game.PlayerOneID == -1 || game.PlayerTwoID == -1)
                 return false;
 
 

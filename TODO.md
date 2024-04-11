@@ -10,7 +10,7 @@
 - [ ] Create Controller methods
 - [ ] Generate Mock data
 - [ ] Test Backend
-- [ ] Implement JWT
+- [x] Implement JWT
 - [ ] Test JWT implementation
 - [ ] Look for Edge-cases and fix them
 - [ ] Add error handling for when wifi goes down

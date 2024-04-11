@@ -8,13 +8,13 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
     public readonly AppDbContext _context = context;
     public readonly ILogger<PlayerRepository> _logger = logger;
 
-    public async Task<Player> GetPlayerById(string playerId)
+    public async Task<Player> GetPlayerById(int playerId)
     {
         return await _context.Player
             .FindAsync(playerId) ?? throw new KeyNotFoundException($"Player with id {playerId}, does not exist!");
     }
 
-    public async Task<string> CreatePlayer(Player player)
+    public async Task<int> CreatePlayer(Player player)
     {
         try
         {
@@ -25,7 +25,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         catch (Exception e)
         {
             _logger.LogError(e, $"Error creating Player with id {player.PlayerID} .(PlayerRepository)");
-            return "";
+            return -1;
         }
     }
 
@@ -49,6 +49,13 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
     {
         return await _context.Player
             .AnyAsync(p => p.Username == username);
+    }
+
+    public async Task<Player> GetPlayerByUsername(string username)
+    {
+        return await _context.Player
+            .FirstAsync(p => p.Username == username)
+            ?? throw new KeyNotFoundException($"Username {username} does not exist. (AuthService)");
     }
 
     public async Task<bool> UpdateUsername(Player player, string newUsername)

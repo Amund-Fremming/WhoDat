@@ -8,12 +8,14 @@ public class Gallery
 {
     [Key]
     public int GalleryID { get; set; }
-    public string PlayerID { get; set; }
+    public int PlayerID { get; set; }
     public Player? Player { get; set; }
 
     public IEnumerable<Card>? Cards { get; set; }
 
-    public Gallery(string playerId)
+    public Gallery() { }
+
+    public Gallery(int playerId)
     {
         PlayerID = playerId;
     }

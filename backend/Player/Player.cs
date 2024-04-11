@@ -9,7 +9,7 @@ namespace PlayerEntity;
 public class Player
 {
     [Key]
-    public string PlayerID { get; set; }
+    public int PlayerID { get; set; }
     public string Username { get; set; }
     public string PasswordHash { get; set; }
     public string PasswordSalt { get; set; }
@@ -20,9 +20,8 @@ public class Player
     public IEnumerable<Game>? GamesAsPlayerOne { get; set; }
     public IEnumerable<Game>? GamesAsPlayerTwo { get; set; }
 
-    public Player(string playerId, string username, string passwordHash, string passwordSalt)
+    public Player(string username, string passwordHash, string passwordSalt)
     {
-        PlayerID = playerId;
         Username = username;
         PasswordHash = passwordHash;
         PasswordSalt = passwordSalt;

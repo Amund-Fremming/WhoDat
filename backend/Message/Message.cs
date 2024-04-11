@@ -10,11 +10,13 @@ public class Message
     public int MessageID { get; set; }
     public int GameID { get; set; }
     public Game? Game { get; set; }
-    public string PlayerID { get; set; }
+    public int PlayerID { get; set; }
     public Player? Player { get; set; }
     public string MessageText { get; set; }
 
-    public Message(int gameId, string playerId, string messageText)
+    public Message() { }
+
+    public Message(int gameId, int playerId, string messageText)
     {
         GameID = gameId;
         PlayerID = playerId;
