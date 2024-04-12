@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RaptorProject.Migrations
 {
     /// <inheritdoc />
-    public partial class InitCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,10 +15,11 @@ namespace RaptorProject.Migrations
                 name: "Player",
                 columns: table => new
                 {
-                    PlayerID = table.Column<string>(type: "text", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: true),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    PasswordSalt = table.Column<string>(type: "text", nullable: true)
+                    PlayerID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    PasswordSalt = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,7 +32,7 @@ namespace RaptorProject.Migrations
                 {
                     GalleryID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PlayerID = table.Column<string>(type: "text", nullable: false)
+                    PlayerID = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,8 +51,8 @@ namespace RaptorProject.Migrations
                 {
                     GameID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PlayerOneID = table.Column<string>(type: "text", nullable: false),
-                    PlayerTwoID = table.Column<string>(type: "text", nullable: false),
+                    PlayerOneID = table.Column<int>(type: "integer", nullable: false),
+                    PlayerTwoID = table.Column<int>(type: "integer", nullable: true),
                     CurrentPlayer = table.Column<int>(type: "integer", nullable: false),
                     State = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -99,7 +100,7 @@ namespace RaptorProject.Migrations
                 {
                     BoardID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PlayerID = table.Column<string>(type: "text", nullable: false),
+                    PlayerID = table.Column<int>(type: "integer", nullable: false),
                     GameID = table.Column<int>(type: "integer", nullable: false),
                     ChosenCardID = table.Column<int>(type: "integer", nullable: false),
                     PlayersLeft = table.Column<int>(type: "integer", nullable: false)
@@ -155,8 +156,8 @@ namespace RaptorProject.Migrations
                     MessageID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     GameID = table.Column<int>(type: "integer", nullable: false),
-                    PlayerID = table.Column<string>(type: "text", nullable: false),
-                    MessageText = table.Column<string>(type: "text", nullable: true),
+                    PlayerID = table.Column<int>(type: "integer", nullable: false),
+                    MessageText = table.Column<string>(type: "text", nullable: false),
                     BoardID = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>

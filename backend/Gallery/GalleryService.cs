@@ -9,8 +9,6 @@ public class GalleryService(ILogger<GalleryService> logger, GalleryRepository ga
     {
         try
         {
-            await _galleryRepository.GetGalleryById(gallery.GalleryID);
-
             return await _galleryRepository.CreateGallery(gallery);
         }
         catch (Exception)

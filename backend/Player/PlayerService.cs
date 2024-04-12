@@ -5,13 +5,12 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
     public readonly PlayerRepository _playerRepository = playerRepository;
     public readonly ILogger<PlayerService> _logger = logger;
 
-    public async Task<int> CreatePlayer(Player player)
+    public async Task<Player> CreatePlayer(Player player)
     {
         try
         {
-            await _playerRepository.GetPlayerById(player.PlayerID);
-
-            return await _playerRepository.CreatePlayer(player);
+            await _playerRepository.CreatePlayer(player);
+            return player;
         }
         catch (Exception)
         {

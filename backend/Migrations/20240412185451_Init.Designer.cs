@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RaptorProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240410062530_InitCreate")]
-    partial class InitCreate
+    [Migration("20240412185451_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,9 +65,8 @@ namespace RaptorProject.Migrations
                     b.Property<int>("GameID")
                         .HasColumnType("integer");
 
-                    b.Property<string>("PlayerID")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("PlayerID")
+                        .HasColumnType("integer");
 
                     b.Property<int>("PlayersLeft")
                         .HasColumnType("integer");
@@ -115,9 +114,8 @@ namespace RaptorProject.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("GalleryID"));
 
-                    b.Property<string>("PlayerID")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("PlayerID")
+                        .HasColumnType("integer");
 
                     b.HasKey("GalleryID");
 
@@ -138,13 +136,11 @@ namespace RaptorProject.Migrations
                     b.Property<int>("CurrentPlayer")
                         .HasColumnType("integer");
 
-                    b.Property<string>("PlayerOneID")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("PlayerOneID")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("PlayerTwoID")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("PlayerTwoID")
+                        .HasColumnType("integer");
 
                     b.Property<int>("State")
                         .HasColumnType("integer");
@@ -173,11 +169,11 @@ namespace RaptorProject.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("MessageText")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlayerID")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("PlayerID")
+                        .HasColumnType("integer");
 
                     b.HasKey("MessageID");
 
@@ -192,16 +188,22 @@ namespace RaptorProject.Migrations
 
             modelBuilder.Entity("PlayerEntity.Player", b =>
                 {
-                    b.Property<string>("PlayerID")
-                        .HasColumnType("text");
+                    b.Property<int>("PlayerID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PlayerID"));
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PasswordSalt")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("PlayerID");
@@ -288,8 +290,7 @@ namespace RaptorProject.Migrations
                     b.HasOne("PlayerEntity.Player", "PlayerTwo")
                         .WithMany("GamesAsPlayerTwo")
                         .HasForeignKey("PlayerTwoID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("PlayerOne");
 
@@ -347,8 +348,7 @@ namespace RaptorProject.Migrations
                 {
                     b.Navigation("Boards");
 
-                    b.Navigation("Gallery")
-                        .IsRequired();
+                    b.Navigation("Gallery");
 
                     b.Navigation("GamesAsPlayerOne");
 

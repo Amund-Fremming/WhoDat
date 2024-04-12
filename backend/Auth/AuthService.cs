@@ -10,11 +10,13 @@ using GalleryEntity;
 namespace Auth;
 
 public class AuthService(IConfiguration configuration, ILogger<AuthService> logger,
-        IPasswordHasher<Player> passwordHasher, PlayerRepository playerRepository, IGalleryService galleryService) : IAuthService
+        IPasswordHasher<Player> passwordHasher, PlayerRepository playerRepository,
+        IGalleryService galleryService, IPlayerService playerService) : IAuthService
 {
     public readonly IConfiguration _configuration = configuration;
     public readonly ILogger<AuthService> _logger = logger;
     public readonly IPasswordHasher<Player> _passwordHasher = passwordHasher;
+    public readonly IPlayerService _playerService = playerService;
     public readonly PlayerRepository _playerRepository = playerRepository;
     public readonly IGalleryService _galleryService = galleryService;
 
@@ -89,24 +91,20 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
         }
     }
 
-    public async Task<Player?> RegisterNewPlayer(RegistrationRequest request)
+    public async Task<Player> RegisterNewPlayer(RegistrationRequest request)
     {
         {
             try
             {
-                bool usernameExist = await _playerRepository.DoesUsernameExist(request.Username);
-
-                if (usernameExist)
-                    return null;
-
                 string salt = GenerateSalt();
-                string saltedPassword = request.Password;
+                string saltedPassword = request.Password + salt;
                 string hashedPassword = _passwordHasher.HashPassword(null, saltedPassword);
 
                 Player player = new Player(request.Username, hashedPassword, salt);
-                await _galleryService.CreateGallery(new Gallery(player.PlayerID));
+                Player newPlayer = await _playerService.CreatePlayer(player);
+                await _galleryService.CreateGallery(new Gallery(newPlayer.PlayerID));
 
-                return player;
+                return newPlayer;
             }
             catch (Exception e)
             {
