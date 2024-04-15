@@ -1,12 +1,11 @@
 using Enum;
-using PlayerEntity;
 
 namespace GameEntity;
 
 public interface IGameService
 {
     /* Basic Crud */
-    public Task<int> CreateGame(Game game, Player player);
+    public Task<int> CreateGame(Game game, int playerId);
     public Task<bool> DeleteGame(int gameId);
 
     /* Other */

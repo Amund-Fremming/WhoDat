@@ -13,10 +13,10 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
 
             return await _messageRepository.CreateMessage(message);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while creating Message with id {message.MessageID}. (MessageService)");
+            _logger.LogError(e, $"Error while creating Message with id {message.MessageID}. (MessageService)");
             throw;
         }
     }
@@ -29,26 +29,26 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
 
             return await _messageRepository.DeleteMessage(message);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while deleting Message with id {messageId}. (MessageService)");
+            _logger.LogError(e, $"Error while deleting Message with id {messageId}. (MessageService)");
             throw;
         }
     }
 
-    public async Task<bool> UpdateMessage(Message newMessage)
+    public async Task<bool> UpdateMessage(int oldMessageId, Message newMessage)
     {
         try
         {
-            Message oldMessage = await _messageRepository.GetMessageById(newMessage.MessageID);
+            Message oldMessage = await _messageRepository.GetMessageById(oldMessageId);
 
             return await _messageRepository.UpdateMessage(oldMessage, newMessage);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while updating Message with id {newMessage.MessageID}. (MessageService)");
+            _logger.LogError(e, $"Error while updating Message with id {newMessage.MessageID}. (MessageService)");
             throw;
         }
     }

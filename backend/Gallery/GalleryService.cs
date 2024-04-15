@@ -11,10 +11,10 @@ public class GalleryService(ILogger<GalleryService> logger, GalleryRepository ga
         {
             return await _galleryRepository.CreateGallery(gallery);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while creating Gallery with id {gallery.GalleryID}. (GalleryService)");
+            _logger.LogError(e, $"Error while creating Gallery with id {gallery.GalleryID}. (GalleryService)");
             throw;
         }
     }
@@ -27,10 +27,10 @@ public class GalleryService(ILogger<GalleryService> logger, GalleryRepository ga
 
             return await _galleryRepository.DeleteGallery(gallery);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while deleting Gallery with id {galleryId}. (GalleryService)");
+            _logger.LogError(e, $"Error while deleting Gallery with id {galleryId}. (GalleryService)");
             throw;
         }
     }

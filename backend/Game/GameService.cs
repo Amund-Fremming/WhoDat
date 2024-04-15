@@ -9,19 +9,20 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
     public readonly GameRepository _gameRepository = gameRepository;
     public readonly PlayerRepository _playerRepository = playerRepository;
 
-    public async Task<int> CreateGame(Game game, Player player)
+    public async Task<int> CreateGame(Game game, int playerId)
     {
         try
         {
+            Player player = await _playerRepository.GetPlayerById(playerId);
             await _gameRepository.GetGameById(game.GameID);
             await _playerRepository.GetPlayerById(player.PlayerID);
 
             return await _gameRepository.CreateGame(game, player);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while creating Game with id {game.GameID}. (GameService)");
+            _logger.LogError(e, $"Error while creating Game with id {game.GameID}. (GameService)");
             throw;
         }
     }
@@ -34,10 +35,10 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
 
             return await _gameRepository.DeleteGame(game);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while deleting Game with id {gameId}. (GameService)");
+            _logger.LogError(e, $"Error while deleting Game with id {gameId}. (GameService)");
             throw;
         }
     }
@@ -48,7 +49,7 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
         {
             Game game = await _gameRepository.GetGameById(gameId);
 
-            if (game.PlayerOneID == -1 || game.PlayerTwoID == -1)
+            if (game.PlayerOneID != -1 || game.PlayerTwoID != -1)
                 return false;
 
 
@@ -56,10 +57,10 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
 
             return await _gameRepository.JoinGame(game, player);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while joining Game with id {gameId}. (GameService)");
+            _logger.LogError(e, $"Error while joining Game with id {gameId}. (GameService)");
             throw;
         }
     }
@@ -72,10 +73,10 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
 
             return await _gameRepository.LeaveGame(game, playerNumber);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while leaving Game with id {gameId}. (GameService)");
+            _logger.LogError(e, $"Error while leaving Game with id {gameId}. (GameService)");
             throw;
         }
     }
@@ -88,10 +89,10 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
 
             return await _gameRepository.UpdateGameState(game, state);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while updating state in Game with id {gameId}. (GameService)");
+            _logger.LogError(e, $"Error while updating state in Game with id {gameId}. (GameService)");
             throw;
         }
     }
@@ -104,10 +105,10 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
 
             return await _gameRepository.UpdateCurrentPlayerTurn(game, playerNumber);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while updating current player turn in Game with id {gameId}. (GameService)");
+            _logger.LogError(e, $"Error while updating current player turn in Game with id {gameId}. (GameService)");
             throw;
         }
     }

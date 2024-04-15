@@ -19,10 +19,10 @@ public class BoardCardService(ILogger<BoardCardService> logger, BoardCardReposit
 
             return await _boardcardRepository.CreateBoardCard(boardCard);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while creating BoardCard with id {boardCard.BoardCardID}. (BoardCardService)");
+            _logger.LogError(e, $"Error while creating BoardCard with id {boardCard.BoardCardID}. (BoardCardService)");
             throw;
         }
 
@@ -36,10 +36,10 @@ public class BoardCardService(ILogger<BoardCardService> logger, BoardCardReposit
 
             return await _boardcardRepository.DeleteBoardCard(boardCard);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while deleting BoardCard with id {boardCardId}. (BoardCardService)");
+            _logger.LogError(e, $"Error while deleting BoardCard with id {boardCardId}. (BoardCardService)");
             throw;
         }
     }
@@ -52,10 +52,10 @@ public class BoardCardService(ILogger<BoardCardService> logger, BoardCardReposit
 
             return await _boardcardRepository.UpdateActive(boardCard, active);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while updating BoardCard with id {boardCardId}. (BoardCardService)");
+            _logger.LogError(e, $"Error while updating BoardCard with id {boardCardId}. (BoardCardService)");
             throw;
         }
     }

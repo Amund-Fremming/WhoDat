@@ -12,10 +12,10 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
             await _playerRepository.CreatePlayer(player);
             return player;
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while creating Player with id {player.PlayerID}. (PlayerService)");
+            _logger.LogError(e, $"Error while creating Player with id {player.PlayerID}. (PlayerService)");
             throw;
         }
     }
@@ -28,10 +28,10 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
 
             return await _playerRepository.DeletePlayer(player);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while deleting Player with id {playerId}. (PlayerService)");
+            _logger.LogError(e, $"Error while deleting Player with id {playerId}. (PlayerService)");
             throw;
         }
     }
@@ -44,10 +44,10 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
 
             return await _playerRepository.UpdateUsername(player, newUsername);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError($"Error while updating username for Player with id {playerId}. (PlayerService)");
+            _logger.LogError(e, $"Error while updating username for Player with id {playerId}. (PlayerService)");
             throw;
         }
     }

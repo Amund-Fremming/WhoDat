@@ -49,7 +49,7 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError("Error while generating token. (AuthService)", e);
+            _logger.LogError(e, "Error while generating token. (AuthService)");
             throw;
         }
     }
@@ -66,7 +66,7 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError("Error while generating salt. (AuthService)", e);
+            _logger.LogError(e, "Error while generating salt. (AuthService)");
             throw;
         }
     }
@@ -86,7 +86,7 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError("Error while validating password with salt. (AuthService)", e);
+            _logger.LogError(e, "Error while validating password with salt. (AuthService)");
             throw;
         }
     }
@@ -109,7 +109,7 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
             catch (Exception e)
             {
                 // ADD HANDLING
-                _logger.LogError("Error while validating password with salt. (AuthService)", e);
+                _logger.LogError(e, "Error while validating password with salt. (AuthService)");
                 throw;
             }
         }
