@@ -1,6 +1,8 @@
 namespace GameEntity;
+using Enum;
 
 public class GameStateDto
 {
-    // TODO
+    public State State { get; set; }
+    public int CurrentPlayer { get; set; }
 }

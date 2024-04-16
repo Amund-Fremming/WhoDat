@@ -1,6 +1,14 @@
-namespace BoardEntity;
-
-public class BoardCardUpdateDto
+namespace BoardEntity
 {
-    // TODO
+
+    public class BoardCardUpdateDto
+    {
+        public IEnumerable<CardUpdateDetails>? Updates { get; set; }
+    }
+
+    public class CardUpdateDetails
+    {
+        public int BoardCardID { get; set; }
+        public bool Active { get; set; }
+    }
 }

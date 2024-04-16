@@ -244,4 +244,29 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPost("games/{gameId}/messages")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult> SendMessage(int gameId, [FromBody] Message message)
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+        try
+        {
+            // TODO
+            return Ok("Message Sendt!");
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
 }
