@@ -9,8 +9,6 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
     {
         try
         {
-            await _messageRepository.GetMessageById(message.MessageID);
-
             return await _messageRepository.CreateMessage(message);
         }
         catch (Exception e)

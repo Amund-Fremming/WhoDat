@@ -14,8 +14,6 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
         try
         {
             Player player = await _playerRepository.GetPlayerById(playerId);
-            await _gameRepository.GetGameById(game.GameID);
-            await _playerRepository.GetPlayerById(player.PlayerID);
 
             return await _gameRepository.CreateGame(game, player);
         }

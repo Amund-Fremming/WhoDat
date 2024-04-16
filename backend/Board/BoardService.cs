@@ -11,7 +11,16 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
 
     public async Task<int> CreateBoard(Board board)
     {
-        return await _boardRepository.CreateBoard(board);
+        try
+        {
+            return await _boardRepository.CreateBoard(board);
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError(e, $"Error while creating Board with id {board.BoardID}. (BoardService)");
+            throw;
+        }
     }
 
     public async Task DeleteBoard(int boardId)

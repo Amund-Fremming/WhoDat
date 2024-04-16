@@ -14,7 +14,6 @@ public class BoardCardService(ILogger<BoardCardService> logger, BoardCardReposit
     {
         try
         {
-            await _boardRepository.GetBoardById(boardCard.BoardID);
             await _cardRepository.GetCardById(boardCard.CardID);
 
             return await _boardcardRepository.CreateBoardCard(boardCard);
@@ -25,7 +24,6 @@ public class BoardCardService(ILogger<BoardCardService> logger, BoardCardReposit
             _logger.LogError(e, $"Error while creating BoardCard with id {boardCard.BoardCardID}. (BoardCardService)");
             throw;
         }
-
     }
 
     public async Task<bool> DeleteBoardCard(int boardCardId)

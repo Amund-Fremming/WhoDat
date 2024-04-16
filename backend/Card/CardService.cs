@@ -9,8 +9,6 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
     {
         try
         {
-            await _cardRepository.GetCardById(card.CardID);
-
             return await _cardRepository.CreateCard(card);
         }
         catch (Exception e)
