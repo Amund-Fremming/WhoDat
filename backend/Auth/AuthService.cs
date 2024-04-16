@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 using GalleryEntity;
+using Enum;
 
 namespace Auth;
 
@@ -35,6 +36,7 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, player.PlayerID.ToString()),
+                    new Claim(ClaimTypes.Role, player.Role.ToString()),
                     new Claim(ClaimTypes.Name, player.Username),
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),       // TODO - JUSTER DENNE!!!
@@ -100,7 +102,7 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
                 string saltedPassword = request.Password + salt;
                 string hashedPassword = _passwordHasher.HashPassword(null, saltedPassword);
 
-                Player player = new Player(request.Username, hashedPassword, salt);
+                Player player = new Player(request.Username, hashedPassword, salt, Role.USER);
                 Player newPlayer = await _playerService.CreatePlayer(player);
                 await _galleryService.CreateGallery(new Gallery(newPlayer.PlayerID));
 

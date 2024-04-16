@@ -3,6 +3,7 @@ using GalleryEntity;
 using BoardEntity;
 using GameEntity;
 using MessageEntity;
+using Enum;
 
 namespace PlayerEntity;
 
@@ -13,17 +14,19 @@ public class Player
     public string Username { get; set; }
     public string PasswordHash { get; set; }
     public string PasswordSalt { get; set; }
+    public Role Role { get; set; }
     public Gallery? Gallery { get; set; }
     public IEnumerable<Board>? Boards { get; set; }
     public IEnumerable<Message>? Messages { get; set; }
     public IEnumerable<Game>? GamesAsPlayerOne { get; set; }
     public IEnumerable<Game>? GamesAsPlayerTwo { get; set; }
 
-    public Player(string username, string passwordHash, string passwordSalt)
+    public Player(string username, string passwordHash, string passwordSalt, Role role)
     {
         Username = username;
         PasswordHash = passwordHash;
         PasswordSalt = passwordSalt;
+        Role = role;
     }
 
     public IEnumerable<Game> GetAllGames()

@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using GalleryEntity;
 using CardEntity;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace PlayerEntity;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/")]
 public class PlayerController(ILogger<PlayerController> logger, IPlayerService playerService, IGalleryService galleryService, ICardService cardService) : ControllerBase
 {
     public readonly ILogger<PlayerController> _logger = logger;
@@ -13,13 +15,154 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     public readonly IGalleryService _galleryService = galleryService;
     public readonly ICardService _cardService = cardService;
 
-    // Delete Player
-    // Update Player Username
+    [HttpDelete("players/delete")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult> DeletePlayer()
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        Console.WriteLine("UserID " + userIdClaim);
 
-    // Get Gallery
-    // Create Gallery (Limit to one per now)
+        try
+        {
+            // TODO
+            return Ok("Player Deleted!");
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
 
-    // Add Card to Gallery
-    // Update Card in Gallery
-    // Delete Card in Gallery
+    [HttpPut("player/update-username")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult> UpdatePlayerUsername()
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+        try
+        {
+            // TODO
+            return Ok("Username Updated!");
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpGet("galleries/{galleryId}/cards")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult<IEnumerable<Card>>> GetPlayerGalleryCards(int galleryId)
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+        try
+        {
+            // TODO
+            return Ok(Enumerable.Empty<string>());
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPost("galleries/{galleryId}/cards")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult<Card>> AddCardToGallery(int galleryId)
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+        try
+        {
+            // TODO
+            return Ok(new Card());
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPut("galleries/{galleryId}/cards/{cardId}")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult<IEnumerable<Card>>> UpdateCardInGallery(int galleryId, int cardId)
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+        try
+        {
+            // TODO
+            return Ok(Enumerable.Empty<string>());
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpDelete("galleries/{galleryId}/cards/{cardId}")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult<IEnumerable<Card>>> DeleteCardInGallery(int galleryId, int cardId)
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+        try
+        {
+            // TODO
+            return Ok(Enumerable.Empty<string>());
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
 }
