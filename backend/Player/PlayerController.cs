@@ -20,7 +20,6 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     public async Task<ActionResult> DeletePlayer()
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        Console.WriteLine("UserID " + userIdClaim);
 
         try
         {
@@ -41,9 +40,9 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
     }
 
-    [HttpPut("player/update-username")]
+    [HttpPut("players/update-username")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdatePlayerUsername()
+    public async Task<ActionResult> UpdatePlayerUsername([FromBody] string newUsername)
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
@@ -118,14 +117,14 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
 
     [HttpPut("galleries/{galleryId}/cards/{cardId}")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<IEnumerable<Card>>> UpdateCardInGallery(int galleryId, int cardId)
+    public async Task<ActionResult<Card>> UpdateCardInGallery(int galleryId, int cardId, Card updatedCard)
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
         try
         {
             // TODO
-            return Ok(Enumerable.Empty<string>());
+            return Ok(new Card());
         }
         catch (InvalidOperationException e)
         {
