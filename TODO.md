@@ -2,9 +2,8 @@
 
 ## Fix first!
 
-- LeaveGame i Game Repo, for mye logikk, flytt til service
-- CreateBoardCard -> CreateBoardCards(List<int> cardIds)
 - Add logic to Send-/CreateMessage, not possible to send without state to asking, and current player to this player
+- Split controllers to Player, Board(+ BoardCard), Gallery(+ Card), Message
 
 ## Backend
 
@@ -13,7 +12,8 @@
 - [x] Create basic Repo methods
 - [x] Create basic Service methods
 - [x] Generate database
-- [ ] Create advanced Service methods
+- [x] Add JWT for security
+- [ ] Add Transactions
 - [ ] Create Controller methods
 - [ ] Generate Mock data
 - [ ] Test Backend

@@ -67,23 +67,10 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         }
     }
 
-    async public Task<bool> LeaveGame(Game game, int playerNumber)
+    async public Task<bool> LeaveGame(Game game)
     {
         try
         {
-            if (playerNumber == 1)
-            {
-                game.PlayerOneID = -1;
-                game.PlayerOne = null;
-                game.State = State.P2_WON;
-            }
-
-            if (playerNumber == 2)
-            {
-                game.PlayerTwoID = -1;
-                game.PlayerTwo = null;
-                game.State = State.P1_WON;
-            }
 
             _context.Game.Update(game);
             await _context.SaveChangesAsync();

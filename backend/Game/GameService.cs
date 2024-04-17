@@ -1,27 +1,35 @@
 using Enum;
 using PlayerEntity;
+using Data;
 
 namespace GameEntity;
 
-public class GameService(ILogger<GameService> logger, GameRepository gameRepository, PlayerRepository playerRepository) : IGameService
+public class GameService(AppDbContext context, ILogger<GameService> logger, GameRepository gameRepository, PlayerRepository playerRepository) : IGameService
 {
+    public readonly AppDbContext _context = context;
     public readonly ILogger<GameService> _logger = logger;
     public readonly GameRepository _gameRepository = gameRepository;
     public readonly PlayerRepository _playerRepository = playerRepository;
 
     public async Task<int> CreateGame(Game game, int playerId)
     {
-        try
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-            Player player = await _playerRepository.GetPlayerById(playerId);
+            try
+            {
+                Player player = await _playerRepository.GetPlayerById(playerId);
+                int gameId = await _gameRepository.CreateGame(game, player);
 
-            return await _gameRepository.CreateGame(game, player);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while creating Game with id {game.GameID}. (GameService)");
-            throw;
+                await transaction.CommitAsync();
+                return gameId;
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e, $"Error while creating Game with id {game.GameID}. (GameService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 
@@ -43,39 +51,63 @@ public class GameService(ILogger<GameService> logger, GameRepository gameReposit
 
     public async Task<bool> JoinGameById(int gameId, int playerId)
     {
-        try
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-            Game game = await _gameRepository.GetGameById(gameId);
+            try
+            {
+                Game game = await _gameRepository.GetGameById(gameId);
+                if (game.PlayerTwoID != -1) return false;
 
-            if (game.PlayerOneID != -1 || game.PlayerTwoID != -1)
-                return false;
+                Player player = await _playerRepository.GetPlayerById(playerId);
+                bool joinedGame = await _gameRepository.JoinGame(game, player);
 
-
-            Player player = await _playerRepository.GetPlayerById(playerId);
-
-            return await _gameRepository.JoinGame(game, player);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while joining Game with id {gameId}. (GameService)");
-            throw;
+                await transaction.CommitAsync();
+                return joinedGame;
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e, $"Error while joining Game with id {gameId}. (GameService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 
     public async Task<bool> LeaveGameById(int gameId, int playerNumber)
     {
-        try
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-            Game game = await _gameRepository.GetGameById(gameId);
+            try
+            {
+                Game game = await _gameRepository.GetGameById(gameId);
 
-            return await _gameRepository.LeaveGame(game, playerNumber);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while leaving Game with id {gameId}. (GameService)");
-            throw;
+                if (playerNumber == 1)
+                {
+                    game.PlayerOneID = -1;
+                    game.PlayerOne = null;
+                    game.State = State.P2_WON;
+                }
+
+                if (playerNumber == 2)
+                {
+                    game.PlayerTwoID = -1;
+                    game.PlayerTwo = null;
+                    game.State = State.P1_WON;
+                }
+
+                bool leftGame = await _gameRepository.LeaveGame(game);
+
+                await transaction.CommitAsync();
+                return leftGame;
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e, $"Error while leaving Game with id {gameId}. (GameService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 

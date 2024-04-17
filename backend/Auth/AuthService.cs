@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 using GalleryEntity;
 using Enum;
+using Data;
 
 namespace Auth;
 
-public class AuthService(IConfiguration configuration, ILogger<AuthService> logger,
+public class AuthService(AppDbContext context, IConfiguration configuration, ILogger<AuthService> logger,
         IPasswordHasher<Player> passwordHasher, PlayerRepository playerRepository,
         IGalleryService galleryService, IPlayerService playerService) : IAuthService
 {
+    public readonly AppDbContext _context = context;
     public readonly IConfiguration _configuration = configuration;
     public readonly ILogger<AuthService> _logger = logger;
     public readonly IPasswordHasher<Player> _passwordHasher = passwordHasher;
@@ -82,7 +84,7 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
             var saltedPassword = request.Password + player.PasswordSalt;
             PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
 
-            return result == PasswordVerificationResult.Success;
+            return (result == PasswordVerificationResult.Success);
 
         }
         catch (Exception e)
@@ -95,6 +97,7 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
 
     public async Task<Player> RegisterNewPlayer(RegistrationRequest request)
     {
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
@@ -106,12 +109,14 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
                 Player newPlayer = await _playerService.CreatePlayer(player);
                 await _galleryService.CreateGallery(new Gallery(newPlayer.PlayerID));
 
+                await transaction.CommitAsync();
                 return newPlayer;
             }
             catch (Exception e)
             {
                 // ADD HANDLING
                 _logger.LogError(e, "Error while validating password with salt. (AuthService)");
+                await transaction.RollbackAsync();
                 throw;
             }
         }

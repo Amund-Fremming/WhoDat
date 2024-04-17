@@ -15,14 +15,15 @@ public enum State
     BOTH_PICKING_PLAYER,
     PICKING_PLAYER,
 
-    // Turns from P1
+    // Turns
     TURN_STARTED,
     ASKING,
     WAITING_ASK_REPLY,
-    REPLY,
-    TURN_PLAYED,
+    ASK_REPLY,
     GUESSING,
     WAITING_GUESS_REPLY,
+    GUESS_REPLY,
+    TOGGLING_CARDS,
 
     // Finished
     P1_WON,

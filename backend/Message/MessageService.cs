@@ -1,3 +1,6 @@
+using GameEntity;
+using Enum;
+
 namespace MessageEntity;
 
 public class MessageService(ILogger<MessageService> logger, MessageRepository messageRepository) : IMessageService
@@ -7,6 +10,8 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
 
     public async Task<int> CreateMessage(Message message)
     {
+        // if CanSendMessage returns true send message, if not dont!
+
         try
         {
             return await _messageRepository.CreateMessage(message);
@@ -17,6 +22,19 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
             _logger.LogError(e, $"Error while creating Message with id {message.MessageID}. (MessageService)");
             throw;
         }
+    }
+
+    public bool CanSendMessage(int playerId, int currentPlayerId, State currentState)
+    {
+        bool isCurrentPlayer = currentPlayerId == playerId;
+
+        if (isCurrentPlayer)
+            return (currentState == State.ASKING || currentState == State.GUESSING);
+
+        if (!isCurrentPlayer)
+            return (currentState == State.WAITING_ASK_REPLY || currentState == State.WAITING_GUESS_REPLY);
+
+        return false;
     }
 
     public async Task<bool> DeleteMessage(int messageId)
@@ -35,6 +53,7 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
         }
     }
 
+    // RM
     public async Task<bool> UpdateMessage(int oldMessageId, Message newMessage)
     {
         try

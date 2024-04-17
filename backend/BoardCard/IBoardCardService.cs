@@ -3,7 +3,7 @@ namespace BoardCardEntity;
 public interface IBoardCardService
 {
     /* Basic CRUD */
-    public Task<int> CreateBoardCard(BoardCard boardCard);
+    public Task CreateBoardCards(int boardId, List<int> cardIds);
     public Task<bool> DeleteBoardCard(int boardCardId);
 
     /* Other */

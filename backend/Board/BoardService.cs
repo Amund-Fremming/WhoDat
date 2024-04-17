@@ -40,18 +40,24 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
 
     public async Task ChooseCard(int boardId, int boardCardId)
     {
-        try
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-            Board board = await _boardRepository.GetBoardById(boardId);
-            BoardCard boardCard = await _boardCardRepository.GetBoardCardById(boardCardId);
 
-            await _boardRepository.ChooseCard(board, boardCard);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error chosing a card on Board with id {boardId}. (BoardService)");
-            throw;
+            try
+            {
+                Board board = await _boardRepository.GetBoardById(boardId);
+                BoardCard boardCard = await _boardCardRepository.GetBoardCardById(boardCardId);
+
+                await _boardRepository.ChooseCard(board, boardCard);
+                await transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e, $"Error chosing a card on Board with id {boardId}. (BoardService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 

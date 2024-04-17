@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace GameEntity;
 
 [ApiController]
-[Route("api/")]
+[Route("api/[controller]")]
 public class GameController(ILogger<GameController> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService) : ControllerBase
 {
     public readonly ILogger<GameController> _logger = logger;
