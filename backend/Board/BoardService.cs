@@ -9,25 +9,35 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
     public readonly BoardRepository _boardRepository = boardRepository;
     public readonly BoardCardRepository _boardCardRepository = boardCardRepository;
 
-    public async Task<int> CreateBoard(Board board)
+    public async Task<int> CreateBoard(int playerId, Board board)
     {
-        try
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-            return await _boardRepository.CreateBoard(board);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while creating Board with id {board.BoardID}. (BoardService)");
-            throw;
+            try
+            {
+                board.PlayerID = playerId;
+                int boardId = await _boardRepository.CreateBoard(board);
+
+                await transaction.CommitAsync();
+                return boardId;
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e, $"Error while creating Board with id {board.BoardID}. (BoardService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 
-    public async Task DeleteBoard(int boardId)
+    public async Task DeleteBoard(int playerId, int boardId)
     {
         try
         {
-            Board? board = await _boardRepository.GetBoardById(boardId);
+            Board board = await _boardRepository.GetBoardById(boardId);
+            PlayerHasPermission(playerId, board);
+
             await _boardRepository.DeleteBoard(board);
         }
         catch (Exception e)
@@ -74,5 +84,11 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
             _logger.LogError(e, $"Error updating card on Board with id {boardId}. (BoardService)");
             throw;
         }
+    }
+
+    public void PlayerHasPermission(int playerId, Board board)
+    {
+        if (board.PlayerID != playerId)
+            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
     }
 }

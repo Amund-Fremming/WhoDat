@@ -15,6 +15,7 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
 
     public async Task CreateBoardCards(int boardId, List<int> cardIds)
     {
+        // TODO - does player have permisson?
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
@@ -36,13 +37,14 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
         }
     }
 
-    public async Task<bool> DeleteBoardCard(int boardCardId)
+    // RM
+    public async Task DeleteBoardCard(int boardCardId)
     {
         try
         {
             BoardCard boardCard = await _boardcardRepository.GetBoardCardById(boardCardId);
 
-            return await _boardcardRepository.DeleteBoardCard(boardCard);
+            await _boardcardRepository.DeleteBoardCard(boardCard);
         }
         catch (Exception e)
         {
@@ -52,13 +54,13 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
         }
     }
 
-    public async Task<bool> UpdateActive(int boardCardId, bool active)
+    public async Task UpdateActive(int boardCardId, bool active)
     {
         try
         {
             BoardCard boardCard = await _boardcardRepository.GetBoardCardById(boardCardId);
 
-            return await _boardcardRepository.UpdateActive(boardCard, active);
+            await _boardcardRepository.UpdateActive(boardCard, active);
         }
         catch (Exception e)
         {

@@ -17,7 +17,6 @@ public class Board
     public int ChosenCardID { get; set; }
     public BoardCard? ChosenCard { get; set; }
     public int PlayersLeft { get; set; }
-
     public IEnumerable<Message>? Messages { get; set; }
     public IEnumerable<BoardCard>? BoardCards { get; set; }
 

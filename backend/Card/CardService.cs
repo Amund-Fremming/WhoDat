@@ -19,13 +19,13 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         }
     }
 
-    public async Task<bool> DeleteCard(int cardId)
+    public async Task DeleteCard(int cardId)
     {
         try
         {
             Card card = await _cardRepository.GetCardById(cardId);
 
-            return await _cardRepository.DeleteCard(card);
+            await _cardRepository.DeleteCard(card);
         }
         catch (Exception e)
         {
@@ -35,13 +35,14 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         }
     }
 
-    public async Task<bool> UpdateCard(Card newCard)
+    // RM
+    public async Task UpdateCard(Card newCard)
     {
         try
         {
             Card oldCard = await _cardRepository.GetCardById(newCard.CardID);
 
-            return await _cardRepository.UpdateCard(oldCard, newCard);
+            await _cardRepository.UpdateCard(oldCard, newCard);
         }
         catch (Exception e)
         {

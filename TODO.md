@@ -2,8 +2,13 @@
 
 ## Fix first!
 
-- Add logic to Send-/CreateMessage, not possible to send without state to asking, and current player to this player
-- Split controllers to Player, Board(+ BoardCard), Gallery(+ Card), Message
+- [ ] TODO in DeleteBoard -> BoardService
+- [ ] TODO in CreateBoardCards -> BoardCardService
+- [ ] TODO CheckPromission
+- [ ] TODO catch UnauthorizedAccessException in all controllers
+- [ ] REMOVE? DeleteBoardCard -> BoardCardService, BoardCardRepository
+
+<hr />
 
 ## Backend
 
@@ -13,7 +18,7 @@
 - [x] Create basic Service methods
 - [x] Generate database
 - [x] Add JWT for security
-- [ ] Add Transactions
+- [x] Add Transactions
 - [ ] Create Controller methods
 - [ ] Generate Mock data
 - [ ] Test Backend
@@ -22,6 +27,8 @@
 - [ ] Look for Edge-cases and fix them
 - [ ] Add error handling for when wifi goes down
 - [ ] Add error handling
+- [ ] Create Docs, for services and gerneral
+- [ ] Add logic for adding payment solution for buying more gallery cards??
 
 <hr />
 
@@ -45,4 +52,12 @@
 - [ ] Deploy to Azure
 - [ ] User Test with Test Flight
 - [ ] Fix user feedback
+- [ ] Repeat deploy again until finished
 - [ ] Deploy to the AppStore
+
+<hr />
+
+## Monetization
+
+- Remove update card functinallity, players get x number of cards, can buy more
+- Bundle packs (Premade galleries)

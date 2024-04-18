@@ -2,8 +2,7 @@ namespace MessageEntity;
 
 public interface IMessageService
 {
-    /* Basic CRUD */
-    public Task<int> CreateMessage(Message message);
+    public Task<int> CreateMessage(int playerId, int gameId, Message message);
     public Task<bool> DeleteMessage(int messageId);
     public Task<bool> UpdateMessage(int oldMessageId, Message newMessage);
 }

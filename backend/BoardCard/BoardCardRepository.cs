@@ -27,6 +27,7 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
         }
     }
 
+    // RM
     public async Task<bool> DeleteBoardCard(BoardCard boardCard)
     {
         try

@@ -119,7 +119,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult<Card>> UpdateCardInGallery(int galleryId, int cardId, Card updatedCard)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         try
         {

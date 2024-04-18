@@ -12,7 +12,7 @@ public class Game
     public int GameID { get; set; }
     public int PlayerOneID { get; set; }
     public Player? PlayerOne { get; set; }
-    public int? PlayerTwoID { get; set; }
+    public int PlayerTwoID { get; set; }
     public Player? PlayerTwo { get; set; }
     public int CurrentPlayer { get; set; }
     public State State { get; set; }
@@ -25,6 +25,8 @@ public class Game
     public Game(int playerOneId, State state)
     {
         PlayerOneID = playerOneId;
+        PlayerTwoID = -1;
+        CurrentPlayer = 1;
         State = state;
     }
 }

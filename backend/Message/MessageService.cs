@@ -3,18 +3,27 @@ using Enum;
 
 namespace MessageEntity;
 
-public class MessageService(ILogger<MessageService> logger, MessageRepository messageRepository) : IMessageService
+public class MessageService(ILogger<MessageService> logger, MessageRepository messageRepository, GameRepository gameRepository) : IMessageService
 {
-    public readonly MessageRepository _messageRepository = messageRepository;
     public readonly ILogger<MessageService> _logger = logger;
+    public readonly MessageRepository _messageRepository = messageRepository;
+    public readonly GameRepository _gameRepository = gameRepository;
 
-    public async Task<int> CreateMessage(Message message)
+    public async Task<int> CreateMessage(int playerId, int gameId, Message message)
     {
-        // if CanSendMessage returns true send message, if not dont!
-
         try
         {
-            return await _messageRepository.CreateMessage(message);
+            Game game = await _gameRepository.GetGameById(gameId);
+            if (game.PlayerOneID == -1 || game.PlayerTwoID == -1)
+                throw new Exception($"Not enough player for sending messages!");
+
+            int currentPlayerId = game.CurrentPlayer == 1 ? game.PlayerOneID : game.PlayerTwoID;
+            bool canSendMessage = CanSendMessage(playerId, currentPlayerId, game.State);
+
+            if (canSendMessage)
+                return await _messageRepository.CreateMessage(message);
+
+            return -1;
         }
         catch (Exception e)
         {

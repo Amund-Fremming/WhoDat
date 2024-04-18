@@ -1,9 +1,12 @@
+using Data;
+
 namespace GalleryEntity;
 
-public class GalleryService(ILogger<GalleryService> logger, GalleryRepository galleryRepository) : IGalleryService
+public class GalleryService(AppDbContext context, ILogger<GalleryService> logger, GalleryRepository galleryRepository) : IGalleryService
 {
-    public readonly GalleryRepository _galleryRepository = galleryRepository;
+    public readonly AppDbContext _context = context;
     public readonly ILogger<GalleryService> _logger = logger;
+    public readonly GalleryRepository _galleryRepository = galleryRepository;
 
     public async Task<int> CreateGallery(Gallery gallery)
     {
@@ -19,19 +22,24 @@ public class GalleryService(ILogger<GalleryService> logger, GalleryRepository ga
         }
     }
 
-    public async Task<bool> DeleteGallery(int galleryId)
+    public async Task DeleteGallery(int galleryId)
     {
-        try
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-            Gallery gallery = await _galleryRepository.GetGalleryById(galleryId);
+            try
+            {
+                Gallery gallery = await _galleryRepository.GetGalleryById(galleryId);
+                bool deletedGallery = await _galleryRepository.DeleteGallery(gallery);
 
-            return await _galleryRepository.DeleteGallery(gallery);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while deleting Gallery with id {galleryId}. (GalleryService)");
-            throw;
+                await transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e, $"Error while deleting Gallery with id {galleryId}. (GalleryService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 
