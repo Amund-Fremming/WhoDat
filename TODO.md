@@ -1,5 +1,7 @@
 # TODO`S
 
+<hr />
+
 ## Fix first!
 
 - [ ] TODO in DeleteBoard -> BoardService
