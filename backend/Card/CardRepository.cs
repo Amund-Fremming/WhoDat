@@ -67,9 +67,10 @@ public class CardRepository(AppDbContext context, ILogger<CardRepository> logger
         }
     }
 
-    public async Task<IEnumerable<Card>> GetAllCards()
+    public async Task<IEnumerable<Card>> GetAllCards(int galleryId)
     {
         return await _context.Card
+            .Where(c => c.GalleryID == galleryId)
             .ToListAsync();
     }
 }

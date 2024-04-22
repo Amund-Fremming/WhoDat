@@ -33,29 +33,34 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
 
     public async Task DeleteBoard(int playerId, int boardId)
     {
-        try
-        {
-            Board board = await _boardRepository.GetBoardById(boardId);
-            PlayerHasPermission(playerId, board);
-
-            await _boardRepository.DeleteBoard(board);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while deleting Board with id {boardId}. (BoardService)");
-            throw;
-        }
-    }
-
-    public async Task ChooseCard(int boardId, int boardCardId)
-    {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-
             try
             {
                 Board board = await _boardRepository.GetBoardById(boardId);
+                PlayerHasPermission(playerId, board);
+
+                await _boardRepository.DeleteBoard(board);
+                await transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e, $"Error while deleting Board with id {boardId}. (BoardService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+    }
+
+    public async Task ChooseCard(int playerId, int boardId, int boardCardId)
+    {
+        using (var transaction = await _context.Database.BeginTransactionAsync())
+        {
+            try
+            {
+                Board board = await _boardRepository.GetBoardById(boardId);
+                PlayerHasPermission(playerId, board);
                 BoardCard boardCard = await _boardCardRepository.GetBoardCardById(boardCardId);
 
                 await _boardRepository.ChooseCard(board, boardCard);
@@ -71,11 +76,13 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         }
     }
 
-    public async Task UpdatePlayersLeft(int boardId, int activePlayers)
+    public async Task UpdatePlayersLeft(int playerId, int boardId, int activePlayers)
     {
         try
         {
             Board board = await _boardRepository.GetBoardById(boardId);
+            PlayerHasPermission(playerId, board);
+
             await _boardRepository.UpdatePlayersLeft(board, activePlayers);
         }
         catch (Exception e)

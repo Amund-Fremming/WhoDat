@@ -2,7 +2,6 @@ namespace BoardCardEntity;
 
 public interface IBoardCardService
 {
-    public Task CreateBoardCards(int boardId, List<int> cardIds);
-    public Task DeleteBoardCard(int boardCardId);
-    public Task UpdateActive(int boardCardId, bool active);
+    public Task CreateBoardCards(int playerId, int boardId, List<int> cardIds);
+    public Task UpdateActive(int playerId, int boardCardId, bool active);
 }

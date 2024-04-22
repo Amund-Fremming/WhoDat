@@ -5,10 +5,11 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
     public readonly CardRepository _cardRepository = cardRepository;
     public readonly ILogger<CardService> _logger = logger;
 
-    public async Task<int> CreateCard(Card card)
+    public async Task<int> CreateCard(int playerId, int galleryId, Card card)
     {
         try
         {
+            // TODO - hasPermission
             return await _cardRepository.CreateCard(card);
         }
         catch (Exception e)
@@ -19,11 +20,12 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         }
     }
 
-    public async Task DeleteCard(int cardId)
+    public async Task DeleteCard(int playerId, int galleryId, int cardId)
     {
         try
         {
             Card card = await _cardRepository.GetCardById(cardId);
+            // TODO - hasPermission
 
             await _cardRepository.DeleteCard(card);
         }
@@ -35,12 +37,12 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         }
     }
 
-    // RM
-    public async Task UpdateCard(Card newCard)
+    public async Task UpdateCard(int playerId, Card newCard)
     {
         try
         {
             Card oldCard = await _cardRepository.GetCardById(newCard.CardID);
+            // TODO - hasPermission
 
             await _cardRepository.UpdateCard(oldCard, newCard);
         }
@@ -52,11 +54,13 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         }
     }
 
-    public async Task<IEnumerable<Card>> GetAllCards()
+    public async Task<IEnumerable<Card>> GetAllCards(int playerId, int galleryId)
     {
         try
         {
-            return await _cardRepository.GetAllCards();
+            // TODO - hasPermission
+
+            return await _cardRepository.GetAllCards(galleryId);
         }
         catch (Exception e)
         {

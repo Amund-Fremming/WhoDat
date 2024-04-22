@@ -33,20 +33,8 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
         }
     }
 
-    public bool CanSendMessage(int playerId, int currentPlayerId, State currentState)
-    {
-        bool isCurrentPlayer = currentPlayerId == playerId;
-
-        if (isCurrentPlayer)
-            return (currentState == State.ASKING || currentState == State.GUESSING);
-
-        if (!isCurrentPlayer)
-            return (currentState == State.WAITING_ASK_REPLY || currentState == State.WAITING_GUESS_REPLY);
-
-        return false;
-    }
-
-    public async Task<bool> DeleteMessage(int messageId)
+    // TODO - permission 
+    public async Task<bool> DeleteMessage(int playerId, int messageId)
     {
         try
         {
@@ -62,20 +50,16 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
         }
     }
 
-    // RM
-    public async Task<bool> UpdateMessage(int oldMessageId, Message newMessage)
+    public bool CanSendMessage(int playerId, int currentPlayerId, State currentState)
     {
-        try
-        {
-            Message oldMessage = await _messageRepository.GetMessageById(oldMessageId);
+        bool isCurrentPlayer = currentPlayerId == playerId;
 
-            return await _messageRepository.UpdateMessage(oldMessage, newMessage);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while updating Message with id {newMessage.MessageID}. (MessageService)");
-            throw;
-        }
+        if (isCurrentPlayer)
+            return (currentState == State.ASKING || currentState == State.GUESSING);
+
+        if (!isCurrentPlayer)
+            return (currentState == State.WAITING_ASK_REPLY || currentState == State.WAITING_GUESS_REPLY);
+
+        return false;
     }
 }

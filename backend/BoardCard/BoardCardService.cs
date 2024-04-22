@@ -13,19 +13,22 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
     public readonly BoardRepository _boardRepository = boardRepository;
     public readonly CardRepository _cardRepository = cardRepository;
 
-    public async Task CreateBoardCards(int boardId, List<int> cardIds)
+    public async Task CreateBoardCards(int playerId, int boardId, List<int> cardIds)
     {
-        // TODO - does player have permisson?
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
+                Board board = await _boardRepository.GetBoardById(boardId);
+                PlayerHasPermission(playerId, board);
+
                 foreach (int cardId in cardIds)
                 {
                     await _cardRepository.GetCardById(cardId);
                     await _boardcardRepository.CreateBoardCard(new BoardCard(boardId, cardId));
                 }
 
+                await transaction.CommitAsync();
             }
             catch (Exception e)
             {
@@ -37,28 +40,12 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
         }
     }
 
-    // RM
-    public async Task DeleteBoardCard(int boardCardId)
+    public async Task UpdateActive(int playerId, int boardCardId, bool active)
     {
         try
         {
             BoardCard boardCard = await _boardcardRepository.GetBoardCardById(boardCardId);
-
-            await _boardcardRepository.DeleteBoardCard(boardCard);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while deleting BoardCard with id {boardCardId}. (BoardCardService)");
-            throw;
-        }
-    }
-
-    public async Task UpdateActive(int boardCardId, bool active)
-    {
-        try
-        {
-            BoardCard boardCard = await _boardcardRepository.GetBoardCardById(boardCardId);
+            PlayerHasPermission(playerId, boardCard.Board!);
 
             await _boardcardRepository.UpdateActive(boardCard, active);
         }
@@ -68,5 +55,11 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
             _logger.LogError(e, $"Error while updating BoardCard with id {boardCardId}. (BoardCardService)");
             throw;
         }
+    }
+
+    public void PlayerHasPermission(int playerId, Board board)
+    {
+        if (board.PlayerID != playerId)
+            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
     }
 }

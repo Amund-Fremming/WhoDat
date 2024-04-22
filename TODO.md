@@ -4,9 +4,7 @@
 
 ## Fix first!
 
-- [ ] TODO in DeleteBoard -> BoardService
-- [ ] TODO in CreateBoardCards -> BoardCardService
-- [ ] TODO CheckPromission
+- [ ] TODO CheckPromission (GameService, CardService)
 - [ ] TODO catch UnauthorizedAccessException in all controllers
 - [ ] REMOVE? DeleteBoardCard -> BoardCardService, BoardCardRepository
 

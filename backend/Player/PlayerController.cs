@@ -16,7 +16,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     public readonly ICardService _cardService = cardService;
 
     [HttpDelete("players/delete")]
-    [Authorize(Roles = "ADMIN,USER")]
+    [Authorize(Roles = "ADMIN")]
     public async Task<ActionResult> DeletePlayer()
     {
         var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
