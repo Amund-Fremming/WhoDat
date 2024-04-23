@@ -45,12 +45,6 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
     }
 
-    public async Task<bool> DoesUsernameExist(string username)
-    {
-        return await _context.Player
-            .AnyAsync(p => p.Username == username);
-    }
-
     public async Task<Player> GetPlayerByUsername(string username)
     {
         return await _context.Player
@@ -73,5 +67,11 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
             _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID} .(PlayerRepository)");
             return false;
         }
+    }
+
+    public async Task<bool> DoesUsernameExist(string username)
+    {
+        return await _context.Player
+            .AnyAsync(p => p.Username == username);
     }
 }

@@ -27,23 +27,6 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
         }
     }
 
-    // RM
-    public async Task<bool> DeleteBoardCard(BoardCard boardCard)
-    {
-        try
-        {
-            _context.BoardCard.Remove(boardCard);
-            await _context.SaveChangesAsync();
-
-            return true;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error deleting BoardCard with id {boardCard.BoardCardID} .(BoardCardRepository)");
-            return false;
-        }
-    }
-
     public async Task<bool> UpdateActive(BoardCard boardCard, bool active)
     {
         try

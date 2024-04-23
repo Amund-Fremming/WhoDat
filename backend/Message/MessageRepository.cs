@@ -26,40 +26,4 @@ public class MessageRepository(AppDbContext context, ILogger<MessageRepository> 
             return -1;
         }
     }
-
-    public async Task<bool> DeleteMessage(Message message)
-    {
-        try
-        {
-            _context.Message.Remove(message);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error deleting Message with id {message.MessageID} .(MessageRepository)");
-            return false;
-        }
-    }
-
-    public async Task<bool> UpdateMessage(Message oldMessage, Message newMessage)
-    {
-        try
-        {
-            oldMessage.GameID = newMessage.GameID;
-            oldMessage.Game = newMessage.Game;
-            oldMessage.PlayerID = newMessage.PlayerID;
-            oldMessage.Player = newMessage.Player;
-            oldMessage.MessageText = newMessage.MessageText;
-
-            _context.Message.Update(oldMessage);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error updating Message with id {oldMessage.MessageID} .(MessageRepository)");
-            return false;
-        }
-    }
 }

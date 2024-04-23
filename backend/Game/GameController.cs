@@ -36,6 +36,10 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         {
             return NotFound(e.Message);
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);
@@ -60,6 +64,10 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {
@@ -88,6 +96,10 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         {
             return NotFound(e.Message);
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);
@@ -112,6 +124,10 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {
@@ -138,6 +154,10 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {

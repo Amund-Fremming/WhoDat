@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace PlayerEntity;
 
 [ApiController]
-[Route("api/")]
+[Route("api/[controller]")]
 public class PlayerController(ILogger<PlayerController> logger, IPlayerService playerService, IGalleryService galleryService, ICardService cardService) : ControllerBase
 {
     public readonly ILogger<PlayerController> _logger = logger;
@@ -34,6 +34,10 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         {
             return NotFound(e.Message);
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);
@@ -58,6 +62,10 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {
@@ -84,6 +92,10 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         {
             return NotFound(e.Message);
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);
@@ -108,6 +120,10 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {
@@ -134,6 +150,10 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         {
             return NotFound(e.Message);
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);
@@ -158,6 +178,10 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {

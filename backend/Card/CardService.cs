@@ -43,6 +43,7 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         }
     }
 
+    // RM - Maybe make players pay for more cards?
     public async Task UpdateCard(int playerId, Card newCard)
     {
         try

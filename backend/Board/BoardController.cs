@@ -32,6 +32,10 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
         {
             return NotFound(e.Message);
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);
@@ -58,6 +62,10 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
         {
             return NotFound(e.Message);
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);
@@ -83,6 +91,10 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
         {
             return NotFound(e.Message);
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);
@@ -107,6 +119,10 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {
@@ -134,6 +150,10 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
         {
             return NotFound(e.Message);
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);
@@ -160,6 +180,10 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {

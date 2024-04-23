@@ -46,7 +46,7 @@ public class CardRepository(AppDbContext context, ILogger<CardRepository> logger
         }
     }
 
-    // RM
+    // RM - Maybe make players pay for more cards?
     public async Task<bool> UpdateCard(Card oldCard, Card newCard)
     {
         try
