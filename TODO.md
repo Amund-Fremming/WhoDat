@@ -4,7 +4,7 @@
 
 ## Fix first!
 
-- [ ] TODO CheckPromission (GameService, CardService)
+- [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 - [ ] TODO catch UnauthorizedAccessException in all controllers
 - [ ] REMOVE? DeleteBoardCard -> BoardCardService, BoardCardRepository
 

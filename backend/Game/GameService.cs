@@ -11,7 +11,6 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
     public readonly GameRepository _gameRepository = gameRepository;
     public readonly PlayerRepository _playerRepository = playerRepository;
 
-    // TODO - hasPermission
     public async Task<int> CreateGame(int playerId, Game game)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -19,6 +18,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             try
             {
                 Player player = await _playerRepository.GetPlayerById(playerId);
+                game.PlayerTwoID = -1;
                 int gameId = await _gameRepository.CreateGame(game, player);
 
                 await transaction.CommitAsync();
@@ -34,12 +34,12 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         }
     }
 
-    // TODO - hasPermission
     public async Task<bool> DeleteGame(int playerId, int gameId)
     {
         try
         {
             Game game = await _gameRepository.GetGameById(gameId);
+            PlayerHasPermission(playerId, game);
 
             return await _gameRepository.DeleteGame(game);
         }
@@ -51,7 +51,6 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         }
     }
 
-    // TODO - hasPermission
     public async Task<bool> JoinGameById(int playerId, int gameId)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -77,7 +76,6 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         }
     }
 
-    // TODO - hasPermission
     public async Task<bool> LeaveGameById(int playerId, int gameId, int playerNumber)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -85,6 +83,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
+                PlayerHasPermission(playerId, game);
 
                 if (playerNumber == 1)
                 {
@@ -115,7 +114,6 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         }
     }
 
-    // TODO - hasPermission
     public async Task<bool> UpdateGameState(int playerId, int gameId, State state)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -123,6 +121,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
+                PlayerHasPermission(playerId, game);
                 bool updatedGameState = await _gameRepository.UpdateGameState(game, state);
 
                 await transaction.CommitAsync();
@@ -138,7 +137,6 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         }
     }
 
-    // TODO - hasPermission
     public async Task<bool> UpdateCurrentPlayerTurn(int playerId, int gameId, int playerNumber)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -146,6 +144,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
+                PlayerHasPermission(playerId, game);
                 bool updatedGameState = await _gameRepository.UpdateCurrentPlayerTurn(game, playerNumber);
 
                 await transaction.CommitAsync();
@@ -157,6 +156,15 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
                 _logger.LogError(e, $"Error while updating current player turn in Game with id {gameId}. (GameService)");
                 throw;
             }
+        }
+    }
+
+    public void PlayerHasPermission(int playerId, Game game)
+    {
+        if (playerId != game.PlayerOneID || playerId != game.PlayerTwoID)
+        {
+            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
+            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (GameService)");
         }
     }
 }

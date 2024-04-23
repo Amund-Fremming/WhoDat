@@ -33,23 +33,6 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
         }
     }
 
-    // TODO - permission 
-    public async Task<bool> DeleteMessage(int playerId, int messageId)
-    {
-        try
-        {
-            Message message = await _messageRepository.GetMessageById(messageId);
-
-            return await _messageRepository.DeleteMessage(message);
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while deleting Message with id {messageId}. (MessageService)");
-            throw;
-        }
-    }
-
     public bool CanSendMessage(int playerId, int currentPlayerId, State currentState)
     {
         bool isCurrentPlayer = currentPlayerId == playerId;

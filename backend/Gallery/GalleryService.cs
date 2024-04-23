@@ -59,6 +59,9 @@ public class GalleryService(AppDbContext context, ILogger<GalleryService> logger
     public void PlayerHasPermission(int playerId, Gallery gallery)
     {
         if (gallery.PlayerID != playerId)
+        {
+            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
+        }
     }
 }

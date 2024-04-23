@@ -96,6 +96,9 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
     public void PlayerHasPermission(int playerId, Board board)
     {
         if (board.PlayerID != playerId)
-            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
+        {
+            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
+            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (BoardService)");
+        }
     }
 }

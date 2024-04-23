@@ -60,6 +60,9 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
     public void PlayerHasPermission(int playerId, Board board)
     {
         if (board.PlayerID != playerId)
+        {
+            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
+        }
     }
 }

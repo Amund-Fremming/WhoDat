@@ -1,15 +1,20 @@
+using GalleryEntity;
+
 namespace CardEntity;
 
-public class CardService(ILogger<CardService> logger, CardRepository cardRepository) : ICardService
+public class CardService(ILogger<CardService> logger, CardRepository cardRepository, GalleryRepository galleryRepository) : ICardService
 {
-    public readonly CardRepository _cardRepository = cardRepository;
     public readonly ILogger<CardService> _logger = logger;
+    public readonly CardRepository _cardRepository = cardRepository;
+    public readonly GalleryRepository _galleryRepository = galleryRepository;
 
-    public async Task<int> CreateCard(int playerId, int galleryId, Card card)
+    public async Task<int> CreateCard(int playerId, Card card)
     {
         try
         {
-            // TODO - hasPermission
+            Gallery gallery = await _galleryRepository.GetGalleryById(card.GalleryID);
+            PlayerHasPermission(playerId, gallery);
+
             return await _cardRepository.CreateCard(card);
         }
         catch (Exception e)
@@ -20,12 +25,13 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         }
     }
 
-    public async Task DeleteCard(int playerId, int galleryId, int cardId)
+    public async Task DeleteCard(int playerId, int cardId)
     {
         try
         {
             Card card = await _cardRepository.GetCardById(cardId);
-            // TODO - hasPermission
+            Gallery gallery = await _galleryRepository.GetGalleryById(card.GalleryID);
+            PlayerHasPermission(playerId, gallery);
 
             await _cardRepository.DeleteCard(card);
         }
@@ -42,7 +48,8 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         try
         {
             Card oldCard = await _cardRepository.GetCardById(newCard.CardID);
-            // TODO - hasPermission
+            Gallery gallery = await _galleryRepository.GetGalleryById(newCard.GalleryID);
+            PlayerHasPermission(playerId, gallery);
 
             await _cardRepository.UpdateCard(oldCard, newCard);
         }
@@ -58,7 +65,8 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
     {
         try
         {
-            // TODO - hasPermission
+            Gallery gallery = await _galleryRepository.GetGalleryById(galleryId);
+            PlayerHasPermission(playerId, gallery);
 
             return await _cardRepository.GetAllCards(galleryId);
         }
@@ -67,6 +75,15 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
             // ADD HANDLING
             _logger.LogError(e, $"Error while getting all cards. (CardService)");
             throw;
+        }
+    }
+
+    public void PlayerHasPermission(int playerId, Gallery gallery)
+    {
+        if (playerId != gallery.PlayerID)
+        {
+            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
+            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
         }
     }
 }
