@@ -9,6 +9,9 @@
 - [ ] TODO-LATER add api for getting history/stats
 
 - [ ] TODO fix LeaveGameById, remove playernumber, also remove player from game, not just game from player
+- Make func for parsing id claim
+- Create gallery?
+- get all galleries?
 
 <hr />
 
