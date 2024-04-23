@@ -76,11 +76,11 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> SetPlayingBoardCard(int boardId, int boardCardId)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         try
         {
-            await _boardService.ChooseCard(boardId, boardCardId);
+            await _boardService.ChooseCard(int.Parse(userIdClaim!), boardId, boardCardId);
             return Ok("BoardCard Chosen!");
         }
         catch (InvalidOperationException e)
@@ -105,11 +105,11 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> UpdatePlayersLeftOnBoard(int boardId, [FromBody] int playersLeft)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         try
         {
-            await _boardService.UpdatePlayersLeft(boardId, playersLeft);
+            await _boardService.UpdatePlayersLeft(int.Parse(userIdClaim!), boardId, playersLeft);
             return Ok("Updated Players Left!");
         }
         catch (InvalidOperationException e)
@@ -130,16 +130,15 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
         }
     }
 
-
     [HttpPost("boards/{boardId}/boardcards")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> CreateBoardCards(int boardId, List<int> cardIds)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         try
         {
-            await _boardCardService.CreateBoardCards(boardId, cardIds);
+            await _boardCardService.CreateBoardCards(int.Parse(userIdClaim!), boardId, cardIds);
             return Ok("BoardCards Created!");
         }
         catch (InvalidOperationException e)
@@ -159,8 +158,6 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
             return StatusCode(500, e.Message);
         }
     }
-
-
 
     [HttpPut("boards/{boardId}/boardcards")]
     [Authorize(Roles = "ADMIN,USER")]

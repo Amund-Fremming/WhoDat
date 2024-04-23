@@ -5,6 +5,10 @@
 ## Fix first!
 
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
+- [ ] TODO-LATER handle GameFullException in frontend, display game full
+- [ ] TODO-LATER add api for getting history/stats
+
+- [ ] TODO fix LeaveGameById, remove playernumber, also remove player from game, not just game from player
 
 <hr />
 
