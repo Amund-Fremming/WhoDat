@@ -8,8 +8,7 @@
 - [ ] TODO-LATER handle GameFullException in frontend, display game full
 - [ ] TODO-LATER add api for getting history/stats
 
-- [ ] TODO fix LeaveGameById, remove playernumber, also remove player from game, not just game from player
-- Make func for parsing id claim
+- Set object IDs in service not in controllers?
 - Create gallery?
 - get all galleries?
 
@@ -29,6 +28,7 @@
 - [ ] Test Backend
 - [x] Implement JWT
 - [ ] Test JWT implementation
+- [ ] Add input validation
 - [ ] Look for Edge-cases and fix them
 - [ ] Add error handling for when wifi goes down
 - [ ] Add error handling
@@ -47,6 +47,7 @@
 - [ ] Implement the screens with their components
 - [ ] Implement the LoginWall
 - [ ] Add Token handling for security
+- [ ] Add input validation
 - [ ] Test the app
 
 <hr />

@@ -19,11 +19,11 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     [Authorize(Roles = "ADMIN")]
     public async Task<ActionResult> DeletePlayer()
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            // TODO
+            int playerId = ParsePlayerIdClaim();
+            await _playerService.DeletePlayer(playerId);
+
             return Ok("Player Deleted!");
         }
         catch (InvalidOperationException e)
@@ -48,11 +48,11 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> UpdatePlayerUsername([FromBody] string newUsername)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
         try
         {
-            // TODO
+            int playerId = ParsePlayerIdClaim();
+            await _playerService.UpdateUsername(playerId, newUsername);
+
             return Ok("Username Updated!");
         }
         catch (InvalidOperationException e)
@@ -77,12 +77,12 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult<IEnumerable<Card>>> GetPlayerGalleryCards(int galleryId)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
         try
         {
-            // TODO
-            return Ok(Enumerable.Empty<string>());
+            int playerId = ParsePlayerIdClaim();
+            IEnumerable<Card> cards = await _cardService.GetAllCards(playerId, galleryId);
+
+            return Ok(cards);
         }
         catch (InvalidOperationException e)
         {
@@ -104,14 +104,15 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
 
     [HttpPost("galleries/{galleryId}/cards")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<Card>> AddCardToGallery(int galleryId)
+    public async Task<ActionResult> AddCardToGallery(int galleryId, [FromBody] Card card)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
         try
         {
-            // TODO
-            return Ok(new Card());
+            card.GalleryID = galleryId;
+            int playerId = ParsePlayerIdClaim();
+            int cardId = await _cardService.CreateCard(playerId, card);
+
+            return Ok($"Card Created {cardId}");
         }
         catch (InvalidOperationException e)
         {
@@ -133,14 +134,16 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
 
     [HttpPut("galleries/{galleryId}/cards/{cardId}")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<Card>> UpdateCardInGallery(int galleryId, int cardId, Card updatedCard)
+    public async Task<ActionResult> UpdateCardInGallery(int galleryId, int cardId, [FromBody] Card updatedCard)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            // TODO
-            return Ok(new Card());
+            updatedCard.GalleryID = galleryId;
+            updatedCard.CardID = cardId;
+            int playerId = ParsePlayerIdClaim();
+            await _cardService.UpdateCard(playerId, updatedCard);
+
+            return Ok("Card Updated!");
         }
         catch (InvalidOperationException e)
         {
@@ -162,14 +165,14 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
 
     [HttpDelete("galleries/{galleryId}/cards/{cardId}")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<IEnumerable<Card>>> DeleteCardInGallery(int galleryId, int cardId)
+    public async Task<ActionResult> DeleteCardInGallery(int galleryId, int cardId)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
         try
         {
-            // TODO
-            return Ok(Enumerable.Empty<string>());
+            int playerId = ParsePlayerIdClaim();
+            await _cardService.DeleteCard(playerId, cardId);
+
+            return Ok("Card Deleted!");
         }
         catch (InvalidOperationException e)
         {
@@ -188,4 +191,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
             return StatusCode(500, e.Message);
         }
     }
+
+    [NonAction]
+    private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 }

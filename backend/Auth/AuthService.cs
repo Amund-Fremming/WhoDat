@@ -97,28 +97,23 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
 
     public async Task<Player> RegisterNewPlayer(RegistrationRequest request)
     {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
+        try
         {
-            try
-            {
-                string salt = GenerateSalt();
-                string saltedPassword = request.Password + salt;
-                string hashedPassword = _passwordHasher.HashPassword(null, saltedPassword);
+            string salt = GenerateSalt();
+            string saltedPassword = request.Password + salt;
+            string hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
 
-                Player player = new Player(request.Username, hashedPassword, salt, Role.USER);
-                Player newPlayer = await _playerService.CreatePlayer(player);
-                await _galleryService.CreateGallery(newPlayer.PlayerID);
+            Player player = new Player(request.Username, hashedPassword, salt, Role.USER);
+            Player newPlayer = await _playerService.CreatePlayer(player);
+            await _galleryService.CreateGallery(newPlayer.PlayerID);
 
-                await transaction.CommitAsync();
-                return newPlayer;
-            }
-            catch (Exception e)
-            {
-                // ADD HANDLING
-                _logger.LogError(e, "Error while validating password with salt. (AuthService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
+            return newPlayer;
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError(e, "Error while validating password with salt. (AuthService)");
+            throw;
         }
     }
 }

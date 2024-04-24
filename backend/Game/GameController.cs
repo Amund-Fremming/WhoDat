@@ -22,11 +22,11 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> CreateGame(Game game)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            int gameId = await _gameService.CreateGame(int.Parse(userIdClaim!), game);
+            int playerId = ParsePlayerIdClaim();
+            int gameId = await _gameService.CreateGame(playerId, game);
+
             return Ok($"Game {gameId} Created!");
         }
         catch (InvalidOperationException e)
@@ -51,11 +51,11 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> DeleteGame(int gameId)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            await _gameService.DeleteGame(int.Parse(userIdClaim!), gameId);
+            int playerId = ParsePlayerIdClaim();
+            await _gameService.DeleteGame(playerId, gameId);
+
             return Ok("Game Deleted!");
         }
         catch (InvalidOperationException e)
@@ -80,11 +80,11 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> LeaveGame(int gameId)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            // TODO
+            int playerId = ParsePlayerIdClaim();
+            await _gameService.LeaveGameById(playerId, gameId);
+
             return Ok("Player Left The Game!");
         }
         catch (InvalidOperationException e)
@@ -109,11 +109,11 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> JoinGame(int gameId)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            await _gameService.JoinGameById(int.Parse(userIdClaim!), gameId);
+            int playerId = ParsePlayerIdClaim();
+            await _gameService.JoinGameById(playerId, gameId);
+
             return Ok($"Player Joined Game {gameId}!");
         }
         catch (InvalidOperationException e)
@@ -139,11 +139,11 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> UpdateGameState(int gameId, [FromBody] State state)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            await _gameService.UpdateGameState(int.Parse(userIdClaim!), gameId, state);
+            int playerId = ParsePlayerIdClaim();
+            await _gameService.UpdateGameState(playerId, gameId, state);
+
             return Ok("Game State And Player Turn Updated!");
         }
         catch (InvalidOperationException e)
@@ -168,11 +168,11 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> UpdateCurrentPlayerTurn(int gameId, [FromBody] int playerNumber)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            await _gameService.UpdateCurrentPlayerTurn(int.Parse(userIdClaim!), gameId, playerNumber);
+            int playerId = ParsePlayerIdClaim();
+            await _gameService.UpdateCurrentPlayerTurn(playerId, gameId, playerNumber);
+
             return Ok("Game State And Player Turn Updated!");
         }
         catch (InvalidOperationException e)
@@ -197,11 +197,11 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> SendMessage(int gameId, [FromBody] Message message)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            await _messageService.CreateMessage(int.Parse(userIdClaim!), gameId, message);
+            int playerId = ParsePlayerIdClaim();
+            await _messageService.CreateMessage(playerId, gameId, message);
+
             return Ok("Message Sendt!");
         }
         catch (InvalidOperationException e)
@@ -221,4 +221,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
             return StatusCode(500, e.Message);
         }
     }
+
+    [NonAction]
+    private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 }

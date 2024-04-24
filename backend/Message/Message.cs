@@ -12,7 +12,7 @@ public class Message
     public Game? Game { get; set; }
     public int PlayerID { get; set; }
     public Player? Player { get; set; }
-    public string MessageText { get; set; }
+    public string? MessageText { get; set; }
 
     public Message() { }
 

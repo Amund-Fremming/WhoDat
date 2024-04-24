@@ -14,12 +14,9 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
         try
         {
             Game game = await _gameRepository.GetGameById(gameId);
-            if (game.PlayerOneID == -1 || game.PlayerTwoID == -1)
-                throw new Exception($"Not enough player for sending messages!");
+            int? currentPlayerId = game.CurrentPlayer == 1 ? game.PlayerOneID : game.PlayerTwoID;
 
-            int currentPlayerId = game.CurrentPlayer == 1 ? game.PlayerOneID : game.PlayerTwoID;
             bool canSendMessage = CanSendMessage(playerId, currentPlayerId, game.State);
-
             if (canSendMessage)
                 return await _messageRepository.CreateMessage(message);
 
@@ -33,8 +30,11 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
         }
     }
 
-    public bool CanSendMessage(int playerId, int currentPlayerId, State currentState)
+    public bool CanSendMessage(int playerId, int? currentPlayerId, State currentState)
     {
+        if (currentPlayerId == null)
+            throw new Exception($"Current player does is null (MessageService)");
+
         bool isCurrentPlayer = currentPlayerId == playerId;
 
         if (isCurrentPlayer)

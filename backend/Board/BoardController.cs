@@ -17,11 +17,11 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> CreateBoard(Board board)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            int boardId = await _boardService.CreateBoard(int.Parse(userIdClaim!), board);
+            int playerId = ParsePlayerIdClaim();
+            int boardId = await _boardService.CreateBoard(playerId, board);
+
             return Ok(boardId);
         }
         catch (InvalidOperationException e)
@@ -42,16 +42,15 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
         }
     }
 
-
     [HttpDelete("{boardId}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> DeleteBoard(int boardId)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            await _boardService.DeleteBoard(int.Parse(userIdClaim!), boardId);
+            int playerId = ParsePlayerIdClaim();
+            await _boardService.DeleteBoard(playerId, boardId);
+
             return Ok("Board Deleted!");
         }
         catch (InvalidOperationException e)
@@ -76,11 +75,11 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> SetPlayingBoardCard(int boardId, int boardCardId)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            await _boardService.ChooseCard(int.Parse(userIdClaim!), boardId, boardCardId);
+            int playerId = ParsePlayerIdClaim();
+            await _boardService.ChooseCard(playerId, boardId, boardCardId);
+
             return Ok("BoardCard Chosen!");
         }
         catch (InvalidOperationException e)
@@ -105,11 +104,11 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> UpdatePlayersLeftOnBoard(int boardId, [FromBody] int playersLeft)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            await _boardService.UpdatePlayersLeft(int.Parse(userIdClaim!), boardId, playersLeft);
+            int playerId = ParsePlayerIdClaim();
+            await _boardService.UpdatePlayersLeft(playerId, boardId, playersLeft);
+
             return Ok("Updated Players Left!");
         }
         catch (InvalidOperationException e)
@@ -134,11 +133,11 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> CreateBoardCards(int boardId, List<int> cardIds)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
         try
         {
-            await _boardCardService.CreateBoardCards(int.Parse(userIdClaim!), boardId, cardIds);
+            int playerId = ParsePlayerIdClaim();
+            await _boardCardService.CreateBoardCards(playerId, boardId, cardIds);
+
             return Ok("BoardCards Created!");
         }
         catch (InvalidOperationException e)
@@ -163,11 +162,11 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> UpdateBoardCardsActivity(int boardId, [FromBody] BoardCardUpdateDto boardCardUpdateDto)
     {
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
         try
         {
             // TODO
+            int playerId = ParsePlayerIdClaim();
+
             return Ok("BoardCard Activity Updated!");
         }
         catch (InvalidOperationException e)
@@ -187,4 +186,7 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
             return StatusCode(500, e.Message);
         }
     }
+
+    [NonAction]
+    private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 }

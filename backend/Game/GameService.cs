@@ -78,7 +78,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         }
     }
 
-    public async Task LeaveGameById(int playerId, int gameId, int playerNumber)
+    public async Task LeaveGameById(int playerId, int gameId)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
@@ -87,21 +87,13 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
                 Game game = await _gameRepository.GetGameById(gameId);
                 PlayerHasPermission(playerId, game);
 
-                if (playerNumber == 1)
-                {
-                    game.PlayerOneID = -1;
-                    game.PlayerOne = null;
-                    game.State = State.P2_WON;
-                }
+                if (game.PlayerOneID == playerId)
+                    game.PlayerOneID = null;
 
-                if (playerNumber == 2)
-                {
-                    game.PlayerTwoID = -1;
-                    game.PlayerTwo = null;
-                    game.State = State.P1_WON;
-                }
+                if (game.PlayerTwoID == playerId)
+                    game.PlayerTwoID = null;
 
-                bool leftGame = await _gameRepository.LeaveGame(game);
+                await _gameRepository.LeaveGame(game);
 
                 await transaction.CommitAsync();
             }
