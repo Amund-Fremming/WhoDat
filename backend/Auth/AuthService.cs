@@ -75,7 +75,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         }
     }
 
-    public async Task<bool> ValidatePasswordWithSalt(LoginRequest request, string password)
+    public async Task ValidatePasswordWithSalt(LoginRequest request, string password)
     {
         try
         {
@@ -84,8 +84,8 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             var saltedPassword = request.Password + player.PasswordSalt;
             PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
 
-            return (result == PasswordVerificationResult.Success);
-
+            if (result == PasswordVerificationResult.Success)
+                throw new UnauthorizedAccessException("Password not valid!");
         }
         catch (Exception e)
         {

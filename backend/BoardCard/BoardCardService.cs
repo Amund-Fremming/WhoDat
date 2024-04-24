@@ -40,19 +40,24 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
         }
     }
 
-    public async Task UpdateActive(int playerId, int boardCardId, bool active)
+    public async Task UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
     {
         try
         {
-            BoardCard boardCard = await _boardcardRepository.GetBoardCardById(boardCardId);
-            PlayerHasPermission(playerId, boardCard.Board!);
+            // TODO
+            Board board = await _boardRepository.GetBoardById(boardId);
+            PlayerHasPermission(playerId, board);
 
-            await _boardcardRepository.UpdateActive(boardCard, active);
+            foreach (BoardCardUpdate update in boardCardUpdates)
+            {
+                BoardCard boardCard = await _boardcardRepository.GetBoardCardById(update.BoardCardID);
+                await _boardcardRepository.UpdateActive(boardCard, update.Active);
+            }
         }
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while updating BoardCard with id {boardCardId}. (BoardCardService)");
+            _logger.LogError(e, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
             throw;
         }
     }

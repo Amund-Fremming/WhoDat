@@ -18,10 +18,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
     {
         try
         {
-            bool validPassword = await _authService.ValidatePasswordWithSalt(request, request.Password);
-
-            if (!validPassword)
-                return Unauthorized("Invalid credentials");
+            await _authService.ValidatePasswordWithSalt(request, request.Password);
 
             Player player = await _playerRepository.GetPlayerByUsername(request.Username);
             string token = _authService.GenerateToken(player);
@@ -31,6 +28,10 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         catch (KeyNotFoundException e)
         {
             return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e);
         }
         catch (Exception e)
         {

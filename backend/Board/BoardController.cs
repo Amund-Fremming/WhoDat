@@ -160,12 +160,13 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
 
     [HttpPut("boards/{boardId}/boardcards")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdateBoardCardsActivity(int boardId, [FromBody] BoardCardUpdateDto boardCardUpdateDto)
+    public async Task<ActionResult> UpdateBoardCardsActivity(int boardId, [FromBody] IEnumerable<BoardCardUpdate> boardCardUpdates)
     {
         try
         {
             // TODO
             int playerId = ParsePlayerIdClaim();
+            await _boardCardService.UpdateBoardCardsActivity(playerId, boardId, boardCardUpdates);
 
             return Ok("BoardCard Activity Updated!");
         }

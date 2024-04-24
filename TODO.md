@@ -7,10 +7,9 @@
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 - [ ] TODO-LATER handle GameFullException in frontend, display game full
 - [ ] TODO-LATER add api for getting history/stats
+- [ ] TODO-LATER add func for multiple gallery
 
-- Set object IDs in service not in controllers?
-- Create gallery?
-- get all galleries?
+- [ ] TODO Update BoardCardsActivity, fetch all BoardCards, update their values, then save
 
 <hr />
 
