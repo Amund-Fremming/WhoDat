@@ -131,7 +131,7 @@ public class BoardController(ILogger<BoardController> logger, IBoardService boar
 
     [HttpPost("boards/{boardId}/boardcards")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> CreateBoardCards(int boardId, List<int> cardIds)
+    public async Task<ActionResult> CreateBoardCards(int boardId, IEnumerable<int> cardIds)
     {
         try
         {

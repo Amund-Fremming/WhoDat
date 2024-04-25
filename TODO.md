@@ -8,8 +8,10 @@
 - [ ] TODO-LATER handle GameFullException in frontend, display game full
 - [ ] TODO-LATER add api for getting history/stats
 - [ ] TODO-LATER add func for multiple gallery
+- [ ] TODO-LATER When updating BoardCards, send all boardcards with their active vaules!
 
-- [ ] TODO Update BoardCardsActivity, fetch all BoardCards, update their values, then save
+- [ ] TODO Get Playing BoardCards, this needs Include Card to get the values.
+- [ ] TODO Throw Exceptions in repo instead of returning true/false?
 
 <hr />
 

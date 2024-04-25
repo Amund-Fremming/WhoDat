@@ -13,7 +13,7 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
     public readonly BoardRepository _boardRepository = boardRepository;
     public readonly CardRepository _cardRepository = cardRepository;
 
-    public async Task CreateBoardCards(int playerId, int boardId, List<int> cardIds)
+    public async Task CreateBoardCards(int playerId, int boardId, IEnumerable<int> cardIds)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
@@ -22,12 +22,9 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
                 Board board = await _boardRepository.GetBoardById(boardId);
                 PlayerHasPermission(playerId, board);
 
-                foreach (int cardId in cardIds)
-                {
-                    await _cardRepository.GetCardById(cardId);
-                    await _boardcardRepository.CreateBoardCard(new BoardCard(boardId, cardId));
-                }
+                IEnumerable<BoardCard> newBoardCards = cardIds.Select(cardId => new BoardCard(boardId, cardId)).ToList();
 
+                await _boardcardRepository.CreateBoardCards(newBoardCards);
                 await transaction.CommitAsync();
             }
             catch (Exception e)
@@ -42,23 +39,26 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
 
     public async Task UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
     {
-        try
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-            // TODO
-            Board board = await _boardRepository.GetBoardById(boardId);
-            PlayerHasPermission(playerId, board);
-
-            foreach (BoardCardUpdate update in boardCardUpdates)
+            try
             {
-                BoardCard boardCard = await _boardcardRepository.GetBoardCardById(update.BoardCardID);
-                await _boardcardRepository.UpdateActive(boardCard, update.Active);
+                Board board = await _boardRepository.GetBoardById(boardId);
+                PlayerHasPermission(playerId, board);
+
+                IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.BoardCardID, update => update.Active);
+                IList<BoardCard> boardCards = await _boardcardRepository.GetBoardCardsFromBoard(boardId);
+
+                await _boardcardRepository.UpdateBoardCardsActivity(updateMap, boardCards);
+                await transaction.CommitAsync();
             }
-        }
-        catch (Exception e)
-        {
-            // ADD HANDLING
-            _logger.LogError(e, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
-            throw;
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 
