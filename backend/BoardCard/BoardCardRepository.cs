@@ -58,6 +58,7 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
         {
             return await _context.BoardCard
                 .Where(b => b.BoardID == boardId)
+                .Include(b => b.Card)
                 .ToListAsync();
         }
         catch (Exception e)

@@ -10,7 +10,6 @@
 - [ ] TODO-LATER add func for multiple gallery
 - [ ] TODO-LATER When updating BoardCards, send all boardcards with their active vaules!
 
-- [ ] TODO Get Playing BoardCards, this needs Include Card to get the values.
 - [ ] TODO Throw Exceptions in repo instead of returning true/false?
 
 <hr />

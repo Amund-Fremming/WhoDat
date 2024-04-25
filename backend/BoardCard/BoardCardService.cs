@@ -62,6 +62,23 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
         }
     }
 
+    public async Task<IEnumerable<BoardCard>> GetBoardCardsFromBoard(int playerId, int boardId)
+    {
+        try
+        {
+            Board board = await _boardRepository.GetBoardById(boardId);
+            PlayerHasPermission(playerId, board);
+
+            return await _boardcardRepository.GetBoardCardsFromBoard(boardId);
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError(e, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
+            throw;
+        }
+    }
+
     public void PlayerHasPermission(int playerId, Board board)
     {
         if (board.PlayerID != playerId)
