@@ -17,3 +17,5 @@
 - Change passwords func
 - AirDrop and snapchat sharing link
 - If host leaves the game, make the second player the host
+- add api for getting history/stats
+- add func for multiple gallery

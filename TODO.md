@@ -6,9 +6,6 @@
 
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 - [ ] TODO-LATER handle GameFullException in frontend, display game full
-- [ ] TODO-LATER add api for getting history/stats
-- [ ] TODO-LATER add func for multiple gallery
-- [ ] TODO-LATER When updating BoardCards, send all boardcards with their active vaules!
 
 <hr />
 
