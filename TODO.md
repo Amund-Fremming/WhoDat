@@ -19,6 +19,7 @@
 - [x] Add JWT for security
 - [x] Add Transactions
 - [ ] Create Controller methods
+- [ ] Add logger service and controller for sdmin page
 - [ ] Go over design, try to find more api´s to implement
 - [ ] Generate Mock data
 - [ ] Test Backend
