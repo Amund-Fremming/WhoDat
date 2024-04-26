@@ -25,28 +25,29 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error creating board with id {board.BoardID}. (BoardRepository)");
-            return -1;
+            throw;
         }
     }
 
-    public async Task<bool> DeleteBoard(Board board)
+    public async Task DeleteBoard(Board board)
     {
         try
         {
             _context.Board.Remove(board);
 
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error deleting board with id {board.BoardID}. (BoardRepository)");
-            return false;
+            throw;
         }
     }
 
-    public async Task<bool> ChooseCard(Board board, BoardCard boardCard)
+    public async Task ChooseCard(Board board, BoardCard boardCard)
     {
         try
         {
@@ -55,16 +56,16 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
 
             _context.Board.Update(board);
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error setting ChosenCard in board with id {board.BoardID}. (BoardRepository)");
-            return false;
+            throw;
         }
     }
 
-    public async Task<bool> UpdatePlayersLeft(Board board, int playersLeft)
+    public async Task UpdatePlayersLeft(Board board, int playersLeft)
     {
         try
         {
@@ -72,12 +73,12 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
 
             _context.Board.Update(board);
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error updating players left in board with id {board.BoardID}. (BoardRepository)");
-            return false;
+            throw;
         }
     }
 

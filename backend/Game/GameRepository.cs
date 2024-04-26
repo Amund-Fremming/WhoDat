@@ -15,7 +15,7 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
             .FindAsync(gameId) ?? throw new KeyNotFoundException($"Game with id {gameId}, does not exist!");
     }
 
-    async public Task<int> CreateGame(Game game, Player player)
+    public async Task<int> CreateGame(Game game, Player player)
     {
         try
         {
@@ -28,28 +28,29 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error creating Game with id {game.GameID} .(GameRepository)");
-            return -1;
+            throw;
         }
     }
 
-    async public Task<bool> DeleteGame(Game game)
+    public async Task DeleteGame(Game game)
     {
         try
         {
             _context.Game.Remove(game);
 
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error deleting Game with id {game.GameID} .(GameRepository)");
-            return false;
+            throw;
         }
     }
 
-    async public Task<bool> JoinGame(Game game, Player player)
+    public async Task JoinGame(Game game, Player player)
     {
         try
         {
@@ -58,62 +59,62 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
             _context.Game.Update(game);
 
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error joining Game with id {game.GameID} .(GameRepository)");
-            return false;
+            throw;
         }
     }
 
-    async public Task<bool> LeaveGame(Game game)
+    public async Task LeaveGame(Game game)
     {
         try
         {
-
             _context.Game.Update(game);
+
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error leaving Game with id {game.GameID} .(GameRepository)");
-            return false;
+            throw;
         }
     }
 
-    async public Task<bool> UpdateGameState(Game game, State state)
+    public async Task UpdateGameState(Game game, State state)
     {
         try
         {
             game.State = state;
-
             _context.Game.Update(game);
+
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error updating Game State with id {game.GameID} .(GameRepository)");
-            return false;
+            throw;
         }
     }
 
-    public async Task<bool> UpdateCurrentPlayerTurn(Game game, int playerNumber)
+    public async Task UpdateCurrentPlayerTurn(Game game, int playerNumber)
     {
         try
         {
             game.CurrentPlayer = playerNumber;
-
             _context.Game.Update(game);
+
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error updating current player in Game with id {game.GameID} .(GameRepository)");
-            return false;
+            throw;
         }
     }
 }

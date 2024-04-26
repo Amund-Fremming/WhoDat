@@ -64,7 +64,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
                     throw new GameFullException($"Game with id {gameId} is full!");
 
                 Player player = await _playerRepository.GetPlayerById(playerId);
-                bool joinedGame = await _gameRepository.JoinGame(game, player);
+                await _gameRepository.JoinGame(game, player);
 
                 await transaction.CommitAsync();
             }
@@ -115,7 +115,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             {
                 Game game = await _gameRepository.GetGameById(gameId);
                 PlayerHasPermission(playerId, game);
-                bool updatedGameState = await _gameRepository.UpdateGameState(game, state);
+                await _gameRepository.UpdateGameState(game, state);
 
                 await transaction.CommitAsync();
             }
@@ -137,7 +137,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             {
                 Game game = await _gameRepository.GetGameById(gameId);
                 PlayerHasPermission(playerId, game);
-                bool updatedGameState = await _gameRepository.UpdateCurrentPlayerTurn(game, playerNumber);
+                await _gameRepository.UpdateCurrentPlayerTurn(game, playerNumber);
 
                 await transaction.CommitAsync();
             }

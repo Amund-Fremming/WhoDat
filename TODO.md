@@ -10,8 +10,6 @@
 - [ ] TODO-LATER add func for multiple gallery
 - [ ] TODO-LATER When updating BoardCards, send all boardcards with their active vaules!
 
-- [ ] TODO Throw Exceptions in repo instead of returning true/false?
-
 <hr />
 
 ## Backend
@@ -24,15 +22,17 @@
 - [x] Add JWT for security
 - [x] Add Transactions
 - [ ] Create Controller methods
+- [ ] Go over design, try to find more api´s to implement
 - [ ] Generate Mock data
 - [ ] Test Backend
 - [x] Implement JWT
 - [ ] Test JWT implementation
 - [ ] Add input validation
 - [ ] Look for Edge-cases and fix them
-- [ ] Add error handling for when wifi goes down
-- [ ] Add error handling
-- [ ] Create Docs, for services and gerneral
+- [ ] Add error handling in Services
+- [ ] Add error handling in Repositories
+- [ ] Create Docs for services and general
+- [ ] Create Docs for Interfaces
 - [ ] Add logic for adding payment solution for buying more gallery cards??
 
 <hr />
@@ -40,7 +40,7 @@
 ## Frontend
 
 - [x] User test with Figma prototype
-- [ ] Tweak Design
+- [x] Tweak Design
 - [ ] Implement generic components
 - [ ] Implement Navigation bar
 - [ ] Implement Routers / View-render for different screens

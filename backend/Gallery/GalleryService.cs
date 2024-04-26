@@ -43,7 +43,7 @@ public class GalleryService(AppDbContext context, ILogger<GalleryService> logger
                 Gallery gallery = await _galleryRepository.GetGalleryById(galleryId);
                 PlayerHasPermission(playerId, gallery);
 
-                bool deletedGallery = await _galleryRepository.DeleteGallery(gallery);
+                await _galleryRepository.DeleteGallery(gallery);
                 await transaction.CommitAsync();
             }
             catch (Exception e)

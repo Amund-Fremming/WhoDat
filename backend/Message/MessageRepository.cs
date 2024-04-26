@@ -22,8 +22,9 @@ public class MessageRepository(AppDbContext context, ILogger<MessageRepository> 
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error creating Message with id {message.MessageID} .(MessageRepository)");
-            return -1;
+            throw;
         }
     }
 }

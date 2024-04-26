@@ -24,24 +24,25 @@ public class GalleryRepository(AppDbContext context, ILogger<GalleryRepository> 
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error creating Gallery with id {gallery.GalleryID} .(GalleryRepository)");
-            return -1;
+            throw;
         }
     }
 
-    public async Task<bool> DeleteGallery(Gallery gallery)
+    public async Task DeleteGallery(Gallery gallery)
     {
         try
         {
             _context.Remove(gallery);
 
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error deleting Gallery with id {gallery.GalleryID} .(GalleryRepository)");
-            return false;
+            throw;
         }
     }
 

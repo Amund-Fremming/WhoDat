@@ -25,29 +25,30 @@ public class CardRepository(AppDbContext context, ILogger<CardRepository> logger
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error creating Card with id {card.CardID} .(CardRepository)");
-            return -1;
+            throw;
         }
     }
 
-    public async Task<bool> DeleteCard(Card card)
+    public async Task DeleteCard(Card card)
     {
         try
         {
             _context.Remove(card);
 
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error deleting Card with id {card.CardID} .(CardRepository)");
-            return false;
+            throw;
         }
     }
 
     // RM - Maybe make players pay for more cards?
-    public async Task<bool> UpdateCard(Card oldCard, Card newCard)
+    public async Task UpdateCard(Card oldCard, Card newCard)
     {
         try
         {
@@ -58,12 +59,12 @@ public class CardRepository(AppDbContext context, ILogger<CardRepository> logger
 
             _context.Card.Update(oldCard);
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error updating Card with id {oldCard.CardID} .(CardRepository)");
-            return false;
+            throw;
         }
     }
 

@@ -24,24 +24,25 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error creating Player with id {player.PlayerID} .(PlayerRepository)");
-            return -1;
+            throw;
         }
     }
 
-    public async Task<bool> DeletePlayer(Player player)
+    public async Task DeletePlayer(Player player)
     {
         try
         {
             _context.Player.Remove(player);
 
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error deleting Player with id {player.PlayerID} .(PlayerRepository)");
-            return false;
+            throw;
         }
     }
 
@@ -52,7 +53,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
             ?? throw new KeyNotFoundException($"Username {username} does not exist. (AuthService)");
     }
 
-    public async Task<bool> UpdateUsername(Player player, string newUsername)
+    public async Task UpdateUsername(Player player, string newUsername)
     {
         try
         {
@@ -60,12 +61,12 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
             _context.Player.Update(player);
 
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID} .(PlayerRepository)");
-            return false;
+            throw;
         }
     }
 

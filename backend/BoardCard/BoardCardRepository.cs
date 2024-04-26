@@ -14,23 +14,22 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
             .FindAsync(boardCardId) ?? throw new KeyNotFoundException($"BoardCard with id {boardCardId}, does not exist!");
     }
 
-    public async Task<bool> CreateBoardCards(IEnumerable<BoardCard> boardCards)
+    public async Task CreateBoardCards(IEnumerable<BoardCard> boardCards)
     {
         try
         {
             await _context.BoardCard.AddRangeAsync(boardCards);
             await _context.SaveChangesAsync();
-
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error creating BoardCards for Board. (BoardCardRepository)");
-            return false;
+            throw;
         }
     }
 
-    public async Task<bool> UpdateBoardCardsActivity(IDictionary<int, bool> updateMap, IEnumerable<BoardCard> boardCards)
+    public async Task UpdateBoardCardsActivity(IDictionary<int, bool> updateMap, IEnumerable<BoardCard> boardCards)
     {
         try
         {
@@ -43,12 +42,12 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
             }
 
             await _context.SaveChangesAsync();
-            return true;
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error updating BoardCards. (BoardCardRepository)");
-            return false;
+            throw;
         }
     }
 
@@ -63,8 +62,9 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
         }
         catch (Exception e)
         {
+            // TODO - more exceptions
             _logger.LogError(e, $"Error fetching BoardCards from Board with id {boardId}. (BoardCardRepository)");
-            return null!;
+            throw;
         }
     }
 }

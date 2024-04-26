@@ -20,13 +20,13 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         }
     }
 
-    public async Task<bool> DeletePlayer(int playerId)
+    public async Task DeletePlayer(int playerId)
     {
         try
         {
             Player player = await _playerRepository.GetPlayerById(playerId);
 
-            return await _playerRepository.DeletePlayer(player);
+            await _playerRepository.DeletePlayer(player);
         }
         catch (Exception e)
         {
@@ -36,13 +36,13 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         }
     }
 
-    public async Task<bool> UpdateUsername(int playerId, string newUsername)
+    public async Task UpdateUsername(int playerId, string newUsername)
     {
         try
         {
             Player player = await _playerRepository.GetPlayerById(playerId);
 
-            return await _playerRepository.UpdateUsername(player, newUsername);
+            await _playerRepository.UpdateUsername(player, newUsername);
         }
         catch (Exception e)
         {
