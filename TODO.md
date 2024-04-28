@@ -18,8 +18,9 @@
 - [x] Generate database
 - [x] Add JWT for security
 - [x] Add Transactions
-- [ ] Create Controller methods
-- [ ] Add logger service and controller for sdmin page
+- [x] Create Controller methods
+- [ ] Add logger service and controller for admin page
+- [ ] Add signalR endpoints for game logic
 - [ ] Go over design, try to find more api´s to implement
 - [ ] Generate Mock data
 - [ ] Test Backend
