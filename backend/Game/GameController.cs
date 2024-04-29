@@ -48,7 +48,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     }
 
     [HttpDelete("games/{gameId}")]
-    [Authorize(Roles = "ADMIN,USER")]
+    [Authorize(Roles = "ADMIN")]
     public async Task<ActionResult> DeleteGame(int gameId)
     {
         try
@@ -76,6 +76,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
+    // MOVE
     [HttpPut("games/{gameId}/leave")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> LeaveGame(int gameId)
@@ -105,6 +106,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
+    // MOVE
     [HttpPut("games/{gameId}/join")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> JoinGame(int gameId)
@@ -134,7 +136,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-
+    // MOVE
     [HttpPut("games/{gameId}/update-state")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> UpdateGameState(int gameId, [FromBody] State state)
@@ -164,6 +166,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
+    // MOVE
     [HttpPut("games/{gameId}/update-turn")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> UpdateCurrentPlayerTurn(int gameId, [FromBody] int playerNumber)
@@ -193,6 +196,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
+    // MOVE
     [HttpPost("games/{gameId}/messages")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> SendMessage(int gameId, [FromBody] Message message)
