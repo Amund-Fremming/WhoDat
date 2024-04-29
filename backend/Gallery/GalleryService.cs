@@ -1,4 +1,5 @@
 using Data;
+using Enum;
 using PlayerEntity;
 
 namespace GalleryEntity;
@@ -39,9 +40,9 @@ public class GalleryService(AppDbContext context, ILogger<GalleryService> logger
         {
             try
             {
-                await _playerRepository.GetPlayerById(playerId);
+                Player player = await _playerRepository.GetPlayerById(playerId);
                 Gallery gallery = await _galleryRepository.GetGalleryById(galleryId);
-                PlayerHasPermission(playerId, gallery);
+                PlayerHasPermission(player, gallery);
 
                 await _galleryRepository.DeleteGallery(gallery);
                 await transaction.CommitAsync();
@@ -56,12 +57,12 @@ public class GalleryService(AppDbContext context, ILogger<GalleryService> logger
         }
     }
 
-    public void PlayerHasPermission(int playerId, Gallery gallery)
+    public void PlayerHasPermission(Player player, Gallery gallery)
     {
-        if (gallery.PlayerID != playerId)
+        if (gallery.PlayerID != player.PlayerID || player.Role != Role.ADMIN)
         {
-            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
-            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
+            _logger.LogInformation($"Player with id {player.PlayerID} tried accessing someone elses data");
+            throw new UnauthorizedAccessException($"Player with id {player.PlayerID} does not have permission");
         }
     }
 }

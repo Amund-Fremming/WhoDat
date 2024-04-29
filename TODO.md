@@ -19,8 +19,9 @@
 - [x] Add JWT for security
 - [x] Add Transactions
 - [x] Create Controller methods
-- [ ] Add logger service and controller for admin page
-- [ ] Add change passord api
+- [ ] Add logger service and controller
+- [x] Admin Controller
+- [x] Add change passord api
 - [ ] Add signalR endpoints for game logic
 - [ ] Go over design, try to find more api´s to implement
 - [ ] Generate Mock data

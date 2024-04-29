@@ -70,6 +70,25 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
     }
 
+    public async Task UpdatePassword(Player player, string newPassword, string newSalt)
+    {
+        try
+        {
+            player.PasswordHash = newPassword;
+            player.PasswordSalt = newSalt;
+
+            _context.Player.Update(player);
+
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            // TODO - more exceptions
+            _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID} .(PlayerRepository)");
+            throw;
+        }
+    }
+
     public async Task<bool> DoesUsernameExist(string username)
     {
         return await _context.Player

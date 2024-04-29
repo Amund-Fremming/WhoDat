@@ -15,16 +15,16 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     public readonly IGalleryService _galleryService = galleryService;
     public readonly ICardService _cardService = cardService;
 
-    [HttpDelete("players/delete")]
-    [Authorize(Roles = "ADMIN")]
-    public async Task<ActionResult> DeletePlayer()
+    [HttpPut("players/update-username")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult> UpdatePlayerUsername([FromBody] string newUsername)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _playerService.DeletePlayer(playerId);
+            await _playerService.UpdateUsername(playerId, newUsername);
 
-            return Ok("Player Deleted!");
+            return Ok("Username Updated!");
         }
         catch (InvalidOperationException e)
         {
@@ -44,16 +44,16 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
     }
 
-    [HttpPut("players/update-username")]
+    [HttpPut("players/update-password")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdatePlayerUsername([FromBody] string newUsername)
+    public async Task<ActionResult> UpdatePlayerPassword([FromBody] string newPassword)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _playerService.UpdateUsername(playerId, newUsername);
+            await _playerService.UpdatePassword(playerId, newPassword);
 
-            return Ok("Username Updated!");
+            return Ok("Password Updated!");
         }
         catch (InvalidOperationException e)
         {
@@ -171,6 +171,35 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         {
             int playerId = ParsePlayerIdClaim();
             await _cardService.DeleteCard(playerId, cardId);
+
+            return Ok("Card Deleted!");
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpDelete("galleries/{galleryId}")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult> DeleteGallery(int galleryId)
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            await _galleryService.DeleteGallery(playerId, galleryId);
 
             return Ok("Card Deleted!");
         }
