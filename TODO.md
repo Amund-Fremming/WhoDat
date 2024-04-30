@@ -39,7 +39,7 @@
 - [ ] Look for Edge-cases and fix them
 - [ ] Add error handling in Services
 - [ ] Add error handling in Repositories
-- [ ] Create Docs for services and general
+- [ ] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
 - [ ] Create Docs for Interfaces
 - [ ] Add logic for adding payment solution for buying more gallery cards??
 
