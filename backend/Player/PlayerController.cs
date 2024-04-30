@@ -192,6 +192,35 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
     }
 
+    [HttpPost("galleries")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult> CreateGallery(int galleryId)
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            await _galleryService.CreateGallery(playerId);
+
+            return Ok("Card Deleted!");
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
     [HttpDelete("galleries/{galleryId}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> DeleteGallery(int galleryId)

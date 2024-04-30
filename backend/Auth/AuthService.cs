@@ -53,7 +53,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, "Error while generating token. (AuthService)");
+            _logger.LogError(e.Message, "Error while generating token. (AuthService)");
             throw;
         }
     }
@@ -70,7 +70,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, "Error while generating salt. (AuthService)");
+            _logger.LogError(e.Message, "Error while generating salt. (AuthService)");
             throw;
         }
     }
@@ -84,14 +84,14 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             var saltedPassword = request.Password + player.PasswordSalt;
             PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
 
-            if (result == PasswordVerificationResult.Success)
-                throw new UnauthorizedAccessException("Password not valid!");
+            if (result != PasswordVerificationResult.Success)
+                throw new UnauthorizedAccessException("Credentials not valid!");
         }
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, "Error while validating password with salt. (AuthService)");
-            throw;
+            _logger.LogError(e.Message, "Error while validating password with salt. (AuthService)");
+            throw new UnauthorizedAccessException("Credentials not valid!");
         }
     }
 
@@ -112,7 +112,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, "Error while validating password with salt. (AuthService)");
+            _logger.LogError(e.Message, "Error while validating password with salt. (AuthService)");
             throw;
         }
     }

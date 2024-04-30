@@ -4,11 +4,9 @@ using MessageEntity;
 using BoardCardEntity;
 using Enum;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using System.Security.Claims;
 
-namespace GameHub;
+namespace Hubs;
 
 public class GameHub(ILogger<GameController> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService) : Hub
 {
@@ -18,27 +16,13 @@ public class GameHub(ILogger<GameController> logger, IGameService gameService, I
     public readonly IBoardCardService _boardCardService = boardCardService;
     public readonly IMessageService _messageService = messageService;
 
-    private IDictionary<string, List<string>> playerGroups = new Dictionary<string, List<string>>();
-
-    // override onConnect
-    // override onDisconnect 
-
-    public override async Task OnConnectedAsync()
-    {
-        try
-        {
-        }
-        catch (Exception e)
-        {
-            _logger.LogError($"Connect failed (GameHub): {e}");
-            await Clients.Caller.SendAsync("ReceiveMessage", "Error", "CONNECT_FAILED");
-        }
-    }
+    private IDictionary<string, string> connectionIdToGroup = new Dictionary<string, string>();
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         try
         {
+            // TODO
         }
         catch (Exception e)
         {
@@ -52,6 +36,14 @@ public class GameHub(ILogger<GameController> logger, IGameService gameService, I
         try
         {
             string gameIdString = gameId.ToString();
+            int playerId = ParsePlayerIdClaim();
+            await _gameService.LeaveGameById(playerId, gameId);
+
+            if (connectionIdToGroup.TryGetValue(Context.ConnectionId, out string? groupName))
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+                await Clients.Group(gameIdString).SendAsync("ReceiveMessage", "Message", "PLAYER_LEFT");
+            }
         }
         catch (InvalidOperationException e)
         {
@@ -185,5 +177,10 @@ public class GameHub(ILogger<GameController> logger, IGameService gameService, I
             _logger.LogError($"Unexpected error in LeaveGame (GameHub): {e}");
             await Clients.Caller.SendAsync("ReceiveMessage", "Error", "UNEXPECTED_ERROR");
         }
+    }
+
+    public int ParsePlayerIdClaim()
+    {
+        return int.Parse(Context.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
     }
 }

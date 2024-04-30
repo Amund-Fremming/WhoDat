@@ -13,7 +13,7 @@ public class AdminController(IPlayerService playerService, IGalleryService galle
     public readonly IPlayerService _playerService = playerService;
     public readonly IGalleryService _galleryService = galleryService;
 
-    [HttpDelete("players/delete{playerId}")]
+    [HttpDelete("players/delete/{playerId}")]
     [Authorize(Roles = "ADMIN")]
     public async Task<ActionResult> DeletePlayer(int playerId)
     {

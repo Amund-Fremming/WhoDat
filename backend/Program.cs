@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PlayerEntity;
+using Hubs;
 using GalleryEntity;
 using GameEntity;
 using MessageEntity;
@@ -37,6 +38,7 @@ builder.Services.AddScoped<IBoardCardService, BoardCardService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPasswordHasher<Player>, PasswordHasher<Player>>();
 
+builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -81,8 +83,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidAudience = builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
                     ClockSkew = TimeSpan.Zero
+                };
+
+                // Configure WebSocket support
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        if (string.IsNullOrEmpty(accessToken))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
@@ -103,6 +119,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
+
 app.MapControllers();
+app.MapHub<GameHub>("hub/gamehub");
 
 app.Run();

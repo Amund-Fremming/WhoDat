@@ -31,7 +31,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         }
         catch (UnauthorizedAccessException e)
         {
-            return Unauthorized(e);
+            return Unauthorized(e.Message);
         }
         catch (Exception e)
         {

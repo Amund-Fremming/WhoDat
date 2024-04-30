@@ -5,7 +5,14 @@
 ## Fix first!
 
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
+- [ ] WARNING UnnauthorizedException might not be thrown but Exception instead, i only catch this in the service
 - [ ] TODO-LATER handle GameFullException in frontend, display game full
+
+- [ ] TODO throw exception not return bool in DoesUsernameExsist and handle in controller
+- [ ] TODO PlayerService UpdateUsername does not chech that the username is available
+- [ ] TODO Add unique contraints to player username
+
+- [ ] BUG UpdatePassword does not work properly
 
 <hr />
 

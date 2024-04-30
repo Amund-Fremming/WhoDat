@@ -1,13 +1,12 @@
-using Auth;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
 
 namespace PlayerEntity;
 
-public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playerRepository, IAuthService authService, IPasswordHasher<Player> passwordHasher) : IPlayerService
+public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playerRepository, IPasswordHasher<Player> passwordHasher) : IPlayerService
 {
     public readonly ILogger<PlayerService> _logger = logger;
     public readonly PlayerRepository _playerRepository = playerRepository;
-    public readonly IAuthService _authService = authService;
     public readonly IPasswordHasher<Player> _passwordHasher = passwordHasher;
 
     public async Task<Player> CreatePlayer(Player player)
@@ -20,7 +19,7 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while creating Player with id {player.PlayerID}. (PlayerService)");
+            _logger.LogError(e.Message, $"Error while creating Player with id {player.PlayerID}. (PlayerService)");
             throw;
         }
     }
@@ -36,7 +35,7 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while deleting Player with id {playerId}. (PlayerService)");
+            _logger.LogError(e.Message, $"Error while deleting Player with id {playerId}. (PlayerService)");
             throw;
         }
     }
@@ -52,7 +51,7 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while updating username for Player with id {playerId}. (PlayerService)");
+            _logger.LogError(e.Message, $"Error while updating username for Player with id {playerId}. (PlayerService)");
             throw;
         }
     }
@@ -63,7 +62,7 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         {
             Player player = await _playerRepository.GetPlayerById(playerId);
 
-            string newSalt = _authService.GenerateSalt();
+            string newSalt = GenerateSalt();
             string saltedPassword = newPassword + newSalt;
             string hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
 
@@ -72,7 +71,24 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while updating username for Player with id {playerId}. (PlayerService)");
+            _logger.LogError(e.Message, $"Error while updating username for Player with id {playerId}. (PlayerService)");
+            throw;
+        }
+    }
+
+    public string GenerateSalt()
+    {
+        try
+        {
+            var buffer = new byte[16];
+            RandomNumberGenerator.Fill(buffer);
+
+            return Convert.ToBase64String(buffer);
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError(e.Message, "Error while generating salt. (AuthService)");
             throw;
         }
     }
