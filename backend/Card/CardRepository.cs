@@ -26,7 +26,7 @@ public class CardRepository(AppDbContext context, ILogger<CardRepository> logger
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error creating Card with id {card.CardID} .(CardRepository)");
+            _logger.LogError(e.Message, $"Error creating Card with id {card.CardID} .(CardRepository)");
             throw;
         }
     }
@@ -42,7 +42,7 @@ public class CardRepository(AppDbContext context, ILogger<CardRepository> logger
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error deleting Card with id {card.CardID} .(CardRepository)");
+            _logger.LogError(e.Message, $"Error deleting Card with id {card.CardID} .(CardRepository)");
             throw;
         }
     }
@@ -63,7 +63,7 @@ public class CardRepository(AppDbContext context, ILogger<CardRepository> logger
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error updating Card with id {oldCard.CardID} .(CardRepository)");
+            _logger.LogError(e.Message, $"Error updating Card with id {oldCard.CardID} .(CardRepository)");
             throw;
         }
     }

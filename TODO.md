@@ -6,11 +6,10 @@
 
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 - [ ] WARNING UnnauthorizedException might not be thrown but Exception instead, i only catch this in the service
+- [ ] WARNING Transactinos might not have Rolback or have Commit in catch
 - [ ] TODO-LATER handle GameFullException in frontend, display game full
 
-- [ ] TODO Change message, excepion returns and error to enums, maybe have different "messages" depending on what type of update it is?
-- [ ] TODO Only broadcast message to the receiver not both
-- [ ] TODO Handle on disconnect, get the recent state, playerturn, and if needs message this also
+- [ ] TODO Only broadcast message to the receiver not both, get the other player from the game instance in the DB
 
 <hr />
 
@@ -27,7 +26,8 @@
 - [ ] Add logger service and controller
 - [x] Admin Controller
 - [x] Add change passord api
-- [ ] Add signalR endpoints for game logic
+- [x] Add signalR endpoints for game logic
+- [ ] Handling for reconnect when disconnected
 - [ ] Go over design, try to find more api´s to implement
 - [ ] Generate Mock data
 - [ ] Test Backend

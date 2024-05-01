@@ -24,7 +24,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
             catch (Exception e)
             {
                 // ADD HANDLING
-                _logger.LogError(e, $"Error while creating Board with id {board.BoardID}. (BoardService)");
+                _logger.LogError(e.Message, $"Error while creating Board with id {board.BoardID}. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
             }
@@ -46,7 +46,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
             catch (Exception e)
             {
                 // ADD HANDLING
-                _logger.LogError(e, $"Error while deleting Board with id {boardId}. (BoardService)");
+                _logger.LogError(e.Message, $"Error while deleting Board with id {boardId}. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
             }
@@ -69,7 +69,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
             catch (Exception e)
             {
                 // ADD HANDLING
-                _logger.LogError(e, $"Error chosing a card on Board with id {boardId}. (BoardService)");
+                _logger.LogError(e.Message, $"Error chosing a card on Board with id {boardId}. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
             }
@@ -88,7 +88,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error updating card on Board with id {boardId}. (BoardService)");
+            _logger.LogError(e.Message, $"Error updating card on Board with id {boardId}. (BoardService)");
             throw;
         }
     }

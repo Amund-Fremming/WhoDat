@@ -20,7 +20,7 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while creating Card with id {card.CardID}. (CardService)");
+            _logger.LogError(e.Message, $"Error while creating Card with id {card.CardID}. (CardService)");
             throw;
         }
     }
@@ -38,7 +38,7 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while deleting Card with id {cardId}. (CardService)");
+            _logger.LogError(e.Message, $"Error while deleting Card with id {cardId}. (CardService)");
             throw;
         }
     }
@@ -57,7 +57,7 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while updating Card with id {newCard.CardID}. (CardService)");
+            _logger.LogError(e.Message, $"Error while updating Card with id {newCard.CardID}. (CardService)");
             throw;
         }
     }
@@ -74,7 +74,7 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while getting all cards. (CardService)");
+            _logger.LogError(e.Message, $"Error while getting all cards. (CardService)");
             throw;
         }
     }

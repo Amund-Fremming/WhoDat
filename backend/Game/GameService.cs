@@ -123,7 +123,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             {
                 // ADD HANDLING
                 _logger.LogError(e, $"Error while updating state in Game with id {gameId}. (GameService)");
-                await transaction.CommitAsync();
+                await transaction.RollbackAsync();
                 throw;
             }
         }
@@ -145,6 +145,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             {
                 // ADD HANDLING
                 _logger.LogError(e, $"Error while updating current player turn in Game with id {gameId}. (GameService)");
+                await transaction.RollbackAsync();
                 throw;
             }
         }
@@ -156,6 +157,22 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         {
             _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (GameService)");
+        }
+    }
+
+    public async Task<int> GetRecentGamePlayed(int playerId)
+    {
+        try
+        {
+            await _playerRepository.GetPlayerById(playerId);
+
+            return await _gameRepository.GetRecentGamePlayed(playerId);
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError(e, $"Error while getting players recent Game with PlayerID {playerId}. (GameService)");
+            throw;
         }
     }
 }

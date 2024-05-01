@@ -27,7 +27,7 @@ public class GalleryService(AppDbContext context, ILogger<GalleryService> logger
             catch (Exception e)
             {
                 // ADD HANDLING
-                _logger.LogError(e, $"Error while creating Gallery for player {playerId} (GalleryService)");
+                _logger.LogError(e.Message, $"Error while creating Gallery for player {playerId} (GalleryService)");
                 await transaction.RollbackAsync();
                 throw;
             }
@@ -50,7 +50,7 @@ public class GalleryService(AppDbContext context, ILogger<GalleryService> logger
             catch (Exception e)
             {
                 // ADD HANDLING
-                _logger.LogError(e, $"Error while deleting Gallery with id {galleryId}. (GalleryService)");
+                _logger.LogError(e.Message, $"Error while deleting Gallery with id {galleryId}. (GalleryService)");
                 await transaction.RollbackAsync();
                 throw;
             }

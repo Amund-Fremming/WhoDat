@@ -1,6 +1,7 @@
 using Data;
 using PlayerEntity;
 using Enum;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameEntity;
 
@@ -118,6 +119,22 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         {
             // TODO - more exceptions
             _logger.LogError(e, $"Error updating current player in Game with id {game.GameID} .(GameRepository)");
+            throw;
+        }
+    }
+
+    public async Task<int> GetRecentGamePlayed(int playerId)
+    {
+        try
+        {
+            return await _context.Game
+                .Where(g => g.PlayerOneID == playerId || g.PlayerTwoID == playerId)
+                .MaxAsync(g => g.GameID);
+        }
+        catch (Exception e)
+        {
+            // TODO - more exceptions
+            _logger.LogError(e, $"Error while getting players recent Game with PlayerID {playerId}. (GameRepository)");
             throw;
         }
     }

@@ -199,12 +199,12 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     // MOVE
     [HttpPost("games/{gameId}/messages")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> SendMessage(int gameId, [FromBody] Message message)
+    public async Task<ActionResult> SendMessage(int gameId, [FromBody] string messageText)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _messageService.CreateMessage(playerId, gameId, message);
+            await _messageService.CreateMessage(playerId, gameId, messageText);
 
             return Ok("Message Sendt!");
         }

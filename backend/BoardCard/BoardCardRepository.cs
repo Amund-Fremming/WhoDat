@@ -24,7 +24,7 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error creating BoardCards for Board. (BoardCardRepository)");
+            _logger.LogError(e.Message, $"Error creating BoardCards for Board. (BoardCardRepository)");
             throw;
         }
     }
@@ -46,7 +46,7 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error updating BoardCards. (BoardCardRepository)");
+            _logger.LogError(e.Message, $"Error updating BoardCards. (BoardCardRepository)");
             throw;
         }
     }
@@ -63,7 +63,7 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error fetching BoardCards from Board with id {boardId}. (BoardCardRepository)");
+            _logger.LogError(e.Message, $"Error fetching BoardCards from Board with id {boardId}. (BoardCardRepository)");
             throw;
         }
     }

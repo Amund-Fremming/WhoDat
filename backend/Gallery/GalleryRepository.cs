@@ -25,7 +25,7 @@ public class GalleryRepository(AppDbContext context, ILogger<GalleryRepository> 
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error creating Gallery with id {gallery.GalleryID} .(GalleryRepository)");
+            _logger.LogError(e.Message, $"Error creating Gallery with id {gallery.GalleryID} .(GalleryRepository)");
             throw;
         }
     }
@@ -41,9 +41,8 @@ public class GalleryRepository(AppDbContext context, ILogger<GalleryRepository> 
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error deleting Gallery with id {gallery.GalleryID} .(GalleryRepository)");
+            _logger.LogError(e.Message, $"Error deleting Gallery with id {gallery.GalleryID} .(GalleryRepository)");
             throw;
         }
     }
-
 }

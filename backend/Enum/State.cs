@@ -30,5 +30,6 @@ public enum State
     P2_WON,
 
     // Someone left
+    DISCONNECTED,
     FINISHED,
 }

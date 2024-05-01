@@ -26,7 +26,7 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error creating board with id {board.BoardID}. (BoardRepository)");
+            _logger.LogError(e.Message, $"Error creating board with id {board.BoardID}. (BoardRepository)");
             throw;
         }
     }
@@ -42,7 +42,7 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error deleting board with id {board.BoardID}. (BoardRepository)");
+            _logger.LogError(e.Message, $"Error deleting board with id {board.BoardID}. (BoardRepository)");
             throw;
         }
     }
@@ -60,7 +60,7 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error setting ChosenCard in board with id {board.BoardID}. (BoardRepository)");
+            _logger.LogError(e.Message, $"Error setting ChosenCard in board with id {board.BoardID}. (BoardRepository)");
             throw;
         }
     }
@@ -77,7 +77,7 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error updating players left in board with id {board.BoardID}. (BoardRepository)");
+            _logger.LogError(e.Message, $"Error updating players left in board with id {board.BoardID}. (BoardRepository)");
             throw;
         }
     }

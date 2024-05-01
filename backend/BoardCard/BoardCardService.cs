@@ -30,7 +30,7 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
             catch (Exception e)
             {
                 // ADD HANDLING
-                _logger.LogError(e, $"Error while creating BoardCards for board with id {boardId}. (BoardCardService)");
+                _logger.LogError(e.Message, $"Error while creating BoardCards for board with id {boardId}. (BoardCardService)");
                 await transaction.RollbackAsync();
                 throw;
             }
@@ -55,7 +55,7 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
             catch (Exception e)
             {
                 // ADD HANDLING
-                _logger.LogError(e, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
+                _logger.LogError(e.Message, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
                 await transaction.RollbackAsync();
                 throw;
             }
@@ -74,7 +74,7 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
+            _logger.LogError(e.Message, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
             throw;
         }
     }
