@@ -9,7 +9,7 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
     public readonly MessageRepository _messageRepository = messageRepository;
     public readonly GameRepository _gameRepository = gameRepository;
 
-    public async Task<int> CreateMessage(int playerId, int gameId, Message message)
+    public async Task<int> CreateMessage(int playerId, int gameId, string messageText)
     {
         try
         {
@@ -18,14 +18,14 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
 
             bool canSendMessage = CanSendMessage(playerId, currentPlayerId, game.State);
             if (canSendMessage)
-                return await _messageRepository.CreateMessage(message);
+                return await _messageRepository.CreateMessage(new Message(playerId, gameId, messageText));
 
             return -1;
         }
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e, $"Error while creating Message with id {message.MessageID}. (MessageService)");
+            _logger.LogError(e, $"Error while creating Message for game with id {gameId}. (MessageService)");
             throw;
         }
     }

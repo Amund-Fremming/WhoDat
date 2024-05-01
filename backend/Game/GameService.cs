@@ -60,7 +60,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             {
                 Game game = await _gameRepository.GetGameById(gameId);
 
-                if (game.PlayerTwoID != -1)
+                if (game.PlayerTwoID != null)
                     throw new GameFullException($"Game with id {gameId} is full!");
 
                 Player player = await _playerRepository.GetPlayerById(playerId);

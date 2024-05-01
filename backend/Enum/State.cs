@@ -3,8 +3,8 @@ namespace Enum;
 public enum State
 {
     // Initial state
-    CREATING,
-    WAITING_FOR_PLAYER,         // Kanskje droppe for å la host velge kort?
+    WAITING,
+    READY,
 
     // Chosing cards
     ONLY_HOST_CHOSING_CARDS,

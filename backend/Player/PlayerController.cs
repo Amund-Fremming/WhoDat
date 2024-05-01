@@ -38,6 +38,10 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         {
             return Unauthorized(e.Message);
         }
+        catch (ArgumentException e)
+        {
+            return Conflict(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);

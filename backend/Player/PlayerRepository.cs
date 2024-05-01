@@ -95,6 +95,6 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
             .AnyAsync(p => p.Username == username);
 
         if (usernameExist)
-            throw new ArgumentException("Username {username} already exists!");
+            throw new ArgumentException($"Username {username} already exists!");
     }
 }

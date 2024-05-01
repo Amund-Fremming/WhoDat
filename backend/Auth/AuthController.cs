@@ -55,6 +55,10 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         {
             return NotFound(e.Message);
         }
+        catch (ArgumentException e)
+        {
+            return Conflict(e.Message);
+        }
         catch (Exception e)
         {
             return StatusCode(500, e.Message);

@@ -21,9 +21,10 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         {
             game.PlayerOneID = player.PlayerID;
             game.PlayerOne = player;
-            await _context.AddAsync(game);
 
+            await _context.AddAsync(game);
             await _context.SaveChangesAsync();
+
             return game.GameID;
         }
         catch (Exception e)
@@ -56,8 +57,9 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         {
             game.PlayerTwoID = player.PlayerID;
             game.PlayerTwo = player;
-            _context.Game.Update(game);
+            game.State = State.READY;
 
+            _context.Game.Update(game);
             await _context.SaveChangesAsync();
         }
         catch (Exception e)
@@ -72,8 +74,9 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
     {
         try
         {
-            _context.Game.Update(game);
+            game.State = State.FINISHED;
 
+            _context.Game.Update(game);
             await _context.SaveChangesAsync();
         }
         catch (Exception e)
@@ -89,8 +92,8 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         try
         {
             game.State = state;
-            _context.Game.Update(game);
 
+            _context.Game.Update(game);
             await _context.SaveChangesAsync();
         }
         catch (Exception e)
@@ -106,8 +109,9 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         try
         {
             game.CurrentPlayer = playerNumber;
-            _context.Game.Update(game);
+            game.State = State.TURN_STARTED;
 
+            _context.Game.Update(game);
             await _context.SaveChangesAsync();
         }
         catch (Exception e)

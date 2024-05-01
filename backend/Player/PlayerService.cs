@@ -45,6 +45,7 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         try
         {
             Player player = await _playerRepository.GetPlayerById(playerId);
+            await _playerRepository.DoesUsernameExist(newUsername);
 
             await _playerRepository.UpdateUsername(player, newUsername);
         }
@@ -64,9 +65,9 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
 
             string newSalt = GenerateSalt();
             string saltedPassword = newPassword + newSalt;
-            string hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
+            string hashedPassword = _passwordHasher.HashPassword(player, saltedPassword);
 
-            await _playerRepository.UpdatePassword(player, saltedPassword, newSalt);
+            await _playerRepository.UpdatePassword(player, hashedPassword, newSalt);
         }
         catch (Exception e)
         {

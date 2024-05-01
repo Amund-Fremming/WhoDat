@@ -85,10 +85,14 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
 
             if (result != PasswordVerificationResult.Success)
+            {
+                Console.WriteLine("Feil?");
                 throw new UnauthorizedAccessException("Credentials not valid!");
+            }
         }
         catch (Exception e)
         {
+            Console.WriteLine("Kastet?");
             // ADD HANDLING
             _logger.LogError(e.Message, "Error while validating password with salt. (AuthService)");
             throw new UnauthorizedAccessException("Credentials not valid!");

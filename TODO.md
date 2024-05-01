@@ -8,11 +8,9 @@
 - [ ] WARNING UnnauthorizedException might not be thrown but Exception instead, i only catch this in the service
 - [ ] TODO-LATER handle GameFullException in frontend, display game full
 
-- [ ] TODO throw exception not return bool in DoesUsernameExsist and handle in controller
-- [ ] TODO PlayerService UpdateUsername does not chech that the username is available
-- [ ] TODO Add unique contraints to player username
-
-- [ ] BUG UpdatePassword does not work properly
+- [ ] TODO Change message, excepion returns and error to enums, maybe have different "messages" depending on what type of update it is?
+- [ ] TODO Only broadcast message to the receiver not both
+- [ ] TODO Handle on disconnect, get the recent state, playerturn, and if needs message this also
 
 <hr />
 
