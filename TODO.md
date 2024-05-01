@@ -28,6 +28,7 @@
 - [x] Admin Controller
 - [x] Add change passord api
 - [ ] Add signalR endpoints for game logic
+- [ ] image upload func to azure
 - [ ] Go over design, try to find more api´s to implement
 - [ ] Generate Mock data
 - [ ] Test Backend
