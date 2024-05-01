@@ -28,6 +28,7 @@
 - [x] Add change passord api
 - [x] Add signalR endpoints for game logic
 - [ ] Handling for reconnect when disconnected
+- [ ] Image upload func to azure
 - [ ] Go over design, try to find more api´s to implement
 - [ ] Generate Mock data
 - [ ] Test Backend
