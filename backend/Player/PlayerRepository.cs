@@ -89,9 +89,12 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
     }
 
-    public async Task<bool> DoesUsernameExist(string username)
+    public async Task DoesUsernameExist(string username)
     {
-        return await _context.Player
+        bool usernameExist = await _context.Player
             .AnyAsync(p => p.Username == username);
+
+        if (usernameExist)
+            throw new ArgumentException("Username {username} already exists!");
     }
 }

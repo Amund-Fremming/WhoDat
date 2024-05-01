@@ -44,10 +44,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
     {
         try
         {
-            bool usernameExist = await _playerRepository.DoesUsernameExist(request.Username);
-
-            if (usernameExist)
-                return Conflict("Username already exists");
+            await _playerRepository.DoesUsernameExist(request.Username);
 
             Player? registeredPlayer = await _authService.RegisterNewPlayer(request);
             string token = _authService.GenerateToken(registeredPlayer);
