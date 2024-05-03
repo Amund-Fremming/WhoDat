@@ -9,11 +9,18 @@ namespace GameEntity;
 public class Game
 {
     [Key]
+    [Range(1, 10000000)]
     public int GameID { get; set; }
+
+    [Range(1, 10000000)]
     public int? PlayerOneID { get; set; }
     public Player? PlayerOne { get; set; }
+
+    [Range(1, 10000000)]
     public int? PlayerTwoID { get; set; }
     public Player? PlayerTwo { get; set; }
+
+    [Range(1, 10000000)]
     public int CurrentPlayer { get; set; }
     public State State { get; set; }
 

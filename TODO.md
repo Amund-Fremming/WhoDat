@@ -5,9 +5,11 @@
 ## Fix first!
 
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
-- [ ] WARNING UnnauthorizedException might not be thrown but Exception instead, i only catch this in the service
-- [ ] WARNING Transactinos might not have Rolback or have Commit in catch
-- [ ] TODO-LATER handle GameFullException in frontend, display game full
+
+- [ ] Start game endpoint that also creates a board
+- [ ] CreateBoardCards does not have a endpoint
+
+card gallery game state message
 
 <hr />
 
@@ -21,24 +23,27 @@
 - [x] Add JWT for security
 - [x] Add Transactions
 - [x] Create Controller methods
-- [ ] Add logger service and controller
 - [x] Admin Controller
 - [x] Add change passord api
 - [x] Add signalR endpoints for game logic
 - [ ] Handling for reconnect when disconnected
 - [ ] Image upload func to azure
-- [ ] Go over design, try to find more api´s to implement
+- [ ] Add input validation
+- [x] Go over design, try to find more api´s to implement
 - [ ] Generate Mock data
+- [ ] Create premade boards
+- [ ] Create endpoints for getting premade boards or boarcards.
 - [ ] Test Backend
 - [x] Implement JWT
 - [ ] Test JWT implementation
-- [ ] Add input validation
-- [ ] Look for Edge-cases and fix them
 - [ ] Add error handling in Services
 - [ ] Add error handling in Repositories
 - [ ] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
 - [ ] Create Docs for Interfaces
 - [ ] Add logic for adding payment solution for buying more gallery cards??
+
+- [ ] FEATURE: Friends functonality
+- [ ] FEATURE: Persistent logs with a controller to get them
 
 <hr />
 

@@ -136,6 +136,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
     }
 
+    // RM - for monetization
     [HttpPut("galleries/{galleryId}/cards/{cardId}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> UpdateCardInGallery(int galleryId, int cardId, [FromBody] Card updatedCard)
@@ -198,12 +199,12 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
 
     [HttpPost("galleries")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> CreateGallery(int galleryId)
+    public async Task<ActionResult> CreateGallery([FromBody] Gallery gallery)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _galleryService.CreateGallery(playerId);
+            await _galleryService.CreateGallery(playerId, gallery);
 
             return Ok("Card Deleted!");
         }

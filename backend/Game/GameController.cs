@@ -4,6 +4,7 @@ using BoardCardEntity;
 using MessageEntity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Enum;
 
 namespace GameEntity;
 
@@ -75,16 +76,17 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-    [HttpPost]
+    // MOVE
+    [HttpPut("games/{gameId}/leave")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> CreateBoard(Board board)
+    public async Task<ActionResult> LeaveGame(int gameId)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            int boardId = await _boardService.CreateBoard(playerId, board);
+            await _gameService.LeaveGameById(playerId, gameId);
 
-            return Ok(boardId);
+            return Ok("Player Left The Game!");
         }
         catch (InvalidOperationException e)
         {
@@ -104,16 +106,17 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-    [HttpDelete("{boardId}")]
+    // MOVE
+    [HttpPut("games/{gameId}/join")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> DeleteBoard(int boardId)
+    public async Task<ActionResult> JoinGame(int gameId)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _boardService.DeleteBoard(playerId, boardId);
+            await _gameService.JoinGameById(playerId, gameId);
 
-            return Ok("Board Deleted!");
+            return Ok($"Player Joined Game {gameId}!");
         }
         catch (InvalidOperationException e)
         {
@@ -133,16 +136,17 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-    [HttpPut("boards/{boardId}/boardcards/{boardcardId}")]
+    // MOVE
+    [HttpPut("games/{gameId}/update-state")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> SetPlayingBoardCard(int boardId, int boardCardId)
+    public async Task<ActionResult> UpdateGameState(int gameId, [FromBody] State state)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _boardService.ChooseCard(playerId, boardId, boardCardId);
+            await _gameService.UpdateGameState(playerId, gameId, state);
 
-            return Ok("BoardCard Chosen!");
+            return Ok("Game State And Player Turn Updated!");
         }
         catch (InvalidOperationException e)
         {
@@ -162,16 +166,17 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-    [HttpPut("boards/{boardId}")]
+    // MOVE
+    [HttpPut("games/{gameId}/update-turn")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdatePlayersLeftOnBoard(int boardId, [FromBody] int playersLeft)
+    public async Task<ActionResult> UpdateCurrentPlayerTurn(int gameId, [FromBody] int playerNumber)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _boardService.UpdatePlayersLeft(playerId, boardId, playersLeft);
+            await _gameService.UpdateCurrentPlayerTurn(playerId, gameId, playerNumber);
 
-            return Ok("Updated Players Left!");
+            return Ok("Game State And Player Turn Updated!");
         }
         catch (InvalidOperationException e)
         {
@@ -191,45 +196,17 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-    [HttpPost("boards/{boardId}/boardcards")]
+    // MOVE
+    [HttpPost("games/{gameId}/messages")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> CreateBoardCards(int boardId, IEnumerable<int> cardIds)
+    public async Task<ActionResult> SendMessage(int gameId, [FromBody] string messageText)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _boardCardService.CreateBoardCards(playerId, boardId, cardIds);
+            await _messageService.CreateMessage(playerId, gameId, messageText);
 
-            return Ok("BoardCards Created!");
-        }
-        catch (InvalidOperationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-        catch (UnauthorizedAccessException e)
-        {
-            return Unauthorized(e.Message);
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
-    }
-
-    [HttpPut("boards/{boardId}/boardcards")]
-    [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdateBoardCardsActivity(int boardId, [FromBody] IEnumerable<BoardCardUpdate> boardCardUpdates)
-    {
-        try
-        {
-            int playerId = ParsePlayerIdClaim();
-            await _boardCardService.UpdateBoardCardsActivity(playerId, boardId, boardCardUpdates);
-
-            return Ok("BoardCard Activity Updated!");
+            return Ok("Message Sendt!");
         }
         catch (InvalidOperationException e)
         {

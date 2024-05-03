@@ -109,7 +109,6 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
 
             Player player = new Player(request.Username, hashedPassword, salt, Role.USER);
             Player newPlayer = await _playerService.CreatePlayer(player);
-            await _galleryService.CreateGallery(newPlayer.PlayerID);
 
             return newPlayer;
         }

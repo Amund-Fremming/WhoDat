@@ -11,14 +11,15 @@ public class GalleryService(AppDbContext context, ILogger<GalleryService> logger
     public readonly GalleryRepository _galleryRepository = galleryRepository;
     public readonly PlayerRepository _playerRepository = playerRepository;
 
-    public async Task<int> CreateGallery(int playerId)
+    public async Task<int> CreateGallery(int playerId, Gallery gallery)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
                 await _playerRepository.GetPlayerById(playerId);
-                Gallery gallery = new Gallery(playerId);
+                gallery.PlayerID = playerId;
+
                 int galleryId = await _galleryRepository.CreateGallery(gallery);
 
                 await transaction.CommitAsync();
