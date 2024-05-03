@@ -9,8 +9,6 @@
 - [ ] WARNING Transactinos might not have Rolback or have Commit in catch
 - [ ] TODO-LATER handle GameFullException in frontend, display game full
 
-- [ ] TODO Only broadcast message to the receiver not both, get the other player from the game instance in the DB
-
 <hr />
 
 ## Backend

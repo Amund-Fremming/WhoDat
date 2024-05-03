@@ -16,7 +16,7 @@ public class GameHub : Hub
     public readonly IBoardCardService _boardCardService;
     public readonly IMessageService _messageService;
 
-    private readonly string IDENTIFIER = "RECEIVE_MESSAGE";
+    private readonly string IDENTIFIER = "RECEIVE_STATE";
 
     public GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService)
     {
