@@ -3,6 +3,7 @@ using GalleryEntity;
 using CardEntity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Text.Encodings.Web;
 
 namespace PlayerEntity;
 
@@ -22,8 +23,9 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _playerService.UpdateUsername(playerId, newUsername);
+            string encodedNewUsername = EncodeForJsAndHtml(newUsername);
 
+            await _playerService.UpdateUsername(playerId, encodedNewUsername);
             return Ok("Username Updated!");
         }
         catch (InvalidOperationException e)
@@ -55,8 +57,9 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _playerService.UpdatePassword(playerId, newPassword);
+            string encodedNewPassword = EncodeForJsAndHtml(newPassword);
 
+            await _playerService.UpdatePassword(playerId, encodedNewPassword);
             return Ok("Password Updated!");
         }
         catch (InvalidOperationException e)
@@ -84,8 +87,8 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         try
         {
             int playerId = ParsePlayerIdClaim();
-            IEnumerable<Card> cards = await _cardService.GetAllCards(playerId, galleryId);
 
+            IEnumerable<Card> cards = await _cardService.GetAllCards(playerId, galleryId);
             return Ok(cards);
         }
         catch (InvalidOperationException e)
@@ -257,4 +260,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
 
     [NonAction]
     private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
+
+    [NonAction]
+    private string EncodeForJsAndHtml(string input) => JavaScriptEncoder.Default.Encode(HtmlEncoder.Default.Encode(input));
 }

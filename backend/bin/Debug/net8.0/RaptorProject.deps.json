@@ -14,7 +14,8 @@
           "Microsoft.EntityFrameworkCore.Design": "8.0.3",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.2",
           "Swashbuckle.AspNetCore": "6.5.0",
-          "System.IdentityModel.Tokens.Jwt": "7.5.1"
+          "System.IdentityModel.Tokens.Jwt": "7.5.1",
+          "System.Text.Encodings.Web": "8.0.0"
         },
         "runtime": {
           "RaptorProject.dll": {}

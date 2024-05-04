@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using GalleryEntity;
+using Dto;
 
 namespace Admin;
 
@@ -40,6 +41,35 @@ public class AdminController(IPlayerService playerService, IGalleryService galle
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpGet("players")]
+    [Authorize(Roles = "ADMIN")]
+    public async Task<ActionResult<IEnumerable<PlayerDto>>> GetAllPlayers()
+    {
+        try
+        {
+            IEnumerable<PlayerDto> players = await _playerService.GetAllPlayers();
+
+            return Ok(players);
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
 
     [HttpDelete("galleries/{galleryId}")]
     [Authorize(Roles = "ADMIN")]

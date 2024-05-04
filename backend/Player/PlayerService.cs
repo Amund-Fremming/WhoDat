@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
+using Dto;
 
 namespace PlayerEntity;
 
@@ -77,6 +78,22 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         }
     }
 
+    public async Task<IEnumerable<PlayerDto>> GetAllPlayers()
+    {
+        try
+        {
+            IEnumerable<PlayerDto> players = await _playerRepository.GetAllPlayers();
+
+            return players;
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError(e.Message, $"Error getting all players. (PlayerService)");
+            throw;
+        }
+    }
+
     public string GenerateSalt()
     {
         try
@@ -89,7 +106,7 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e.Message, "Error while generating salt. (AuthService)");
+            _logger.LogError(e.Message, "Error while generating salt. (PlayerService)");
             throw;
         }
     }

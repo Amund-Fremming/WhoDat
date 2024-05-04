@@ -1,5 +1,6 @@
 using Data;
 using Microsoft.EntityFrameworkCore;
+using Dto;
 
 namespace PlayerEntity;
 
@@ -25,7 +26,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error creating Player with id {player.PlayerID} .(PlayerRepository)");
+            _logger.LogError(e, $"Error creating Player with id {player.PlayerID}. (PlayerRepository)");
             throw;
         }
     }
@@ -41,7 +42,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error deleting Player with id {player.PlayerID} .(PlayerRepository)");
+            _logger.LogError(e, $"Error deleting Player with id {player.PlayerID}. (PlayerRepository)");
             throw;
         }
     }
@@ -50,7 +51,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
     {
         return await _context.Player
             .FirstAsync(p => p.Username == username)
-            ?? throw new KeyNotFoundException($"Username {username} does not exist. (AuthService)");
+            ?? throw new KeyNotFoundException($"Username {username} does not exist. (PlayerRepository)");
     }
 
     public async Task UpdateUsername(Player player, string newUsername)
@@ -65,7 +66,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID} .(PlayerRepository)");
+            _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID}. (PlayerRepository)");
             throw;
         }
     }
@@ -84,7 +85,23 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         catch (Exception e)
         {
             // TODO - more exceptions
-            _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID} .(PlayerRepository)");
+            _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID}. (PlayerRepository)");
+            throw;
+        }
+    }
+
+    public async Task<IEnumerable<PlayerDto>> GetAllPlayers()
+    {
+        try
+        {
+            return await _context.Player
+                .Select(p => new PlayerDto() { PlayerID = p.PlayerID, Username = p.Username, ImageUrl = p.ImageUrl })
+                .ToListAsync();
+        }
+        catch (Exception e)
+        {
+            // TODO - more exceptions
+            _logger.LogError(e, $"Error getting all players. (PlayerRepository)");
             throw;
         }
     }

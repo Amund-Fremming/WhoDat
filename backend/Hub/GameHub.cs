@@ -5,6 +5,7 @@ using BoardCardEntity;
 using Enum;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using System.Text.Encodings.Web;
 
 namespace Hubs;
 
@@ -180,6 +181,7 @@ public class GameHub : Hub
         {
             int playerId = ParsePlayerIdClaim();
             string groupName = gameId.ToString();
+            string encodedMessageText = EncodeForJsAndHtml(messageText);
 
             await _messageService.CreateMessage(playerId, gameId, messageText);
             await Clients.Groups(groupName).SendAsync("ReceiveMessage", GameHubType.SYSTEM, messageText);
@@ -206,8 +208,7 @@ public class GameHub : Hub
         }
     }
 
-    public int ParsePlayerIdClaim()
-    {
-        return int.Parse(Context.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
-    }
+    public int ParsePlayerIdClaim() => int.Parse(Context.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
+
+    private string EncodeForJsAndHtml(string input) => JavaScriptEncoder.Default.Encode(HtmlEncoder.Default.Encode(input));
 }
