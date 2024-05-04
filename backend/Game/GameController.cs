@@ -75,6 +75,8 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
+
+
     [NonAction]
     private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 }

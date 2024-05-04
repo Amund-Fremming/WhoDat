@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RaptorProject")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5090a51b09274afd3094496935a0310c5a27fac1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4824b17018c7a6d5eed546f6282163c5371a094f")]
 [assembly: System.Reflection.AssemblyProductAttribute("RaptorProject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RaptorProject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

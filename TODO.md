@@ -8,6 +8,8 @@
 
 - [ ] Start game endpoint that also creates a board
 - [ ] CreateBoardCards does not have a endpoint
+- [ ] GetBoardCardsFromBoard does not have a endpoint
+- [ ] UpdateBoardCardsActivity does not have a endpoint
 
 card gallery game state message
 
@@ -28,20 +30,20 @@ card gallery game state message
 - [x] Add signalR endpoints for game logic
 - [ ] Handling for reconnect when disconnected
 - [ ] Image upload func to azure
-- [ ] Add input validation
+- [x] Add input validation
 - [x] Go over design, try to find more api´s to implement
 - [ ] Generate Mock data
-- [ ] Create premade boards
-- [ ] Create endpoints for getting premade boards or boarcards.
+- [ ] Create premade cards
+- [ ] Create endpoints for getting premade boards or boardcards.
 - [ ] Test Backend
 - [x] Implement JWT
-- [ ] Test JWT implementation
+- [x] Test JWT implementation
 - [ ] Add error handling in Services
 - [ ] Add error handling in Repositories
 - [ ] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
 - [ ] Create Docs for Interfaces
-- [ ] Add logic for adding payment solution for buying more gallery cards??
 
+- [ ] FEATURE: Add logic for adding payment solution for buying more gallery cards??
 - [ ] FEATURE: Friends functonality
 - [ ] FEATURE: Persistent logs with a controller to get them
 
