@@ -1,17 +1,18 @@
 # TODO`S
 
-<hr />
-
 ## Fix first!
 
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 
-- [ ] Start game endpoint that also creates a board
-- [ ] CreateBoardCards does not have a endpoint
-- [ ] GetBoardCardsFromBoard does not have a endpoint
-- [ ] UpdateBoardCardsActivity does not have a endpoint
+Needs endpoints
 
-card gallery game state message
+- [ ] StartGame
+- [ ] UpdateBoardCardActivity + update playersleft
+- [ ] GetBoard (with boardcards)
+  - needs more implementation, service gets a gameid then needs to get the board id
+  - use gameid and playerid
+- [x] CreateBoardCards
+- [ ] GuessPlayer
 
 <hr />
 

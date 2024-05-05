@@ -1,5 +1,6 @@
 using Data;
 using BoardCardEntity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BoardEntity;
 
@@ -11,7 +12,8 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
     public async Task<Board> GetBoardById(int boardId)
     {
         return await _context.Board
-            .FindAsync(boardId) ?? throw new KeyNotFoundException($"Board with id {boardId}, does not exist!");
+            .Include(b => b.BoardCards)
+            .FirstOrDefaultAsync(b => b.BoardID == boardId) ?? throw new KeyNotFoundException($"Board with id {boardId}, does not exist!");
     }
 
     public async Task<int> CreateBoard(Board board)

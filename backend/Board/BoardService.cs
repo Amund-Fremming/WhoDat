@@ -93,6 +93,23 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         }
     }
 
+    public async Task<Board> GetBoardWithBoardCards(int playerId, int boardId)
+    {
+        try
+        {
+            Board board = await _boardRepository.GetBoardById(boardId);
+            PlayerHasPermission(playerId, board);
+
+            return board;
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError(e.Message, $"Error updating card on Board with id {boardId}. (BoardService)");
+            throw;
+        }
+    }
+
     public void PlayerHasPermission(int playerId, Board board)
     {
         if (board.PlayerID != playerId)

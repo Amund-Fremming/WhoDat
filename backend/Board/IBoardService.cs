@@ -6,4 +6,5 @@ public interface IBoardService
     public Task DeleteBoard(int playerId, int boardId);
     public Task ChooseCard(int playerId, int boardId, int boardCardId);
     public Task UpdatePlayersLeft(int playerId, int boardId, int activePlayers);
+    public Task<Board> GetBoardWithBoardCards(int playerId, int boardId);
 }

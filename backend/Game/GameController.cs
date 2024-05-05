@@ -75,7 +75,63 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
+    [HttpPost("games/{gameId}/boards")]
+    [Authorize(Roles = "ADMIN")]
+    public async Task<ActionResult> CreateBoardCards(int gameId, [FromBody] IEnumerable<int> cardIds)
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            await _boardCardService.CreateBoardCards(playerId, gameId, cardIds);
 
+            return Ok("BoardCards Created!");
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpDelete("games/{gameId}")]
+    [Authorize(Roles = "ADMIN")]
+    public async Task<ActionResult> GetBoardWithBoardCards(int gameId)
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            Board board = await _boardService.GetBoardWithBoardCards(playerId, gameId);
+
+            return Ok(board);
+        }
+        catch (InvalidOperationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
 
     [NonAction]
     private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
