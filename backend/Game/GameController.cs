@@ -105,7 +105,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-    [HttpDelete("games/{gameId}")]
+    [HttpGet("games/{gameId}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> GetBoardWithBoardCards(int gameId)
     {

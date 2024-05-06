@@ -142,23 +142,13 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
                 PlayerHasGamePermission(playerId, game);
 
                 if (guessedCard.BoardCardID == otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerOneID)
-                {
                     game.State = State.P1_WON;
-                }
                 if (guessedCard.BoardCardID == otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerTwoID)
-                {
                     game.State = State.P2_WON;
-                }
-                if (guessedCard.BoardCardID != otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerOneID)
-                {
-                    game.State = State.TURN_STARTED;
-                    game.CurrentPlayer = 2;
-                }
                 if (guessedCard.BoardCardID != otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerTwoID)
-                {
-                    game.State = State.TURN_STARTED;
-                    game.CurrentPlayer = 1;
-                }
+                    game.State = State.P1_TURN_STARTED;
+                if (guessedCard.BoardCardID != otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerOneID)
+                    game.State = State.P2_TURN_STARTED;
 
                 await _gameRepository.UpdateGame(game);
                 await transaction.CommitAsync();

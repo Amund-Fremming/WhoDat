@@ -14,9 +14,8 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
         try
         {
             Game game = await _gameRepository.GetGameById(gameId);
-            int? currentPlayerId = game.CurrentPlayer == 1 ? game.PlayerOneID : game.PlayerTwoID;
 
-            bool canSendMessage = CanSendMessage(playerId, currentPlayerId, game.State);
+            bool canSendMessage = CanSendMessage(playerId, game);
             if (canSendMessage)
                 return await _messageRepository.CreateMessage(new Message(playerId, gameId, messageText));
 
@@ -30,18 +29,17 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
         }
     }
 
-    public bool CanSendMessage(int playerId, int? currentPlayerId, State currentState)
+    public bool CanSendMessage(int playerId, Game game)
     {
-        if (currentPlayerId == null)
-            throw new Exception($"Current player does is null (MessageService)");
+        State state = game.State;
+        bool playerIsP1 = playerId == game.PlayerOneID;
 
-        bool isCurrentPlayer = currentPlayerId == playerId;
+        if (playerIsP1)
+            return (state == State.P1_GUESSING || state == State.P1_ASKING || state == State.P2_WAITING_ASK_REPLY || state == State.P2_WAITING_GUESS_REPLY);
 
-        if (isCurrentPlayer)
-            return (currentState == State.ASKING || currentState == State.GUESSING);
 
-        if (!isCurrentPlayer)
-            return (currentState == State.WAITING_ASK_REPLY || currentState == State.WAITING_GUESS_REPLY);
+        if (!playerIsP1)
+            return (state == State.P2_GUESSING || state == State.P2_ASKING || state == State.P1_WAITING_ASK_REPLY || state == State.P1_WAITING_GUESS_REPLY);
 
         return false;
     }

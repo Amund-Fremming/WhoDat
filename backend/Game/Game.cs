@@ -20,20 +20,19 @@ public class Game
     public int? PlayerTwoID { get; set; }
     public Player? PlayerTwo { get; set; }
 
-    [Range(1, 10000000)]
-    public int CurrentPlayer { get; set; }
     public State State { get; set; }
+    public GameType GameType { get; set; }
 
     public IEnumerable<Message>? Messages { get; set; }
     public IEnumerable<Board>? Boards { get; set; }
 
     public Game() { }
 
-    public Game(int playerOneId, State state)
+    public Game(int playerOneId, State state, GameType gameType)
     {
         PlayerOneID = playerOneId;
         PlayerTwoID = null;
-        CurrentPlayer = 1;
         State = state;
+        GameType = gameType;
     }
 }

@@ -58,7 +58,6 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         {
             game.PlayerTwoID = player.PlayerID;
             game.PlayerTwo = player;
-            game.State = State.READY;
 
             _context.Game.Update(game);
             await _context.SaveChangesAsync();
@@ -101,24 +100,6 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         {
             // TODO - more exceptions
             _logger.LogError(e, $"Error updating Game State with id {game.GameID} .(GameRepository)");
-            throw;
-        }
-    }
-
-    public async Task UpdateCurrentPlayerTurn(Game game, int playerNumber)
-    {
-        try
-        {
-            game.CurrentPlayer = playerNumber;
-            game.State = State.TURN_STARTED;
-
-            _context.Game.Update(game);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error updating current player in Game with id {game.GameID} .(GameRepository)");
             throw;
         }
     }

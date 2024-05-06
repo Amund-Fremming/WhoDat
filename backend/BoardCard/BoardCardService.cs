@@ -48,9 +48,13 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
 
                 IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.BoardCardID, update => update.Active);
                 IList<BoardCard> boardCards = await _boardcardRepository.GetBoardCardsFromBoard(boardId);
+                int playersLeft = boardCards.Count(bc => bc.Active);
 
                 await _boardcardRepository.UpdateBoardCardsActivity(updateMap, boardCards);
+                await _boardRepository.UpdatePlayersLeft(board, playersLeft);
+
                 await transaction.CommitAsync();
+                return playersLeft;
             }
             catch (Exception e)
             {

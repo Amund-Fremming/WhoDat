@@ -2,28 +2,34 @@ namespace Enum;
 
 public enum State
 {
-    // Initial state
-    WAITING,
-    READY,
-
     // Chosing cards
     ONLY_HOST_CHOSING_CARDS,
     BOTH_CHOSING_CARDS,
-    CHOSING_CARDS,
+    P1_CHOOSING,
+    P2_CHOOSING,
+    BOTH_CHOOSING,
 
     // Picking player
     BOTH_PICKING_PLAYER,
-    PICKING_PLAYER,
+    P1_PICKING_PLAYER,
+    P2_PICKING_PLAYER,
 
     // Turns
-    TURN_STARTED,
-    ASKING,
-    WAITING_ASK_REPLY,
-    ASK_REPLY,
-    GUESSING,
-    WAITING_GUESS_REPLY,
-    GUESS_REPLY,
-    TOGGLING_CARDS,
+    P1_TURN_STARTED,
+    P1_ASKING,
+    P1_WAITING_ASK_REPLY,
+    P1_ASK_REPLIED,
+    P1_GUESSING,
+    P1_WAITING_GUESS_REPLY,
+    P1_GUESS_REPLIED,
+
+    P2_TURN_STARTED,
+    P2_ASKING,
+    P2_WAITING_ASK_REPLY,
+    P2_ASK_REPLIED,
+    P2_GUESSING,
+    P2_WAITING_GUESS_REPLY,
+    P2_GUESS_REPLIED,
 
     // Finished
     P1_WON,

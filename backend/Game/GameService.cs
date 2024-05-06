@@ -52,7 +52,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         }
     }
 
-    public async Task JoinGameById(int playerId, int gameId)
+    public async Task<Game> JoinGameById(int playerId, int gameId)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
@@ -67,6 +67,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
                 await _gameRepository.JoinGame(game, player);
 
                 await transaction.CommitAsync();
+                return game;
             }
             catch (Exception e)
             {
@@ -123,28 +124,6 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             {
                 // ADD HANDLING
                 _logger.LogError(e, $"Error while updating state in Game with id {gameId}. (GameService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task UpdateCurrentPlayerTurn(int playerId, int gameId, int playerNumber)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                Game game = await _gameRepository.GetGameById(gameId);
-                PlayerHasPermission(playerId, game);
-                await _gameRepository.UpdateCurrentPlayerTurn(game, playerNumber);
-
-                await transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                // ADD HANDLING
-                _logger.LogError(e, $"Error while updating current player turn in Game with id {gameId}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
             }
