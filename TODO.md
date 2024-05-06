@@ -4,16 +4,9 @@
 
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 
-Needs endpoints
-
-- [ ] StartGame
-- [ ] UpdateBoardCardActivity + update playersleft
-  - just missing cards left update and return
-- [x] GetBoard (with boardcards)
-  - needs more implementation, service gets a gameid then needs to get the board id
-  - use gameid and playerid
-- [x] CreateBoardCards
-- [x] GuessBardCard
+- [ ] StartGame - Implement
+- [ ] JoinGame only joins the group, needs to get state in return so we can make the person choose cards or not
+- [ ] Frontend needs one connection to handle state, and one to handle messages??
 
 <hr />
 
