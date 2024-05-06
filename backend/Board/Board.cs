@@ -22,10 +22,10 @@ public class Board
 
     public Board() { }
 
-    public Board(int playerId, int gameId, int playersLeft)
+    public Board(int playerId, int gameId)
     {
         PlayerID = playerId;
         GameID = gameId;
-        playersLeft = 20;
+        PlayersLeft = 20;
     }
 }

@@ -83,5 +83,4 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
             throw;
         }
     }
-
 }

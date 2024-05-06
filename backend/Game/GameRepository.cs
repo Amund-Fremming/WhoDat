@@ -138,4 +138,19 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
             throw;
         }
     }
+
+    public async Task UpdateGame(Game game)
+    {
+        try
+        {
+            _context.Game.Update(game);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            // TODO - more exceptions
+            _logger.LogError(e.Message, $"Error updating Game with id {game.GameID}. (GameRepository)");
+            throw;
+        }
+    }
 }

@@ -8,11 +8,12 @@ Needs endpoints
 
 - [ ] StartGame
 - [ ] UpdateBoardCardActivity + update playersleft
-- [ ] GetBoard (with boardcards)
+  - just missing cards left update and return
+- [x] GetBoard (with boardcards)
   - needs more implementation, service gets a gameid then needs to get the board id
   - use gameid and playerid
 - [x] CreateBoardCards
-- [ ] GuessPlayer
+- [x] GuessBardCard
 
 <hr />
 
@@ -80,3 +81,11 @@ Needs endpoints
 
 - Remove update card functinallity, players get x number of cards, can buy more
 - Bundle packs (Premade galleries)
+
+<hr />
+
+## To docs
+
+- CreateGame creates one board for making the boards the same we use this one
+- StartGame creates a duplicate board of the board that was created then the game was made
+- UpdateBoardCards returns a number indicating the number of cards left on board

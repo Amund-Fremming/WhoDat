@@ -1,20 +1,25 @@
-namespace BoardEntity;
 using BoardCardEntity;
 using Data;
+using GameEntity;
+using Enum;
 
-public class BoardService(ILogger<BoardService> logger, AppDbContext context, BoardRepository boardRepository, BoardCardRepository boardCardRepository) : IBoardService
+namespace BoardEntity;
+
+public class BoardService(ILogger<BoardService> logger, AppDbContext context, BoardRepository boardRepository, BoardCardRepository boardCardRepository, GameRepository gameRepository) : IBoardService
 {
     public readonly ILogger<BoardService> _logger = logger;
     public readonly AppDbContext _context = context;
     public readonly BoardRepository _boardRepository = boardRepository;
     public readonly BoardCardRepository _boardCardRepository = boardCardRepository;
+    public readonly GameRepository _gameRepository = gameRepository;
 
-    public async Task<int> CreateBoard(int playerId, Board board)
+    public async Task<int> CreateBoard(int playerId, int gameId)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
+                Board board = new Board(playerId, gameId);
                 board.PlayerID = playerId;
                 int boardId = await _boardRepository.CreateBoard(board);
 
@@ -24,7 +29,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
             catch (Exception e)
             {
                 // ADD HANDLING
-                _logger.LogError(e.Message, $"Error while creating Board with id {board.BoardID}. (BoardService)");
+                _logger.LogError(e.Message, $"Error while creating Board. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
             }
@@ -93,22 +98,91 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         }
     }
 
-    public async Task<Board> GetBoardWithBoardCards(int playerId, int boardId)
+    public async Task<Board> GetBoardWithBoardCards(int playerId, int gameId)
     {
         try
         {
-            Board board = await _boardRepository.GetBoardById(boardId);
-            PlayerHasPermission(playerId, board);
+            Game game = await _gameRepository.GetGameById(gameId);
+            PlayerHasGamePermission(playerId, game);
 
-            return board;
+            Board playerOneBoard = game.Boards!.ElementAt(0);
+            Board playerTwoBoard = game.Boards!.ElementAt(1);
+
+            if (playerOneBoard.PlayerID == playerId)
+                return playerOneBoard;
+
+            if (playerTwoBoard.PlayerID == playerId)
+                return playerTwoBoard;
+
+            return null!;
         }
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e.Message, $"Error updating card on Board with id {boardId}. (BoardService)");
+            _logger.LogError(e.Message, $"Error fetching Board from game with id {gameId}. (BoardService)");
             throw;
         }
     }
+
+    public async Task<State> GuessBoardCard(int playerId, int gameId, int boardCardId)
+    {
+        using (var transaction = await _context.Database.BeginTransactionAsync())
+        {
+            try
+            {
+                Game game = await _gameRepository.GetGameById(gameId);
+                Board otherPlayersBoard;
+
+                if (game.Boards!.ElementAt(0).PlayerID == playerId)
+                    otherPlayersBoard = game.Boards!.ElementAt(1);
+                else
+                    otherPlayersBoard = game.Boards!.ElementAt(0);
+
+                BoardCard guessedCard = await _boardCardRepository.GetBoardCardById(boardCardId);
+                PlayerHasGamePermission(playerId, game);
+
+                if (guessedCard.BoardCardID == otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerOneID)
+                {
+                    game.State = State.P1_WON;
+                }
+                if (guessedCard.BoardCardID == otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerTwoID)
+                {
+                    game.State = State.P2_WON;
+                }
+                if (guessedCard.BoardCardID != otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerOneID)
+                {
+                    game.State = State.TURN_STARTED;
+                    game.CurrentPlayer = 2;
+                }
+                if (guessedCard.BoardCardID != otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerTwoID)
+                {
+                    game.State = State.TURN_STARTED;
+                    game.CurrentPlayer = 1;
+                }
+
+                await _gameRepository.UpdateGame(game);
+                await transaction.CommitAsync();
+                return game.State;
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e.Message, $"Error taking in guess on game wiht id {gameId}. (BoardService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+    }
+
+    public void PlayerHasGamePermission(int playerId, Game game)
+    {
+        if (game.PlayerOneID != playerId || game.PlayerTwoID != playerId)
+        {
+            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
+            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (BoardService)");
+        }
+    }
+
 
     public void PlayerHasPermission(int playerId, Board board)
     {

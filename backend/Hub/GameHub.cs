@@ -208,6 +208,72 @@ public class GameHub : Hub
         }
     }
 
+    public async Task GuessBoardCard(int gameId, int boardCardId)
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            string groupName = gameId.ToString();
+
+            State guessResult = await _boardService.GuessBoardCard(playerId, gameId, boardCardId);
+            await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, guessResult);
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogError($"Leave game failed SendMessage (GameHub): {e}");
+            await Clients.Caller.SendAsync(IDENTIFIER, GameHubType.ERROR, GameHubError.OPERATION_FAILED);
+        }
+        catch (KeyNotFoundException e)
+        {
+            _logger.LogError($"Entity not found SendMessage (GameHub): {e}");
+            await Clients.Caller.SendAsync(IDENTIFIER, GameHubType.ERROR, GameHubError.ENTITY_NOT_FOUND);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            _logger.LogError($"Unauthorized access SendMessage (GameHub): {e}");
+            await Clients.Caller.SendAsync(IDENTIFIER, GameHubType.ERROR, GameHubError.UNAUTHORIZED);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Unexpected error SendMessage (GameHub): {e}");
+            await Clients.Caller.SendAsync(IDENTIFIER, GameHubType.ERROR, GameHubError.UNEXPECTED_ERROR);
+        }
+    }
+
+    public async Task UpdateBoardCardsActivity(int gameId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            string groupName = gameId.ToString();
+
+            int boardCardsLeft = await _boardCardService.UpdateBoardCardsActivity(playerId, boardId, boardCardUpdates);
+            await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, boardCardsLeft);
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogError($"Leave game failed SendMessage (GameHub): {e}");
+            await Clients.Caller.SendAsync(IDENTIFIER, GameHubType.ERROR, GameHubError.OPERATION_FAILED);
+        }
+        catch (KeyNotFoundException e)
+        {
+            _logger.LogError($"Entity not found SendMessage (GameHub): {e}");
+            await Clients.Caller.SendAsync(IDENTIFIER, GameHubType.ERROR, GameHubError.ENTITY_NOT_FOUND);
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            _logger.LogError($"Unauthorized access SendMessage (GameHub): {e}");
+            await Clients.Caller.SendAsync(IDENTIFIER, GameHubType.ERROR, GameHubError.UNAUTHORIZED);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Unexpected error SendMessage (GameHub): {e}");
+            await Clients.Caller.SendAsync(IDENTIFIER, GameHubType.ERROR, GameHubError.UNEXPECTED_ERROR);
+        }
+    }
+
+
+
     public int ParsePlayerIdClaim() => int.Parse(Context.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 
     private string EncodeForJsAndHtml(string input) => JavaScriptEncoder.Default.Encode(HtmlEncoder.Default.Encode(input));

@@ -25,6 +25,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         {
             int playerId = ParsePlayerIdClaim();
             int gameId = await _gameService.CreateGame(playerId, game);
+            await _boardService.CreateBoard(playerId, gameId);
 
             return Ok($"Game {gameId} Created!");
         }
@@ -47,7 +48,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     }
 
     [HttpDelete("games/{gameId}")]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> DeleteGame(int gameId)
     {
         try
@@ -76,7 +77,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     }
 
     [HttpPost("games/{gameId}/boards")]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> CreateBoardCards(int gameId, [FromBody] IEnumerable<int> cardIds)
     {
         try
@@ -105,7 +106,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     }
 
     [HttpDelete("games/{gameId}")]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> GetBoardWithBoardCards(int gameId)
     {
         try

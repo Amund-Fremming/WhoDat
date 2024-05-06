@@ -37,7 +37,7 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
         }
     }
 
-    public async Task UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
+    public async Task<int> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
