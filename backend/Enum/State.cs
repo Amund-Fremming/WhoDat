@@ -7,7 +7,6 @@ public enum State
     BOTH_CHOSING_CARDS,
     P1_CHOOSING,
     P2_CHOOSING,
-    BOTH_CHOOSING,
 
     // Picking player
     BOTH_PICKING_PLAYER,
