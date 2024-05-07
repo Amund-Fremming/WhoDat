@@ -102,6 +102,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
     {
         try
         {
+            // TODO - if playerTwoBoard is not created, create a duplicate from player one
             Game game = await _gameRepository.GetGameById(gameId);
             PlayerHasGamePermission(playerId, game);
 

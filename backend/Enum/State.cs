@@ -37,5 +37,5 @@ public enum State
 
     // Someone left
     DISCONNECTED,
-    FINISHED,
+    PLAYER_LEFT,
 }

@@ -1,6 +1,7 @@
 using BoardEntity;
 using CardEntity;
 using Data;
+using GameEntity;
 
 namespace BoardCardEntity;
 
@@ -13,14 +14,14 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
     public readonly BoardRepository _boardRepository = boardRepository;
     public readonly CardRepository _cardRepository = cardRepository;
 
-    public async Task CreateBoardCards(int playerId, int boardId, IEnumerable<int> cardIds)
+    public async Task CreateBoardCards(int playerId, int gameId, IEnumerable<int> cardIds)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
-                Board board = await _boardRepository.GetBoardById(boardId);
-                PlayerHasPermission(playerId, board);
+                Game game = await _gamerepo...
+                PlayerHasGamePermission(playerId, game);
 
                 IEnumerable<BoardCard> newBoardCards = cardIds.Select(cardId => new BoardCard(boardId, cardId)).ToList();
 
@@ -91,4 +92,14 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
         }
     }
+
+    public void PlayerHasGamePermission(int playerId, Game game)
+    {
+        if (game.PlayerOneID != playerId || game.PlayerTwoID != playerId)
+        {
+            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
+            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
+        }
+    }
 }
+

@@ -4,9 +4,22 @@
 
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 
-- [ ] StartGame - Implement
-- [ ] JoinGame only joins the group, needs to get state in return so we can make the person choose cards or not
-- [ ] Frontend needs one connection to handle state, and one to handle messages??
+- [ ] GetBoardWithBoardCards
+  - TODO: if playerTwoBoard is not created, create a duplicate from player one
+  - INFO: her the other person needs to get their board with gameid
+- [ ] CreateBoardCards:
+
+  - responsibility for sending gamestate P1/P2 starting
+  - have to check game for gametype and see the state
+  - if both choosing, let player create 20 incomming
+  - when a create comes in, update the state and broadcast
+  - if the other player has created, broadcast game started
+  - Method in service needs to return state!
+
+  game flow
+
+  - oppretter kort, da vi er begge klare og far game started
+  - hent board fra frontend!
 
 <hr />
 
@@ -82,3 +95,4 @@
 - CreateGame creates one board for making the boards the same we use this one
 - StartGame creates a duplicate board of the board that was created then the game was made
 - UpdateBoardCards returns a number indicating the number of cards left on board
+- GetBoardWithBoardCards creates a duplicate board of playerones board if player two board does not excist
