@@ -7,4 +7,5 @@ public enum GameHubError
     ENTITY_NOT_FOUND,
     UNAUTHORIZED,
     UNEXPECTED_ERROR,
+    WRONG_AMOUNT_CARDS
 }

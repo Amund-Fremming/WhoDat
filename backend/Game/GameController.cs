@@ -76,35 +76,6 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-    [HttpPost("games/{gameId}/boards")]
-    [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> CreateBoardCards(int gameId, [FromBody] IEnumerable<int> cardIds)
-    {
-        try
-        {
-            int playerId = ParsePlayerIdClaim();
-            await _boardCardService.CreateBoardCards(playerId, gameId, cardIds);
-
-            return Ok("BoardCards Created!");
-        }
-        catch (InvalidOperationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-        catch (UnauthorizedAccessException e)
-        {
-            return Unauthorized(e.Message);
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
-    }
-
     [HttpGet("games/{gameId}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> GetBoardWithBoardCards(int gameId)

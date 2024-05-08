@@ -21,18 +21,16 @@ public class Game
     public Player? PlayerTwo { get; set; }
 
     public State State { get; set; }
-    public GameType GameType { get; set; }
 
     public IEnumerable<Message>? Messages { get; set; }
     public IEnumerable<Board>? Boards { get; set; }
 
     public Game() { }
 
-    public Game(int playerOneId, State state, GameType gameType)
+    public Game(int playerOneId, State state)
     {
         PlayerOneID = playerOneId;
         PlayerTwoID = null;
         State = state;
-        GameType = gameType;
     }
 }

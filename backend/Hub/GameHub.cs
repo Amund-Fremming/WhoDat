@@ -19,7 +19,7 @@ public class GameHub : Hub
 
     private readonly string IDENTIFIER = "RECEIVE_STATE";
     private readonly string MESSAGE_IDENTIFIER = "RECEIVE_STATE";
-    private readonly string PLAYERS_LEFT_IDENTIFIER = "RECEIVE_STATE";
+    private readonly string BOARDCARDS_LEFT_IDENTIFIER = "RECEIVE_STATE";
 
     public GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService)
     {
@@ -91,10 +91,10 @@ public class GameHub : Hub
             Game game = await _gameService.JoinGameById(playerId, gameId);
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
-            if (game.GameType == GameType.HOST_CHOOSES)
+            if (game.State == State.ONLY_HOST_CHOSING_CARDS)
                 await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, State.ONLY_HOST_CHOSING_CARDS);
 
-            if (game.GameType == GameType.BOTH_CHOOSES)
+            if (game.State == State.BOTH_CHOSING_CARDS)
                 await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, State.BOTH_CHOSING_CARDS);
         }
         catch (InvalidOperationException e)
@@ -229,22 +229,22 @@ public class GameHub : Hub
         catch (InvalidOperationException e)
         {
             _logger.LogError($"Operation failed UpdateBoardCardsActivity (GameHub): {e}");
-            await Clients.Caller.SendAsync(PLAYERS_LEFT_IDENTIFIER, GameHubType.ERROR, GameHubError.OPERATION_FAILED);
+            await Clients.Caller.SendAsync(BOARDCARDS_LEFT_IDENTIFIER, GameHubType.ERROR, GameHubError.OPERATION_FAILED);
         }
         catch (KeyNotFoundException e)
         {
             _logger.LogError($"Entity not found UpdateBoardCardsActivity (GameHub): {e}");
-            await Clients.Caller.SendAsync(PLAYERS_LEFT_IDENTIFIER, GameHubType.ERROR, GameHubError.ENTITY_NOT_FOUND);
+            await Clients.Caller.SendAsync(BOARDCARDS_LEFT_IDENTIFIER, GameHubType.ERROR, GameHubError.ENTITY_NOT_FOUND);
         }
         catch (UnauthorizedAccessException e)
         {
             _logger.LogError($"Unauthorized access UpdateBoardCardsActivity (GameHub): {e}");
-            await Clients.Caller.SendAsync(PLAYERS_LEFT_IDENTIFIER, GameHubType.ERROR, GameHubError.UNAUTHORIZED);
+            await Clients.Caller.SendAsync(BOARDCARDS_LEFT_IDENTIFIER, GameHubType.ERROR, GameHubError.UNAUTHORIZED);
         }
         catch (Exception e)
         {
             _logger.LogError($"Unexpected error UpdateBoardCardsActivity (GameHub): {e}");
-            await Clients.Caller.SendAsync(PLAYERS_LEFT_IDENTIFIER, GameHubType.ERROR, GameHubError.UNEXPECTED_ERROR);
+            await Clients.Caller.SendAsync(BOARDCARDS_LEFT_IDENTIFIER, GameHubType.ERROR, GameHubError.UNEXPECTED_ERROR);
         }
     }
 
@@ -255,7 +255,13 @@ public class GameHub : Hub
             int playerId = ParsePlayerIdClaim();
             string groupName = gameId.ToString();
 
-            await _boardCardService.CreateBoardCards(playerId, gameId, cardIds);
+            State state = await _boardCardService.CreateBoardCards(playerId, gameId, cardIds);
+            await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, state);
+        }
+        catch (ArgumentException e)
+        {
+            _logger.LogError($"Argument failed CreateBoardCards (GameHub): {e}");
+            await Clients.Caller.SendAsync(IDENTIFIER, GameHubType.ERROR, GameHubError.WRONG_AMOUNT_CARDS);
         }
         catch (InvalidOperationException e)
         {
