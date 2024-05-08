@@ -96,3 +96,4 @@
 - StartGame creates a duplicate board of the board that was created then the game was made
 - UpdateBoardCards returns a number indicating the number of cards left on board
 - GetBoardWithBoardCards creates a duplicate board of playerones board if player two board does not excist
+- CreateBoardCards, does a lot! and does also manage state!
