@@ -35,11 +35,11 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
         bool playerIsP1 = playerId == game.PlayerOneID;
 
         if (playerIsP1)
-            return (state == State.P1_GUESSING || state == State.P1_ASKING || state == State.P2_WAITING_ASK_REPLY || state == State.P2_WAITING_GUESS_REPLY);
+            return (state == State.P1_TURN_STARTED || state == State.P2_WAITING_ASK_REPLY || state == State.P2_WAITING_GUESS_REPLY);
 
 
         if (!playerIsP1)
-            return (state == State.P2_GUESSING || state == State.P2_ASKING || state == State.P1_WAITING_ASK_REPLY || state == State.P1_WAITING_GUESS_REPLY);
+            return (state == State.P2_TURN_STARTED || state == State.P1_WAITING_ASK_REPLY || state == State.P1_WAITING_GUESS_REPLY);
 
         return false;
     }

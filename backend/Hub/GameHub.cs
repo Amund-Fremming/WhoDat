@@ -224,7 +224,7 @@ public class GameHub : Hub
             string groupName = gameId.ToString();
 
             int boardCardsLeft = await _boardCardService.UpdateBoardCardsActivity(playerId, boardId, boardCardUpdates);
-            await Clients.Groups(groupName).SendAsync(PLAYERS_LEFT_IDENTIFIER, GameHubType.SYSTEM, boardCardsLeft);
+            await Clients.Groups(groupName).SendAsync(BOARDCARDS_LEFT_IDENTIFIER, GameHubType.SYSTEM, boardCardsLeft);
         }
         catch (InvalidOperationException e)
         {

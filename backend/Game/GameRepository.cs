@@ -74,7 +74,7 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
     {
         try
         {
-            game.State = State.FINISHED;
+            game.State = State.PLAYER_LEFT;
 
             _context.Game.Update(game);
             await _context.SaveChangesAsync();
