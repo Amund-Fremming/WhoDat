@@ -5,21 +5,12 @@
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 
 - [ ] GetBoardWithBoardCards
+
   - TODO: if playerTwoBoard is not created, create a duplicate from player one
   - INFO: her the other person needs to get their board with gameid
-- [ ] CreateBoardCards:
 
-  - responsibility for sending gamestate P1/P2 starting
-  - have to check game for gametype and see the state
-  - if both choosing, let player create 20 incomming
-  - when a create comes in, update the state and broadcast
-  - if the other player has created, broadcast game started
-  - Method in service needs to return state!
-
-  game flow
-
-  - oppretter kort, da vi er begge klare og far game started
-  - hent board fra frontend!
+- [ ] ChooseCard in service
+  - Needs to update state and return a state
 
 <hr />
 
@@ -47,7 +38,7 @@
 - [x] Implement JWT
 - [x] Test JWT implementation
 - [ ] Add error handling in Services
-- [ ] Add error handling in Repositories
+- [ ] Add error handling in Repositories or just let them throw then handle in service?
 - [ ] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
 - [ ] Create Docs for Interfaces
 

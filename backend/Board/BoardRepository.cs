@@ -49,7 +49,7 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         }
     }
 
-    public async Task ChooseCard(Board board, BoardCard boardCard)
+    public async Task ChooseBoardCard(Board board, BoardCard boardCard)
     {
         try
         {

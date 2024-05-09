@@ -58,18 +58,32 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         }
     }
 
-    public async Task ChooseCard(int playerId, int boardId, int boardCardId)
+    public async Task<State> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
                 Board board = await _boardRepository.GetBoardById(boardId);
-                PlayerHasPermission(playerId, board);
-                BoardCard boardCard = await _boardCardRepository.GetBoardCardById(boardCardId);
+                Game game = await _gameRepository.GetGameById(gameId);
 
-                await _boardRepository.ChooseCard(board, boardCard);
+                PlayerHasPermission(playerId, board);
+                PlayerHasGamePermission(playerId, game);
+                PlayerCanChooseCard(playerId, game, board);
+
+                BoardCard boardCard = await _boardCardRepository.GetBoardCardById(boardCardId);
+                await _boardRepository.ChooseBoardCard(board, boardCard);
+
+                bool isPlayerOne = game.PlayerOneID == playerId;
+                if (isPlayerOne)
+                    game.State = State.P2_PICKING_PLAYER;
+
+                if (!isPlayerOne)
+                    game.State = State.P1_PICKING_PLAYER;
+
+                await _gameRepository.UpdateGameState(game, game.State);
                 await transaction.CommitAsync();
+                return game.State;
             }
             catch (Exception e)
             {
@@ -174,7 +188,6 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         }
     }
 
-
     public void PlayerHasPermission(int playerId, Board board)
     {
         if (board.PlayerID != playerId)
@@ -182,5 +195,16 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
             _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (BoardService)");
         }
+    }
+
+    public void PlayerCanChooseCard(int playerId, Game game, Board board)
+    {
+        bool isPlayerOne = game.PlayerOneID == playerId;
+
+        if (game.State != State.P1_PICKING_PLAYER || game.State != State.P2_PICKING_PLAYER || game.State != State.BOTH_PICKING_PLAYER)
+            throw new InvalidOperationException("This action cannot be performed in this State");
+
+        if ((isPlayerOne && game.State == State.P2_PICKING_PLAYER) || (!isPlayerOne && game.State == State.P1_PICKING_PLAYER))
+            throw new InvalidOperationException("This action cannot be performed in this State");
     }
 }
