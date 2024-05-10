@@ -1,4 +1,5 @@
 # Who Dat?
+[![runs with Expo Go](https://img.shields.io/badge/Runs%20with%20Expo%20Go-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://expo.dev/client)
 
 The application is inspired by the classic game "Guess Who?" and introduces a unique twist by integrating personalized gameplay.
 The game boards utilized during play are curated directly from the user's own gallery, a dedicated space within the app where
