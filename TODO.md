@@ -1,16 +1,13 @@
 # TODO`S
 
-## Fix first!
-
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
+
+## Fix first!
 
 - [ ] GetBoardWithBoardCards
 
   - TODO: if playerTwoBoard is not created, create a duplicate from player one
   - INFO: her the other person needs to get their board with gameid
-
-- [ ] ChooseCard in service
-  - Needs to update state and return a state
 
 <hr />
 
@@ -45,6 +42,7 @@
 - [ ] FEATURE: Add logic for adding payment solution for buying more gallery cards??
 - [ ] FEATURE: Friends functonality
 - [ ] FEATURE: Persistent logs with a controller to get them
+- [ ] FEATURE: Add automated testing
 
 <hr />
 
