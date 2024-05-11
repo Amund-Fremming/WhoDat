@@ -9,6 +9,12 @@
   - TODO: if playerTwoBoard is not created, create a duplicate from player one
   - INFO: her the other person needs to get their board with gameid
 
+- [ ] StartGame
+  - sets the game state
+  - checks that two players are in the game
+  - checks that both players has boards and choosen board
+  - broadcast the state and starts the game
+
 <hr />
 
 ## Backend
