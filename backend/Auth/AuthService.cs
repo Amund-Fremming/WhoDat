@@ -75,7 +75,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         }
     }
 
-    public async Task ValidatePasswordWithSalt(LoginRequest request, string password)
+    public async Task ValidatePasswordWithSalt(LoginRequest request)
     {
         try
         {

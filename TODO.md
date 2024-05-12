@@ -4,6 +4,8 @@
 
 ## Fix first!
 
+- [ ] TODO: create player does not chech if the username already exists
+
 - [ ] GetBoardWithBoardCards
 
   - TODO: if playerTwoBoard is not created, create a duplicate from player one
