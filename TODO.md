@@ -5,6 +5,7 @@
 ## Fix first!
 
 - [ ] TODO: create player does not chech if the username already exists
+- [ ] TODO: updateboardcards in hub
 
 - [ ] GetBoardWithBoardCards
 

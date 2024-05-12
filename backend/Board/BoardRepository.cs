@@ -67,7 +67,7 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         }
     }
 
-    public async Task UpdatePlayersLeft(Board board, int playersLeft)
+    public async Task UpdateBoardCardsLeft(Board board, int playersLeft)
     {
         try
         {

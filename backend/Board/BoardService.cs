@@ -2,16 +2,18 @@ using BoardCardEntity;
 using Data;
 using GameEntity;
 using Enum;
+using PlayerEntity; 
 
 namespace BoardEntity;
 
-public class BoardService(ILogger<BoardService> logger, AppDbContext context, BoardRepository boardRepository, BoardCardRepository boardCardRepository, GameRepository gameRepository) : IBoardService
+public class BoardService(ILogger<BoardService> logger, AppDbContext context, BoardRepository boardRepository, BoardCardRepository boardCardRepository, GameRepository gameRepository, PlayerRepository playerRepository) : IBoardService
 {
     public readonly ILogger<BoardService> _logger = logger;
     public readonly AppDbContext _context = context;
     public readonly BoardRepository _boardRepository = boardRepository;
     public readonly BoardCardRepository _boardCardRepository = boardCardRepository;
     public readonly GameRepository _gameRepository = gameRepository;
+    public readonly PlayerRepository _playerRepository = playerRepository;
 
     public async Task<int> CreateBoard(int playerId, int gameId)
     {
@@ -19,6 +21,9 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         {
             try
             {
+                await _playerRepository.GetPlayerById(playerId);
+                await _gameRepository.GetGameById(gameId); 
+
                 Board board = new Board(playerId, gameId);
                 board.PlayerID = playerId;
                 int boardId = await _boardRepository.CreateBoard(board);
@@ -95,14 +100,14 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
         }
     }
 
-    public async Task UpdatePlayersLeft(int playerId, int boardId, int activePlayers)
+    public async Task UpdateBoardCardsLeft(int playerId, int boardId, int activePlayers)
     {
         try
         {
             Board board = await _boardRepository.GetBoardById(boardId);
             PlayerHasPermission(playerId, board);
 
-            await _boardRepository.UpdatePlayersLeft(board, activePlayers);
+            await _boardRepository.UpdateBoardCardsLeft(board, activePlayers);
         }
         catch (Exception e)
         {
