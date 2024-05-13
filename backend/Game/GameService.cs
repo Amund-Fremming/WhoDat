@@ -130,15 +130,6 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         }
     }
 
-    public void PlayerHasPermission(int playerId, Game game)
-    {
-        if (playerId != game.PlayerOneID || playerId != game.PlayerTwoID)
-        {
-            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
-            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (GameService)");
-        }
-    }
-
     public async Task<int> GetRecentGamePlayed(int playerId)
     {
         try
@@ -152,6 +143,15 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
             // ADD HANDLING
             _logger.LogError(e, $"Error while getting players recent Game with PlayerID {playerId}. (GameService)");
             throw;
+        }
+    }
+
+    public void PlayerHasPermission(int playerId, Game game)
+    {
+        if (playerId != game.PlayerOneID || playerId != game.PlayerTwoID)
+        {
+            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
+            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (GameService)");
         }
     }
 }
