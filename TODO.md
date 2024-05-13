@@ -4,7 +4,6 @@
 
 ## Fix first!
 
-- [ ] TODO: create player does not chech if the username already exists
 - [ ] TODO: updateboardcards in hub
 
 - [ ] GetBoardWithBoardCards
@@ -44,9 +43,8 @@
 - [x] Implement JWT
 - [x] Test JWT implementation
 - [ ] Add error handling in Services
-- [ ] Add error handling in Repositories or just let them throw then handle in service?
 - [ ] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
-- [ ] Create Docs for Interfaces
+- [x] Create Docs for Interfaces
 
 - [ ] FEATURE: Add logic for adding payment solution for buying more gallery cards??
 - [ ] FEATURE: Friends functonality

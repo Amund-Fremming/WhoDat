@@ -14,6 +14,8 @@ public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playe
     {
         try
         {
+            await _playerRepository.DoesUsernameExist(player.Username);
+
             await _playerRepository.CreatePlayer(player);
             return player;
         }

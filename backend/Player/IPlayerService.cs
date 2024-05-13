@@ -9,6 +9,7 @@ public interface IPlayerService
     /// </summary>
     /// <param name="player">The new player to be created.</param>
     /// <returns>The newly created player.</returns>
+    /// <exception cref="ArgumentException">Throws if the username exist.</exception>
     public Task<Player> CreatePlayer(Player player);
 
     /// <summary>

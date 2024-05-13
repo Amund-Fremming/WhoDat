@@ -24,21 +24,9 @@ public class AdminController(IPlayerService playerService, IGalleryService galle
 
             return Ok("Player Deleted!");
         }
-        catch (InvalidOperationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-        catch (UnauthorizedAccessException e)
-        {
-            return Unauthorized(e.Message);
-        }
         catch (Exception e)
         {
-            return StatusCode(500, e.Message);
+            return HandleException(e);
         }
     }
 
@@ -52,21 +40,9 @@ public class AdminController(IPlayerService playerService, IGalleryService galle
 
             return Ok(players);
         }
-        catch (InvalidOperationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-        catch (UnauthorizedAccessException e)
-        {
-            return Unauthorized(e.Message);
-        }
         catch (Exception e)
         {
-            return StatusCode(500, e.Message);
+            return HandleException(e);
         }
     }
 
@@ -81,21 +57,26 @@ public class AdminController(IPlayerService playerService, IGalleryService galle
 
             return Ok("Card Deleted!");
         }
-        catch (InvalidOperationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-        catch (UnauthorizedAccessException e)
-        {
-            return Unauthorized(e.Message);
-        }
         catch (Exception e)
         {
-            return StatusCode(500, e.Message);
+            return HandleException(e);
+        }
+    }
+
+    private ActionResult HandleException(Exception exception)
+    {
+        switch (exception)
+        {
+            case InvalidOperationException _:
+                return BadRequest(exception.Message);
+            case KeyNotFoundException _:
+                return NotFound(exception.Message);
+            case UnauthorizedAccessException _:
+                return Unauthorized(exception.Message);
+            case ArgumentException _:
+                return Conflict(exception.Message);
+            default:
+                return StatusCode(500, exception.Message);
         }
     }
 

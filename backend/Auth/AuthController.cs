@@ -18,7 +18,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
     {
         try
         {
-            await _authService.ValidatePasswordWithSalt(request, request.Password);
+            await _authService.ValidatePasswordWithSalt(request);
 
             Player player = await _playerRepository.GetPlayerByUsername(request.Username);
             string token = _authService.GenerateToken(player);
@@ -64,4 +64,6 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
             return StatusCode(500, e.Message);
         }
     }
+
+
 }
