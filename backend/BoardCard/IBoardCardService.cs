@@ -32,5 +32,7 @@ public interface IBoardCardService
     /// <param name="playerId">The player retrieving the boardcards.</param>
     /// <param name="boardId">The board to retrieve the boardcards from.</param>
     /// <returns>A collection of boardcards.</returns>
+    /// <exception cref="KeyNotFoundException">Throws if the board does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the board.</exception>
     public Task<IEnumerable<BoardCard>> GetBoardCardsFromBoard(int playerId, int boardId);
 }
