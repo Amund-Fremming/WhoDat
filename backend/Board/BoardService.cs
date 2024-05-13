@@ -2,7 +2,7 @@ using BoardCardEntity;
 using Data;
 using GameEntity;
 using Enum;
-using PlayerEntity; 
+using PlayerEntity;
 
 namespace BoardEntity;
 
@@ -22,7 +22,7 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
             try
             {
                 await _playerRepository.GetPlayerById(playerId);
-                await _gameRepository.GetGameById(gameId); 
+                await _gameRepository.GetGameById(gameId);
 
                 Board board = new Board(playerId, gameId);
                 board.PlayerID = playerId;

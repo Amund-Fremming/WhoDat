@@ -4,8 +4,6 @@
 
 ## Fix first!
 
-- [ ] TODO: updateboardcards in hub
-
 - [ ] GetBoardWithBoardCards
 
   - TODO: if playerTwoBoard is not created, create a duplicate from player one

@@ -70,7 +70,7 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
                 int boardcardsLeft = boardCards.Count(bc => bc.Active);
 
                 await _boardcardRepository.UpdateBoardCardsActivity(updateMap, boardCards);
-                await _boardRepository.UpdatePlayersLeft(board, boardcardsLeft);
+                await _boardRepository.UpdateBoardCardsLeft(board, boardcardsLeft);
 
                 await transaction.CommitAsync();
                 return boardcardsLeft;

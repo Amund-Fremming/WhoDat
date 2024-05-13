@@ -14,7 +14,7 @@ public interface IBoardCardService
     /// <exception cref="KeyNotFoundException">Throws if the game or board does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the game or board.</exception>
     public Task<State> CreateBoardCards(int playerId, int gameId, IEnumerable<int> cardIds);
-    
+
     /// <summary>
     /// Updates the activity for multiple boardcards at once.
     /// </summary>
@@ -25,7 +25,7 @@ public interface IBoardCardService
     /// <exception cref="KeyNotFoundException">Throws if the board does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the game or board.</exception>
     public Task<int> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates);
-    
+
     /// <summary>
     /// Retrieves the boardcards from a board.
     /// </summary>

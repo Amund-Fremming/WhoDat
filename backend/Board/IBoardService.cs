@@ -27,12 +27,13 @@ public interface IBoardService
     /// </summary>
     /// <param name="playerId">The id of the player to choose a boardcard for.</param>
     /// <param name="boardId">The id of the board to set the choosen card on.</param>
+    /// <param name="gameId">The id of the game to set the choosen card on.</param>
     /// <param name="boardCardId">The id of the boardcard choosen.</param>
     /// <returns>The new state of the game.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the board or boardcard does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player does not own the board or is in the game.</exception>
     /// <exception cref="InvalidOperationException">Throws if the state does not allow for choosing cards.</exception>
-    public Task<State> ChooseBoardCard(int playerId, int boardId, int boardCardId);
+    public Task<State> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId);
 
     /// <summary>
     /// Updates the active boardcards left on the players board.

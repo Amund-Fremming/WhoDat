@@ -175,7 +175,7 @@ public class GameHub : Hub
             int playerId = ParsePlayerIdClaim();
             string groupName = gameId.ToString();
 
-            State state = await _boardService.ChooseBoardCard(playerId, boardId, boardCardId);
+            State state = await _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId);
             await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, state);
         }
         catch (Exception e)
