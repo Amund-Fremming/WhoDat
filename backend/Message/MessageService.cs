@@ -1,5 +1,6 @@
 using GameEntity;
 using Enum;
+using ExceptionNamespace;
 
 namespace MessageEntity;
 
@@ -19,7 +20,7 @@ public class MessageService(ILogger<MessageService> logger, MessageRepository me
             if (canSendMessage)
                 return await _messageRepository.CreateMessage(new Message(playerId, gameId, messageText));
 
-            return -1;
+            throw new UnauthorizedAccessException($"This action is not allowed with the current game state. (MessageService)");
         }
         catch (Exception e)
         {
