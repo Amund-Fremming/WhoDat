@@ -12,7 +12,7 @@ public interface IGameService
     /// <returns>The id of the game created.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the player or game does not exist.</exception>
     public Task<int> CreateGame(int playerId, Game game);
-    
+
     /// <summary>
     /// Deletes a existing game.
     /// </summary>
@@ -31,7 +31,7 @@ public interface IGameService
     /// <exception cref="KeyNotFoundException">Throws if the game or player does not exist.</exception>
     /// <exception cref="GameFullException">Throws if the game already has to players added.</exception>
     public Task<Game> JoinGameById(int playerId, int gameId);
-    
+
     /// <summary>
     /// Removes a player from a game.
     /// </summary>
@@ -40,7 +40,7 @@ public interface IGameService
     /// <exception cref="KeyNotFoundException">Throws if the game does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the game.</exception>
     public Task LeaveGameById(int playerId, int gameId);
-    
+
     /// <summary>
     /// Updates the game state.
     /// </summary>
@@ -59,4 +59,15 @@ public interface IGameService
     /// <returns>The id of the most recent game for the player.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the player does not exist.</exception>
     public Task<int> GetRecentGamePlayed(int playerId);
+
+    /// <summary>
+    /// Updates the game state so a player can start playing. 
+    /// </summary>
+    /// <param name="playerId">The player starting the game.</param>
+    /// <param name="gameId">The game to start.</param>
+    /// <returns>The new updated state.</returns>
+    /// <exception cref="KeyNotFoundException">Throws if the player or game does not exist.</exception>
+    /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the game.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Throws if the game state is not correct for starting the game.</exception>
+    public Task<State> StartGame(int playerId, int gameId);
 }

@@ -1,13 +1,11 @@
 # TODO`S
 
+CreatePlayerTwoBoard
+
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
+- [ ] WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
 
 ## Fix first!
-
-- [ ] GetBoardWithBoardCards
-
-  - TODO: if playerTwoBoard is not created, create a duplicate from player one
-  - INFO: her the other person needs to get their board with gameid
 
 - [ ] StartGame
   - sets the game state
@@ -48,6 +46,7 @@
 - [ ] FEATURE: Friends functonality
 - [ ] FEATURE: Persistent logs with a controller to get them
 - [ ] FEATURE: Add automated testing
+- [ ] FEATURE: Change Auth to clerk
 
 <hr />
 

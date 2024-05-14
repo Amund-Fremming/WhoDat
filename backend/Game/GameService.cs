@@ -146,6 +146,32 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
         }
     }
 
+    public async Task<State> StartGame(int playerId, int gameId)
+    {
+        using (var transaction = await _context.Database.BeginTransactionAsync())
+        {
+            try
+            {
+                Player player = await _playerRepository.GetPlayerById(playerId);
+                Game game = await _gameRepository.GetGameById(gameId);
+                PlayerHasPermission(playerId, game);
+
+                if (game.State != State.BOTH_PICKED_PLAYERS)
+                    throw new ArgumentOutOfRangeException("Game cannot start at this state!");
+
+                await _gameRepository.UpdateGameState(game, State.P1_TURN_STARTED);
+                return State.P1_TURN_STARTED;
+            }
+            catch (Exception e)
+            {
+                // ADD HANDLING
+                _logger.LogError(e, $"Error while starting Game with ID {gameId}. (GameService)");
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+    }
+
     public void PlayerHasPermission(int playerId, Game game)
     {
         if (playerId != game.PlayerOneID || playerId != game.PlayerTwoID)

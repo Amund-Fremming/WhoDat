@@ -12,6 +12,7 @@ public enum State
     BOTH_PICKING_PLAYER,
     P1_PICKING_PLAYER,
     P2_PICKING_PLAYER,
+    BOTH_PICKED_PLAYERS,
 
     // Turns
     P1_TURN_STARTED,

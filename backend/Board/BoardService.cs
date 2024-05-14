@@ -80,11 +80,14 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
                 await _boardRepository.ChooseBoardCard(board, boardCard);
 
                 bool isPlayerOne = game.PlayerOneID == playerId;
-                if (isPlayerOne)
+                if (isPlayerOne && game.State == State.BOTH_PICKING_PLAYER)
                     game.State = State.P2_PICKING_PLAYER;
 
-                if (!isPlayerOne)
+                if (!isPlayerOne && game.State == State.BOTH_PICKING_PLAYER)
                     game.State = State.P1_PICKING_PLAYER;
+
+                if ((isPlayerOne && game.State == State.P1_PICKING_PLAYER) || (!isPlayerOne && game.State == State.P2_PICKING_PLAYER))
+                    game.State = State.BOTH_PICKED_PLAYERS;
 
                 await _gameRepository.UpdateGameState(game, game.State);
                 await transaction.CommitAsync();
@@ -121,7 +124,6 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
     {
         try
         {
-            // TODO - if playerTwoBoard is not created, create a duplicate from player one
             Game game = await _gameRepository.GetGameById(gameId);
             PlayerHasGamePermission(playerId, game);
 
@@ -130,6 +132,9 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
 
             if (playerOneBoard.PlayerID == playerId)
                 return playerOneBoard;
+
+            if (playerTwoBoard.PlayerID == playerId && playerTwoBoard == null)
+                return await CreatePlayerTwoBoard(playerId, game);
 
             if (playerTwoBoard.PlayerID == playerId)
                 return playerTwoBoard;
@@ -211,5 +216,25 @@ public class BoardService(ILogger<BoardService> logger, AppDbContext context, Bo
 
         if ((isPlayerOne && game.State == State.P2_PICKING_PLAYER) || (!isPlayerOne && game.State == State.P1_PICKING_PLAYER))
             throw new InvalidOperationException("This action cannot be performed in this State");
+    }
+
+    private async Task<Board> CreatePlayerTwoBoard(int playerId, Game game)
+    {
+        Player player = await _playerRepository.GetPlayerById(playerId);
+        Board playerOneBoard = game.Boards!.ElementAt(1);
+
+        Board playerTwoBoard = new Board(playerId, game.GameID);
+        List<BoardCard> tempBoardCards = new List<BoardCard>();
+
+        foreach (BoardCard boardCard in playerOneBoard.BoardCards!)
+        {
+            BoardCard newBoardCard = new BoardCard(boardCard.BoardID, boardCard.CardID);
+            tempBoardCards.Add(newBoardCard);
+        }
+
+        playerTwoBoard.BoardCards = tempBoardCards;
+
+        await _boardRepository.CreateBoard(playerTwoBoard);
+        return playerTwoBoard;
     }
 }

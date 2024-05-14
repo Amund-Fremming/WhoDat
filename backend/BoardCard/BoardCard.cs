@@ -14,6 +14,8 @@ public class BoardCard
     public Card? Card { get; set; }
     public bool Active { get; set; }
 
+    public BoardCard() { }
+
     public BoardCard(int boardID, int cardID)
     {
         BoardID = boardID;
