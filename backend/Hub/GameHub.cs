@@ -184,6 +184,22 @@ public class GameHub : Hub
         }
     }
 
+    public async Task StartGame(int gameId)
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            string groupName = gameId.ToString();
+
+            State state = await _gameService.StartGame(playerId, gameId);
+            await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, state);
+        }
+        catch (Exception e)
+        {
+            await NotifyClientOfError(e, IDENTIFIER, gameId);
+        }
+    }
+
     private async Task NotifyClientOfError(Exception exception, string identifier, int gameId)
     {
         var errorType = GameHubError.UNEXPECTED_ERROR;

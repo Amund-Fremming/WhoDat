@@ -2,6 +2,7 @@ using Enum;
 using PlayerEntity;
 using Data;
 using ExceptionNamespace;
+using BoardEntity;
 
 namespace GameEntity;
 
@@ -158,6 +159,15 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
 
                 if (game.State != State.BOTH_PICKED_PLAYERS)
                     throw new ArgumentOutOfRangeException("Game cannot start at this state!");
+
+                if (game.PlayerOneID == null || game.PlayerTwoID == null)
+                    throw new ArgumentOutOfRangeException("Game cannot start, missing players!");
+
+                Board playerOneBoard = game.Boards!.ElementAt(0);
+                Board playerTwoBoard = game.Boards!.ElementAt(1);
+
+                if (playerOneBoard.ChosenCardID == null || playerTwoBoard.ChosenCardID == null)
+                    throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not choosen boardcard!");
 
                 await _gameRepository.UpdateGameState(game, State.P1_TURN_STARTED);
                 return State.P1_TURN_STARTED;

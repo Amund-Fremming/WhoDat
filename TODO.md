@@ -1,17 +1,7 @@
 # TODO`S
 
-CreatePlayerTwoBoard
-
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 - [ ] WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
-
-## Fix first!
-
-- [ ] StartGame
-  - sets the game state
-  - checks that two players are in the game
-  - checks that both players has boards and choosen board
-  - broadcast the state and starts the game
 
 <hr />
 
@@ -32,7 +22,6 @@ CreatePlayerTwoBoard
 - [ ] Image upload func to azure
 - [x] Add input validation
 - [x] Go over design, try to find more api´s to implement
-- [ ] Generate Mock data
 - [ ] Create premade cards
 - [ ] Create endpoints for getting premade boards or boardcards.
 - [ ] Test Backend

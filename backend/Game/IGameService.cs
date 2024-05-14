@@ -68,6 +68,6 @@ public interface IGameService
     /// <returns>The new updated state.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the player or game does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the game.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">Throws if the game state is not correct for starting the game.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Throws if the game state is not correct for starting the game, there is missing players or one or more player have not choosen a boardcard.</exception>
     public Task<State> StartGame(int playerId, int gameId);
 }
