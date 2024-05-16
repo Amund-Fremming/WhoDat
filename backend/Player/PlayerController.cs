@@ -4,6 +4,7 @@ using CardEntity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using Dto;
 
 namespace PlayerEntity;
 
@@ -71,13 +72,13 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
 
     [HttpPost("galleries/{galleryId}/cards")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> AddCardToGallery(int galleryId, [FromBody] Card card)
+    public async Task<ActionResult> AddCardToGallery(int galleryId, [FromForm] CardInputDto cardDto)
     {
         try
         {
-            card.GalleryID = galleryId;
             int playerId = ParsePlayerIdClaim();
-            int cardId = await _cardService.CreateCard(playerId, card);
+            cardDto.Card!.GalleryID = galleryId;
+            int cardId = await _cardService.CreateCard(playerId, cardDto);
 
             return Ok($"Card Created {cardId}");
         }
@@ -90,14 +91,14 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     // RM - for monetization
     [HttpPut("galleries/{galleryId}/cards/{cardId}")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdateCardInGallery(int galleryId, int cardId, [FromBody] Card updatedCard)
+    public async Task<ActionResult> UpdateCardInGallery(int galleryId, int cardId, [FromForm] CardInputDto updatedCardDto)
     {
         try
         {
-            updatedCard.GalleryID = galleryId;
-            updatedCard.CardID = cardId;
+            updatedCardDto.Card!.GalleryID = galleryId;
+            updatedCardDto.Card!.CardID = cardId;
             int playerId = ParsePlayerIdClaim();
-            await _cardService.UpdateCard(playerId, updatedCard);
+            await _cardService.UpdateCard(playerId, updatedCardDto);
 
             return Ok("Card Updated!");
         }

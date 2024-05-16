@@ -1,3 +1,5 @@
+using Dto;
+
 namespace CardEntity;
 
 public interface ICardService
@@ -6,11 +8,12 @@ public interface ICardService
     /// Creates a new card.
     /// </summary>
     /// <param name="playerId">The player creating the new card.</param>
-    /// <param name="card">The card to create.</param>
+    /// <param name="cardDto">Dto containing the card object and a image file.</param>
     /// <returns>The id of the card created.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the gallery does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the gallery.</exception>
-    public Task<int> CreateCard(int playerId, Card card);
+    /// <exception cref="InvalidOperationException">Throws if there is no image file present in the dto.</exception>
+    public Task<int> CreateCard(int playerId, CardInputDto cardDto);
 
     /// <summary>
     /// Deletes a existing card.
@@ -25,10 +28,11 @@ public interface ICardService
     /// Updates a existing card.
     /// </summary>
     /// <param name="playerId">The player updating the card.</param>
-    /// <param name="card">The updated card.</param>
+    /// <param name="newCardDto">Dto containing the card object and a image file.</param>
     /// <exception cref="KeyNotFoundException">Throws if the card or gallery does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the gallery.</exception>
-    public Task UpdateCard(int playerId, Card card);
+    /// <exception cref="InvalidOperationException">Throws if there is no image file present in the dto.</exception>
+    public Task UpdateCard(int playerId, CardInputDto newCardDto);
 
     /// <summary>
     /// Retrives all cards from a gallery.

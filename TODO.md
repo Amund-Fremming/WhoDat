@@ -20,7 +20,7 @@
 - [x] Add signalR endpoints for game logic
 - [ ] Handling for reconnect when disconnected
 - [x] Image upload func to CloudFlare
-- [ ] Connect backend with CloudFlare
+- [x] Connect backend with CloudFlare
 - [ ] Image upload access control
 - [x] Add input validation
 - [x] Go over design, try to find more api´s to implement
