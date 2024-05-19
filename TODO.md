@@ -37,7 +37,6 @@
 - [ ] FEATURE: Friends functonality
 - [ ] FEATURE: Persistent logs with a controller to get them
 - [ ] FEATURE: Add automated testing
-- [ ] FEATURE: Change Auth to clerk
 
 <hr />
 
