@@ -18,5 +18,9 @@
 - [ ] AirDrop and snapchat sharing link
 - [ ] If host leaves the game, make the second player the host
 - [ ] add api for getting history/stats
-- [ ] add func for multiple gallery
 - [ ] change auth to clerk
+
+- [ ] FEATURE: Add logic for adding payment solution for buying more gallery cards??
+- [ ] FEATURE: Friends functonality
+- [ ] FEATURE: Persistent logs with a controller to get them
+- [ ] FEATURE: Add automated testing

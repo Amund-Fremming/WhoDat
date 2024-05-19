@@ -3,6 +3,8 @@
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 - [ ] WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
 
+- [ ] TODO UploadImageToCloudflare does not return the correct url
+
 <hr />
 
 ## Backend
@@ -24,19 +26,12 @@
 - [ ] Image upload access control
 - [x] Add input validation
 - [x] Go over design, try to find more api´s to implement
-- [ ] Create premade cards
-- [ ] Create endpoints for getting premade boards or boardcards.
-- [ ] Test Backend
+- [ ] Create premade cards and their endpoints
 - [x] Implement JWT
 - [x] Test JWT implementation
 - [ ] Add error handling in Services
-- [ ] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
+- [x] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
 - [x] Create Docs for Interfaces
-
-- [ ] FEATURE: Add logic for adding payment solution for buying more gallery cards??
-- [ ] FEATURE: Friends functonality
-- [ ] FEATURE: Persistent logs with a controller to get them
-- [ ] FEATURE: Add automated testing
 
 <hr />
 

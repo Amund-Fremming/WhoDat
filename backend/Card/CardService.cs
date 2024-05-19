@@ -116,10 +116,11 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
             content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
 
             var response = await client.PutAsync(containerEndpoint, content);
+            Console.WriteLine("Response: " + response);
 
             if (response.IsSuccessStatusCode)
             {
-                return containerEndpoint;
+                return response.Content.ToString();
             }
             else
             {
