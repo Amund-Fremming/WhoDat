@@ -4,6 +4,7 @@
 - [ ] WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
 
 - [ ] TODO UploadImageToCloudflare does not return the correct url
+- [ ] TODO CreateBoardCards has bug, if only host choosing, return a unauthorized or so, then the p2 cannot do this
 
 <hr />
 
@@ -20,18 +21,18 @@
 - [x] Admin Controller
 - [x] Add change passord api
 - [x] Add signalR endpoints for game logic
-- [ ] Handling for reconnect when disconnected
 - [x] Image upload func to CloudFlare
 - [x] Connect backend with CloudFlare
-- [ ] Image upload access control
 - [x] Add input validation
 - [x] Go over design, try to find more api´s to implement
-- [ ] Create premade cards and their endpoints
 - [x] Implement JWT
 - [x] Test JWT implementation
-- [ ] Add error handling in Services
 - [x] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
 - [x] Create Docs for Interfaces
+- [ ] Handling for reconnect when disconnected
+- [ ] Image upload access control
+- [ ] Create premade cards and their endpoints
+- [ ] Add error handling in Services
 
 <hr />
 
@@ -47,6 +48,7 @@
 - [ ] Add Token handling for security
 - [ ] Add input validation
 - [ ] Test the app
+- [ ] Create docs
 
 <hr />
 
@@ -58,6 +60,7 @@
 - [ ] Fix user feedback
 - [ ] Repeat deploy again until finished
 - [ ] Deploy to the AppStore
+- [ ] Update the docs, and add pipeline docs
 
 <hr />
 
@@ -67,11 +70,3 @@
 - Bundle packs (Premade galleries)
 
 <hr />
-
-## To docs
-
-- CreateGame creates one board for making the boards the same we use this one
-- StartGame creates a duplicate board of the board that was created then the game was made
-- UpdateBoardCards returns a number indicating the number of cards left on board
-- GetBoardWithBoardCards creates a duplicate board of playerones board if player two board does not excist
-- CreateBoardCards, does a lot! and does also manage state!

@@ -38,3 +38,15 @@ Operating at the same level as controllers, the Hub uses SignalR to manage WebSo
 updates and real-time management of game states and related information. This component is central to the
 application's functionality, especially for interactive game elements. Like the controllers, this class has a
 function for handling errors and returning the right message, a parsing of player id and encoding HTML and JS input.
+
+### Some special service functions
+
+**CreateGame**: creates one board for making the board for the game, we later duplicate this board so each player
+gets the same board.
+**UpdateBoardCards**: updates the boardcards activity, and returns the number of active cards left on the board.
+**GetBoardWithBoardCards**: creates the duplicate board that was made when the `CreateGame` was called if the
+second board was not created, if it was, their board is returned.
+**CreateBoardCards**: creates incomming boardcards from cards. Does also validate what king of game, so if only host
+is supposed to choose cards the second player is not allowed. Does also update the state and return it. This is
+important for the game state when the players are choosing their cards so we can track when both are ready or which
+player is still choosing, or if both are finished so we can do the next action.

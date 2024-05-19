@@ -164,7 +164,8 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
                     throw new ArgumentOutOfRangeException("Game cannot start, missing players!");
 
                 Board playerOneBoard = game.Boards!.ElementAt(0);
-                Board playerTwoBoard = game.Boards!.ElementAt(1);
+                Board playerTwoBoard = game.Boards.ElementAt(1) ??
+                    throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not created their board!");
 
                 if (playerOneBoard.ChosenCardID == null || playerTwoBoard.ChosenCardID == null)
                     throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not choosen boardcard!");
