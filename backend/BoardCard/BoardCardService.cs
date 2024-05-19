@@ -25,15 +25,30 @@ public class BoardCardService(AppDbContext context, ILogger<BoardCardService> lo
                 Game game = await _gameRepository.GetGameById(gameId);
                 int boardId = game.Boards!.ElementAt(0).BoardID;
 
+                if (game.State != State.BOTH_CHOSING_CARDS || game.State == State.P1_CHOOSING
+                        || game.State == State.P2_CHOOSING || game.State == State.ONLY_HOST_CHOSING_CARDS)
+                    return game.State;
+
+                if (game.State == State.ONLY_HOST_CHOSING_CARDS)
+                    cardIds = cardIds.Take(40);
+                else
+                    cardIds = cardIds.Take(20);
+
                 PlayerHasGamePermission(playerId, game);
                 ValidatePlayerPermissions(playerId, game, cardIds);
 
                 if (game.State == State.ONLY_HOST_CHOSING_CARDS)
+                {
+                    // if not the host, return a error or so
+                    // if not continue
                     game.State = State.BOTH_PICKING_PLAYER;
+                }
 
                 if (game.State == State.BOTH_CHOSING_CARDS)
                     game.State = game.PlayerOneID == playerId ? State.P2_CHOOSING : State.P1_CHOOSING;
 
+                // denne ma splittes i to, na kan en spiller lage begge set med kort
+                // denne ma flyttes, metoden over vil endre state og denne vil ga direkte gjennom
                 if (game.State == State.P1_CHOOSING || game.State == State.P2_CHOOSING)
                     game.State = State.BOTH_PICKING_PLAYER;
 
