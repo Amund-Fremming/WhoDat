@@ -29,6 +29,7 @@
 - [x] Test JWT implementation
 - [x] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
 - [x] Create Docs for Interfaces
+- [ ] Create tests for services
 - [ ] Handling for reconnect when disconnected
 - [ ] Image upload access control
 - [ ] Create premade cards and their endpoints
