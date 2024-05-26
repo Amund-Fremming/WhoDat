@@ -3,6 +3,7 @@
 - [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 - [ ] WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
 
+- [ ] TODO add docs for R2
 - [ ] TODO UploadImageToCloudflare does not return the correct url
 - [ ] TODO CreateBoardCards has bug, if only host choosing, return a unauthorized or so, then the p2 cannot do this
 
@@ -34,6 +35,8 @@
 - [ ] Image upload access control
 - [ ] Create premade cards and their endpoints
 - [ ] Add error handling in Services
+- [ ] Setup Azure env
+- [ ] Setup github actions with test pipeline to dev / prod branch to azure
 
 <hr />
 
@@ -41,6 +44,8 @@
 
 - [x] User test with Figma prototype
 - [x] Tweak Design
+- [ ] Add wrapper / provider for keyboard up (might also add scrollview)
+- [ ] Add util classes for styles (colors) and styling functions for converting pixel values
 - [ ] Implement generic components
 - [ ] Implement Navigation bar
 - [ ] Implement Routers / View-render for different screens
