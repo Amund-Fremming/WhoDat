@@ -7,39 +7,44 @@ using GameEntity;
 using PlayerEntity;
 using Enum;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore;
 
 public class BoardServiceTests
 {
-    public readonly BoardService _boardService;
-    public readonly Mock<AppDbContext> _mockContext;
-    public readonly Mock<BoardRepository> _mockBoardRepository;
-    public readonly Mock<BoardCardRepository> _mockBoardCardRepository;
-    public readonly Mock<GameRepository> _mockGameRepository;
-    public readonly Mock<PlayerRepository> _mockPlayerRepository;
-    public readonly Mock<ILogger<BoardService>> _mockLogger;
+    private readonly BoardService _boardService;
+    private readonly Mock<BoardRepository> _mockBoardRepository;
+    private readonly Mock<BoardCardRepository> _mockBoardCardRepository;
+    private readonly Mock<GameRepository> _mockGameRepository;
+    private readonly Mock<PlayerRepository> _mockPlayerRepository;
+    private readonly Mock<ILogger<BoardService>> _mockLogger;
+    private readonly AppDbContext _context;
 
     public BoardServiceTests()
     {
+        // Set up in-memory database for context
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseInMemoryDatabase(databaseName: "TestDatabase")
+            .Options;
+        _context = new AppDbContext(options);
+
         // Create the mock objects
-        _mockContext = new Mock<AppDbContext>();
         _mockLogger = new Mock<ILogger<BoardService>>();
-        _mockBoardRepository = new Mock<BoardRepository>();
-        _mockBoardCardRepository = new Mock<BoardCardRepository>();
-        _mockGameRepository = new Mock<GameRepository>();
-        _mockPlayerRepository = new Mock<PlayerRepository>();
+
+        // Create instances of repositories with the in-memory context
+        _mockBoardRepository = new Mock<BoardRepository>(_context);
+        _mockBoardCardRepository = new Mock<BoardCardRepository>(_context);
+        _mockGameRepository = new Mock<GameRepository>(_context);
+        _mockPlayerRepository = new Mock<PlayerRepository>(_context);
 
         // Create the service with the mocked dependencies
         _boardService = new BoardService(
             _mockLogger.Object,
-            _mockContext.Object,
+            _context,
             _mockBoardRepository.Object,
             _mockBoardCardRepository.Object,
             _mockGameRepository.Object,
             _mockPlayerRepository.Object
         );
-
     }
 
     [Fact]
@@ -63,7 +68,5 @@ public class BoardServiceTests
         _mockGameRepository.Verify(repo => repo.GetGameById(gameId), Times.Once);
         _mockBoardRepository.Verify(repo => repo.CreateBoard(It.IsAny<Board>()), Times.Once);
     }
-
-
 }
 
