@@ -26,9 +26,7 @@ with any other player they wish to invite.
   - mycolor.space
 - Frontend
   - React-native
-  - Expo
-  - Eas
-  - CSS
+  - Eas Expo
 - Backend
   - dotnet
   - postgreSQL
