@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BoardCardEntity;
 
-public class BoardCardRepository(AppDbContext context, ILogger<BoardCardRepository> logger)
+public class BoardCardRepository(AppDbContext context, ILogger<IBoardCardRepository> logger) : IBoardCardRepository
 {
     public readonly AppDbContext _context = context;
-    public readonly ILogger<BoardCardRepository> _logger = logger;
+    public readonly ILogger<IBoardCardRepository> _logger = logger;
 
     public async Task<BoardCard> GetBoardCardById(int boardCardId)
     {

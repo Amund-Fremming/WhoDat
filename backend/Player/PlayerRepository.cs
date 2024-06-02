@@ -4,10 +4,10 @@ using Dto;
 
 namespace PlayerEntity;
 
-public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> logger)
+public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> logger) : IPlayerRepository
 {
     public readonly AppDbContext _context = context;
-    public readonly ILogger<PlayerRepository> _logger = logger;
+    public readonly ILogger<IPlayerRepository> _logger = logger;
 
     public async Task<Player> GetPlayerById(int playerId)
     {

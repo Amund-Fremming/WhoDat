@@ -2,10 +2,10 @@ using Data;
 
 namespace MessageEntity;
 
-public class MessageRepository(AppDbContext context, ILogger<MessageRepository> logger)
+public class MessageRepository(AppDbContext context, ILogger<IMessageRepository> logger) : IMessageRepository
 {
     public readonly AppDbContext _context = context;
-    public readonly ILogger<MessageRepository> _logger = logger;
+    public readonly ILogger<IMessageRepository> _logger = logger;
 
     public async Task<Message> GetMessageById(int messageId)
     {

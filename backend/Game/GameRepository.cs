@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameEntity;
 
-public class GameRepository(AppDbContext context, ILogger<GameRepository> logger)
+public class GameRepository(AppDbContext context, ILogger<IGameRepository> logger) : IGameRepository
 {
     public readonly AppDbContext _context = context;
-    public readonly ILogger<GameRepository> _logger = logger;
+    public readonly ILogger<IGameRepository> _logger = logger;
 
     public async Task<Game> GetGameById(int gameId)
     {

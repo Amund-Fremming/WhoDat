@@ -6,12 +6,12 @@ using BoardEntity;
 
 namespace GameEntity;
 
-public class GameService(AppDbContext context, ILogger<GameService> logger, GameRepository gameRepository, PlayerRepository playerRepository) : IGameService
+public class GameService(AppDbContext context, ILogger<IGameService> logger, IGameRepository gameRepository, IPlayerRepository playerRepository) : IGameService
 {
     public readonly AppDbContext _context = context;
-    public readonly ILogger<GameService> _logger = logger;
-    public readonly GameRepository _gameRepository = gameRepository;
-    public readonly PlayerRepository _playerRepository = playerRepository;
+    public readonly ILogger<IGameService> _logger = logger;
+    public readonly IGameRepository _gameRepository = gameRepository;
+    public readonly IPlayerRepository _playerRepository = playerRepository;
 
     public async Task<int> CreateGame(int playerId, Game game)
     {
@@ -164,7 +164,7 @@ public class GameService(AppDbContext context, ILogger<GameService> logger, Game
                     throw new ArgumentOutOfRangeException("Game cannot start, missing players!");
 
                 Board playerOneBoard = game.Boards!.ElementAt(0);
-                Board playerTwoBoard = game.Boards.ElementAt(1) ??
+                Board playerTwoBoard = game.Boards!.ElementAt(1) ??
                     throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not created their board!");
 
                 if (playerOneBoard.ChosenCardID == null || playerTwoBoard.ChosenCardID == null)

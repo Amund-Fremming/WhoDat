@@ -4,12 +4,12 @@ using PlayerEntity;
 
 namespace GalleryEntity;
 
-public class GalleryService(AppDbContext context, ILogger<GalleryService> logger, GalleryRepository galleryRepository, PlayerRepository playerRepository) : IGalleryService
+public class GalleryService(AppDbContext context, ILogger<IGalleryService> logger, IGalleryRepository galleryRepository, IPlayerRepository playerRepository) : IGalleryService
 {
     public readonly AppDbContext _context = context;
-    public readonly ILogger<GalleryService> _logger = logger;
-    public readonly GalleryRepository _galleryRepository = galleryRepository;
-    public readonly PlayerRepository _playerRepository = playerRepository;
+    public readonly ILogger<IGalleryService> _logger = logger;
+    public readonly IGalleryRepository _galleryRepository = galleryRepository;
+    public readonly IPlayerRepository _playerRepository = playerRepository;
 
     public async Task<int> CreateGallery(int playerId, Gallery gallery)
     {

@@ -6,15 +6,15 @@ using Enum;
 
 namespace BoardCardEntity;
 
-public class BoardCardService(AppDbContext context, ILogger<BoardCardService> logger,
-        BoardCardRepository boardcardRepository, BoardRepository boardRepository, CardRepository cardRepository, GameRepository gameRepository) : IBoardCardService
+public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> logger,
+        IBoardCardRepository boardcardRepository, IBoardRepository boardRepository, ICardRepository cardRepository, IGameRepository gameRepository) : IBoardCardService
 {
     public readonly AppDbContext _context = context;
-    public readonly ILogger<BoardCardService> _logger = logger;
-    public readonly BoardCardRepository _boardcardRepository = boardcardRepository;
-    public readonly BoardRepository _boardRepository = boardRepository;
-    public readonly CardRepository _cardRepository = cardRepository;
-    public readonly GameRepository _gameRepository = gameRepository;
+    public readonly ILogger<IBoardCardService> _logger = logger;
+    public readonly IBoardCardRepository _boardcardRepository = boardcardRepository;
+    public readonly IBoardRepository _boardRepository = boardRepository;
+    public readonly ICardRepository _cardRepository = cardRepository;
+    public readonly IGameRepository _gameRepository = gameRepository;
 
     public async Task<State> CreateBoardCards(int playerId, int gameId, IEnumerable<int> cardIds)
     {

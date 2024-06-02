@@ -4,10 +4,10 @@ using Dto;
 
 namespace PlayerEntity;
 
-public class PlayerService(ILogger<PlayerService> logger, PlayerRepository playerRepository, IPasswordHasher<Player> passwordHasher) : IPlayerService
+public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository playerRepository, IPasswordHasher<Player> passwordHasher) : IPlayerService
 {
-    public readonly ILogger<PlayerService> _logger = logger;
-    public readonly PlayerRepository _playerRepository = playerRepository;
+    public readonly ILogger<IPlayerService> _logger = logger;
+    public readonly IPlayerRepository _playerRepository = playerRepository;
     public readonly IPasswordHasher<Player> _passwordHasher = passwordHasher;
 
     public async Task<Player> CreatePlayer(Player player)

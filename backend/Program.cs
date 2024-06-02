@@ -20,13 +20,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<PlayerRepository>();
-builder.Services.AddScoped<GalleryRepository>();
-builder.Services.AddScoped<GameRepository>();
-builder.Services.AddScoped<MessageRepository>();
-builder.Services.AddScoped<BoardRepository>();
-builder.Services.AddScoped<CardRepository>();
-builder.Services.AddScoped<BoardCardRepository>();
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+builder.Services.AddScoped<IGalleryRepository, GalleryRepository>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<ICardRepository, CardRepository>();
+builder.Services.AddScoped<IBoardCardRepository, BoardCardRepository>();
 
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IGalleryService, GalleryService>();

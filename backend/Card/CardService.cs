@@ -4,11 +4,11 @@ using System.Net.Http.Headers;
 
 namespace CardEntity;
 
-public class CardService(ILogger<CardService> logger, CardRepository cardRepository, GalleryRepository galleryRepository, IHttpClientFactory httpClientFactory) : ICardService
+public class CardService(ILogger<ICardService> logger, ICardRepository cardRepository, IGalleryRepository galleryRepository, IHttpClientFactory httpClientFactory) : ICardService
 {
-    public readonly ILogger<CardService> _logger = logger;
-    public readonly CardRepository _cardRepository = cardRepository;
-    public readonly GalleryRepository _galleryRepository = galleryRepository;
+    public readonly ILogger<ICardService> _logger = logger;
+    public readonly ICardRepository _cardRepository = cardRepository;
+    public readonly IGalleryRepository _galleryRepository = galleryRepository;
     public readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
 
     public async Task<int> CreateCard(int playerId, CardInputDto cardDto)
@@ -120,7 +120,7 @@ public class CardService(ILogger<CardService> logger, CardRepository cardReposit
 
             if (response.IsSuccessStatusCode)
             {
-                return response.Content.ToString();
+                return response.Content.ToString()!;
             }
             else
             {

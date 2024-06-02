@@ -2,10 +2,10 @@ using Data;
 
 namespace GalleryEntity;
 
-public class GalleryRepository(AppDbContext context, ILogger<GalleryRepository> logger)
+public class GalleryRepository(AppDbContext context, ILogger<IGalleryRepository> logger) : IGalleryRepository
 {
     public readonly AppDbContext _context = context;
-    public readonly ILogger<GalleryRepository> _logger = logger;
+    public readonly ILogger<IGalleryRepository> _logger = logger;
 
     public async Task<Gallery> GetGalleryById(int galleryId)
     {

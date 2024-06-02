@@ -6,14 +6,14 @@ using PlayerEntity;
 
 namespace BoardEntity;
 
-public class BoardService(ILogger<BoardService> logger, AppDbContext context, BoardRepository boardRepository, BoardCardRepository boardCardRepository, GameRepository gameRepository, PlayerRepository playerRepository) : IBoardService
+public class BoardService(ILogger<IBoardService> logger, AppDbContext context, IBoardRepository boardRepository, IBoardCardRepository boardCardRepository, IGameRepository gameRepository, IPlayerRepository playerRepository) : IBoardService
 {
-    public readonly ILogger<BoardService> _logger = logger;
+    public readonly ILogger<IBoardService> _logger = logger;
     public readonly AppDbContext _context = context;
-    public readonly BoardRepository _boardRepository = boardRepository;
-    public readonly BoardCardRepository _boardCardRepository = boardCardRepository;
-    public readonly GameRepository _gameRepository = gameRepository;
-    public readonly PlayerRepository _playerRepository = playerRepository;
+    public readonly IBoardRepository _boardRepository = boardRepository;
+    public readonly IBoardCardRepository _boardCardRepository = boardCardRepository;
+    public readonly IGameRepository _gameRepository = gameRepository;
+    public readonly IPlayerRepository _playerRepository = playerRepository;
 
     public async Task<int> CreateBoard(int playerId, int gameId)
     {

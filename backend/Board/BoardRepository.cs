@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BoardEntity;
 
-public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logger)
+public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> logger) : IBoardRepository
 {
     public readonly AppDbContext _context = context;
-    private readonly ILogger<BoardRepository> _logger = logger;
+    private readonly ILogger<IBoardRepository> _logger = logger;
 
     public async Task<Board> GetBoardById(int boardId)
     {

@@ -1,14 +1,13 @@
 using GameEntity;
 using Enum;
-using ExceptionNamespace;
 
 namespace MessageEntity;
 
-public class MessageService(ILogger<MessageService> logger, MessageRepository messageRepository, GameRepository gameRepository) : IMessageService
+public class MessageService(ILogger<IMessageService> logger, IMessageRepository messageRepository, IGameRepository gameRepository) : IMessageService
 {
-    public readonly ILogger<MessageService> _logger = logger;
-    public readonly MessageRepository _messageRepository = messageRepository;
-    public readonly GameRepository _gameRepository = gameRepository;
+    public readonly ILogger<IMessageService> _logger = logger;
+    public readonly IMessageRepository _messageRepository = messageRepository;
+    public readonly IGameRepository _gameRepository = gameRepository;
 
     public async Task<int> CreateMessage(int playerId, int gameId, string messageText)
     {
