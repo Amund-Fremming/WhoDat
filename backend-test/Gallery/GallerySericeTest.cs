@@ -101,6 +101,24 @@ public class GalleryServiceTest
     [Fact]
     public async Task DeleteGallery_Unsuccessful_PlayerHasNotPermission()
     {
+        // Arrange
+        int playerId = 12;
+        int ownerPlayerId = 22;
+        int galleryId = 33;
+        string galleryName = "GalleryOne";
+
+        Player player = new Player("", "", "", Enum.Role.USER);
+        player.PlayerID = playerId;
+        _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
+            .ReturnsAsync(player);
+
+        Gallery gallery = new Gallery(ownerPlayerId, galleryName);
+        gallery.GalleryID = galleryId;
+        _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
+            .ReturnsAsync(gallery);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _galleryService.DeleteGallery(playerId, galleryId));
     }
 
     [Fact]
