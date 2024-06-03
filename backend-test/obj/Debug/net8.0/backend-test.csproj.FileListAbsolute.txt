@@ -253,3 +253,4 @@
 /home/amund/Documents/Projects/WhoDat/backend-test/obj/Debug/net8.0/backend-test.genruntimeconfig.cache
 /home/amund/Documents/Projects/WhoDat/backend-test/obj/Debug/net8.0/ref/backend-test.dll
 /home/amund/Documents/Projects/WhoDat/backend-test/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend-test/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll

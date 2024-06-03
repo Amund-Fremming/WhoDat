@@ -32,7 +32,6 @@
 - [x] Create Docs for Interfaces
 - [ ] Create tests for services
 - [ ] Handling for reconnect when disconnected
-- [ ] Image upload access control
 - [ ] Create premade cards and their endpoints
 - [ ] Add error handling in Services
 - [ ] Setup Azure env

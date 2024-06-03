@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using PlayerEntity;
 using GalleryEntity;
 using GameEntity;
@@ -19,6 +19,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Board> Board { get; set; }
     public DbSet<Card> Card { get; set; }
     public DbSet<BoardCard> BoardCard { get; set; }
+
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseInMemoryDatabase("TestDatabase");
+        }
+
+        optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

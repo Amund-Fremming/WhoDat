@@ -218,3 +218,4 @@
 /Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 /Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
 /Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll
