@@ -78,17 +78,24 @@ public class GalleryServiceTest
         string galleryName = "GalleryOne";
 
         Player player = new Player("", "", "", Enum.Role.USER);
+        player.PlayerID = playerId;
         _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
             .ReturnsAsync(player);
 
         Gallery gallery = new Gallery(playerId, galleryName);
+        gallery.GalleryID = galleryId;
         _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
             .ReturnsAsync(gallery);
 
-        // Act
+        _mockGalleryRepository.Setup(repo => repo.DeleteGallery(gallery))
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
+        // Act
+        await _galleryService.DeleteGallery(playerId, galleryId);
 
         // Assert
+        _mockGalleryRepository.Verify(repo => repo.DeleteGallery(gallery), Times.Once);
     }
 
     [Fact]
