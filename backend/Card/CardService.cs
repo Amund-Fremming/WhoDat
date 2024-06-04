@@ -18,16 +18,16 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
             Card card = cardDto.Card!;
             IFormFile? file = cardDto.Image;
 
+            Gallery gallery = await _galleryRepository.GetGalleryById(card.GalleryID);
+            PlayerHasPermission(playerId, gallery);
+
             if (file == null || file.Length == 0)
             {
                 throw new ArgumentNullException($"No image present!");
             }
 
-            string imageUrl = await UploadImageToCloudflare(file);
+            string imageUrl = await UploadImageToCloudflare(file!);
             card.Url = imageUrl;
-
-            Gallery gallery = await _galleryRepository.GetGalleryById(card.GalleryID);
-            PlayerHasPermission(playerId, gallery);
 
             return await _cardRepository.CreateCard(card);
         }
@@ -106,6 +106,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
 
     private async Task<string> UploadImageToCloudflare(IFormFile file)
     {
+
         var client = _httpClientFactory.CreateClient();
         string containerEndpoint = "https://whodat-image-worker.amund-fremming.workers.dev/";
 
