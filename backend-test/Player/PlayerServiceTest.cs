@@ -26,4 +26,55 @@ public class PlayerServiceTest
                 _mockpasswordHasher.Object
                 );
     }
+
+    [Fact]
+    public async Task CreatePlayer_Successful()
+    {
+    }
+
+    [Fact]
+    public async Task CreatePlayer_UsernameNotAvailable_ShouldThrow()
+    {
+    }
+
+    ///
+
+    [Fact]
+    public async Task DeletePlayer_Successful_PlayerExists()
+    {
+    }
+
+    [Fact]
+    public async Task DeletePlayer_PlayerDoesNotExists_ShouldThrow()
+    {
+    }
+
+    ///
+
+    [Fact]
+    public async Task UpdateUsername_Successful()
+    {
+    }
+
+    [Fact]
+    public async Task UpdateUsername_PlayerDoesNotExist_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task UpdateUsername_UsernameExists_ShouldThrow()
+    {
+    }
+
+    ///
+
+    [Fact]
+    public async Task UpdatePassword_Successful()
+    {
+    }
+
+    [Fact]
+    public async Task UpdatePassword_PlayerDoesNotExist_ShouldThrow()
+    {
+    }
 }
