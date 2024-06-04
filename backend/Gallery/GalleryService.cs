@@ -13,6 +13,9 @@ public class GalleryService(AppDbContext context, ILogger<IGalleryService> logge
 
     public async Task<int> CreateGallery(int playerId, Gallery gallery)
     {
+        if (gallery == null)
+            throw new ArgumentNullException(nameof(gallery));
+
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
@@ -60,7 +63,7 @@ public class GalleryService(AppDbContext context, ILogger<IGalleryService> logge
 
     public void PlayerHasPermission(Player player, Gallery gallery)
     {
-        if (gallery.PlayerID != player.PlayerID || player.Role != Role.ADMIN)
+        if (player.Role != Role.ADMIN && gallery.PlayerID != player.PlayerID)
         {
             _logger.LogInformation($"Player with id {player.PlayerID} tried accessing someone elses data");
             throw new UnauthorizedAccessException($"Player with id {player.PlayerID} does not have permission");

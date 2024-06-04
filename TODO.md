@@ -1,6 +1,5 @@
 # TODO`S
 
-- [ ] WARNING May need to add Includes for PlayerHasPermission to work!
 - [ ] WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
 
 - [ ] TODO add docs for R2
@@ -29,11 +28,15 @@
 - [x] Implement JWT
 - [x] Test JWT implementation
 - [x] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
-- [x] Create Docs for Interfaces
+- [x] Create Docs for Service Interfaces
+- [ ] Create Docs for Repository Interfaces
 - [ ] Create tests for services
+- [ ] Create tests for Repositories
 - [ ] Handling for reconnect when disconnected
 - [ ] Create premade cards and their endpoints
 - [ ] Add error handling in Services
+
+- [ ] Change identity provider to clerk
 - [ ] Setup Azure env
 - [ ] Setup github actions with test pipeline to dev / prod branch to azure
 

@@ -20,7 +20,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
 
             if (file == null || file.Length == 0)
             {
-                throw new InvalidOperationException($"No image present!");
+                throw new ArgumentNullException($"No image present!");
             }
 
             string imageUrl = await UploadImageToCloudflare(file);

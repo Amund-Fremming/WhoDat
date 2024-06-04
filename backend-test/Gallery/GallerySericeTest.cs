@@ -1,5 +1,3 @@
-using GalleryEntity;
-
 namespace GalleryEntityTest;
 
 public class GalleryServiceTest
@@ -39,6 +37,7 @@ public class GalleryServiceTest
         int expectedId = 2;
 
         Player player = new Player("", "", "", Enum.Role.USER);
+        player.PlayerID = playerId;
         _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
             .ReturnsAsync(player);
 
@@ -55,7 +54,7 @@ public class GalleryServiceTest
     }
 
     [Fact]
-    public async Task CreateGallery_Unsuccessful_PlayerDoesNotExist()
+    public async Task CreateGallery_PlayerDoesNotExist_ShouldThrow()
     {
         // Arrange
         int playerId = 12;
@@ -67,6 +66,21 @@ public class GalleryServiceTest
 
         // Act and Assert
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _galleryService.CreateGallery(playerId, gallery));
+    }
+
+    [Fact]
+    public async Task CreateGallery_GalleryIsNull_ShouldThrow()
+    {
+        // Arrange
+        int playerId = 12;
+        Gallery? gallery = null;
+
+        Player player = new Player("", "", "", Enum.Role.USER);
+        _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
+            .ReturnsAsync(player);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _galleryService.CreateGallery(playerId, gallery!));
     }
 
     [Fact]
@@ -99,7 +113,7 @@ public class GalleryServiceTest
     }
 
     [Fact]
-    public async Task DeleteGallery_Unsuccessful_PlayerHasNotPermission()
+    public async Task DeleteGallery_PlayerHasNotPermission_ShouldThrow()
     {
         // Arrange
         int playerId = 12;
@@ -124,10 +138,63 @@ public class GalleryServiceTest
     [Fact]
     public async Task DeleteGallery_WhenPlayerDoesNotExist_ShouldThrow()
     {
+        // Arrange 
+        int playerId = 12;
+        int galleryId = 33;
+
+        _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
+            .ThrowsAsync(new KeyNotFoundException($"Player with id {playerId}, does not exist!"));
+
+        // Assert and Act
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _galleryService.DeleteGallery(playerId, galleryId));
     }
 
     [Fact]
     public async Task DeleteGallery_WhenGalleryDoesNotExist_ShouldThrow()
     {
+        // Arrange
+        int playerId = 12;
+        int galleryId = 33;
+
+        Player player = new Player("", "", "", Enum.Role.USER);
+        player.PlayerID = playerId;
+        _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
+            .ReturnsAsync(player);
+
+        _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
+            .ThrowsAsync(new KeyNotFoundException($"Gallery with id {galleryId}, does not exist!"));
+
+        // Assert and Act
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _galleryService.DeleteGallery(playerId, galleryId));
+    }
+
+    [Fact]
+    public async Task DeleteGallery_Successful_PlayerIsAdminAndNotOwner()
+    {
+        // Arrange
+        int playerId = 12;
+        int ownerPlayerId = 22;
+        int galleryId = 33;
+        string galleryName = "GalleryOne";
+
+        Player player = new Player("", "", "", Enum.Role.ADMIN);
+        player.PlayerID = playerId;
+        _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
+            .ReturnsAsync(player);
+
+        Gallery gallery = new Gallery(ownerPlayerId, galleryName);
+        gallery.GalleryID = galleryId;
+        _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
+            .ReturnsAsync(gallery);
+
+        _mockGalleryRepository.Setup(repo => repo.DeleteGallery(gallery))
+            .Returns(Task.CompletedTask)
+            .Verifiable();
+
+        // Act
+        await _galleryService.DeleteGallery(playerId, galleryId);
+
+        // Assert
+        _mockGalleryRepository.Verify(repo => repo.DeleteGallery(gallery), Times.Once);
     }
 }
