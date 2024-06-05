@@ -69,7 +69,6 @@ public class CardServiceTest
         _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
             .ReturnsAsync(gallery);
 
-
         await Assert.ThrowsAsync<ArgumentNullException>(() => _cardService.CreateCard(playerId, dto));
     }
 
@@ -84,7 +83,6 @@ public class CardServiceTest
 
         _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
             .ThrowsAsync(new KeyNotFoundException($"Gallery with id {galleryId}, does not exist!"));
-
 
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _cardService.CreateCard(playerId, dto));
     }
@@ -112,9 +110,7 @@ public class CardServiceTest
             .Returns(Task.CompletedTask)
             .Verifiable();
 
-
         await _cardService.DeleteCard(playerId, cardId);
-
 
         _mockCardRepository.Verify(repo => repo.DeleteCard(card), Times.Once);
     }
@@ -137,7 +133,6 @@ public class CardServiceTest
         _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
             .ReturnsAsync(gallery);
 
-
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _cardService.DeleteCard(playerId, cardId));
     }
 
@@ -155,7 +150,6 @@ public class CardServiceTest
         _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
             .ThrowsAsync(new KeyNotFoundException($"Gallery with id {galleryId}, does not exist!"));
 
-
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _cardService.DeleteCard(playerId, cardId));
     }
 
@@ -169,7 +163,6 @@ public class CardServiceTest
         Card card = new Card(galleryId);
         _mockCardRepository.Setup(repo => repo.GetCardById(cardId))
             .ThrowsAsync(new KeyNotFoundException($"Card with id {cardId}, does not exist!"));
-
 
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _cardService.DeleteCard(playerId, cardId));
     }
@@ -196,9 +189,7 @@ public class CardServiceTest
         _mockCardRepository.Setup(repo => repo.GetAllCards(galleryId))
             .ReturnsAsync(expectedCards);
 
-
         var result = await _cardService.GetAllCards(playerId, galleryId);
-
 
         Assert.Equal(expectedCards, result);
         _mockCardRepository.Verify(repo => repo.GetAllCards(galleryId), Times.Once);
@@ -217,7 +208,6 @@ public class CardServiceTest
         _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
             .ReturnsAsync(gallery);
 
-
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _cardService.GetAllCards(playerId, galleryId));
     }
 
@@ -231,7 +221,6 @@ public class CardServiceTest
         Gallery gallery = new Gallery(playerId, galleryName);
         _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
             .ThrowsAsync(new KeyNotFoundException($"Gallery with id {galleryId}, does not exist!"));
-
 
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _cardService.GetAllCards(playerId, galleryId));
     }

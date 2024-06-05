@@ -10,14 +10,13 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
     public readonly IPlayerRepository _playerRepository = playerRepository;
     public readonly IPasswordHasher<Player> _passwordHasher = passwordHasher;
 
-    public async Task<Player> CreatePlayer(Player player)
+    public async Task<int> CreatePlayer(Player player)
     {
         try
         {
             await _playerRepository.DoesUsernameExist(player.Username);
 
-            await _playerRepository.CreatePlayer(player);
-            return player;
+            return await _playerRepository.CreatePlayer(player);
         }
         catch (Exception e)
         {

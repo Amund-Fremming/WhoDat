@@ -29,7 +29,7 @@ public interface IAuthService
     /// Registers a new player by using the player service.
     /// </summary>
     /// <param name="request">Object containing all data for regirering a user.</param>
-    /// <returns></returns>
+    /// <returns>The Player created.</returns>
     /// <exception cref="ArgumentException">Throws if username already exists.</exception>
     Task<Player> RegisterNewPlayer(RegistrationRequest request);
 }

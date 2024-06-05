@@ -108,9 +108,9 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             string hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
 
             Player player = new Player(request.Username, hashedPassword, salt, Role.USER);
-            Player newPlayer = await _playerService.CreatePlayer(player);
+            await _playerService.CreatePlayer(player);
 
-            return newPlayer;
+            return player;
         }
         catch (Exception e)
         {
