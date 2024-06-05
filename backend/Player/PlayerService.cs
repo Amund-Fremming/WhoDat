@@ -95,7 +95,7 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
         }
     }
 
-    private string GenerateSalt()
+    public string GenerateSalt()
     {
         try
         {

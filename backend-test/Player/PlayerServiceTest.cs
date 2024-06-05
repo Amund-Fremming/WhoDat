@@ -4,7 +4,7 @@ public class PlayerServiceTest
 {
     public readonly Mock<ILogger<IPlayerService>> _mocklogger;
     public readonly Mock<IPlayerRepository> _mockPlayerRepository;
-    public readonly Mock<IPasswordHasher<Player>> _mockpasswordHasher;
+    public readonly Mock<IPasswordHasher<Player>> _mockPasswordHasher;
     public readonly IPlayerService _playerService;
     public readonly AppDbContext _context;
 
@@ -12,7 +12,7 @@ public class PlayerServiceTest
     {
         _mocklogger = new Mock<ILogger<IPlayerService>>();
         _mockPlayerRepository = new Mock<IPlayerRepository>();
-        _mockpasswordHasher = new Mock<IPasswordHasher<Player>>();
+        _mockPasswordHasher = new Mock<IPasswordHasher<Player>>();
 
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase("TestDatabase")
@@ -23,7 +23,7 @@ public class PlayerServiceTest
         _playerService = new PlayerService(
                 _mocklogger.Object,
                 _mockPlayerRepository.Object,
-                _mockpasswordHasher.Object
+                _mockPasswordHasher.Object
                 );
     }
 
@@ -145,13 +145,16 @@ public class PlayerServiceTest
         _mockPlayerRepository.Setup(repo => repo.GetPlayerById(player.PlayerID))
             .ReturnsAsync(player);
 
+        _mockPasswordHasher.Setup(pass => pass.HashPassword(player, player.PasswordHash))
+            .Returns(hashedPassword);
+
         _mockPlayerRepository.Setup(repo => repo.UpdatePassword(player, hashedPassword, newSalt))
             .Returns(Task.CompletedTask)
             .Verifiable();
 
         await _playerService.UpdatePassword(player.PlayerID, newPassword);
 
-        _mockPlayerRepository.Verify(repo => repo.UpdatePassword(player, hashedPassword, newSalt), Times.Once);
+        _mockPlayerRepository.Verify(repo => repo.UpdatePassword(It.IsAny<Player>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
     }
 
     [Fact]
