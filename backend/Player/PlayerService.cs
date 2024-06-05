@@ -83,9 +83,7 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
     {
         try
         {
-            IEnumerable<PlayerDto> players = await _playerRepository.GetAllPlayers();
-
-            return players;
+            return await _playerRepository.GetAllPlayers();
         }
         catch (Exception e)
         {

@@ -167,4 +167,35 @@ public class PlayerServiceTest
 
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _playerService.UpdatePassword(player.PlayerID, newPassword));
     }
+
+    [Fact]
+    public async Task GetAllPlayers_Successful_ReturnsListOfDtos()
+    {
+        IEnumerable<PlayerDto> players = new List<PlayerDto>
+        {
+            new PlayerDto(),
+            new PlayerDto(),
+            new PlayerDto(),
+        };
+
+        _mockPlayerRepository.Setup(repo => repo.GetAllPlayers())
+                .ReturnsAsync(players);
+
+        IEnumerable<PlayerDto> result = await _playerService.GetAllPlayers();
+
+        Assert.Equal(players, result);
+    }
+
+    [Fact]
+    public async Task GetAllPlayers_Successful_ReturnsEmptyList()
+    {
+        IEnumerable<PlayerDto> players = new List<PlayerDto> { };
+
+        _mockPlayerRepository.Setup(repo => repo.GetAllPlayers())
+                .ReturnsAsync(players);
+
+        IEnumerable<PlayerDto> result = await _playerService.GetAllPlayers();
+
+        Assert.Equal(players, result);
+    }
 }
