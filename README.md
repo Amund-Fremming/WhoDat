@@ -31,7 +31,5 @@ with any other player they wish to invite.
   - dotnet
   - postgreSQL
   - JWT
-  - Swagger
   - Azure
-  - Github actions
   - CloudFlare R2
