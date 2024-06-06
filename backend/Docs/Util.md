@@ -19,5 +19,7 @@ card in the application.
 - JavaScript Worker: A predefined JavaScript worker processes the image upload.
 - Image URL Retrieval: The JavaScript worker returns the URL of the hosted image.
 - URL Storage: The returned image URL is stored with the card that was created.
-  **Benefits**
+
+**Benefits**
+
 - Cost Efficiency: Cloudflare is chosen over Azure due to its cost-effectiveness.
