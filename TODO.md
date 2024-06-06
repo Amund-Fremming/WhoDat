@@ -2,9 +2,8 @@
 
 - [ ] WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
 
-- [ ] TODO add docs for R2
 - [ ] TODO UploadImageToCloudflare does not return the correct url
-- [ ] TODO CreateBoardCards has bug, if only host choosing, return a unauthorized or so, then the p2 cannot do this
+- [ ] TODO CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
 
 <hr />
 
@@ -36,7 +35,7 @@
 - [ ] Create premade cards and their endpoints
 - [ ] Add error handling in Services
 
-- [ ] Change identity provider to clerk
+- [ ] Change authentication to use OAuth
 - [ ] Setup Azure env
 - [ ] Setup github actions with test pipeline to dev / prod branch to azure
 

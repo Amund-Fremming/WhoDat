@@ -5,6 +5,12 @@ namespace GameEntity;
 
 public interface IGameRepository
 {
+    /// <summary>
+    /// Get a Gallery corresponding to the given id.
+    /// </summary>
+    /// <param name="galleryId">The id for the Gallery.</param>
+    /// <returns>The Gallery asked for.</returns>
+    /// <exception cref="KeyNotFoundException">Throws if the Gallery does not exist.</exception>
     Task<Game> GetGameById(int gameId);
 
     Task<int> CreateGame(Game game, Player player);
