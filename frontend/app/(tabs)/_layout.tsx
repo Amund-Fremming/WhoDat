@@ -1,34 +1,39 @@
 import { Tabs } from "expo-router";
 import React from "react";
+
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "light",
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
       }}
     >
       <Tabs.Screen
-        name="play"
+        name="index"
         options={{
           title: "Play",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "game-controller" : "game-controller-outline"}
+              name={focused ? "home" : "home-outline"}
               color={color}
             />
           ),
         }}
       />
       <Tabs.Screen
-        name="gallery"
+        name="galleryScreen"
         options={{
           title: "Gallery",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "images" : "images-outline"}
+              name={focused ? "code-slash" : "code-slash-outline"}
               color={color}
             />
           ),
