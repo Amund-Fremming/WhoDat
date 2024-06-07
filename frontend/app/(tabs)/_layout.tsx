@@ -1,36 +1,36 @@
-import { FontAwesome } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import React from "react";
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "black" }}>
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: "light",
+        headerShown: false,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          headerShown: false,
           title: "Home",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="home" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "home" : "home-outline"}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="explore"
         options={{
-          headerShown: false,
-          title: "Settings",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="cog" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="test"
-        options={{
-          headerShown: false,
-          title: "Test",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="forward" color={color} />
+          title: "Explore",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "code-slash" : "code-slash-outline"}
+              color={color}
+            />
           ),
         }}
       />
