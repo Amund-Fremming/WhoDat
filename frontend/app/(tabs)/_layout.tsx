@@ -21,7 +21,7 @@ export default function TabLayout() {
           title: "Play",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "home" : "home-outline"}
+              name={focused ? "game-controller" : "game-controller-outline"}
               color={color}
             />
           ),
@@ -33,9 +33,18 @@ export default function TabLayout() {
           title: "Gallery",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
+              name={focused ? "images" : "images-outline"}
               color={color}
             />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profileScreen"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? "man" : "man-outline"} color={color} />
           ),
         }}
       />
