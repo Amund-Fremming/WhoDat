@@ -2,6 +2,7 @@
 
 ### Generic
 
+- [x] Navigation
 - [ ] BigButton
 - [ ] MediumButton
 - [ ] SmallButton

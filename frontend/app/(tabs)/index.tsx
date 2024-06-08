@@ -1,18 +1,5 @@
-import { StyleSheet, View, Text } from "react-native";
+import Play from "@/screens/Play/Play";
 
-export default function PlayScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>Play</Text>
-    </View>
-  );
+export default function PlayTab() {
+  return <Play />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
