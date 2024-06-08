@@ -8,24 +8,24 @@ import "react-native-reanimated";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    ModakRegular: require("../assets/fonts/Modak-Regular.ttf"),
-  });
+    const [loaded] = useFonts({
+        SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+        Modak: require("../assets/fonts/Modak-Regular.ttf"),
+    });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    useEffect(() => {
+        if (loaded) {
+            SplashScreen.hideAsync();
+        }
+    }, [loaded]);
+
+    if (!loaded) {
+        return null;
     }
-  }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
-  );
+    return (
+        <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+    );
 }

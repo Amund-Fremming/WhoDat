@@ -3,6 +3,8 @@
 ### Generic
 
 - [x] Navigation
+- [x] Colors
+- [x] Dimentions
 - [ ] BigButton
 - [ ] MediumButton
 - [ ] SmallButton
