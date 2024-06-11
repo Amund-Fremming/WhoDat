@@ -5,7 +5,7 @@
 - [x] Navigation
 - [x] Colors
 - [x] Dimentions
-- [ ] BigButton
+- [x] BigButton
 - [ ] MediumButton
 - [ ] SmallButton
 
@@ -17,8 +17,8 @@
 
 ### Gallery (Cards)
 
-- [ ] GalleryBase
-- [ ] CardContainer
+- [x] GalleryBase
+- [x] CardContainer
 - [ ] Card
 - [ ] CreateCard
 - [ ] CardModal

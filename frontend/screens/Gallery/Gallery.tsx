@@ -1,6 +1,7 @@
 import { View, Text } from "react-native";
 import styles from "./GalleryStyles";
 import BigButton from "@/components/BigButton/BigButton";
+import { Colors } from "@/constants/Colors";
 
 export default function Gallery() {
     return (
@@ -9,9 +10,13 @@ export default function Gallery() {
 
             <View style={styles.creamContainer}>
                 <View style={styles.boardContainer}></View>
+                <BigButton
+                    text="Edit"
+                    color={Colors.BurgundyRed}
+                    inverted={false}
+                    onButtonPress={() => console.log("hey!")}
+                />
             </View>
-
-            <BigButton />
         </View>
     );
 }

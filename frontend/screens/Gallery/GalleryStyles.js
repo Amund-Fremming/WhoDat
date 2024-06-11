@@ -19,17 +19,17 @@ export default styles = StyleSheet.create({
 
     creamContainer: {
         width: "100%",
-        height: "100%",
+        height: "92%",
+        alignItems: "center",
+        justifyContent: "space-between",
         backgroundColor: Colors.Cream,
         borderTopStartRadius: moderateScale(30),
         borderTopRightRadius: moderateScale(30),
-        alignItems: "center",
-        justifyContent: "center",
+        paddingBottom: verticalScale(30),
     },
 
     boardContainer: {
         width: "90%",
-        height: "100%",
         marginTop: "10%",
     },
 });

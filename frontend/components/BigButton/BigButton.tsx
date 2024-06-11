@@ -15,12 +15,27 @@ export default function BigButton({
     inverted,
     onButtonPress,
 }: BigButtonProps) {
+    const getStyles = () => {
+        if (inverted) {
+            return {
+                ...styles.button,
+                backgroundColor: Colors.Cream,
+                borderColor: color,
+            };
+        } else {
+            return {
+                ...styles.button,
+                backgroundColor: color,
+                borderColor: color,
+            };
+        }
+    };
+
     return (
-        <Pressable
-            onPress={onButtonPress}
-            style={{ ...styles.button, backgroundColor: inverted ? Colors.Cream}}
-        >
-            <Text>{text}</Text>
+        <Pressable onPress={onButtonPress} style={getStyles()}>
+            <Text style={{ ...styles.text, color: inverted ? color : Colors.Cream }}>
+                {text}
+            </Text>
         </Pressable>
     );
 }

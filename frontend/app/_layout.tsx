@@ -11,6 +11,8 @@ export default function RootLayout() {
     const [loaded] = useFonts({
         SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
         Modak: require("../assets/fonts/Modak-Regular.ttf"),
+        Inika: require("../assets/fonts/Inika-Regular.ttf"),
+        InikaBold: require("../assets/fonts/Inika-Bold.ttf"),
     });
 
     useEffect(() => {
