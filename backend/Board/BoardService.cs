@@ -48,7 +48,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             try
             {
                 Board board = await _boardRepository.GetBoardById(boardId);
-                PlayerHasPermission(playerId, board);
+                PlayerHasBoardPermission(playerId, board);
 
                 await _boardRepository.DeleteBoard(board);
                 await transaction.CommitAsync();
@@ -72,7 +72,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
                 Board board = await _boardRepository.GetBoardById(boardId);
                 Game game = await _gameRepository.GetGameById(gameId);
 
-                PlayerHasPermission(playerId, board);
+                PlayerHasBoardPermission(playerId, board);
                 PlayerHasGamePermission(playerId, game);
                 PlayerCanChooseCard(playerId, game, board);
 
@@ -108,7 +108,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
         try
         {
             Board board = await _boardRepository.GetBoardById(boardId);
-            PlayerHasPermission(playerId, board);
+            PlayerHasBoardPermission(playerId, board);
 
             await _boardRepository.UpdateBoardCardsLeft(board, activePlayers);
         }
@@ -191,14 +191,14 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
     public void PlayerHasGamePermission(int playerId, Game game)
     {
-        if (game.PlayerOneID != playerId || game.PlayerTwoID != playerId)
+        if (game.PlayerOneID != playerId && game.PlayerTwoID != playerId)
         {
             _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (BoardService)");
         }
     }
 
-    public void PlayerHasPermission(int playerId, Board board)
+    public void PlayerHasBoardPermission(int playerId, Board board)
     {
         if (board.PlayerID != playerId)
         {

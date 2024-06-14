@@ -219,3 +219,12 @@
 /Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
 /Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
 /Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
