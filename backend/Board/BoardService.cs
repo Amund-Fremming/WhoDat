@@ -211,7 +211,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     {
         bool isPlayerOne = game.PlayerOneID == playerId;
 
-        if (game.State != State.P1_PICKING_PLAYER || game.State != State.P2_PICKING_PLAYER || game.State != State.BOTH_PICKING_PLAYER)
+        if (game.State != State.P1_PICKING_PLAYER && game.State != State.P2_PICKING_PLAYER && game.State != State.BOTH_PICKING_PLAYER)
             throw new InvalidOperationException("This action cannot be performed in this State");
 
         if ((isPlayerOne && game.State == State.P2_PICKING_PLAYER) || (!isPlayerOne && game.State == State.P1_PICKING_PLAYER))

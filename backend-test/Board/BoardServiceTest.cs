@@ -213,14 +213,30 @@ public class BoardServiceTests
         Assert.Equal(expectedState, result);
     }
 
-    // All Cases where its duccessful and state is updated correct|
-    // ChooseBoardCard_BoardDoesNotExist_ShouldThrow
+    [Fact]
+    public async Task ChooseBoardCard_BoardDoesNotExist_ShouldThrow()
+    {
+        // Arrange
+        int playerId = 12;
+        int gameId = 22;
+        int boardId = 1;
+        int boardCardId = 33;
+
+        Board board = new Board(playerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ThrowsAsync(new KeyNotFoundException($"Board with id {boardId}, does not exist!"));
+
+        // Act and Assert
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId));
+    }
+
     // ChooseBoardCard_GameDoesNotExist_ShouldThrow
     // ChooseBoardCard_PlayerHasNotBoardPermission_ShouldThrow
     // ChooseBoardCard_PlayerHasNotGamePermission_ShouldThrow
     // ChooseBoardCard_PlayerCantChooseCard_ShouldThrow
     // ChooseBoardCard_BoardCardDoesNotExist_ShouldThrow
-    // All Cases for the different states and players choosing BoardCards
+    // All Cases where its duccessful and state is updated correct|
 
     ///
 
