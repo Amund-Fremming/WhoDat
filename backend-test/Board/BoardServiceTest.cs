@@ -218,9 +218,160 @@ public class BoardServiceTests
     {
         // Arrange
         int playerId = 12;
+        int ownerPlayerId = 44;
         int gameId = 22;
         int boardId = 1;
         int boardCardId = 33;
+        State currentState = State.BOTH_PICKING_PLAYER;
+
+        Board board = new Board(playerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ThrowsAsync(new KeyNotFoundException($"Board with id {boardId}, does not exist!"));
+
+        Game game = new Game(ownerPlayerId, currentState);
+        game.GameID = gameId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId));
+    }
+
+    public async Task ChooseBoardCard_GameDoesNotExist_ShouldThrow()
+    {
+        // Arrange
+        int playerId = 12;
+        int ownerPlayerId = 44;
+        int gameId = 22;
+        int boardId = 1;
+        int boardCardId = 33;
+
+        Board board = new Board(ownerPlayerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ReturnsAsync(board);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId));
+    }
+
+    public async Task ChooseBoardCard_PlayerHasNotBoardPermission_ShouldThrow()
+    {
+        // Arrange
+        int playerId = 12;
+        int ownerPlayerId = 44;
+        int gameId = 22;
+        int boardId = 1;
+        int boardCardId = 33;
+        State currentState = State.BOTH_PICKING_PLAYER;
+
+        Board board = new Board(ownerPlayerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ReturnsAsync(board);
+
+        Game game = new Game(playerId, currentState);
+        game.GameID = gameId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId));
+    }
+
+    [Fact]
+    public async Task ChooseBoardCard_PlayerHasNotGamePermission_ShouldThrow()
+    {
+        // Arrange
+        int playerId = 12;
+        int ownerPlayerId = 44;
+        int gameId = 22;
+        int boardId = 1;
+        int boardCardId = 33;
+        State currentState = State.BOTH_PICKING_PLAYER;
+
+        Board board = new Board(playerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ReturnsAsync(board);
+
+        Game game = new Game(ownerPlayerId, currentState);
+        game.GameID = gameId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId));
+    }
+
+    [Fact]
+    public async Task ChooseBoardCard_BoardCardDoesNotExist_ShouldThrow()
+    {
+        // Arrange
+        int playerId = 12;
+        int gameId = 22;
+        int boardId = 1;
+        int boardCardId = 33;
+        int cardId = 55;
+        State currentState = State.BOTH_PICKING_PLAYER;
+
+        Board board = new Board(playerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ReturnsAsync(board);
+
+        Game game = new Game(playerId, currentState);
+        game.GameID = gameId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        BoardCard boardCard = new BoardCard(boardId, cardId);
+        boardCard.BoardID = boardCardId;
+        _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
+            .ThrowsAsync(new KeyNotFoundException($"Board with id {boardId}, does not exist!"));
+
+        // Act and Assert
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId));
+    }
+
+    // All Cases where its duccessful and state is updated correct
+
+    ///
+
+    [Fact]
+    public async Task UpdateBoardCardsLeft_Successful_PlayerHasPermission()
+    {
+        // Arrange
+        int playerId = 12;
+        int gameId = 22;
+        int boardId = 1;
+        int activePlayers = 18;
+
+        Board board = new Board(playerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ReturnsAsync(board);
+
+        _mockBoardRepository.Setup(repo => repo.UpdateBoardCardsLeft(board, activePlayers))
+            .Returns(Task.CompletedTask)
+            .Verifiable();
+
+        // Act
+        await _boardService.UpdateBoardCardsLeft(playerId, boardId, activePlayers);
+
+        // Assert
+        _mockBoardRepository.Verify(repo => repo.UpdateBoardCardsLeft(board, activePlayers));
+    }
+
+    [Fact]
+    public async Task UpdateBoardCardsLeft_BoardDoesNotExist_ShouldThrow()
+    {
+        // Arrange
+        int playerId = 12;
+        int gameId = 22;
+        int boardId = 1;
+        int activePlayers = 18;
 
         Board board = new Board(playerId, gameId);
         board.BoardID = boardId;
@@ -228,22 +379,27 @@ public class BoardServiceTests
             .ThrowsAsync(new KeyNotFoundException($"Board with id {boardId}, does not exist!"));
 
         // Act and Assert
-        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId));
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.UpdateBoardCardsLeft(playerId, boardId, activePlayers));
+
     }
 
-    // ChooseBoardCard_GameDoesNotExist_ShouldThrow
-    // ChooseBoardCard_PlayerHasNotBoardPermission_ShouldThrow
-    // ChooseBoardCard_PlayerHasNotGamePermission_ShouldThrow
-    // ChooseBoardCard_PlayerCantChooseCard_ShouldThrow
-    // ChooseBoardCard_BoardCardDoesNotExist_ShouldThrow
-    // All Cases where its duccessful and state is updated correct|
+    [Fact]
+    public async Task UpdateBoardCardsLeft_PlayerHasNotPermission_ShouldThrow()
+    {
+        // Arrange
+        int playerId = 12;
+        int ownerPlayerId = 44;
+        int gameId = 22;
+        int boardId = 1;
+        int activePlayers = 18;
 
-    ///
+        Board board = new Board(ownerPlayerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ReturnsAsync(board);
 
-    // UpdateBoardCardsLeft_Successful_PlayerHasPermission
-    // UpdateBoardCardsLeft_BoardDoesNotExist_ShouldThrow
-    // UpdateBoardCardsLeft_PlayerHasNotPermission_ShouldThrow
-
-    ///
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.UpdateBoardCardsLeft(playerId, boardId, activePlayers));
+    }
 }
 
