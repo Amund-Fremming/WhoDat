@@ -52,7 +52,6 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
                 if (game.State == State.P1_CHOOSING || game.State == State.P2_CHOOSING)
                     game.State = State.BOTH_PICKING_PLAYER;
 
-
                 IEnumerable<BoardCard> newBoardCards = cardIds.Select(cardId => new BoardCard(boardId, cardId)).ToList();
 
                 await _gameRepository.UpdateGameState(game, game.State);

@@ -35,4 +35,5 @@ public interface IBoardCardService
     /// <exception cref="KeyNotFoundException">Throws if the board does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the board.</exception>
     public Task<IEnumerable<BoardCard>> GetBoardCardsFromBoard(int playerId, int boardId);
+
 }
