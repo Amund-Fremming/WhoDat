@@ -46,14 +46,15 @@
 - [x] User test with Figma prototype
 - [x] Tweak Design
 - [ ] Add wrapper / provider for keyboard up (might also add scrollview)
-- [ ] Add util classes for styles (colors) and styling functions for converting pixel values
+- [x] Add util classes for styles (colors) and styling functions for converting pixel values
 - [ ] Implement generic components
-- [ ] Implement Navigation bar
+- [x] Implement Navigation bar
 - [ ] Implement Routers / View-render for different screens
 - [ ] Implement the screens with their components
 - [ ] Implement the LoginWall
 - [ ] Add Token handling for security
 - [ ] Add input validation
+- [ ] Add user feedback when api fails
 - [ ] Test the app
 - [ ] Create docs
 
