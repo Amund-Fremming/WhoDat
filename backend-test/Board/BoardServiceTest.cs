@@ -509,9 +509,35 @@ public class BoardServiceTests
 
     ///
 
+    // TODO
     [Fact]
     public async Task GuessBoardCard_Successful_PlayerOneGuessedIncorrect()
     {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+        int boardId = 55;
+        int cardId = 66;
+        int boardCardId = 33;
+
+        Board playerOneBoard = new Board(playerOneId, gameId);
+        Board playerTwoBoard = new Board(playerTwoId, gameId);
+
+        Game game = new Game(playerOneId, State.P1_TURN_STARTED);
+        game.GameID = gameId;
+        game.Boards = new List<Board> { playerOneBoard, playerTwoBoard };
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        BoardCard boardCard = new BoardCard(boardId, cardId);
+        _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
+            .ReturnsAsync(boardCard);
+
+        // Act
+
+        // Assert
     }
 
     [Fact]
@@ -532,20 +558,77 @@ public class BoardServiceTests
     [Fact]
     public async Task GuessBoardCard_GameDoesNotExist_ShouldThrow()
     {
+        // Arrange
+        int playerOneId = 12;
+        int gameId = 22;
+        int boardCardId = 33;
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ThrowsAsync(new KeyNotFoundException($"Game with id {gameId}, does not exist!"));
+
+        // Act and Assert
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.GuessBoardCard(playerOneId, gameId, boardCardId));
     }
 
     [Fact]
     public async Task GuessBoardCard_BoardCardDoesNotExist_ShouldThrow()
     {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+        int boardCardId = 33;
+
+        Board playerOneBoard = new Board(playerOneId, gameId);
+        Board playerTwoBoard = new Board(playerTwoId, gameId);
+
+        Game game = new Game(playerOneId, State.P1_TURN_STARTED);
+        game.GameID = gameId;
+        game.Boards = new List<Board> { playerOneBoard, playerTwoBoard };
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
+            .ThrowsAsync(new KeyNotFoundException($"BoardCard with id {boardCardId}, does not exist!"));
+
+        // Act and Assert
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.GuessBoardCard(playerOneId, gameId, boardCardId));
     }
 
     [Fact]
-    public async Task GuessBoardCard_PlayerOneHasNotPermission_ShouldThrow()
+    public async Task GuessBoardCard_PlayerOneAndTwoHasNotPermission_ShouldThrow()
     {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 12;
+        int ownerPlayerId = 99;
+        int gameId = 22;
+        int boardId = 55;
+        int cardId = 66;
+        int boardCardId = 33;
+
+        Board playerOneBoard = new Board(playerOneId, gameId);
+        Board playerTwoBoard = new Board(playerTwoId, gameId);
+
+        Game game = new Game(ownerPlayerId, State.P1_TURN_STARTED);
+        game.GameID = gameId;
+        game.Boards = new List<Board> { playerOneBoard, playerTwoBoard };
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        BoardCard boardCard = new BoardCard(boardId, cardId);
+        _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
+            .ReturnsAsync(boardCard);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.GuessBoardCard(playerOneId, gameId, boardCardId));
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.GuessBoardCard(playerTwoId, gameId, boardCardId));
     }
 
     [Fact]
-    public async Task GuessBoardCard_PlayerTwoHasNotPermission_ShouldThrow()
+    public async Task GuessBoardCard_PlayerTwoBoardNotCreated_ShouldThrow()
     {
     }
 
