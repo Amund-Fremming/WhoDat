@@ -63,13 +63,49 @@ public class MessageServiceTest
     }
 
     [Fact]
-    public async Task CreateMessage_PlayerOneCantSendMessage_ShouldThrow()
+    public async Task CreateMessage_IsPlayerOneCantSendMessage_ShouldThrow()
     {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+        string messageText = "Hello World!";
+        State currentState = State.P2_TURN_STARTED;
+
+        Game game = new Game(playerOneId, currentState);
+        game.GameID = gameId;
+        game.PlayerOneID = playerOneId;
+        game.PlayerTwoID = playerTwoId;
+        game.State = currentState;
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _messageService.CreateMessage(playerOneId, gameId, messageText));
     }
 
 
     [Fact]
-    public async Task CreateMessage_PlayerTwoCantSendMessage_ShouldThrow()
+    public async Task CreateMessage_IsPlayerTwoCantSendMessage_ShouldThrow()
     {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+        string messageText = "Hello World!";
+        State currentState = State.P1_TURN_STARTED;
+
+        Game game = new Game(playerOneId, currentState);
+        game.GameID = gameId;
+        game.PlayerOneID = playerOneId;
+        game.PlayerTwoID = playerTwoId;
+        game.State = currentState;
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _messageService.CreateMessage(playerTwoId, gameId, messageText));
     }
 }
