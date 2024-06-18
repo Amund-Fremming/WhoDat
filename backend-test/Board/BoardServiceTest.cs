@@ -401,5 +401,152 @@ public class BoardServiceTests
         // Act and Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.UpdateBoardCardsLeft(playerId, boardId, activePlayers));
     }
-}
 
+    ///
+
+    [Fact]
+    public async Task GetBoardWithBoardCards_Successful_PlayerTwoBoardCreated()
+    {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+        State currentState = State.BOTH_PICKED_PLAYERS;
+
+        Game game = new Game(playerOneId, currentState);
+        game.GameID = gameId;
+        game.PlayerOneID = playerOneId;
+        game.PlayerTwoID = playerTwoId;
+
+        Board boardOne = new Board(playerOneId, gameId);
+        Board boardTwo = new Board(playerTwoId, gameId);
+        game.Boards = new List<Board> { boardOne, boardTwo };
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        // Act
+        Board result = await _boardService.GetBoardWithBoardCards(playerTwoId, gameId);
+
+        // Assert
+        Assert.Equal(boardTwo, result);
+    }
+
+    [Fact]
+    public async Task GetBoardWithBoardCards_Successful_PlayerTwoBoardNotCreated()
+    {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+        State currentState = State.BOTH_PICKED_PLAYERS;
+
+        Game game = new Game(playerOneId, currentState);
+        game.GameID = gameId;
+        game.PlayerOneID = playerOneId;
+        game.PlayerTwoID = playerTwoId;
+
+        Board boardOne = new Board(playerOneId, gameId);
+        game.Boards = new List<Board> { boardOne };
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        // Act
+        Board result = await _boardService.GetBoardWithBoardCards(playerTwoId, gameId);
+
+        // Assert
+        Assert.Equal(boardOne, result);
+    }
+
+    [Fact]
+    public async Task GetBoardWithBoardCards_GameDoesNotExist_ShouldThrow()
+    {
+        // Arrange
+        int playerId = 12;
+        int gameId = 22;
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ThrowsAsync(new KeyNotFoundException($"Game with id {gameId}, does not exist!"));
+
+        // Act and Assert
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.GetBoardWithBoardCards(playerId, gameId));
+    }
+
+    [Fact]
+    public async Task GetBoardWithBoardCards_PlayerOneHasNotPermission_ShouldThrow()
+    {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+
+        Game game = new Game(playerTwoId, State.BOTH_PICKED_PLAYERS);
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.GetBoardWithBoardCards(playerOneId, gameId));
+    }
+
+    [Fact]
+    public async Task GetBoardWithBoardCards_PlayerTwoHasNotPermission_ShouldThrow()
+    {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+
+        Game game = new Game(playerOneId, State.BOTH_PICKED_PLAYERS);
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.GetBoardWithBoardCards(playerTwoId, gameId));
+    }
+
+    // All Other cases
+
+    ///
+
+    [Fact]
+    public async Task GuessBoardCard_Successful_PlayerOneGuessedIncorrect()
+    {
+    }
+
+    [Fact]
+    public async Task GuessBoardCard_Successful_PlayerOneGuessedCorrect()
+    {
+    }
+
+    [Fact]
+    public async Task GuessBoardCard_Successful_PlayerTwoGuessedIncorrect()
+    {
+    }
+
+    [Fact]
+    public async Task GuessBoardCard_Successful_PlayerTwoGuessedCorrect()
+    {
+    }
+
+    [Fact]
+    public async Task GuessBoardCard_GameDoesNotExist_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task GuessBoardCard_BoardCardDoesNotExist_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task GuessBoardCard_PlayerOneHasNotPermission_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task GuessBoardCard_PlayerTwoHasNotPermission_ShouldThrow()
+    {
+    }
+
+}
