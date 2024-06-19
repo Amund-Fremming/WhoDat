@@ -1,4 +1,4 @@
-namespace MessageEntity;
+namespace MessageEntityTest;
 
 public class MessageServiceTest
 {
@@ -23,7 +23,6 @@ public class MessageServiceTest
     [Fact]
     public async Task CreateMessage_Successful_CanSendMessage()
     {
-        // Arrange
         int playerId = 12;
         int gameId = 22;
         int messageId = 33;
@@ -40,17 +39,14 @@ public class MessageServiceTest
         _mockMessageRepository.Setup(repo => repo.CreateMessage(message))
             .ReturnsAsync(messageId);
 
-        // Act
         int result = await _messageService.CreateMessage(playerId, gameId, messageText);
 
-        // Assert
         Assert.Equal(messageId, result);
     }
 
     [Fact]
     public async Task CreateMessage_GameDoesNotExist_ShouldThrow()
     {
-        // Arrange
         int playerId = 12;
         int gameId = 22;
         string messageText = "Hello World!";
@@ -58,14 +54,12 @@ public class MessageServiceTest
         _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
             .ThrowsAsync(new KeyNotFoundException($"Game with id {gameId}, does not exist!"));
 
-        // Act and Assert
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _messageService.CreateMessage(playerId, gameId, messageText));
     }
 
     [Fact]
     public async Task CreateMessage_IsPlayerOneCantSendMessage_ShouldThrow()
     {
-        // Arrange
         int playerOneId = 12;
         int playerTwoId = 13;
         int gameId = 22;
@@ -81,7 +75,6 @@ public class MessageServiceTest
         _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
             .ReturnsAsync(game);
 
-        // Act and Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _messageService.CreateMessage(playerOneId, gameId, messageText));
     }
 
@@ -89,7 +82,6 @@ public class MessageServiceTest
     [Fact]
     public async Task CreateMessage_IsPlayerTwoCantSendMessage_ShouldThrow()
     {
-        // Arrange
         int playerOneId = 12;
         int playerTwoId = 13;
         int gameId = 22;
@@ -105,7 +97,6 @@ public class MessageServiceTest
         _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
             .ReturnsAsync(game);
 
-        // Act and Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _messageService.CreateMessage(playerTwoId, gameId, messageText));
     }
 }

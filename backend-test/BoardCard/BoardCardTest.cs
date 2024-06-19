@@ -1,4 +1,4 @@
-namespace BoardCardEntity;
+namespace BoardCardEntityTest;
 
 public class BoardCardTest
 {
@@ -41,42 +41,72 @@ public class BoardCardTest
 
     ///
 
+    // TODO
+    /*
     public async Task UpdateBoardCardsActivity_Successful_PlayerHasPermission()
     {
         // Arrange
         int playerId = 12;
         int boardId = 22;
-        IEnumerable<BoardCardUpdate> boardCardUpdates;
+        int gameId = 33;
+        IEnumerable<BoardCardUpdate> boardCardUpdates = Enumerable.Empty<BoardCardUpdate>();
+
+        Board board = new Board(playerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ReturnsAsync(board);
+
+        _mockBoardCardRepository.Setup(repo => repo.GetBoardCardsFromBoard(boardId))
+            .ReturnsAsync();
+
+        _mockBoardCardRepository.Setup(repo => repo.UpdateBoardCardsActivity(updateMap, boardCards))
+            .ReturnsAsync();
+
+        _mockBoardCardRepository.Setup(repo => repo.UpdateBoardCardsLeft(board, boardcardsLeft))
+            .ReturnsAsync();
 
         // Act
+        int result = await _boardCardService.UpdateBoardCardsActivity(playerId, boardId, boardCardUpdates);
 
         // Assert
+        Assert.Equal(boardCardsLeft, result);
     }
+    */
 
     public async Task UpdateBoardCardsActivity_BoardDoesNotExist_ShouldThrow()
     {
         // Arrange
         int playerId = 12;
         int boardId = 22;
-        IEnumerable<BoardCardUpdate> boardCardUpdates;
+        int gameId = 33;
+        IEnumerable<BoardCardUpdate> boardCardUpdates = Enumerable.Empty<BoardCardUpdate>();
 
-        // Act
+        Board board = new Board(playerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ReturnsAsync(board);
 
-        // Assert
+        // Act and Assert
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardCardService.UpdateBoardCardsActivity(playerId, boardId, boardCardUpdates));
     }
 
     public async Task UpdateBoardCardsActivity_PlayerHasNotPermission_ShouldThrow()
     {
         // Arrange
         int playerId = 12;
+        int ownerPlayerId = 55;
         int boardId = 22;
-        IEnumerable<BoardCardUpdate> boardCardUpdates;
+        int gameId = 33;
+        IEnumerable<BoardCardUpdate> boardCardUpdates = Enumerable.Empty<BoardCardUpdate>();
 
-        // Act
+        Board board = new Board(ownerPlayerId, gameId);
+        board.BoardID = boardId;
+        _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
+            .ReturnsAsync(board);
 
-        // Assert
+        // Act and Assert
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardCardService.UpdateBoardCardsActivity(playerId, boardId, boardCardUpdates));
     }
-
 
     ///
 
@@ -137,5 +167,4 @@ public class BoardCardTest
         // Act and Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardCardService.GetBoardCardsFromBoard(playerId, boardId));
     }
-
 }

@@ -31,7 +31,6 @@ public class GalleryServiceTest
     [Fact]
     public async Task CreateGallery_Successful_ReturnsGalleryId()
     {
-        // Arrange
         int playerId = 12;
         string galleryName = "GalleryOne";
         int expectedId = 2;
@@ -45,10 +44,8 @@ public class GalleryServiceTest
         _mockGalleryRepository.Setup(repo => repo.CreateGallery(It.Is<Gallery>(g => g.PlayerID == playerId && g.Name == galleryName)))
             .ReturnsAsync(expectedId);
 
-        // Act
         int result = await _galleryService.CreateGallery(playerId, gallery);
 
-        // Assert
         Assert.Equal(expectedId, result);
         _mockGalleryRepository.Verify(repo => repo.CreateGallery(It.IsAny<Gallery>()), Times.Once);
     }
@@ -56,7 +53,6 @@ public class GalleryServiceTest
     [Fact]
     public async Task CreateGallery_PlayerDoesNotExist_ShouldThrow()
     {
-        // Arrange
         int playerId = 12;
         string galleryName = "GalleryOne";
         Gallery gallery = new Gallery(playerId, galleryName);
@@ -64,14 +60,12 @@ public class GalleryServiceTest
         _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
             .ThrowsAsync(new KeyNotFoundException($"Player with id {playerId}, does not exist!"));
 
-        // Act and Assert
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _galleryService.CreateGallery(playerId, gallery));
     }
 
     [Fact]
     public async Task CreateGallery_GalleryIsNull_ShouldThrow()
     {
-        // Arrange
         int playerId = 12;
         Gallery? gallery = null;
 
@@ -79,14 +73,12 @@ public class GalleryServiceTest
         _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
             .ReturnsAsync(player);
 
-        // Act and Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() => _galleryService.CreateGallery(playerId, gallery!));
     }
 
     [Fact]
     public async Task DeleteGallery_Successful_PlayerHasPermission()
     {
-        // Arrange
         int playerId = 12;
         int galleryId = 33;
         string galleryName = "GalleryOne";
@@ -105,17 +97,14 @@ public class GalleryServiceTest
             .Returns(Task.CompletedTask)
             .Verifiable();
 
-        // Act
         await _galleryService.DeleteGallery(playerId, galleryId);
 
-        // Assert
         _mockGalleryRepository.Verify(repo => repo.DeleteGallery(gallery), Times.Once);
     }
 
     [Fact]
     public async Task DeleteGallery_PlayerHasNotPermission_ShouldThrow()
     {
-        // Arrange
         int playerId = 12;
         int ownerPlayerId = 22;
         int galleryId = 33;
@@ -131,28 +120,24 @@ public class GalleryServiceTest
         _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
             .ReturnsAsync(gallery);
 
-        // Act and Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _galleryService.DeleteGallery(playerId, galleryId));
     }
 
     [Fact]
     public async Task DeleteGallery_WhenPlayerDoesNotExist_ShouldThrow()
     {
-        // Arrange 
         int playerId = 12;
         int galleryId = 33;
 
         _mockPlayerRepository.Setup(repo => repo.GetPlayerById(playerId))
             .ThrowsAsync(new KeyNotFoundException($"Player with id {playerId}, does not exist!"));
 
-        // Assert and Act
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _galleryService.DeleteGallery(playerId, galleryId));
     }
 
     [Fact]
     public async Task DeleteGallery_WhenGalleryDoesNotExist_ShouldThrow()
     {
-        // Arrange
         int playerId = 12;
         int galleryId = 33;
 
@@ -164,14 +149,12 @@ public class GalleryServiceTest
         _mockGalleryRepository.Setup(repo => repo.GetGalleryById(galleryId))
             .ThrowsAsync(new KeyNotFoundException($"Gallery with id {galleryId}, does not exist!"));
 
-        // Assert and Act
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _galleryService.DeleteGallery(playerId, galleryId));
     }
 
     [Fact]
     public async Task DeleteGallery_Successful_PlayerIsAdminAndNotOwner()
     {
-        // Arrange
         int playerId = 12;
         int ownerPlayerId = 22;
         int galleryId = 33;
@@ -191,10 +174,8 @@ public class GalleryServiceTest
             .Returns(Task.CompletedTask)
             .Verifiable();
 
-        // Act
         await _galleryService.DeleteGallery(playerId, galleryId);
 
-        // Assert
         _mockGalleryRepository.Verify(repo => repo.DeleteGallery(gallery), Times.Once);
     }
 }
