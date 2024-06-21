@@ -20,7 +20,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             try
             {
                 Player player = await _playerRepository.GetPlayerById(playerId);
-                game.PlayerTwoID = -1;
+                game.PlayerTwoID = null;
                 int gameId = await _gameRepository.CreateGame(game, player);
 
                 await transaction.CommitAsync();
