@@ -262,6 +262,7 @@ public class GameServiceTest
 
         Game game = new Game(playerId, State.BOTH_CHOSING_CARDS);
         game.GameID = gameId;
+        game.PlayerOneID = playerId;
 
         _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
             .ReturnsAsync(game);
@@ -270,7 +271,8 @@ public class GameServiceTest
             .ReturnsAsync(player);
 
         _mockGameRepository.Setup(repo => repo.UpdateGameState(game, newState))
-            .Returns(Task.CompletedTask);
+            .Returns(Task.CompletedTask)
+            .Verifiable();
 
         await _gameService.UpdateGameState(playerId, gameId, newState);
 

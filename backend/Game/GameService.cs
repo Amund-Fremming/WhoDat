@@ -185,7 +185,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
 
     public void PlayerHasPermission(int playerId, Game game)
     {
-        if (playerId != game.PlayerOneID || playerId != game.PlayerTwoID)
+        if (playerId != game.PlayerOneID && playerId != game.PlayerTwoID)
         {
             _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (GameService)");
