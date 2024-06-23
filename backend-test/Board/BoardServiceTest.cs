@@ -52,9 +52,7 @@ public class BoardServiceTests
         _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
             .ReturnsAsync(game);
 
-        Board board = new Board(playerId, gameId);
-        board.BoardID = expectedBoardId;
-        _mockBoardRepository.Setup(repo => repo.CreateBoard(board))
+        _mockBoardRepository.Setup(repo => repo.CreateBoard(It.IsAny<Board>()))
                             .ReturnsAsync(expectedBoardId);
 
         // Act

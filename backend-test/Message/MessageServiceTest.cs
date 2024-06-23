@@ -34,9 +34,7 @@ public class MessageServiceTest
         _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
             .ReturnsAsync(game);
 
-        Message message = new Message(playerId, gameId, messageText);
-        message.MessageID = messageId;
-        _mockMessageRepository.Setup(repo => repo.CreateMessage(message))
+        _mockMessageRepository.Setup(repo => repo.CreateMessage(It.IsAny<Message>()))
             .ReturnsAsync(messageId);
 
         int result = await _messageService.CreateMessage(playerId, gameId, messageText);
