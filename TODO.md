@@ -4,6 +4,10 @@
 
 - [ ] TODO UploadImageToCloudflare does not return the correct url
 - [ ] TODO CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
+- [ ] TODO BoardCardService has bugs
+- [ ] TODO BoardCardServiceTest needs edge cases
+- [ ] TODO Game WebSocket needs tests
+- [ ] Change Auth to OAuth
 
 <hr />
 
