@@ -14,53 +14,48 @@ public interface IGameRepository
     Task<Game> GetGameById(int gameId);
 
     /// <summary>
-    /// Creates a new game.
+    /// Creates a new game with the specified game details and initiates it with the provided player.
     /// </summary>
-    /// <param name="game">The game object to be created in the db.</param>
-    /// <param name="game">The player object to be created in the db.</param>
-    /// <returns>The id for the created game.</returns>
+    /// <param name="game">The game object containing details about the game to be created.</param>
+    /// <param name="player">The player who is initiating the game.</param>
     Task<int> CreateGame(Game game, Player player);
 
     /// <summary>
-    /// Deletes a existing game.
+    /// Deletes the specified game from the system.
     /// </summary>
-    /// <param name="game">The game object to be deleted in the db.</param>
+    /// <param name="game">The game object representing the game to be deleted.</param>
     Task DeleteGame(Game game);
 
     /// <summary>
-    /// Adds a player from a existing game.
+    /// Allows a player to join an existing game.
     /// </summary>
-    /// <param name="game">The game object to add the player to in the db.</param>
-    /// <param name="player">The player to be added to the db.</param>
+    /// <param name="game">The game object representing the game to join.</param>
+    /// <param name="player">The player who wants to join the game.</param>
     Task JoinGame(Game game, Player player);
 
     /// <summary>
-    /// Removes the player from the game, sets a new state and updates.
+    /// Allows a player to leave an existing game.
     /// </summary>
-    /// <param name="game">The game object to update and set a new state for.</param>
+    /// <param name="game">The game object representing the game to leave.</param>
     Task LeaveGame(Game game);
 
     /// <summary>
-    /// Creates a new game.
+    /// Updates the state of the specified game.
     /// </summary>
-    /// <param name="game">The game object to be created in the db.</param>
-    /// <param name="game">The player object to be created in the db.</param>
-    /// <returns>The id for the created game.</returns>
+    /// <param name="game">The game object representing the game to update.</param>
+    /// <param name="state">The new state to be applied to the game.</param>
     Task UpdateGameState(Game game, State state);
 
     /// <summary>
-    /// Creates a new game.
+    /// Retrieves the most recent game played by the specified player.
     /// </summary>
-    /// <param name="game">The game object to be created in the db.</param>
-    /// <param name="game">The player object to be created in the db.</param>
-    /// <returns>The id for the created game.</returns>
+    /// <param name="playerId">The ID of the player whose recent game is to be retrieved.</param>
+    /// <returns>Returns the ID of the most recent game played by the player.</returns>
     Task<int> GetRecentGamePlayed(int playerId);
 
     /// <summary>
-    /// Creates a new game.
+    /// Updates the details of the specified game.
     /// </summary>
-    /// <param name="game">The game object to be created in the db.</param>
-    /// <param name="game">The player object to be created in the db.</param>
-    /// <returns>The id for the created game.</returns>
+    /// <param name="game">The game object containing the updated details of the game.</param>
     Task UpdateGame(Game game);
 }

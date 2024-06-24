@@ -39,6 +39,14 @@ updates and real-time management of game states and related information. This co
 application's functionality, especially for interactive game elements. Like the controllers, this class has a
 function for handling errors and returning the right message, a parsing of player id and encoding HTML and JS input.
 
+### CloudFlare R2 For Image Storage And Handling
+
+Our application uses a third-party library for image storage. When users upload images, they are passed to the
+backend, which connects to a Cloudflare Worker for storage. The Cloudflare Worker uploads the image and returns
+a URL. This URL is then provided to the frontend for access. Note that these URLs are publicly accessible, meaning
+anyone with the URL can view the image. To enhance security and privacy, consider implementing access controls,
+URL expiry times, and encryption to restrict access and protect user privacy.
+
 ### Some special service functions
 
 **CreateGame**: creates one board for making the board for the game, we later duplicate this board so each player

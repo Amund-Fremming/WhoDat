@@ -7,7 +7,6 @@
 - [ ] TODO BoardCardService has bugs
 - [ ] TODO BoardCardServiceTest needs edge cases
 - [ ] TODO Game WebSocket needs tests
-- [ ] Change Auth to OAuth
 
 <hr />
 
@@ -32,9 +31,9 @@
 - [x] Test JWT implementation
 - [x] Create Docs for services and general (especially GetById funcs and PlayerHasPermission, they throw)
 - [x] Create Docs for Service Interfaces
-- [ ] Create Docs for Repository Interfaces
+- [x] Create Docs for Repository Interfaces
 - [ ] Create tests for services
-- [ ] Create tests for Repositories
+- [?] Create tests for Repositories
 - [ ] Handling for reconnect when disconnected
 - [ ] Create premade cards and their endpoints
 - [ ] Add error handling in Services
