@@ -236,6 +236,7 @@ public class BoardServiceTests
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId));
     }
 
+    [Fact]
     public async Task ChooseBoardCard_GameDoesNotExist_ShouldThrow()
     {
         // Arrange
@@ -250,10 +251,14 @@ public class BoardServiceTests
         _mockBoardRepository.Setup(repo => repo.GetBoardById(boardId))
             .ReturnsAsync(board);
 
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ThrowsAsync(new KeyNotFoundException($"Game with id {gameId}, does not exist!"));
+
         // Act and Assert
         await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId));
     }
 
+    [Fact]
     public async Task ChooseBoardCard_PlayerHasNotBoardPermission_ShouldThrow()
     {
         // Arrange
@@ -629,5 +634,4 @@ public class BoardServiceTests
     public async Task GuessBoardCard_PlayerTwoBoardNotCreated_ShouldThrow()
     {
     }
-
 }

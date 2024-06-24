@@ -1,12 +1,14 @@
 # TODO`S
 
 - [ ] WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
+- [ ] BUG UploadImageToCloudflare does not return the correct url
+- [ ] BUG CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
 
-- [ ] TODO UploadImageToCloudflare does not return the correct url
-- [ ] TODO CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
-- [ ] TODO BoardCardService has bugs
+- [ ] TODO Global usings for backend
 - [ ] TODO BoardCardServiceTest needs edge cases
 - [ ] TODO Game WebSocket needs tests
+- [ ] TODO BoardServiceTest
+- [ ] TODO BoardCardServiceTest
 
 <hr />
 
