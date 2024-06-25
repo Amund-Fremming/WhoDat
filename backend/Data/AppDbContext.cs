@@ -1,13 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using PlayerEntity;
-using GalleryEntity;
-using GameEntity;
-using MessageEntity;
-using BoardEntity;
-using CardEntity;
-using BoardCardEntity;
-
 namespace Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)

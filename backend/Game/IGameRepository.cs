@@ -1,6 +1,3 @@
-using Enum;
-using PlayerEntity;
-
 namespace GameEntity;
 
 public interface IGameRepository

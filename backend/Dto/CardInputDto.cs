@@ -1,5 +1,3 @@
-using CardEntity;
-
 namespace Dto;
 
 public class CardInputDto

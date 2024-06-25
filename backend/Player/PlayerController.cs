@@ -1,11 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using GalleryEntity;
-using CardEntity;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using System.Text.Encodings.Web;
-using Dto;
-
 namespace PlayerEntity;
 
 [ApiController]

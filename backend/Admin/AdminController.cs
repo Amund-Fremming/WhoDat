@@ -1,10 +1,3 @@
-using PlayerEntity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using GalleryEntity;
-using Dto;
-
 namespace Admin;
 
 [ApiController]

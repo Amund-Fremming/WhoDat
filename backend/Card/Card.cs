@@ -1,7 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using GalleryEntity;
-using BoardCardEntity;
-
 namespace CardEntity;
 
 public class Card

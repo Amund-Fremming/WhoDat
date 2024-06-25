@@ -1,5 +1,4 @@
 namespace Auth;
-using System.ComponentModel.DataAnnotations;
 
 public class LoginRequest
 {

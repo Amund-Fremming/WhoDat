@@ -1,7 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using PlayerEntity;
-using CardEntity;
-
 namespace GalleryEntity;
 
 public class Gallery

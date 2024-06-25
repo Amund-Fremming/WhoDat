@@ -1,9 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using PlayerEntity;
-using GameEntity;
-using BoardCardEntity;
-using MessageEntity;
-
 namespace BoardEntity;
 
 public class Board

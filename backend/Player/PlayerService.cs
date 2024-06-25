@@ -1,7 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using System.Security.Cryptography;
-using Dto;
-
 namespace PlayerEntity;
 
 public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository playerRepository, IPasswordHasher<Player> passwordHasher) : IPlayerService

@@ -1,9 +1,3 @@
-using BoardEntity;
-using CardEntity;
-using Data;
-using GameEntity;
-using Enum;
-
 namespace BoardCardEntity;
 
 public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> logger,

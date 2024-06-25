@@ -1,10 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using GalleryEntity;
-using BoardEntity;
-using GameEntity;
-using MessageEntity;
-using Enum;
-
 namespace PlayerEntity;
 
 public class Player

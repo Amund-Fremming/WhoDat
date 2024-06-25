@@ -1,7 +1,3 @@
-using Data;
-using BoardCardEntity;
-using Microsoft.EntityFrameworkCore;
-
 namespace BoardEntity;
 
 public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> logger) : IBoardRepository

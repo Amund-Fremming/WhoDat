@@ -1,5 +1,3 @@
-using Data;
-
 namespace GalleryEntity;
 
 public class GalleryRepository(AppDbContext context, ILogger<IGalleryRepository> logger) : IGalleryRepository

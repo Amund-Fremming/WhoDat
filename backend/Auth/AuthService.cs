@@ -1,14 +1,3 @@
-using PlayerEntity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Cryptography;
-using GalleryEntity;
-using Enum;
-using Data;
-
 namespace Auth;
 
 public class AuthService(AppDbContext context, IConfiguration configuration, ILogger<IAuthService> logger,

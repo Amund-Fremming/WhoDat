@@ -1,5 +1,3 @@
-using Enum;
-
 namespace BoardCardEntity;
 
 public interface IBoardCardService

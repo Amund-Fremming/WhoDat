@@ -1,7 +1,3 @@
-using Data;
-using Enum;
-using PlayerEntity;
-
 namespace GalleryEntity;
 
 public class GalleryService(AppDbContext context, ILogger<IGalleryService> logger, IGalleryRepository galleryRepository, IPlayerRepository playerRepository) : IGalleryService

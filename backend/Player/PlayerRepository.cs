@@ -1,7 +1,3 @@
-using Data;
-using Microsoft.EntityFrameworkCore;
-using Dto;
-
 namespace PlayerEntity;
 
 public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> logger) : IPlayerRepository
@@ -21,7 +17,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         {
             await _context.AddAsync(player);
             await _context.SaveChangesAsync();
-            
+
             return player.PlayerID;
         }
         catch (Exception e)

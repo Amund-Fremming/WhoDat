@@ -1,10 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using BoardEntity;
-using BoardCardEntity;
-using MessageEntity;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-
 namespace GameEntity;
 
 [ApiController]

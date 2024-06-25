@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using PlayerEntity;
-
 namespace Auth;
 
 [ApiController]

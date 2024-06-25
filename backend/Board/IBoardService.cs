@@ -1,5 +1,3 @@
-using Enum;
-
 namespace BoardEntity;
 
 public interface IBoardService

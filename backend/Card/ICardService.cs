@@ -1,5 +1,3 @@
-using Dto;
-
 namespace CardEntity;
 
 public interface ICardService

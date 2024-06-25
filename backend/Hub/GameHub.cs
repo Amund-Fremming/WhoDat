@@ -1,12 +1,3 @@
-using GameEntity;
-using BoardEntity;
-using MessageEntity;
-using BoardCardEntity;
-using Enum;
-using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
-using System.Text.Encodings.Web;
-
 namespace Hubs;
 
 public class GameHub : Hub

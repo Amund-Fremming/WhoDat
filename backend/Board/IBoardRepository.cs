@@ -1,5 +1,3 @@
-using BoardCardEntity;
-
 namespace BoardEntity;
 
 public interface IBoardRepository

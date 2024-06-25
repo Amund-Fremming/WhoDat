@@ -1,7 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using GameEntity;
-using PlayerEntity;
-
 namespace MessageEntity;
 
 public class Message

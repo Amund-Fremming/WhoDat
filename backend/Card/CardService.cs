@@ -1,7 +1,3 @@
-using Dto;
-using GalleryEntity;
-using System.Net.Http.Headers;
-
 namespace CardEntity;
 
 public class CardService(ILogger<ICardService> logger, ICardRepository cardRepository, IGalleryRepository galleryRepository, IHttpClientFactory httpClientFactory) : ICardService

@@ -1,9 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using PlayerEntity;
-using Enum;
-using MessageEntity;
-using BoardEntity;
-
 namespace GameEntity;
 
 public class Game

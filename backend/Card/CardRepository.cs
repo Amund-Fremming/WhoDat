@@ -1,6 +1,3 @@
-using Data;
-using Microsoft.EntityFrameworkCore;
-
 namespace CardEntity;
 
 public class CardRepository(AppDbContext context, ILogger<ICardRepository> logger) : ICardRepository
