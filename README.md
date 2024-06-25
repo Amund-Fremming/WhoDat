@@ -30,6 +30,6 @@ with any other player they wish to invite.
 - Backend
   - dotnet
   - postgreSQL
-  - JWT
+  - OAuth
   - Azure
   - CloudFlare R2
