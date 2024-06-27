@@ -10,7 +10,6 @@ export default styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: moderateScale(16),
     fontFamily: "Inika",
     textAlign: "center",
     fontWeight: "bold",
@@ -18,25 +17,49 @@ export default styles = StyleSheet.create({
     position: "absolute",
   },
 
-  shadowRight: {
+  smallShadowRight: {
     textShadowOffset: { width: 1, height: 0 },
     textShadowRadius: 0,
     textShadowColor: "#000000",
   },
 
-  shadowLeft: {
+  smallShadowLeft: {
     textShadowOffset: { width: -1, height: 0 },
     textShadowRadius: 0,
     textShadowColor: "#000000",
   },
 
-  shadowTop: {
+  smallShadowTop: {
     textShadowOffset: { width: 0, height: -1 },
     textShadowRadius: 0,
     textShadowColor: "#000000",
   },
 
-  shadowBottom: {
+  smallShadowBottom: {
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 0,
+    textShadowColor: "#000000",
+  },
+
+  BigShadowRight: {
+    textShadowOffset: { width: 1, height: 0 },
+    textShadowRadius: 0,
+    textShadowColor: "#000000",
+  },
+
+  BigShadowLeft: {
+    textShadowOffset: { width: -1, height: 0 },
+    textShadowRadius: 0,
+    textShadowColor: "#000000",
+  },
+
+  BigShadowTop: {
+    textShadowOffset: { width: 0, height: -1 },
+    textShadowRadius: 0,
+    textShadowColor: "#000000",
+  },
+
+  BigShadowBottom: {
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 0,
     textShadowColor: "#000000",

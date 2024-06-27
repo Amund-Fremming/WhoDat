@@ -19,7 +19,8 @@ export default function Card({ card, onCardPress }: CardProps) {
     "Isabella",
     "Benjamin",
     "Nicholas",
-    "Alexandra",
+    "Mmmmmmmm",
+    "Mmm",
   ];
 
   const getRandomName = (): string => {
@@ -38,7 +39,7 @@ export default function Card({ card, onCardPress }: CardProps) {
           }}
         />
       </View>
-      <StrokedText text={getRandomName()} />
+      <StrokedText text={getRandomName()} fontBaseSize={14} />
     </View>
   );
 }
