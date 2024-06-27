@@ -14,14 +14,15 @@ export const styles = StyleSheet.create({
   },
 
   cardModal: {
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     alignItems: "center",
     width: "95%",
-    height: "70%",
+    height: "73%",
     backgroundColor: Colors.Cream,
     borderColor: Colors.BurgundyRed,
     borderWidth: moderateScale(5),
     borderRadius: moderateScale(30),
+    paddingTop: verticalScale(40),
   },
 
   card: {
@@ -31,6 +32,18 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(15),
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: verticalScale(-20),
+  },
+
+  buttonWrapper: {
+    marginBottom: verticalScale(40),
+  },
+
+  closeButton: {
+    position: "absolute",
+    zIndex: 1,
+    right: horizontalScale(16),
+    top: verticalScale(12),
   },
 });
 
@@ -38,7 +51,6 @@ export const imageStyles = StyleSheet.create({
   imageStyle: {
     width: "91%",
     height: "94%",
-    backgroundColor: Colors.Cream,
     borderRadius: moderateScale(6),
   },
 });

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { moderateScale } from "@/constants/Dimentions";
+import { moderateScale, verticalScale } from "@/constants/Dimentions";
 import { Colors } from "@/constants/Colors";
 
 export default styles = StyleSheet.create({
@@ -41,26 +41,26 @@ export default styles = StyleSheet.create({
     textShadowColor: "#000000",
   },
 
-  BigShadowRight: {
-    textShadowOffset: { width: 1, height: 0 },
+  bigShadowRight: {
+    textShadowOffset: { width: 2.5, height: 0 },
     textShadowRadius: 0,
     textShadowColor: "#000000",
   },
 
-  BigShadowLeft: {
-    textShadowOffset: { width: -1, height: 0 },
+  bigShadowLeft: {
+    textShadowOffset: { width: -2.5, height: 0 },
     textShadowRadius: 0,
     textShadowColor: "#000000",
   },
 
-  BigShadowTop: {
-    textShadowOffset: { width: 0, height: -1 },
+  bigShadowTop: {
+    textShadowOffset: { width: 0, height: -2.5 },
     textShadowRadius: 0,
     textShadowColor: "#000000",
   },
 
-  BigShadowBottom: {
-    textShadowOffset: { width: 0, height: 1 },
+  bigShadowBottom: {
+    textShadowOffset: { width: 0, height: 2.5 },
     textShadowRadius: 0,
     textShadowColor: "#000000",
   },

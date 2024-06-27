@@ -4,9 +4,14 @@ import styles from "./StrokedTextStyles";
 interface StokedTextProps {
   text: string;
   fontBaseSize: number;
+  smallBorder: boolean;
 }
 
-export default function StrokedText({ text, fontBaseSize }: StokedTextProps) {
+export default function StrokedText({
+  text,
+  fontBaseSize,
+  smallBorder,
+}: StokedTextProps) {
   if (text.length > 9) text = "Kenneth";
   if ((text.match(/m/gi) || []).length > 3) text = "Kenneth";
   if ((text.match(/w/gi) || []).length > 3) text = "Kenneth";
@@ -31,7 +36,7 @@ export default function StrokedText({ text, fontBaseSize }: StokedTextProps) {
       <Text
         style={[
           { ...styles.text, fontSize: adjustFontSize(text) },
-          styles.shadowRight,
+          smallBorder ? styles.smallShadowRight : styles.bigShadowRight,
         ]}
       >
         {text}
@@ -39,7 +44,7 @@ export default function StrokedText({ text, fontBaseSize }: StokedTextProps) {
       <Text
         style={[
           { ...styles.text, fontSize: adjustFontSize(text) },
-          styles.shadowLeft,
+          smallBorder ? styles.smallShadowLeft : styles.bigShadowLeft,
         ]}
       >
         {text}
@@ -47,7 +52,7 @@ export default function StrokedText({ text, fontBaseSize }: StokedTextProps) {
       <Text
         style={[
           { ...styles.text, fontSize: adjustFontSize(text) },
-          styles.shadowTop,
+          smallBorder ? styles.smallShadowTop : styles.bigShadowTop,
         ]}
       >
         {text}
@@ -55,7 +60,7 @@ export default function StrokedText({ text, fontBaseSize }: StokedTextProps) {
       <Text
         style={[
           { ...styles.text, fontSize: adjustFontSize(text) },
-          styles.shadowBottom,
+          smallBorder ? styles.smallShadowBottom : styles.bigShadowBottom,
         ]}
       >
         {text}

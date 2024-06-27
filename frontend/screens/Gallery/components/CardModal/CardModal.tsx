@@ -1,9 +1,10 @@
-import { Modal, View, Image } from "react-native";
+import { Modal, View, Image, Pressable } from "react-native";
 import { styles, imageStyles } from "./CardModalStyles";
 import BigButton from "@/components/BigButton/BigButton";
 import { Colors } from "@/constants/Colors";
 import StrokedText from "@/components/StokedText/StrokedText";
 import { ICard } from "@/interfaces/ICard";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 interface CardModalProps {
   modalVisible: boolean;
@@ -20,6 +21,12 @@ export default function CardModal({
     <Modal visible={modalVisible} animationType="fade" transparent={true}>
       <View style={styles.container}>
         <View style={styles.cardModal}>
+          <Pressable
+            style={styles.closeButton}
+            onPress={() => setModalVisible(false)}
+          >
+            <FontAwesome name="close" size={36} color={Colors.DarkGray} />
+          </Pressable>
           <View style={styles.card}>
             <Image
               style={imageStyles.imageStyle}
@@ -28,13 +35,15 @@ export default function CardModal({
               }}
             />
           </View>
-          <StrokedText text={"Monsen"} fontBaseSize={40} stokeWidth={4} />
-          <BigButton
-            text="Edit"
-            color={Colors.BurgundyRed}
-            inverted={false}
-            onButtonPress={() => console.log("editing...")}
-          />
+          <StrokedText text={"Monsen"} fontBaseSize={40} smallBorder={false} />
+          <View style={styles.buttonWrapper}>
+            <BigButton
+              text="Edit"
+              color={Colors.BurgundyRed}
+              inverted={false}
+              onButtonPress={() => console.log("editing...")}
+            />
+          </View>
         </View>
       </View>
     </Modal>

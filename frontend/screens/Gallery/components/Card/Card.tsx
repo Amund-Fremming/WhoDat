@@ -39,7 +39,11 @@ export default function Card({ card, onCardPress }: CardProps) {
           }}
         />
       </View>
-      <StrokedText text={getRandomName()} fontBaseSize={14} />
+      <StrokedText
+        text={getRandomName()}
+        fontBaseSize={14}
+        smallBorder={true}
+      />
     </View>
   );
 }

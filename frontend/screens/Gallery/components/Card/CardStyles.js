@@ -35,7 +35,6 @@ export const imageStyles = StyleSheet.create({
   imageStyle: {
     width: "88%",
     height: "91%",
-    backgroundColor: Colors.Cream,
     borderRadius: moderateScale(6),
   },
 });
