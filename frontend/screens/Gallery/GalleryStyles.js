@@ -19,22 +19,21 @@ export default styles = StyleSheet.create({
 
   creamContainer: {
     width: "100%",
-    height: "92%",
+    height: "93%",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     backgroundColor: Colors.Cream,
     borderTopStartRadius: moderateScale(30),
     borderTopRightRadius: moderateScale(30),
-    paddingBottom: verticalScale(30),
   },
 
   boardContainer: {
     width: "100%",
-    height: "100%",
     marginTop: "5%",
     gap: moderateScale(7),
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
+    marginBottom: verticalScale(30),
   },
 });

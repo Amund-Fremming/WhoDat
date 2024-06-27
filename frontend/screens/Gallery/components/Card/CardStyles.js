@@ -6,7 +6,7 @@ import {
 } from "@/constants/Dimentions";
 import { Colors } from "@/constants/Colors";
 
-export default styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     width: horizontalScale(68),
     height: verticalScale(130),
@@ -14,8 +14,8 @@ export default styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  outerRim: {
-    height: verticalScale(100),
+  card: {
+    height: verticalScale(110),
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
@@ -26,13 +26,16 @@ export default styles = StyleSheet.create({
   innerRim: {
     width: "88%",
     height: "91%",
-    overflow: "hidden",
     backgroundColor: Colors.Cream,
     borderRadius: moderateScale(6),
   },
+});
 
+export const imageStyles = StyleSheet.create({
   imageStyle: {
-    width: "100%",
-    height: "100%",
+    width: "88%",
+    height: "91%",
+    backgroundColor: Colors.Cream,
+    borderRadius: moderateScale(6),
   },
 });
