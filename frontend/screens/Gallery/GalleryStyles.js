@@ -29,10 +29,10 @@ export default styles = StyleSheet.create({
   },
 
   boardContainer: {
-    width: "90%",
+    width: "100%",
     height: "100%",
-    marginTop: "10%",
-    gap: moderateScale(10),
+    marginTop: "5%",
+    gap: moderateScale(7),
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",

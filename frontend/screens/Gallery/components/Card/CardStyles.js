@@ -1,19 +1,38 @@
 import { StyleSheet } from "react-native";
-import { moderateScale } from "@/constants/Dimentions";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "@/constants/Dimentions";
+import { Colors } from "@/constants/Colors";
 
 export default styles = StyleSheet.create({
   container: {
-    width: 66,
-    height: 100,
-    justifyContent: "center",
+    width: horizontalScale(68),
+    height: verticalScale(130),
+    justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "red",
   },
 
-  text: {
-    fontSize: moderateScale(16),
-    fontFamily: "Inika",
-    textAlign: "center",
-    fontWeight: "bold",
+  outerRim: {
+    height: verticalScale(100),
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
+    borderRadius: moderateScale(6),
+  },
+
+  innerRim: {
+    width: "88%",
+    height: "91%",
+    overflow: "hidden",
+    backgroundColor: Colors.Cream,
+    borderRadius: moderateScale(6),
+  },
+
+  imageStyle: {
+    width: "100%",
+    height: "100%",
   },
 });
