@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { Colors } from "@/constants/Colors";
 import styles from "./GalleryStyles";
+import { ICard } from "@/interfaces/ICard";
 
 import BigButton from "@/components/BigButton/BigButton";
 import Card from "./components/Card/Card";
@@ -10,27 +11,31 @@ import CardModal from "./components/CardModal/CardModal";
 
 export default function Gallery() {
   const [cardModalVisible, setCardModalVisible] = useState<boolean>(false);
+  const [cardPressed, setCardPressed] = useState<ICard | undefined>(undefined);
+  const [cards, setCards] = useState<ICard[]>([]);
+
+  const handleCardPressed = (card: ICard) => {
+    setCardPressed(card);
+    setCardModalVisible(true);
+  };
 
   return (
     <>
       <CardModal
         modalVisible={cardModalVisible}
         setModalVisible={setCardModalVisible}
-        card={undefined}
+        card={cardPressed}
       />
 
       <View style={styles.container}>
         <Text style={styles.header}>Gallery</Text>
         <View style={styles.creamContainer}>
           <View style={styles.boardContainer}>
-            {[
-              1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-              20,
-            ].map((item) => (
+            {cards.map((card: ICard) => (
               <Card
-                key={item}
+                key={card.cardId}
                 card={null}
-                onCardPress={() => console.log("Card Pressed!")}
+                onCardPress={() => handleCardPressed(card)}
               />
             ))}
           </View>

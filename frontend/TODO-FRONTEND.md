@@ -22,3 +22,7 @@
 - [ ] Card
 - [ ] CreateCard
 - [ ] CardModal
+
+### General
+
+- [ ] Set edit button on gallery to stick to bottom for when there is not a full gallery
