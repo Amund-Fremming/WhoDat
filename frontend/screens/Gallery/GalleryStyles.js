@@ -21,7 +21,7 @@ export default styles = StyleSheet.create({
     width: "100%",
     height: "93%",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     backgroundColor: Colors.Cream,
     borderTopStartRadius: moderateScale(30),
     borderTopRightRadius: moderateScale(30),
@@ -35,5 +35,9 @@ export default styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "center",
     marginBottom: verticalScale(30),
+  },
+
+  buttonWrapper: {
+    paddingBottom: verticalScale(30),
   },
 });

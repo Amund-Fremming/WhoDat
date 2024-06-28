@@ -6,17 +6,20 @@ import StrokedText from "@/components/StokedText/StrokedText";
 import { ICard } from "@/interfaces/ICard";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useEffect, useState } from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface CardModalProps {
   modalVisible: boolean;
   setModalVisible: (condition: boolean) => void;
   card: ICard;
+  onDeleteCardPressed: () => void;
 }
 
 export default function CardModal({
   modalVisible,
   setModalVisible,
   card,
+  onDeleteCardPressed,
 }: CardModalProps) {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [newNameInput, setNewNameInput] = useState<string>("");
@@ -52,6 +55,18 @@ export default function CardModal({
             <FontAwesome name="close" size={36} color={Colors.DarkGray} />
           </Pressable>
           <View style={styles.card}>
+            {editMode && (
+              <Pressable
+                style={styles.deleteButton}
+                onPress={onDeleteCardPressed}
+              >
+                <MaterialCommunityIcons
+                  name="close-circle"
+                  size={45}
+                  color="red"
+                />
+              </Pressable>
+            )}
             <Image
               style={imageStyles.imageStyle}
               source={{

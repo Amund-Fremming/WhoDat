@@ -1,8 +1,7 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text } from "react-native";
 import { useEffect, useState } from "react";
 
 import { Colors } from "@/constants/Colors";
-import styles from "./GalleryStyles";
 import { ICard } from "@/interfaces/ICard";
 
 import BigButton from "@/components/BigButton/BigButton";
@@ -10,7 +9,7 @@ import Card from "./components/Card/Card";
 import CardModal from "./components/CardModal/CardModal";
 
 import { mockCards } from "@/constants/Mockdata";
-import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
+import styles from "./GalleryStyles";
 
 const defaultCard: ICard = {
   cardId: -1,
@@ -20,7 +19,6 @@ const defaultCard: ICard = {
 };
 
 export default function Gallery() {
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [cardModalVisible, setCardModalVisible] = useState<boolean>(false);
   const [cardPressed, setCardPressed] = useState<ICard>(defaultCard);
   const [cards, setCards] = useState<ICard[]>([]);
@@ -37,6 +35,7 @@ export default function Gallery() {
 
   const handleDeleteCardPressed = (card: ICard) => {
     // Delete card from db
+    setCardModalVisible(false);
     setCards([
       ...cards.filter((prevCard: ICard) => prevCard.cardId != card.cardId),
     ]);
@@ -48,6 +47,7 @@ export default function Gallery() {
         modalVisible={cardModalVisible}
         setModalVisible={setCardModalVisible}
         card={cardPressed}
+        onDeleteCardPressed={() => handleDeleteCardPressed(cardPressed)}
       />
 
       <View
@@ -59,31 +59,22 @@ export default function Gallery() {
         <Text style={styles.header}>Gallery</Text>
         <View style={styles.creamContainer}>
           <View style={styles.boardContainer}>
-            {!editMode &&
-              cards.map((card: ICard) => (
-                <Card
-                  key={card.cardId}
-                  card={card}
-                  onCardPress={() => handleCardPressed(card)}
-                />
-              ))}
-            {editMode &&
-              cards.map((card: ICard) => (
-                <Pressable onPress={() => handleDeleteCardPressed(card)}>
-                  <Card
-                    key={card.cardId}
-                    card={card}
-                    onCardPress={() => handleCardPressed(card)}
-                  />
-                </Pressable>
-              ))}
+            {cards.map((card: ICard) => (
+              <Card
+                key={card.cardId}
+                card={card}
+                onCardPress={() => handleCardPressed(card)}
+              />
+            ))}
           </View>
-          <BigButton
-            text={editMode ? "Save" : "Edit"}
-            color={Colors.BurgundyRed}
-            inverted={editMode ? true : false}
-            onButtonPress={() => setEditMode(!editMode)}
-          />
+          <View style={styles.buttonWrapper}>
+            <BigButton
+              text={"Next"}
+              color={Colors.BurgundyRed}
+              inverted={false}
+              onButtonPress={() => console.log("next pressed")}
+            />
+          </View>
         </View>
       </View>
     </>

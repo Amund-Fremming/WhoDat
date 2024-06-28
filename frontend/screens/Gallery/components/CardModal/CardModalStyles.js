@@ -60,6 +60,15 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     color: Colors.DarkGray,
   },
+
+  deleteButton: {
+    position: "absolute",
+    zIndex: 1,
+    left: -15,
+    top: -15,
+    borderRadius: 100,
+    backgroundColor: Colors.Cream,
+  },
 });
 
 export const imageStyles = StyleSheet.create({
