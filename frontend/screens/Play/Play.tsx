@@ -1,10 +1,12 @@
-import { View, Text } from "react-native";
-import styles from "./PlayStyles";
+import { useState } from "react";
+import { PlayScreens } from "./PlayScreens";
+import MainPage from "./components/MainPage/MainPage";
 
 export default function Play() {
-  return (
-    <View style={styles.container}>
-      <Text>Play</Text>
-    </View>
-  );
+    const [screen, setScreen] = useState<PlayScreens>(PlayScreens.MAIN_PAGE);
+
+    switch (screen) {
+        case PlayScreens.MAIN_PAGE:
+            return <MainPage />;
+    }
 }

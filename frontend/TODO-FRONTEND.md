@@ -18,6 +18,11 @@
 ### Gallery (Cards)
 
 - [x] GalleryBase
+  - AddModal
+  - only render add card when gallery not full, may also need a indicator that the gallery is full?
+  - Next gallery functionallity
+  - Add gallery functionally or just make it one large?
+  - Input validation
 - [x] CardContainer
 - [ ] Card
 - [ ] CreateCard

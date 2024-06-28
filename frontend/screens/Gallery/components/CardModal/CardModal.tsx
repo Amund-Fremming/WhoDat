@@ -63,7 +63,7 @@ export default function CardModal({
                 <MaterialCommunityIcons
                   name="close-circle"
                   size={45}
-                  color="red"
+                  color={Colors.Red}
                 />
               </Pressable>
             )}
