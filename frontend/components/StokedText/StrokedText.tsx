@@ -1,5 +1,6 @@
 import { Text, View } from "react-native";
 import styles from "./StrokedTextStyles";
+import { moderateScale } from "@/constants/Dimentions";
 
 interface StokedTextProps {
   text: string;
@@ -23,11 +24,11 @@ export default function StrokedText({
       .filter((char: string) => wideCharacters.includes(char)).length;
 
     if (wideCount > 3) {
-      return fontBaseSize - 2;
+      return moderateScale(fontBaseSize - 2);
     } else if (name.length > 7) {
-      return fontBaseSize - 2;
+      return moderateScale(fontBaseSize - 2);
     } else {
-      return fontBaseSize;
+      return moderateScale(fontBaseSize);
     }
   };
 

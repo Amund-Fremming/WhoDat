@@ -1,36 +1,16 @@
 import { ICard } from "@/interfaces/ICard";
-import { View, Image } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { styles, imageStyles } from "./CardStyles";
 import StrokedText from "@/components/StokedText/StrokedText";
 
 interface CardProps {
-  card: ICard | null;
+  card: ICard;
   onCardPress: () => void;
 }
 
 export default function Card({ card, onCardPress }: CardProps) {
-  const names = [
-    "Emily",
-    "Brandon",
-    "Victoria",
-    "Michael",
-    "Samantha",
-    "Jonathan",
-    "Isabella",
-    "Benjamin",
-    "Nicholas",
-    "Mmmmmmmm",
-    "Mmm",
-  ];
-
-  const getRandomName = (): string => {
-    const name: string | undefined = names.at(Math.random() * names.length);
-    if (name) return name;
-    else return "Card";
-  };
-
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={onCardPress}>
       <View style={styles.card}>
         <Image
           style={imageStyles.imageStyle}
@@ -39,11 +19,7 @@ export default function Card({ card, onCardPress }: CardProps) {
           }}
         />
       </View>
-      <StrokedText
-        text={getRandomName()}
-        fontBaseSize={14}
-        smallBorder={true}
-      />
-    </View>
+      <StrokedText text={card.name} fontBaseSize={14} smallBorder={true} />
+    </Pressable>
   );
 }

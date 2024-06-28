@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   },
 
   cardModal: {
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     width: "95%",
     height: "73%",
@@ -23,6 +23,13 @@ export const styles = StyleSheet.create({
     borderWidth: moderateScale(5),
     borderRadius: moderateScale(30),
     paddingTop: verticalScale(40),
+    shadowColor: Colors.Black,
+    shadowOpacity: 0.5,
+    shadowRadius: 9,
+    shadowOffset: {
+      width: horizontalScale(15),
+      height: verticalScale(15),
+    },
   },
 
   card: {
@@ -36,7 +43,7 @@ export const styles = StyleSheet.create({
   },
 
   buttonWrapper: {
-    marginBottom: verticalScale(40),
+    marginBottom: verticalScale(30),
   },
 
   closeButton: {
@@ -44,6 +51,14 @@ export const styles = StyleSheet.create({
     zIndex: 1,
     right: horizontalScale(16),
     top: verticalScale(12),
+  },
+
+  newNameInput: {
+    fontSize: moderateScale(40),
+    fontFamily: "Inika",
+    textAlign: "center",
+    fontWeight: "bold",
+    color: Colors.DarkGray,
   },
 });
 
