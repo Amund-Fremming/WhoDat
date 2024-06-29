@@ -4,4 +4,5 @@ export enum PlayPages {
   JOIN_PAGE,
   BOARD_PAGE,
   LOBBY_PAGE,
+  WAITING_PAGE,
 }

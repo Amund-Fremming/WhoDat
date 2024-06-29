@@ -1,7 +1,7 @@
 import { Pressable, View, Text } from "react-native";
 import styles from "./IconButtonStyles";
-import { Feather } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
+import { Feather } from "@expo/vector-icons";
 
 interface IconButtonProps {
   text: string;
@@ -24,10 +24,10 @@ export default function IconButton({
           {icon === "join" && (
             <Feather name="truck" size={40} color={Colors.DarkGray} />
           )}
-          {icon === "your" && (
+          {icon === "user" && (
             <Feather name="user" size={40} color={Colors.DarkGray} />
           )}
-          {icon === "split" && (
+          {icon === "users" && (
             <Feather name="users" size={40} color={Colors.DarkGray} />
           )}
         </View>

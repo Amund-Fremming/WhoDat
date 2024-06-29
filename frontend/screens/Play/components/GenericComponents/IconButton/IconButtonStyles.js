@@ -14,6 +14,12 @@ export default styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.Cream,
     borderRadius: moderateScale(25),
+    shadowRadius: 5,
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      height: verticalScale(3),
+      width: horizontalScale(3),
+    },
   },
 
   wrapper: {

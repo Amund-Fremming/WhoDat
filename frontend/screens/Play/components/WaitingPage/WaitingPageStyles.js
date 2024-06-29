@@ -1,8 +1,8 @@
 import { Colors } from "@/constants/Colors";
 import {
-  horizontalScale,
   moderateScale,
   verticalScale,
+  horizontalScale,
 } from "@/constants/Dimentions";
 import { StyleSheet } from "react-native";
 
@@ -13,7 +13,7 @@ export default styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.Orange,
-    gap: verticalScale(20),
+    paddingBottom: verticalScale(130),
   },
 
   header: {
@@ -22,15 +22,7 @@ export default styles = StyleSheet.create({
     color: Colors.Cream,
     textAlign: "center",
     lineHeight: moderateScale(100),
-    shadowRadius: 5,
-    shadowOpacity: 0.2,
-    shadowOffset: {
-      height: verticalScale(3),
-      width: horizontalScale(3),
-    },
   },
-
-  textWrapper: {},
 
   backIconWrapper: {
     position: "absolute",

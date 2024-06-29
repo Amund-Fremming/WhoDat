@@ -1,5 +1,9 @@
 import { Colors } from "@/constants/Colors";
-import { moderateScale, verticalScale } from "@/constants/Dimentions";
+import {
+  moderateScale,
+  verticalScale,
+  horizontalScale,
+} from "@/constants/Dimentions";
 import { StyleSheet } from "react-native";
 
 export default styles = StyleSheet.create({
@@ -17,6 +21,12 @@ export default styles = StyleSheet.create({
     fontSize: moderateScale(75),
     color: Colors.Cream,
     textAlign: "center",
-    lineHeight: moderateScale(90),
+    lineHeight: moderateScale(100),
+    shadowRadius: 5,
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      height: verticalScale(3),
+      width: horizontalScale(3),
+    },
   },
 });

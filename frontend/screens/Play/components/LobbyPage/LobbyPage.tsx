@@ -9,7 +9,7 @@ interface LobbyPageProps {
 export default function LobbyPage({ setPage }: LobbyPageProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>LobbyPage</Text>
+      <Text style={styles.header}></Text>
     </View>
   );
 }
