@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     width: "95%",
     height: "73%",
     backgroundColor: Colors.Cream,
-    borderColor: Colors.BurgundyRed,
+    borderColor: Colors.BorderGray,
     borderWidth: moderateScale(5),
     borderRadius: moderateScale(30),
     paddingTop: verticalScale(40),
