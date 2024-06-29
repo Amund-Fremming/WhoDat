@@ -11,13 +11,14 @@ interface WaitingPageProps {
 export default function WaitingPage({ setPage }: WaitingPageProps) {
   return (
     <View style={styles.container}>
+      <Text style={styles.id}>ID: 54234</Text>
       <Pressable
         style={styles.backIconWrapper}
         onPress={() => setPage(PlayPages.MAIN_PAGE)}
       >
         <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
       </Pressable>
-      <View>
+      <View style={styles.headerWrapper}>
         <Text style={styles.header}>Waiting</Text>
         <Text style={styles.header}>for bro...</Text>
       </View>

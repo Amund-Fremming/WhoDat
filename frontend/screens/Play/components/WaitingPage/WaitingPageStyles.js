@@ -10,10 +10,9 @@ export default styles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: Colors.Orange,
-    paddingBottom: verticalScale(130),
   },
 
   header: {
@@ -28,5 +27,18 @@ export default styles = StyleSheet.create({
     position: "absolute",
     left: horizontalScale(20),
     top: verticalScale(60),
+  },
+
+  headerWrapper: {
+    paddingTop: verticalScale(130),
+  },
+
+  id: {
+    paddingTop: verticalScale(15),
+    fontFamily: "Modak",
+    fontSize: moderateScale(30),
+    color: Colors.Green,
+    textAlign: "center",
+    lineHeight: moderateScale(100),
   },
 });
