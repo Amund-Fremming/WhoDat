@@ -7236,19 +7236,19 @@
     ]
   },
   "packageFolders": {
-    "/home/amund/.nuget/packages/": {}
+    "/Users/amundfremming/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/amund/Documents/Projects/WhoDat/backend-test/backend-test.csproj",
+      "projectUniqueName": "/Users/amundfremming/Documents/projects/WhoDat/backend-test/backend-test.csproj",
       "projectName": "backend-test",
-      "projectPath": "/home/amund/Documents/Projects/WhoDat/backend-test/backend-test.csproj",
-      "packagesPath": "/home/amund/.nuget/packages/",
-      "outputPath": "/home/amund/Documents/Projects/WhoDat/backend-test/obj/",
+      "projectPath": "/Users/amundfremming/Documents/projects/WhoDat/backend-test/backend-test.csproj",
+      "packagesPath": "/Users/amundfremming/.nuget/packages/",
+      "outputPath": "/Users/amundfremming/Documents/projects/WhoDat/backend-test/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/amund/.nuget/NuGet/NuGet.Config"
+        "/Users/amundfremming/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -7260,8 +7260,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/amund/Documents/Projects/WhoDat/backend/RaptorProject.csproj": {
-              "projectPath": "/home/amund/Documents/Projects/WhoDat/backend/RaptorProject.csproj"
+            "/Users/amundfremming/Documents/projects/WhoDat/backend/RaptorProject.csproj": {
+              "projectPath": "/Users/amundfremming/Documents/projects/WhoDat/backend/RaptorProject.csproj"
             }
           }
         }
@@ -7326,7 +7326,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/linuxbrew/.linuxbrew/Cellar/dotnet/8.0.4/libexec/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.1/libexec/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
