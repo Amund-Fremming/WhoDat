@@ -466,7 +466,6 @@ public class BoardServiceTests
 
     ///
 
-    // TODO
     [Fact]
     public async Task GuessBoardCard_Successful_PlayerOneGuessedIncorrect()
     {
@@ -477,9 +476,11 @@ public class BoardServiceTests
         int boardId = 55;
         int cardId = 66;
         int boardCardId = 33;
+        State expectedResult = State.P2_TURN_STARTED;
 
         Board playerOneBoard = new Board(playerOneId, gameId);
         Board playerTwoBoard = new Board(playerTwoId, gameId);
+        playerTwoBoard.ChosenCard = new BoardCard();
 
         Game game = new Game(playerOneId, State.P1_TURN_STARTED);
         game.GameID = gameId;
@@ -489,27 +490,120 @@ public class BoardServiceTests
             .ReturnsAsync(game);
 
         BoardCard boardCard = new BoardCard(boardId, cardId);
+        boardCard.BoardCardID = boardCardId;
         _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
             .ReturnsAsync(boardCard);
 
         // Act
+        State result = await _boardService.GuessBoardCard(playerOneId, gameId, boardCardId);
 
         // Assert
+        Assert.Equal(expectedResult, result);
     }
 
     [Fact]
     public async Task GuessBoardCard_Successful_PlayerOneGuessedCorrect()
     {
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+        int boardId = 55;
+        int cardId = 66;
+        int boardCardId = 33;
+        State expectedResult = State.P1_WON;
+
+        Board playerOneBoard = new Board(playerOneId, gameId);
+        Board playerTwoBoard = new Board(playerTwoId, gameId);
+
+        Game game = new Game(playerOneId, State.P1_TURN_STARTED);
+        game.GameID = gameId;
+        game.Boards = new List<Board> { playerOneBoard, playerTwoBoard };
+
+        BoardCard boardCard = new BoardCard(boardId, cardId);
+        boardCard.BoardCardID = boardCardId;
+
+        playerTwoBoard.ChosenCard = boardCard;
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
+            .ReturnsAsync(boardCard);
+
+        State result = await _boardService.GuessBoardCard(playerOneId, gameId, boardCardId);
+
+        Assert.Equal(expectedResult, result);
     }
 
     [Fact]
     public async Task GuessBoardCard_Successful_PlayerTwoGuessedIncorrect()
     {
+        // Arrange
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+        int boardId = 55;
+        int cardId = 66;
+        int boardCardId = 33;
+        State expectedResult = State.P1_TURN_STARTED;
+
+        Board playerOneBoard = new Board(playerOneId, gameId);
+        Board playerTwoBoard = new Board(playerTwoId, gameId);
+        playerOneBoard.ChosenCard = new BoardCard();
+
+        Game game = new Game(playerOneId, State.P2_TURN_STARTED);
+        game.GameID = gameId;
+        game.PlayerTwoID = playerTwoId;
+        game.Boards = new List<Board> { playerOneBoard, playerTwoBoard };
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        BoardCard boardCard = new BoardCard(boardId, cardId);
+        boardCard.BoardCardID = boardCardId;
+        _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
+            .ReturnsAsync(boardCard);
+
+        // Act
+        State result = await _boardService.GuessBoardCard(playerTwoId, gameId, boardCardId);
+
+        // Assert
+        Assert.Equal(expectedResult, result);
     }
 
     [Fact]
     public async Task GuessBoardCard_Successful_PlayerTwoGuessedCorrect()
     {
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int gameId = 22;
+        int boardId = 55;
+        int cardId = 66;
+        int boardCardId = 33;
+        State expectedResult = State.P2_WON;
+
+        Board playerOneBoard = new Board(playerOneId, gameId);
+        Board playerTwoBoard = new Board(playerTwoId, gameId);
+
+        Game game = new Game(playerOneId, State.P1_TURN_STARTED);
+        game.PlayerTwoID = playerTwoId;
+        game.GameID = gameId;
+        game.Boards = new List<Board> { playerOneBoard, playerTwoBoard };
+
+        BoardCard boardCard = new BoardCard(boardId, cardId);
+        boardCard.BoardCardID = boardCardId;
+
+        playerOneBoard.ChosenCard = boardCard;
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
+            .ReturnsAsync(boardCard);
+
+        State result = await _boardService.GuessBoardCard(playerTwoId, gameId, boardCardId);
+
+        Assert.Equal(expectedResult, result);
     }
 
     [Fact]

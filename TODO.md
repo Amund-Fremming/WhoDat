@@ -7,6 +7,7 @@
 - [ ] TODO BoardCardServiceTest needs edge cases
 - [ ] TODO GameHubTest
 - [ ] TODO BoardServiceTest
+  - Its possible to guess card when its not your turn
 - [ ] TODO BoardCardServiceTest
 
 <hr />
