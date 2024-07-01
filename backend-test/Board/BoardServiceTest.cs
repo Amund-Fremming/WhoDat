@@ -152,8 +152,6 @@ public class BoardServiceTests
 
     ///
 
-    // All Cases where its duccessful and state is updated correct
-
     [Fact]
     public async Task ChooseBoardCard_Successfull_IsPlayerOneAndBothChoosingCards()
     {
@@ -462,8 +460,6 @@ public class BoardServiceTests
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.GetBoardWithBoardCards(playerTwoId, gameId));
     }
 
-    // All Other cases
-
     ///
 
     [Fact]
@@ -604,6 +600,16 @@ public class BoardServiceTests
         State result = await _boardService.GuessBoardCard(playerTwoId, gameId, boardCardId);
 
         Assert.Equal(expectedResult, result);
+    }
+
+    [Fact]
+    public async Task GuessBoardCard_NotPlayerOnesTurn_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task GuessBoardCard_NotPlayersTwoTurn_ShouldThrow()
+    {
     }
 
     [Fact]

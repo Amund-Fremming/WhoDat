@@ -1,6 +1,6 @@
 namespace BoardCardEntityTest;
 
-public class BoardCardTest
+public class BoardCardServiceTest
 {
     public readonly Mock<ILogger<IBoardCardService>> _mockLogger;
     public readonly Mock<IBoardCardRepository> _mockBoardCardRepository;
@@ -10,7 +10,7 @@ public class BoardCardTest
     public readonly IBoardCardService _boardCardService;
     public readonly AppDbContext _context;
 
-    public BoardCardTest()
+    public BoardCardServiceTest()
     {
         _mockLogger = new Mock<ILogger<IBoardCardService>>();
         _mockBoardCardRepository = new Mock<IBoardCardRepository>();

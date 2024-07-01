@@ -4,11 +4,8 @@
 - [ ] BUG UploadImageToCloudflare does not return the correct url
 - [ ] BUG CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
 
-- [ ] TODO BoardCardServiceTest needs edge cases
-- [ ] TODO GameHubTest
-- [ ] TODO BoardServiceTest
-  - Its possible to guess card when its not your turn
-- [ ] TODO BoardCardServiceTest
+- [ ] TODO BoardServiceTest - Missing some impl + BoardService method can player guess
+- [ ] TODO BoardCardServiceTest - Missing test classes + Missing complete CreateBoardCards method
 
 <hr />
 
@@ -52,15 +49,14 @@
 - [x] Tweak Design
 - [ ] Add wrapper / provider for keyboard up (might also add scrollview)
 - [x] Add util classes for styles (colors) and styling functions for converting pixel values
-- [ ] Implement generic components
+- [x] Implement generic components
 - [x] Implement Navigation bar
-- [ ] Implement Routers / View-render for different screens
+- [x] Implement Routers / View-render for different screens
 - [ ] Implement the screens with their components
 - [ ] Implement the LoginWall
 - [ ] Add Token handling for security
 - [ ] Add input validation
 - [ ] Add user feedback when api fails
-- [ ] Test the app
 - [ ] Create docs
 
 <hr />
