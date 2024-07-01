@@ -150,11 +150,15 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
-                Board otherPlayersBoard;
+                Board otherPlayersBoard = null!;
+
+                if (game.Boards!.Count() < 2)
+                    throw new NullReferenceException($"Players board is null in game {game.GameID}.");
 
                 if (game.Boards!.ElementAt(0).PlayerID == playerId)
                     otherPlayersBoard = game.Boards!.ElementAt(1);
-                else
+
+                if (game.Boards!.ElementAt(1).PlayerID == playerId)
                     otherPlayersBoard = game.Boards!.ElementAt(0);
 
                 BoardCard guessedCard = await _boardCardRepository.GetBoardCardById(boardCardId);
