@@ -220,6 +220,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     public void PlayerCanGuessBoardCard(int playerId, Game game)
     {
         // TODO
+        // throw new UnauthorizedAccessException($"Its not player {playerId}`s turn!");
     }
 
     private async Task<Board> CreatePlayerTwoBoard(int playerId, Game game)
