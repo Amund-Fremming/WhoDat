@@ -465,7 +465,6 @@ public class BoardServiceTests
     [Fact]
     public async Task GuessBoardCard_Successful_PlayerOneGuessedIncorrect()
     {
-        // Arrange
         int playerOneId = 12;
         int playerTwoId = 13;
         int gameId = 22;
@@ -490,10 +489,8 @@ public class BoardServiceTests
         _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
             .ReturnsAsync(boardCard);
 
-        // Act
         State result = await _boardService.GuessBoardCard(playerOneId, gameId, boardCardId);
 
-        // Assert
         Assert.Equal(expectedResult, result);
     }
 
@@ -534,7 +531,6 @@ public class BoardServiceTests
     [Fact]
     public async Task GuessBoardCard_Successful_PlayerTwoGuessedIncorrect()
     {
-        // Arrange
         int playerOneId = 12;
         int playerTwoId = 13;
         int gameId = 22;
@@ -560,10 +556,8 @@ public class BoardServiceTests
         _mockBoardCardRepository.Setup(repo => repo.GetBoardCardById(boardCardId))
             .ReturnsAsync(boardCard);
 
-        // Act
         State result = await _boardService.GuessBoardCard(playerTwoId, gameId, boardCardId);
 
-        // Assert
         Assert.Equal(expectedResult, result);
     }
 
@@ -605,11 +599,45 @@ public class BoardServiceTests
     [Fact]
     public async Task GuessBoardCard_NotPlayerOnesTurn_ShouldThrow()
     {
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int boardCardId = 33;
+        int gameId = 22;
+        State gameState = State.P2_TURN_STARTED;
+
+        Board playerOneBoard = new Board(playerOneId, gameId);
+        Board playerTwoBoard = new Board(playerTwoId, gameId);
+
+        Game game = new Game(playerOneId, gameState);
+        game.PlayerTwoID = playerTwoId;
+        game.GameID = gameId;
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.GuessBoardCard(playerOneId, gameId, boardCardId));
     }
 
     [Fact]
     public async Task GuessBoardCard_NotPlayersTwoTurn_ShouldThrow()
     {
+        int playerOneId = 12;
+        int playerTwoId = 13;
+        int boardCardId = 33;
+        int gameId = 22;
+        State gameState = State.P1_TURN_STARTED;
+
+        Board playerOneBoard = new Board(playerOneId, gameId);
+        Board playerTwoBoard = new Board(playerTwoId, gameId);
+
+        Game game = new Game(playerOneId, gameState);
+        game.PlayerTwoID = playerTwoId;
+        game.GameID = gameId;
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.GuessBoardCard(playerOneId, gameId, boardCardId));
     }
 
     [Fact]

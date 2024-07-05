@@ -5,7 +5,12 @@
 - [ ] BUG CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
 
 - [ ] TODO BoardServiceTest - Missing some impl + BoardService method can player guess
+  - TODO PlayerCanGuessBoardCard
+  - TODO Add implementation and test that tests is correct for playerCanGuessBoardCard
 - [ ] TODO BoardCardServiceTest - Missing test classes + Missing complete CreateBoardCards method
+- [ ] TODO Refactor backend services, make the functions shorter
+- [ ] TODO Refactor backend repos, updating functions can be changed to just one
+- [ ] TODO Can remove some game states, like player one asking and guessing, just use P1/P2 \_TURN_STARTED
 
 <hr />
 

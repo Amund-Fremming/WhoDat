@@ -150,6 +150,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
+                PlayerCanGuessBoardCard(playerId, game);
                 Board otherPlayersBoard = null!;
 
                 if (game.Boards!.Count() < 2)
@@ -214,6 +215,11 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
         if ((isPlayerOne && game.State == State.P2_PICKING_PLAYER) || (!isPlayerOne && game.State == State.P1_PICKING_PLAYER))
             throw new InvalidOperationException("This action cannot be performed in this State");
+    }
+
+    public void PlayerCanGuessBoardCard(int playerId, Game game)
+    {
+        // TODO
     }
 
     private async Task<Board> CreatePlayerTwoBoard(int playerId, Game game)
