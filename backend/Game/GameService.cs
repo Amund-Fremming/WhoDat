@@ -22,7 +22,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while creating Game with id {game.GameID}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -41,7 +40,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e, $"Error while deleting Game with id {gameId}. (GameService)");
             throw;
         }
@@ -66,7 +64,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while joining Game with id {gameId}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -95,7 +92,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while leaving Game with id {gameId}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -118,7 +114,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while updating state in Game with id {gameId}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -136,7 +131,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e, $"Error while getting players recent Game with PlayerID {playerId}. (GameService)");
             throw;
         }
@@ -170,7 +164,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while starting Game with ID {gameId}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;

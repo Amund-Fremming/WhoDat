@@ -20,7 +20,6 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e, $"Error while creating Message for game with id {gameId}. (MessageService)");
             throw;
         }

@@ -4,12 +4,10 @@
 - BUG UploadImageToCloudflare does not return the correct url
 - BUG CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
 
-- TODO BoardServiceTest - Missing some impl + BoardService method can player guess
-- TODO BoardCardServiceTest - Missing test classes + Missing complete CreateBoardCards method
+- TODO BoardCardServiceTest: Missing test classes
+- TODO BoardCardServiceTest: Missing complete CreateBoardCards method, make it shorter
 
-- REFACTOR backend services, make the functions shorter
 - REFACTOR backend repos, updating functions can be changed to just one
-- REFACTOR Can remove some game states, like player one asking and guessing, just use P1/P2 \_TURN_STARTED
 
 <hr />
 
@@ -39,7 +37,8 @@
 - [?] Create tests for Repositories
 - [?] Handling for reconnect when disconnected (Maybe just broadcasting a message?)
 - [ ] Create premade cards and their endpoints
-- [ ] Add error handling in Services
+- [x] Add error handling in Services
+- [ ] ?? Remove logging when finished, remove try/catch from non transactions in service
 
 - [ ] Change authentication to use OAuth
 - [ ] Setup Azure env

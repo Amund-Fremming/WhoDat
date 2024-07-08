@@ -27,7 +27,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e.Message, $"Error while creating Board. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -49,7 +48,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e.Message, $"Error while deleting Board with id {boardId}. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -89,7 +87,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e.Message, $"Error chosing a card on Board with id {boardId}. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -108,7 +105,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, $"Error updating card on Board with id {boardId}. (BoardService)");
             throw;
         }
@@ -137,7 +133,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, $"Error fetching Board from game with id {gameId}. (BoardService)");
             throw;
         }
@@ -180,7 +175,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e.Message, $"Error taking in guess on game wiht id {gameId}. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;

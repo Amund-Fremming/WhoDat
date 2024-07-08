@@ -34,9 +34,21 @@ public class BoardCardServiceTest
                 );
     }
 
-    // CreateBoardCards_Successful_PlayerHasPermission
-    // CreateBoardCards_GameDoesNotExist_ShouldThrow
-    // CreateBoardCards_PlayerHasNotPermission_ShouldThrow
+    [Fact]
+    public async Task CreateBoardCards_Successful_PlayerHasPermission()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_GameDoesNotExist_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_PlayerHasNotPermission_ShouldThrow()
+    {
+    }
+
     // CreateBoardCards_InvalidPlayerPermission_ShouldThrow WITH ALL CASES
 
     ///
