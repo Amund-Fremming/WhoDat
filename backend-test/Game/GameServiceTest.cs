@@ -260,7 +260,7 @@ public class GameServiceTest
         Player player = new Player("Username", "PasswordHash", "PasswordSalt", Role.USER);
         player.PlayerID = playerId;
 
-        Game game = new Game(playerId, State.P2_ASK_REPLIED);
+        Game game = new Game(playerId, State.P1_ASK_REPLIED);
         game.GameID = gameId;
         game.PlayerOneID = playerId;
 

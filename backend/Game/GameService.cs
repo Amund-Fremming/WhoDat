@@ -191,13 +191,8 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
     {
         bool isPlayerOne = game.PlayerOneID == playerId;
 
-        if ((isPlayerOne && game.State != State.P1_ASK_REPLIED) && (isPlayerOne && game.State != State.P1_TURN_STARTED) && (isPlayerOne && game.State != State.P1_GUESS_REPLIED))
-        {
-            _logger.LogInformation($"Player with id {playerId} tried to update the state when not allowed.");
-            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission to update the state (GameService)");
-        }
-
-        if ((!isPlayerOne && game.State != State.P2_ASK_REPLIED) && (!isPlayerOne && game.State != State.P2_TURN_STARTED) && (!isPlayerOne && game.State != State.P2_GUESS_REPLIED))
+        if ((isPlayerOne && (game.State != State.P1_ASK_REPLIED && game.State != State.P1_TURN_STARTED && game.State != State.P1_GUESS_REPLIED)) ||
+            (!isPlayerOne && (game.State != State.P2_ASK_REPLIED && game.State != State.P2_TURN_STARTED && game.State != State.P2_GUESS_REPLIED)))
         {
             _logger.LogInformation($"Player with id {playerId} tried to update the state when not allowed.");
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission to update the state (GameService)");
