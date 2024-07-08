@@ -575,7 +575,7 @@ public class BoardServiceTests
         Board playerOneBoard = new Board(playerOneId, gameId);
         Board playerTwoBoard = new Board(playerTwoId, gameId);
 
-        Game game = new Game(playerOneId, State.P1_TURN_STARTED);
+        Game game = new Game(playerOneId, State.P2_TURN_STARTED);
         game.PlayerTwoID = playerTwoId;
         game.GameID = gameId;
         game.Boards = new List<Board> { playerOneBoard, playerTwoBoard };
@@ -637,7 +637,7 @@ public class BoardServiceTests
         _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
             .ReturnsAsync(game);
 
-        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.GuessBoardCard(playerOneId, gameId, boardCardId));
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardService.GuessBoardCard(playerTwoId, gameId, boardCardId));
     }
 
     [Fact]
@@ -710,19 +710,21 @@ public class BoardServiceTests
     public async Task GuessBoardCard_PlayerTwoBoardNotCreated_ShouldThrow()
     {
         int playerOneId = 12;
+        int playerTwoId = 13;
         int ownerPlayerId = 99;
         int gameId = 22;
         int boardCardId = 33;
 
         Board playerOneBoard = new Board(playerOneId, gameId);
 
-        Game game = new Game(ownerPlayerId, State.P1_TURN_STARTED);
+        Game game = new Game(ownerPlayerId, State.P2_TURN_STARTED);
         game.GameID = gameId;
+        game.PlayerTwoID = playerTwoId;
         game.Boards = new List<Board> { playerOneBoard };
 
         _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
             .ReturnsAsync(game);
 
-        await Assert.ThrowsAsync<NullReferenceException>(() => _boardService.GuessBoardCard(playerOneId, gameId, boardCardId));
+        await Assert.ThrowsAsync<NullReferenceException>(() => _boardService.GuessBoardCard(playerTwoId, gameId, boardCardId));
     }
 }
