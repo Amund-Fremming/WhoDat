@@ -255,12 +255,12 @@ public class GameServiceTest
     {
         int playerId = 12;
         int gameId = 2;
-        State newState = State.P1_TURN_STARTED;
+        State newState = State.P2_TURN_STARTED;
 
         Player player = new Player("Username", "PasswordHash", "PasswordSalt", Role.USER);
         player.PlayerID = playerId;
 
-        Game game = new Game(playerId, State.BOTH_CHOSING_CARDS);
+        Game game = new Game(playerId, State.P2_ASK_REPLIED);
         game.GameID = gameId;
         game.PlayerOneID = playerId;
 

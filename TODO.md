@@ -37,7 +37,7 @@
 - [x] Create Docs for Repository Interfaces
 - [ ] Create tests for services
 - [?] Create tests for Repositories
-- [ ] Handling for reconnect when disconnected
+- [?] Handling for reconnect when disconnected (Maybe just broadcasting a message?)
 - [ ] Create premade cards and their endpoints
 - [ ] Add error handling in Services
 
