@@ -34,13 +34,12 @@
 - [x] Create Docs for Service Interfaces
 - [x] Create Docs for Repository Interfaces
 - [ ] Create tests for services
-- [?] Create tests for Repositories
 - [?] Handling for reconnect when disconnected (Maybe just broadcasting a message?)
-- [ ] Create premade cards and their endpoints
 - [x] Add error handling in Services
 - [ ] ?? Remove logging when finished, remove try/catch from non transactions in service
-
 - [ ] Change authentication to use OAuth
+
+- [ ] Create premade cards and their endpoints
 - [ ] Setup Azure env
 - [ ] Setup github actions with test pipeline to dev / prod branch to azure
 
