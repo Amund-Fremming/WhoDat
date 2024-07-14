@@ -2,8 +2,10 @@
 
 - WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
 - BUG UploadImageToCloudflare does not return the correct url
-- BUG CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
+- BUG CeateBoard never created??
 
+- TODO CreateBoardCards: implementation
+  - maybe create both boards here
 - TODO BoardCardServiceTest: Missing test classes
 - TODO BoardCardServiceTest: Missing complete CreateBoardCards method, make it shorter
 

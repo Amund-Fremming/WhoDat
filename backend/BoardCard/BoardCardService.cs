@@ -14,37 +14,26 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
+
+            // NEED TO BE CHECKED
+            // - If host choosing and the player is player two, throw unauthorized
+            // - Create board before boardcards?
+            // - 
+            // - 
+            // - 
+
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
                 int boardId = game.Boards!.ElementAt(0).BoardID;
 
-                if (game.State != State.BOTH_CHOSING_CARDS || game.State == State.P1_CHOOSING
-                        || game.State == State.P2_CHOOSING || game.State == State.ONLY_HOST_CHOSING_CARDS)
-                    return game.State;
+                PlayerHasGamePermission(playerId, game);
+                ValidatePlayerPermissions(playerId, game, cardIds);
 
                 if (game.State == State.ONLY_HOST_CHOSING_CARDS)
                     cardIds = cardIds.Take(40);
                 else
                     cardIds = cardIds.Take(20);
-
-                PlayerHasGamePermission(playerId, game);
-                ValidatePlayerPermissions(playerId, game, cardIds);
-
-                if (game.State == State.ONLY_HOST_CHOSING_CARDS)
-                {
-                    // if not the host, return a error or so
-                    // if not continue
-                    game.State = State.BOTH_PICKING_PLAYER;
-                }
-
-                if (game.State == State.BOTH_CHOSING_CARDS)
-                    game.State = game.PlayerOneID == playerId ? State.P2_CHOOSING : State.P1_CHOOSING;
-
-                // denne ma splittes i to, na kan en spiller lage begge set med kort
-                // denne ma flyttes, metoden over vil endre state og denne vil ga direkte gjennom
-                if (game.State == State.P1_CHOOSING || game.State == State.P2_CHOOSING)
-                    game.State = State.BOTH_PICKING_PLAYER;
 
                 IEnumerable<BoardCard> newBoardCards = cardIds.Select(cardId => new BoardCard(boardId, cardId)).ToList();
 
@@ -52,6 +41,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
                 await _boardcardRepository.CreateBoardCards(newBoardCards);
                 await transaction.CommitAsync();
 
+                // return updated state not this
                 return game.State;
             }
             catch (Exception e)
@@ -70,7 +60,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             try
             {
                 Board board = await _boardRepository.GetBoardById(boardId);
-                PlayerHasPermission(playerId, board);
+                PlayerHasBoardPermission(playerId, board);
 
                 IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.BoardCardID, update => update.Active);
                 IList<BoardCard> boardCards = await _boardcardRepository.GetBoardCardsFromBoard(boardId);
@@ -96,7 +86,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
         try
         {
             Board board = await _boardRepository.GetBoardById(boardId);
-            PlayerHasPermission(playerId, board);
+            PlayerHasBoardPermission(playerId, board);
 
             return await _boardcardRepository.GetBoardCardsFromBoard(boardId);
         }
@@ -126,7 +116,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
     }
 
 
-    public void PlayerHasPermission(int playerId, Board board)
+    public void PlayerHasBoardPermission(int playerId, Board board)
     {
         if (board.PlayerID != playerId)
         {
