@@ -27,7 +27,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e.Message, $"Error while creating Board. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -49,7 +48,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e.Message, $"Error while deleting Board with id {boardId}. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -89,7 +87,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e.Message, $"Error chosing a card on Board with id {boardId}. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -108,7 +105,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, $"Error updating card on Board with id {boardId}. (BoardService)");
             throw;
         }
@@ -137,7 +133,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, $"Error fetching Board from game with id {gameId}. (BoardService)");
             throw;
         }
@@ -150,11 +145,16 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
-                Board otherPlayersBoard;
+                PlayerCanGuessBoardCard(playerId, game);
+                Board otherPlayersBoard = null!;
+
+                if (game.Boards!.Count() < 2)
+                    throw new NullReferenceException($"Players board is null in game {game.GameID}.");
 
                 if (game.Boards!.ElementAt(0).PlayerID == playerId)
                     otherPlayersBoard = game.Boards!.ElementAt(1);
-                else
+
+                if (game.Boards!.ElementAt(1).PlayerID == playerId)
                     otherPlayersBoard = game.Boards!.ElementAt(0);
 
                 BoardCard guessedCard = await _boardCardRepository.GetBoardCardById(boardCardId);
@@ -175,7 +175,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e.Message, $"Error taking in guess on game wiht id {gameId}. (BoardService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -210,6 +209,14 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
         if ((isPlayerOne && game.State == State.P2_PICKING_PLAYER) || (!isPlayerOne && game.State == State.P1_PICKING_PLAYER))
             throw new InvalidOperationException("This action cannot be performed in this State");
+    }
+
+    public void PlayerCanGuessBoardCard(int playerId, Game game)
+    {
+        bool isPlayersTurn = (game.State == State.P1_TURN_STARTED && playerId == game.PlayerOneID) || (game.State == State.P2_TURN_STARTED && playerId == game.PlayerTwoID);
+
+        if (!isPlayersTurn)
+            throw new UnauthorizedAccessException($"Its not player {playerId}`s turn!");
     }
 
     private async Task<Board> CreatePlayerTwoBoard(int playerId, Game game)

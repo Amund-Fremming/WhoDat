@@ -1,13 +1,13 @@
 # TODO`S
 
-- [ ] WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
-- [ ] BUG UploadImageToCloudflare does not return the correct url
-- [ ] BUG CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
+- WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
+- BUG UploadImageToCloudflare does not return the correct url
+- BUG CreateBoardCards has bug, if only host choosing, return a unauthorized or so, p2 cannot chose cards if this is the state
 
-- [ ] TODO BoardCardServiceTest needs edge cases
-- [ ] TODO GameHubTest
-- [ ] TODO BoardServiceTest
-- [ ] TODO BoardCardServiceTest
+- TODO BoardCardServiceTest: Missing test classes
+- TODO BoardCardServiceTest: Missing complete CreateBoardCards method, make it shorter
+
+- REFACTOR backend repos, updating functions can be changed to just one
 
 <hr />
 
@@ -34,12 +34,12 @@
 - [x] Create Docs for Service Interfaces
 - [x] Create Docs for Repository Interfaces
 - [ ] Create tests for services
-- [?] Create tests for Repositories
-- [ ] Handling for reconnect when disconnected
-- [ ] Create premade cards and their endpoints
-- [ ] Add error handling in Services
-
+- [?] Handling for reconnect when disconnected (Maybe just broadcasting a message?)
+- [x] Add error handling in Services
+- [ ] ?? Remove logging when finished, remove try/catch from non transactions in service
 - [ ] Change authentication to use OAuth
+
+- [ ] Create premade cards and their endpoints
 - [ ] Setup Azure env
 - [ ] Setup github actions with test pipeline to dev / prod branch to azure
 
@@ -51,15 +51,14 @@
 - [x] Tweak Design
 - [ ] Add wrapper / provider for keyboard up (might also add scrollview)
 - [x] Add util classes for styles (colors) and styling functions for converting pixel values
-- [ ] Implement generic components
+- [x] Implement generic components
 - [x] Implement Navigation bar
-- [ ] Implement Routers / View-render for different screens
+- [x] Implement Routers / View-render for different screens
 - [ ] Implement the screens with their components
 - [ ] Implement the LoginWall
 - [ ] Add Token handling for security
 - [ ] Add input validation
 - [ ] Add user feedback when api fails
-- [ ] Test the app
 - [ ] Create docs
 
 <hr />

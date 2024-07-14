@@ -1,6 +1,6 @@
 namespace BoardCardEntityTest;
 
-public class BoardCardTest
+public class BoardCardServiceTest
 {
     public readonly Mock<ILogger<IBoardCardService>> _mockLogger;
     public readonly Mock<IBoardCardRepository> _mockBoardCardRepository;
@@ -10,7 +10,7 @@ public class BoardCardTest
     public readonly IBoardCardService _boardCardService;
     public readonly AppDbContext _context;
 
-    public BoardCardTest()
+    public BoardCardServiceTest()
     {
         _mockLogger = new Mock<ILogger<IBoardCardService>>();
         _mockBoardCardRepository = new Mock<IBoardCardRepository>();
@@ -34,9 +34,21 @@ public class BoardCardTest
                 );
     }
 
-    // CreateBoardCards_Successful_PlayerHasPermission
-    // CreateBoardCards_GameDoesNotExist_ShouldThrow
-    // CreateBoardCards_PlayerHasNotPermission_ShouldThrow
+    [Fact]
+    public async Task CreateBoardCards_Successful_PlayerHasPermission()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_GameDoesNotExist_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_PlayerHasNotPermission_ShouldThrow()
+    {
+    }
+
     // CreateBoardCards_InvalidPlayerPermission_ShouldThrow WITH ALL CASES
 
     ///

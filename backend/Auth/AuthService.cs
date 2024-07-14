@@ -41,7 +41,6 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, "Error while generating token. (AuthService)");
             throw;
         }
@@ -58,7 +57,6 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, "Error while generating salt. (AuthService)");
             throw;
         }
@@ -82,7 +80,6 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         catch (Exception e)
         {
             Console.WriteLine("Kastet?");
-            // ADD HANDLING
             _logger.LogError(e.Message, "Error while validating password with salt. (AuthService)");
             throw new UnauthorizedAccessException("Credentials not valid!");
         }
@@ -103,7 +100,6 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, "Error while validating password with salt. (AuthService)");
             throw;
         }

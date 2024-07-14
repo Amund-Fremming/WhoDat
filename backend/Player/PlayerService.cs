@@ -16,7 +16,6 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, $"Error while creating Player with id {player.PlayerID}. (PlayerService)");
             throw;
         }
@@ -32,7 +31,6 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, $"Error while deleting Player with id {playerId}. (PlayerService)");
             throw;
         }
@@ -49,7 +47,6 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, $"Error while updating username for Player with id {playerId}. (PlayerService)");
             throw;
         }
@@ -69,7 +66,6 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, $"Error while updating username for Player with id {playerId}. (PlayerService)");
             throw;
         }
@@ -83,7 +79,6 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, $"Error getting all players. (PlayerService)");
             throw;
         }
@@ -100,7 +95,6 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e.Message, "Error while generating salt. (PlayerService)");
             throw;
         }

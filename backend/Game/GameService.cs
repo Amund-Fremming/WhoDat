@@ -22,7 +22,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while creating Game with id {game.GameID}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -41,7 +40,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e, $"Error while deleting Game with id {gameId}. (GameService)");
             throw;
         }
@@ -66,7 +64,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while joining Game with id {gameId}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -95,7 +92,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while leaving Game with id {gameId}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -111,13 +107,13 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             {
                 Game game = await _gameRepository.GetGameById(gameId);
                 PlayerHasPermission(playerId, game);
-                await _gameRepository.UpdateGameState(game, state);
+                PlayerCanUpdateGame(playerId, game);
 
+                await _gameRepository.UpdateGameState(game, state);
                 await transaction.CommitAsync();
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while updating state in Game with id {gameId}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -135,7 +131,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
         catch (Exception e)
         {
-            // ADD HANDLING
             _logger.LogError(e, $"Error while getting players recent Game with PlayerID {playerId}. (GameService)");
             throw;
         }
@@ -169,7 +164,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             }
             catch (Exception e)
             {
-                // ADD HANDLING
                 _logger.LogError(e, $"Error while starting Game with ID {gameId}. (GameService)");
                 await transaction.RollbackAsync();
                 throw;
@@ -185,4 +179,17 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (GameService)");
         }
     }
+
+    public void PlayerCanUpdateGame(int playerId, Game game)
+    {
+        bool isPlayerOne = game.PlayerOneID == playerId;
+
+        if ((isPlayerOne && (game.State != State.P1_ASK_REPLIED && game.State != State.P1_TURN_STARTED && game.State != State.P1_GUESS_REPLIED)) ||
+            (!isPlayerOne && (game.State != State.P2_ASK_REPLIED && game.State != State.P2_TURN_STARTED && game.State != State.P2_GUESS_REPLIED)))
+        {
+            _logger.LogInformation($"Player with id {playerId} tried to update the state when not allowed.");
+            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission to update the state (GameService)");
+        }
+    }
 }
+

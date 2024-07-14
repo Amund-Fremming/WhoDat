@@ -124,7 +124,6 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
                 throw new Exception("Failed to upload image");
             }
         }
-
     }
 
     public void PlayerHasPermission(int playerId, Gallery gallery)
