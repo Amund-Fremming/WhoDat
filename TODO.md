@@ -5,9 +5,7 @@
 - BUG CeateBoard never created??
 
 - TODO CreateBoardCards: implementation
-  - maybe create both boards here
 - TODO BoardCardServiceTest: Missing test classes
-- TODO BoardCardServiceTest: Missing complete CreateBoardCards method, make it shorter
 
 - REFACTOR backend repos, updating functions can be changed to just one
 

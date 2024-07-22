@@ -14,34 +14,50 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-
             // NEED TO BE CHECKED
-            // - If host choosing and the player is player two, throw unauthorized
-            // - Create board before boardcards?
-            // - 
-            // - 
-            // - 
-
+            // - If state not choosing cards, throw
+            // - If p1 picking and p2 tries vise versa, throw
+            //
+            // - if not board one created create one
+            // - Only create board one, the second board get created on the call for getting the cards 
+            // - Only update the game state to finished when all 20 cards are made
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
-                int boardId = game.Boards!.ElementAt(0).BoardID;
+                if (game.State != State.ONLY_HOST_CHOSING_CARDS || game.State != State.BOTH_CHOSING_CARDS || game.State != State.P1_CHOOSING || game.State != State.P2_CHOOSING)
+                    throw new ArgumentException("This action is not allowed");
 
                 PlayerHasGamePermission(playerId, game);
                 ValidatePlayerPermissions(playerId, game, cardIds);
 
+                int boardId = game.Boards!.ElementAt(0).BoardID;
+
+                if (game.Boards!.ElementAt(0) == null)
+                {
+                    Board board = new Board(playerId, gameId);
+                    int newBoardId = await _boardRepository.CreateBoard(board);
+                    boardId = newBoardId;
+                }
+
                 if (game.State == State.ONLY_HOST_CHOSING_CARDS)
-                    cardIds = cardIds.Take(40);
-                else
                     cardIds = cardIds.Take(20);
+                else
+                    cardIds = cardIds.Take(10);
 
                 IEnumerable<BoardCard> newBoardCards = cardIds.Select(cardId => new BoardCard(boardId, cardId)).ToList();
+
+                bool isPlayerOne = game.PlayerOneID == playerId;
+                if (game.State == State.ONLY_HOST_CHOSING_CARDS || game.State == State.P1_CHOOSING && isPlayerOne || game.State == State.P2_CHOOSING && !isPlayerOne)
+                    game.State = State.BOTH_PICKING_PLAYER;
+                else if (game.State == State.BOTH_CHOSING_CARDS && isPlayerOne)
+                    game.State = State.P2_CHOOSING;
+                else if (game.State == State.BOTH_CHOSING_CARDS && !isPlayerOne)
+                    game.State = State.P1_CHOOSING;
 
                 await _gameRepository.UpdateGameState(game, game.State);
                 await _boardcardRepository.CreateBoardCards(newBoardCards);
                 await transaction.CommitAsync();
 
-                // return updated state not this
                 return game.State;
             }
             catch (Exception e)
@@ -102,11 +118,11 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
         if (game.State == State.ONLY_HOST_CHOSING_CARDS && game.PlayerOneID != playerId)
             throw new UnauthorizedAccessException($"Player {playerId} does not have permission to create cards");
 
-        if (game.State == State.ONLY_HOST_CHOSING_CARDS && cardIds.Count() != 40)
-            throw new ArgumentException("Too few cardIds provided, needs 40");
-
-        if ((game.State == State.BOTH_CHOSING_CARDS || game.State == State.P2_CHOOSING || game.State == State.P1_CHOOSING) && cardIds.Count() != 20)
+        if (game.State == State.ONLY_HOST_CHOSING_CARDS && cardIds.Count() != 20)
             throw new ArgumentException("Too few cardIds provided, needs 20");
+
+        if ((game.State == State.BOTH_CHOSING_CARDS || game.State == State.P2_CHOOSING || game.State == State.P1_CHOOSING) && cardIds.Count() != 10)
+            throw new ArgumentException("Too few cardIds provided, needs 10");
 
         if (game.State == State.P1_CHOOSING && game.PlayerTwoID == playerId)
             throw new UnauthorizedAccessException($"Player {playerId} does not have permission to create cards");
