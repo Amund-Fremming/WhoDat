@@ -14,13 +14,6 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
-            // NEED TO BE CHECKED
-            // - If state not choosing cards, throw
-            // - If p1 picking and p2 tries vise versa, throw
-            //
-            // - if not board one created create one
-            // - Only create board one, the second board get created on the call for getting the cards 
-            // - Only update the game state to finished when all 20 cards are made
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
@@ -35,8 +28,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
                 if (game.Boards!.ElementAt(0) == null)
                 {
                     Board board = new Board(playerId, gameId);
-                    int newBoardId = await _boardRepository.CreateBoard(board);
-                    boardId = newBoardId;
+                    boardId = await _boardRepository.CreateBoard(board);
                 }
 
                 if (game.State == State.ONLY_HOST_CHOSING_CARDS)
@@ -47,7 +39,9 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
                 IEnumerable<BoardCard> newBoardCards = cardIds.Select(cardId => new BoardCard(boardId, cardId)).ToList();
 
                 bool isPlayerOne = game.PlayerOneID == playerId;
-                if (game.State == State.ONLY_HOST_CHOSING_CARDS || game.State == State.P1_CHOOSING && isPlayerOne || game.State == State.P2_CHOOSING && !isPlayerOne)
+                if (game.State == State.P1_CHOOSING && isPlayerOne || game.State == State.P2_CHOOSING && !isPlayerOne)
+                    throw new ArgumentException("Player cannot create more BoardCards!");
+                else if (game.State == State.ONLY_HOST_CHOSING_CARDS || game.State == State.P1_CHOOSING && isPlayerOne || game.State == State.P2_CHOOSING && !isPlayerOne)
                     game.State = State.BOTH_PICKING_PLAYER;
                 else if (game.State == State.BOTH_CHOSING_CARDS && isPlayerOne)
                     game.State = State.P2_CHOOSING;

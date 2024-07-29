@@ -2,11 +2,8 @@
 
 - WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
 - BUG UploadImageToCloudflare does not return the correct url
-- BUG CeateBoard never created??
 
-- TODO CreateBoardCards: implementation
 - TODO BoardCardServiceTest: Missing test classes
-
 - REFACTOR backend repos, updating functions can be changed to just one
 
 <hr />
