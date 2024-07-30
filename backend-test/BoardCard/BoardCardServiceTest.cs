@@ -35,12 +35,80 @@ public class BoardCardServiceTest
     }
 
     [Fact]
-    public async Task CreateBoardCards_Successful_PlayerHasPermission()
+    public async Task CreateBoardCards_Successful_HostCreatedCards()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_Successful_PlayerOneCreatedTheLastCards()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_Successful_PlayerTwoCreatedTheLastCards()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_Successful_BothChoosingPlayerOneCreated()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_Successful_BothChoosingPlayerTwoCreated()
     {
     }
 
     [Fact]
     public async Task CreateBoardCards_GameDoesNotExist_ShouldThrow()
+    {
+        int playerId = 12;
+        int gameId = 2;
+        IEnumerable<int> cardIds = new List<int> { 1, 2, 3, 4, 5 };
+
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ThrowsAsync(new KeyNotFoundException($"Game with id {gameId}, does not exist!"));
+
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _boardCardService.CreateBoardCards(playerId, gameId, cardIds));
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_PlayerIsNotInGame_ShouldThrow()
+    {
+        int playerId = 12;
+        int gameId = 2;
+        IEnumerable<int> cardIds = new List<int> { 1, 2, 3, 4, 5 };
+
+        Game game = new Game(69, State.BOTH_CHOSING_CARDS);
+        game.GameID = gameId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardCardService.CreateBoardCards(playerId, gameId, cardIds));
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_PlayerOneHasChoosenCards_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_HostChoosingPlayerTwoTriesToCreate_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_HostChoosingCardsTooFewCards_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_PlayerOneChoosingCardsTooFewCards_ShouldThrow()
+    {
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_PlayerTwoChoosingCardsTooFewCards_ShouldThrow()
     {
     }
 
@@ -48,8 +116,6 @@ public class BoardCardServiceTest
     public async Task CreateBoardCards_PlayerHasNotPermission_ShouldThrow()
     {
     }
-
-    // CreateBoardCards_InvalidPlayerPermission_ShouldThrow WITH ALL CASES
 
     ///
 

@@ -17,8 +17,6 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             try
             {
                 Game game = await _gameRepository.GetGameById(gameId);
-                if (game.State != State.ONLY_HOST_CHOSING_CARDS || game.State != State.BOTH_CHOSING_CARDS || game.State != State.P1_CHOOSING || game.State != State.P2_CHOOSING)
-                    throw new ArgumentException("This action is not allowed");
 
                 PlayerHasGamePermission(playerId, game);
                 ValidatePlayerPermissions(playerId, game, cardIds);
@@ -29,6 +27,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
                 {
                     Board board = new Board(playerId, gameId);
                     boardId = await _boardRepository.CreateBoard(board);
+                    _logger.LogInformation("Board not created, creating board...");
                 }
 
                 if (game.State == State.ONLY_HOST_CHOSING_CARDS)
@@ -39,7 +38,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
                 IEnumerable<BoardCard> newBoardCards = cardIds.Select(cardId => new BoardCard(boardId, cardId)).ToList();
 
                 bool isPlayerOne = game.PlayerOneID == playerId;
-                if (game.State == State.P1_CHOOSING && isPlayerOne || game.State == State.P2_CHOOSING && !isPlayerOne)
+                if (game.State == State.P1_CHOOSING && !isPlayerOne || game.State == State.P2_CHOOSING && isPlayerOne)
                     throw new ArgumentException("Player cannot create more BoardCards!");
                 else if (game.State == State.ONLY_HOST_CHOSING_CARDS || game.State == State.P1_CHOOSING && isPlayerOne || game.State == State.P2_CHOOSING && !isPlayerOne)
                     game.State = State.BOTH_PICKING_PLAYER;
