@@ -88,33 +88,114 @@ public class BoardCardServiceTest
     }
 
     [Fact]
-    public async Task CreateBoardCards_PlayerOneHasChoosenCards_ShouldThrow()
+    public async Task CreateBoardCards_PlayerOneAlreadyHasChoosenCards_ShouldThrow()
     {
+        int playerId = 12;
+        int gameId = 2;
+        IEnumerable<int> cardIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+        Game game = new Game(playerId, State.P2_CHOOSING);
+        game.GameID = gameId;
+        game.PlayerOneID = playerId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardCardService.CreateBoardCards(playerId, gameId, cardIds));
+    }
+
+    [Fact]
+    public async Task CreateBoardCards_PlayerTwoAlreadyHasChoosenCards_ShouldThrow()
+    {
+        int playerId = 12;
+        int gameId = 2;
+        IEnumerable<int> cardIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+        Game game = new Game(playerId, State.P1_CHOOSING);
+        game.GameID = gameId;
+        game.PlayerTwoID = playerId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardCardService.CreateBoardCards(playerId, gameId, cardIds));
     }
 
     [Fact]
     public async Task CreateBoardCards_HostChoosingPlayerTwoTriesToCreate_ShouldThrow()
     {
+        int playerId = 12;
+        int gameId = 2;
+        IEnumerable<int> cardIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+
+        Game game = new Game(playerId, State.ONLY_HOST_CHOSING_CARDS);
+        game.GameID = gameId;
+        game.PlayerTwoID = playerId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardCardService.CreateBoardCards(playerId, gameId, cardIds));
     }
 
     [Fact]
     public async Task CreateBoardCards_HostChoosingCardsTooFewCards_ShouldThrow()
     {
+        int playerId = 12;
+        int gameId = 2;
+        IEnumerable<int> cardIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+        Game game = new Game(playerId, State.ONLY_HOST_CHOSING_CARDS);
+        game.GameID = gameId;
+        game.PlayerOneID = playerId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _boardCardService.CreateBoardCards(playerId, gameId, cardIds));
     }
 
     [Fact]
     public async Task CreateBoardCards_PlayerOneChoosingCardsTooFewCards_ShouldThrow()
     {
+        int playerId = 12;
+        int gameId = 2;
+        IEnumerable<int> cardIds = new List<int> { 1, 2, 3, 4, 5 };
+
+        Game game = new Game(playerId, State.P1_CHOOSING);
+        game.GameID = gameId;
+        game.PlayerOneID = playerId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _boardCardService.CreateBoardCards(playerId, gameId, cardIds));
     }
 
     [Fact]
     public async Task CreateBoardCards_PlayerTwoChoosingCardsTooFewCards_ShouldThrow()
     {
+        int playerId = 12;
+        int gameId = 2;
+        IEnumerable<int> cardIds = new List<int> { 1, 2, 3, 4, 5 };
+
+        Game game = new Game(playerId, State.P2_CHOOSING);
+        game.GameID = gameId;
+        game.PlayerTwoID = playerId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<ArgumentException>(() => _boardCardService.CreateBoardCards(playerId, gameId, cardIds));
     }
 
     [Fact]
     public async Task CreateBoardCards_PlayerHasNotPermission_ShouldThrow()
     {
+        int playerId = 12;
+        int gameId = 2;
+        IEnumerable<int> cardIds = new List<int> { 1, 2, 3, 4, 5 };
+
+        Game game = new Game(0, State.BOTH_CHOSING_CARDS);
+        game.GameID = gameId;
+        _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
+            .ReturnsAsync(game);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _boardCardService.CreateBoardCards(playerId, gameId, cardIds));
     }
 
     ///

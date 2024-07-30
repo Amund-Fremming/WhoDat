@@ -108,7 +108,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
 
     private void ValidatePlayerPermissions(int playerId, Game game, IEnumerable<int> cardIds)
     {
-        if (game.State == State.ONLY_HOST_CHOSING_CARDS && game.PlayerOneID != playerId)
+        if (game.State == State.ONLY_HOST_CHOSING_CARDS && game.PlayerTwoID == playerId)
             throw new UnauthorizedAccessException($"Player {playerId} does not have permission to create cards");
 
         if (game.State == State.ONLY_HOST_CHOSING_CARDS && cardIds.Count() != 20)
@@ -136,7 +136,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
 
     public void PlayerHasGamePermission(int playerId, Game game)
     {
-        if (game.PlayerOneID != playerId || game.PlayerTwoID != playerId)
+        if (game.PlayerOneID != playerId && game.PlayerTwoID != playerId)
         {
             _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
