@@ -27,15 +27,26 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.Cream,
     borderRadius: moderateScale(20),
     width: horizontalScale(345),
-    height: verticalScale(296),
+    height: verticalScale(350),
+    rowGap: verticalScale(30),
   },
 
-  inputContainer: {},
+  inputContainer: {
+    rowGap: verticalScale(5),
+  },
 
   iconAndInput: {
-    columnGap: horizontalScale(200),
+    columnGap: horizontalScale(15),
     flexDirection: "row",
-    alignItems: "center",
+  },
+
+  icon: {
+    paddingLeft: horizontalScale(5),
+  },
+
+  textInput: {
+    fontSize: moderateScale(22),
+    fontFamily: "InikaBold",
   },
 
   border: {
