@@ -5,6 +5,7 @@
 
 - TODO BoardCardServiceTest: Missing test classes
 - REFACTOR backend repos, updating functions can be changed to just one
+- REFACTOR frontend styling code to be less lines
 
 <hr />
 
