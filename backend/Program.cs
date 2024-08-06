@@ -1,18 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using PlayerEntity;
 using Hubs;
-using GalleryEntity;
-using GameEntity;
-using MessageEntity;
-using BoardEntity;
-using CardEntity;
-using BoardCardEntity;
 using Auth;
 using Microsoft.OpenApi.Models;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+builder.Services.AddScoped<IPlayerRepository, PlayerEntity.PlayerRepository>();
 builder.Services.AddScoped<IGalleryRepository, GalleryRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();

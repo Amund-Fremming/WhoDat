@@ -3,12 +3,12 @@ namespace Auth;
 [ApiController]
 [Route("api/auth")]
 public class AuthController(ILogger<AuthController> logger, IAuthService authService,
-        IPlayerService playerService, PlayerRepository playerRepository) : ControllerBase
+        IPlayerService playerService, IPlayerRepository playerRepository) : ControllerBase
 {
     public readonly ILogger<AuthController> _logger = logger;
     public readonly IAuthService _authService = authService;
     public readonly IPlayerService _playerService = playerService;
-    public readonly PlayerRepository _playerRepository = playerRepository;
+    public readonly IPlayerRepository _playerRepository = playerRepository;
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -61,6 +61,4 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
             return StatusCode(500, e.Message);
         }
     }
-
-
 }
