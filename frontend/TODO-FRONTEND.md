@@ -1,5 +1,13 @@
 # TODO - Frontend
 
+### Next
+
+- [ ] Fix backend regex
+- [ ] Fix redirect on correct login
+- [ ] Fix UI when error
+- [ ] Fix clearing of input on error
+- [ ] Fix keyboard up
+
 ### Generic
 
 - [x] Navigation

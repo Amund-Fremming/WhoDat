@@ -26,6 +26,7 @@ export function Register() {
 
     try {
       const response: IAuthResponse = await registerPlayer(player);
+      console.log(response.username);
 
       setToken(response.token);
       setPlayerID(response.playerID);
@@ -36,11 +37,6 @@ export function Register() {
         "Something went wrong, try another username."
       );
     }
-
-    // remove under this line when everything works
-    console.log("TOKEN: " + token);
-    console.log("PLAYERID: " + playerID);
-    console.log("USERNAME: " + username);
   };
 
   const handleInputValidationAndFeedback = (): boolean => {

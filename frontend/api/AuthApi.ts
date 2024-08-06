@@ -2,6 +2,9 @@ import { AUTH_ENDPOINT } from "./URL_PATHS";
 import { IRegistrationRequest, IAuthResponse } from "@/interfaces/AuthTypes";
 
 export const registerPlayer = async (request: IRegistrationRequest) => {
+  console.log(
+    `${AUTH_ENDPOINT}/register` === "http://localhost:5158/api/auth/register"
+  );
   try {
     const response = await fetch(`${AUTH_ENDPOINT}/register`, {
       method: "POST",
@@ -18,6 +21,7 @@ export const registerPlayer = async (request: IRegistrationRequest) => {
     const data: IAuthResponse = await response.json();
     return data;
   } catch (error) {
+    console.error("Error while registering a user " + error);
     throw new Error("Error while registering a user " + error);
   }
 };
