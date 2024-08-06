@@ -3,35 +3,38 @@ import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import { Splash } from "@/screens/Splash/Splash";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 export default function RootLayout() {
-    const [loadSplash, setLoadSplash] = useState<boolean>(true);
-    const [loaded] = useFonts({
-        SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-        Modak: require("../assets/fonts/Modak-Regular.ttf"),
-        Inika: require("../assets/fonts/Inika-Regular.ttf"),
-        InikaBold: require("../assets/fonts/Inika-Bold.ttf"),
-    });
+  const [loadSplash, setLoadSplash] = useState<boolean>(true);
+  const [loaded] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Modak: require("../assets/fonts/Modak-Regular.ttf"),
+    Inika: require("../assets/fonts/Inika-Regular.ttf"),
+    InikaBold: require("../assets/fonts/Inika-Bold.ttf"),
+  });
 
-    useEffect(() => {
-        if (loaded) {
-            const timer = setTimeout(() => {
-                setLoadSplash(false);
-            }, 300);
-
-            return () => clearTimeout(timer);
-        }
-    }, [loaded]);
-
-    if (loadSplash) {
-        return <Splash />;
-    }
-
+  useEffect(() => {
     if (loaded) {
-        return (
-            <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-        );
+      const timer = setTimeout(() => {
+        setLoadSplash(false);
+      }, 300);
+
+      return () => clearTimeout(timer);
     }
+  }, [loaded]);
+
+  if (loadSplash) {
+    return <Splash />;
+  }
+
+  if (loaded) {
+    return (
+      <AuthProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </AuthProvider>
+    );
+  }
 }
