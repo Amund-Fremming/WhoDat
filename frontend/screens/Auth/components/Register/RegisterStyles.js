@@ -22,13 +22,14 @@ export const styles = StyleSheet.create({
   },
 
   card: {
+    paddingTop: verticalScale(35),
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.Cream,
     borderRadius: moderateScale(20),
     width: horizontalScale(345),
-    height: verticalScale(350),
     rowGap: verticalScale(30),
+    paddingBottom: verticalScale(35),
   },
 
   inputContainer: {
@@ -54,5 +55,17 @@ export const styles = StyleSheet.create({
     height: verticalScale(9),
     backgroundColor: Colors.BorderGray,
     borderRadius: moderateScale(15),
+  },
+
+  loginAndRegisterNew: {
+    rowGap: verticalScale(10),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  registerNewText: {
+    color: Colors.BurgundyRed,
+    fontFamily: "InikaBold",
+    fontSize: moderateScale(14),
   },
 });

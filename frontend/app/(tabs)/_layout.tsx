@@ -3,9 +3,18 @@ import React from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import Auth from "@/screens/Auth/Auth";
+import { useEffect, useState } from "react";
+import { useAuthProvider } from "@/providers/AuthProvider";
 
 export default function TabLayout() {
-  if (true) {
+  const { token } = useAuthProvider();
+
+  const [playerLoggedIn, setPlayerLoggedIn] = useState<boolean>(false);
+  useEffect(() => {
+    if (token != "") setPlayerLoggedIn(true);
+  }, [token]);
+
+  if (!playerLoggedIn) {
     return <Auth />;
   }
 

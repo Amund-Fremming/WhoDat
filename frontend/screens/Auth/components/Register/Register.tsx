@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Alert } from "react-native";
+import { View, Text, TextInput, Alert, Pressable } from "react-native";
 import { styles } from "./RegisterStyles";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constants/Colors";
@@ -9,15 +9,19 @@ import { IAuthResponse, IRegistrationRequest } from "@/interfaces/AuthTypes";
 import { registerPlayer } from "@/api/AuthApi";
 import { useAuthProvider } from "@/providers/AuthProvider";
 
-export function Register() {
-  const { token, setToken, playerID, setPlayerID, username, setUsername } =
-    useAuthProvider();
+interface RegisterProps {
+  setView: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export function Register({ setView }: RegisterProps) {
+  const { setToken, setPlayerID, setUsername } = useAuthProvider();
 
   const [retypedPassword, setRetypedPassword] = useState<string>("");
-  const [player, setPlayer] = useState<IRegistrationRequest>({
-    username: "",
-    password: "",
-  });
+  const [registrationRequest, setRegistrationRequest] =
+    useState<IRegistrationRequest>({
+      username: "",
+      password: "",
+    });
 
   const handleRegister = async () => {
     const validInput: boolean = handleInputValidationAndFeedback();
@@ -25,7 +29,7 @@ export function Register() {
     console.log("Registering user...");
 
     try {
-      const response: IAuthResponse = await registerPlayer(player);
+      const response: IAuthResponse = await registerPlayer(registrationRequest);
       console.log(response.username);
 
       setToken(response.token);
@@ -40,17 +44,23 @@ export function Register() {
   };
 
   const handleInputValidationAndFeedback = (): boolean => {
-    if (player.username.length === 0 || player.password.length === 0) {
+    if (
+      registrationRequest.username.length === 0 ||
+      registrationRequest.password.length === 0
+    ) {
       Alert.alert("Invalid Input!", "Username and password cannot be empty.");
       return false;
     }
 
-    if (player.password !== retypedPassword) {
+    if (registrationRequest.password !== retypedPassword) {
       Alert.alert("Invalid Input!", "The passwords do not match.");
       return false;
     }
 
-    if (!validUsername(player.username) || player.username.length > 10) {
+    if (
+      !validUsername(registrationRequest.username) ||
+      registrationRequest.username.length > 10
+    ) {
       Alert.alert(
         "Invalid Input!",
         "Username can only consist of letters and numbers, with a max length of 10."
@@ -77,7 +87,10 @@ export function Register() {
               style={styles.textInput}
               placeholder="Username"
               onChangeText={(input: string) =>
-                setPlayer({ ...player, username: input })
+                setRegistrationRequest({
+                  ...registrationRequest,
+                  username: input,
+                })
               }
             />
           </View>
@@ -95,7 +108,10 @@ export function Register() {
               style={styles.textInput}
               placeholder="Password"
               onChangeText={(input: string) =>
-                setPlayer({ ...player, password: input })
+                setRegistrationRequest({
+                  ...registrationRequest,
+                  password: input,
+                })
               }
             />
           </View>
@@ -117,12 +133,17 @@ export function Register() {
           </View>
           <View style={styles.border}></View>
         </View>
-        <BigButton
-          text="Register"
-          color={Colors.BurgundyRed}
-          inverted={false}
-          onButtonPress={handleRegister}
-        />
+        <View style={styles.loginAndRegisterNew}>
+          <BigButton
+            text="Register"
+            color={Colors.BurgundyRed}
+            inverted={false}
+            onButtonPress={handleRegister}
+          />
+          <Pressable onPress={() => setView("LOGIN")}>
+            <Text style={styles.registerNewText}>Go to Login</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );
