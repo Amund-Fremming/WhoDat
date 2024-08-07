@@ -1,15 +1,13 @@
 import { View, Text } from "react-native";
 import { useEffect, useState } from "react";
-
 import { Colors } from "@/constants/Colors";
 import { ICard } from "@/interfaces/ICard";
-
 import BigButton from "@/components/BigButton/BigButton";
 import Card from "./components/Card/Card";
 import CardModal from "./components/CardModal/CardModal";
-
-import { mockCards } from "@/constants/Mockdata";
 import styles from "./GalleryStyles";
+import { AddCard } from "./components/AddCard/AddCard";
+import AddCardModal from "./components/AddCardModal/AddCardModal";
 
 const defaultCard: ICard = {
   cardId: -1,
@@ -19,13 +17,15 @@ const defaultCard: ICard = {
 };
 
 export default function Gallery() {
+  const [addCardModalVisible, setAddCardModalVisible] =
+    useState<boolean>(false);
   const [cardModalVisible, setCardModalVisible] = useState<boolean>(false);
   const [cardPressed, setCardPressed] = useState<ICard>(defaultCard);
   const [cards, setCards] = useState<ICard[]>([]);
 
   useEffect(() => {
     // Fetch cards
-    setCards(mockCards);
+    // set cards
   }, []);
 
   const handleCardPressed = (card: ICard) => {
@@ -50,6 +50,11 @@ export default function Gallery() {
         onDeleteCardPressed={() => handleDeleteCardPressed(cardPressed)}
       />
 
+      <AddCardModal
+        modalVisible={addCardModalVisible}
+        setModalVisible={setAddCardModalVisible}
+      />
+
       <View
         style={{
           ...styles.container,
@@ -66,6 +71,9 @@ export default function Gallery() {
                 onCardPress={() => handleCardPressed(card)}
               />
             ))}
+            {cards.length < 20 && (
+              <AddCard onAddCardPress={() => setAddCardModalVisible(true)} />
+            )}
           </View>
           <View style={styles.buttonWrapper}>
             <BigButton
