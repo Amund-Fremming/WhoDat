@@ -1,11 +1,20 @@
-import { View, Text, TextInput, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { styles } from "./LoginStyles";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constants/Colors";
 import BigButton from "@/components/BigButton/BigButton";
-import { ILoginRequest } from "@/interfaces/AuthTypes";
+import { IAuthResponse, ILoginRequest } from "@/interfaces/AuthTypes";
 import { useState } from "react";
 import { useAuthProvider } from "@/providers/AuthProvider";
+import { loginPlayer } from "@/api/AuthApi";
 
 interface LoginProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
@@ -19,12 +28,25 @@ export function Login({ setView }: LoginProps) {
     password: "",
   });
 
-  const handleLogin = () => {
-    // TODO
+  const handleLogin = async () => {
+    try {
+      const response: IAuthResponse = await loginPlayer(loginRequest);
+
+      console.log(response.username);
+
+      setToken(response.token);
+      setPlayerID(response.playerID);
+      setUsername(response.username);
+    } catch (error) {
+      Alert.alert("Invalid Login!", "The username or password was wrong!");
+    }
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <Text style={styles.header}>Login</Text>
       <View style={styles.card}>
         <View style={styles.inputContainer}>
@@ -38,6 +60,7 @@ export function Login({ setView }: LoginProps) {
             <TextInput
               style={styles.textInput}
               placeholder="Username"
+              placeholderTextColor={"gray"}
               onChangeText={(input: string) =>
                 setLoginRequest({ ...loginRequest, username: input })
               }
@@ -56,6 +79,7 @@ export function Login({ setView }: LoginProps) {
             <TextInput
               style={styles.textInput}
               placeholder="Password"
+              placeholderTextColor={"gray"}
               onChangeText={(input: string) =>
                 setLoginRequest({ ...loginRequest, password: input })
               }
@@ -75,6 +99,6 @@ export function Login({ setView }: LoginProps) {
           </Pressable>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

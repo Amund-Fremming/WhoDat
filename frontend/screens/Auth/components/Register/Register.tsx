@@ -1,4 +1,12 @@
-import { View, Text, TextInput, Alert, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Alert,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { styles } from "./RegisterStyles";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/constants/Colors";
@@ -30,7 +38,6 @@ export function Register({ setView }: RegisterProps) {
 
     try {
       const response: IAuthResponse = await registerPlayer(registrationRequest);
-      console.log(response.username);
 
       setToken(response.token);
       setPlayerID(response.playerID);
@@ -72,7 +79,10 @@ export function Register({ setView }: RegisterProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <Text style={styles.header}>Register</Text>
       <View style={styles.card}>
         <View style={styles.inputContainer}>
@@ -86,6 +96,7 @@ export function Register({ setView }: RegisterProps) {
             <TextInput
               style={styles.textInput}
               placeholder="Username"
+              placeholderTextColor={"gray"}
               onChangeText={(input: string) =>
                 setRegistrationRequest({
                   ...registrationRequest,
@@ -107,6 +118,7 @@ export function Register({ setView }: RegisterProps) {
             <TextInput
               style={styles.textInput}
               placeholder="Password"
+              placeholderTextColor={"gray"}
               onChangeText={(input: string) =>
                 setRegistrationRequest({
                   ...registrationRequest,
@@ -128,6 +140,7 @@ export function Register({ setView }: RegisterProps) {
             <TextInput
               style={styles.textInput}
               placeholder="Retype password"
+              placeholderTextColor={"gray"}
               onChangeText={(input: string) => setRetypedPassword(input)}
             />
           </View>
@@ -145,6 +158,6 @@ export function Register({ setView }: RegisterProps) {
           </Pressable>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
