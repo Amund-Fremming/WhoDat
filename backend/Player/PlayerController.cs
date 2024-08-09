@@ -69,7 +69,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         try
         {
             int playerId = ParsePlayerIdClaim();
-            cardDto.Card!.GalleryID = galleryId;
+            cardDto.GalleryID = galleryId;
             int cardId = await _cardService.CreateCard(playerId, cardDto);
 
             return Ok($"Card Created {cardId}");
@@ -80,6 +80,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
     }
 
+    /*
     // RM - for monetization
     [HttpPut("galleries/{galleryId}/cards/{cardId}")]
     [Authorize(Roles = "ADMIN,USER")]
@@ -99,6 +100,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
             return HandleException(e);
         }
     }
+    */
 
     [HttpDelete("galleries/{galleryId}/cards/{cardId}")]
     [Authorize(Roles = "ADMIN,USER")]

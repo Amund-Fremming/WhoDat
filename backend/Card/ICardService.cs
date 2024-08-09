@@ -30,7 +30,7 @@ public interface ICardService
     /// <exception cref="KeyNotFoundException">Throws if the card or gallery does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the gallery.</exception>
     /// <exception cref="InvalidOperationException">Throws if there is no image file present in the dto.</exception>
-    public Task UpdateCard(int playerId, CardInputDto newCardDto);
+    //public Task UpdateCard(int playerId, CardInputDto newCardDto);
 
     /// <summary>
     /// Retrives all cards from a gallery.

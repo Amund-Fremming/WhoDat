@@ -11,10 +11,10 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
     {
         try
         {
-            Card card = cardDto.Card!;
+            string name = cardDto.Name!;
             IFormFile? file = cardDto.Image;
 
-            Gallery gallery = await _galleryRepository.GetGalleryById(card.GalleryID);
+            Gallery gallery = await _galleryRepository.GetGalleryById(cardDto.GalleryID);
             PlayerHasPermission(playerId, gallery);
 
             if (file == null || file.Length == 0)
@@ -23,6 +23,8 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
             }
 
             string imageUrl = await UploadImageToCloudflare(file!);
+            Card card = new Card(gallery.GalleryID);
+            card.Name = name;
             card.Url = imageUrl;
 
             return await _cardRepository.CreateCard(card);
@@ -30,7 +32,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
         catch (Exception e)
         {
             // ADD HANDLING
-            _logger.LogError(e.Message, $"Error while creating Card with id {cardDto.Card!.CardID}. (CardService)");
+            _logger.LogError(e.Message, $"Error while creating Card with id {cardDto.GalleryID}. (CardService)");
             throw;
         }
     }
@@ -53,6 +55,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
         }
     }
 
+    /*
     // RM - Maybe make players pay for more cards?
     public async Task UpdateCard(int playerId, CardInputDto newCardDto)
     {
@@ -82,6 +85,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
             throw;
         }
     }
+    */
 
     public async Task<IEnumerable<Card>> GetAllCards(int playerId, int galleryId)
     {
