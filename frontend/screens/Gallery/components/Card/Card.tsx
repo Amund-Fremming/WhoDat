@@ -1,4 +1,4 @@
-import { ICard } from "@/interfaces/ICard";
+import { ICard } from "@/interfaces/GalleryTypes";
 import { View, Image, Pressable } from "react-native";
 import { styles, imageStyles } from "./CardStyles";
 import StrokedText from "@/components/StokedText/StrokedText";

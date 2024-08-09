@@ -3,7 +3,7 @@ import { styles, imageStyles } from "./CardModalStyles";
 import BigButton from "@/components/BigButton/BigButton";
 import { Colors } from "@/constants/Colors";
 import StrokedText from "@/components/StokedText/StrokedText";
-import { ICard } from "@/interfaces/ICard";
+import { ICard } from "@/interfaces/GalleryTypes";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -92,7 +92,6 @@ export default function CardModal({
               </View>
             </>
           )}
-
           {editMode && (
             <>
               <TextInput

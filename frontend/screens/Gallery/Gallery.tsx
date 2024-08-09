@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
-import { ICard } from "@/interfaces/ICard";
+import { ICard } from "@/interfaces/GalleryTypes";
 import BigButton from "@/components/BigButton/BigButton";
 import Card from "./components/Card/Card";
 import CardModal from "./components/CardModal/CardModal";
