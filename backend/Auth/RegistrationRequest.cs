@@ -2,7 +2,7 @@ namespace Auth;
 
 public class RegistrationRequest
 {
-    //[Required]
+    [Required]
     [StringLength(10, MinimumLength = 3)]
     [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "Only alphanumeric characters are allowed.")]
     public string Username { get; set; }
