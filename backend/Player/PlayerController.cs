@@ -128,7 +128,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
             int playerId = ParsePlayerIdClaim();
             await _galleryService.CreateGallery(playerId, gallery);
 
-            return Ok("Card Deleted!");
+            return Ok("Gallery Created!");
         }
         catch (Exception e)
         {
@@ -145,7 +145,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
             int playerId = ParsePlayerIdClaim();
             await _galleryService.DeleteGallery(playerId, galleryId);
 
-            return Ok("Card Deleted!");
+            return Ok("Gallery Deleted!");
         }
         catch (Exception e)
         {
