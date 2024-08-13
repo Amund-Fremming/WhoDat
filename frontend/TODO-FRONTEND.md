@@ -2,10 +2,10 @@
 
 ### Next
 
-- [ ] Fix backend regex
-- [x] Fix redirect on correct login
-- [x] Fix UI when error
-- [x] Fix keyboard up
+- [ ] Add api calls for cards
+- [ ] make adding work
+- [ ] New gallery functionallity
+- [ ] browse gallery functionallity
 
 ### Generic
 
