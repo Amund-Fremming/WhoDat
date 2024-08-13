@@ -7,6 +7,8 @@
 - [ ] New gallery functionallity
 - [ ] browse gallery functionallity
 
+- [ ] Change getGallery to getAllGalleries or getAllCardsFromGalleries or so, getting by id dont really work
+
 ### Generic
 
 - [x] Navigation

@@ -8,6 +8,7 @@ import CardModal from "./components/CardModal/CardModal";
 import styles from "./GalleryStyles";
 import { AddCard } from "./components/AddCard/AddCard";
 import AddCardModal from "./components/AddCardModal/AddCardModal";
+import { getCardsFromGallery } from "@/api/GalleryApi";
 
 const defaultCard: ICard = {
   cardId: -1,
@@ -24,8 +25,12 @@ export default function Gallery() {
   const [cards, setCards] = useState<ICard[]>([]);
 
   useEffect(() => {
-    // Fetch cards
-    // set cards
+    try {
+      getCardsFromGallery(1);
+      console.log("Fetched cards from gallery");
+    } catch (error) {
+      console.error("Fetching cards failed");
+    }
   }, []);
 
   const handleCardPressed = (card: ICard) => {
