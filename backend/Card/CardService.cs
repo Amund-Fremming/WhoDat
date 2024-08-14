@@ -130,6 +130,20 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
         }
     }
 
+    public async Task<IEnumerable<Card>> GetAllCardsFromAllGalleries(int playerId)
+    {
+        try
+        {
+            return await _cardRepository.GetAllCardsFromAllGalleries(playerId);
+        }
+        catch (Exception e)
+        {
+            // ADD HANDLING
+            _logger.LogError(e.Message, $"Error while getting all cards. (CardService)");
+            throw;
+        }
+    }
+
     public void PlayerHasPermission(int playerId, Gallery gallery)
     {
         if (playerId != gallery.PlayerID)

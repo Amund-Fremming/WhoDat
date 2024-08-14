@@ -96,6 +96,9 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             Player player = new Player(request.Username, hashedPassword, salt, Role.USER);
             await _playerService.CreatePlayer(player);
 
+            Gallery gallery = new Gallery(player.PlayerID, "Default");
+            await _galleryService.CreateGallery(player.PlayerID, gallery);
+
             return player;
         }
         catch (Exception e)

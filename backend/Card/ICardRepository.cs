@@ -35,4 +35,11 @@ public interface ICardRepository
     /// <param name="galleryId">The gallery to fetch cards from.</param>
     /// <returns>An Enumerable of cards.</returns>
     Task<IEnumerable<Card>> GetAllCards(int galleryId);
+
+    /// <summary>
+    /// Fetches all Cards that a user has, from across all galleries 
+    /// </summary>
+    /// <param name="playerId">The player to fetch cards from.</param>
+    /// <returns>An Enumerable of cards.</returns>
+    Task<IEnumerable<Card>> GetAllCardsFromAllGalleries(int playerId);
 }

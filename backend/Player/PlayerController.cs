@@ -45,6 +45,23 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
     }
 
+    [HttpGet("galleries/allcards")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult<IEnumerable<Card>>> GetAllPlayerCards()
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+
+            IEnumerable<Card> cards = await _cardService.GetAllCardsFromAllGalleries(playerId);
+            return Ok(cards);
+        }
+        catch (Exception e)
+        {
+            return HandleException(e);
+        }
+    }
+
     [HttpGet("galleries/{galleryId}/cards")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult<IEnumerable<Card>>> GetPlayerGalleryCards(int galleryId)
