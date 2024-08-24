@@ -4,6 +4,9 @@ import BigButton from "@/components/BigButton/BigButton";
 import { Colors } from "@/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
+import { ICardInputDto } from "@/interfaces/GalleryTypes";
+import { addCardToGallery } from "@/api/GalleryApi";
+import { useAuthProvider } from "@/providers/AuthProvider";
 
 interface AddCardModalProps {
   modalVisible: boolean;
@@ -16,9 +19,7 @@ export default function AddCardModal({
 }: AddCardModalProps) {
   const [nameInput, setNameInput] = useState<string>("");
 
-  const handleAddCard = () => {
-    // TODO
-  };
+  const { token } = useAuthProvider();
 
   const handleNameInput = (input: string) => {
     if (input.length > 9) {
@@ -29,6 +30,14 @@ export default function AddCardModal({
 
     input = input.toLowerCase();
     setNameInput(input.charAt(0).toUpperCase() + input.slice(1));
+  };
+
+  const handleAddCard = () => {
+    try {
+      addCardToGallery(galleryId, cardDto, token);
+    } catch (error) {
+      console.error("Adding card failed");
+    }
   };
 
   return (

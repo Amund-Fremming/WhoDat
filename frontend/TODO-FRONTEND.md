@@ -2,10 +2,7 @@
 
 ### Next
 
-- [x] Add api calls for cards
-- [ ] Add api from frontend to get all cards
 - [ ] make adding work
-- [ ] New gallery functionallity (just create manually when is full
 - [ ] next gallery/page functionality, just render 25, then 25 and so on
 
 ### Generic

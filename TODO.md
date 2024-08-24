@@ -1,5 +1,13 @@
 # TODO`S
 
+- [ ] Build backend to just have one gallery
+  - [ ] Adding cards to this gallery
+  - [ ] Removing cards to this gallery
+- [ ] make adding work
+- [ ] next gallery/page functionality, just render 25, then 25 and so on
+
+<hr />
+
 - WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
 - BUG UploadImageToCloudflare does not return the correct url
 
