@@ -10,7 +10,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IPlayerRepository, PlayerEntity.PlayerRepository>();
-builder.Services.AddScoped<IGalleryRepository, GalleryRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
@@ -18,7 +17,6 @@ builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IBoardCardRepository, BoardCardRepository>();
 
 builder.Services.AddScoped<IPlayerService, PlayerService>();
-builder.Services.AddScoped<IGalleryService, GalleryService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IBoardService, BoardService>();

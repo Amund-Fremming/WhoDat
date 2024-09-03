@@ -2,11 +2,10 @@ namespace PlayerEntity;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlayerController(ILogger<PlayerController> logger, IPlayerService playerService, IGalleryService galleryService, ICardService cardService) : ControllerBase
+public class PlayerController(ILogger<PlayerController> logger, IPlayerService playerService, ICardService cardService) : ControllerBase
 {
     public readonly ILogger<PlayerController> _logger = logger;
     public readonly IPlayerService _playerService = playerService;
-    public readonly IGalleryService _galleryService = galleryService;
     public readonly ICardService _cardService = cardService;
 
     [HttpPut("players/update-username")]
@@ -119,56 +118,6 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     }
     */
 
-    [HttpDelete("galleries/{galleryId}/cards/{cardId}")]
-    [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> DeleteCardInGallery(int galleryId, int cardId)
-    {
-        try
-        {
-            int playerId = ParsePlayerIdClaim();
-            await _cardService.DeleteCard(playerId, cardId);
-
-            return Ok("Card Deleted!");
-        }
-        catch (Exception e)
-        {
-            return HandleException(e);
-        }
-    }
-
-    [HttpPost("galleries")]
-    [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> CreateGallery([FromBody] Gallery gallery)
-    {
-        try
-        {
-            int playerId = ParsePlayerIdClaim();
-            await _galleryService.CreateGallery(playerId, gallery);
-
-            return Ok("Gallery Created!");
-        }
-        catch (Exception e)
-        {
-            return HandleException(e);
-        }
-    }
-
-    [HttpDelete("galleries/{galleryId}")]
-    [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> DeleteGallery(int galleryId)
-    {
-        try
-        {
-            int playerId = ParsePlayerIdClaim();
-            await _galleryService.DeleteGallery(playerId, galleryId);
-
-            return Ok("Gallery Deleted!");
-        }
-        catch (Exception e)
-        {
-            return HandleException(e);
-        }
-    }
 
     private ActionResult HandleException(Exception exception)
     {

@@ -1,3 +1,9 @@
+## Todos - remove gallery
+
+- [ ] Create Crud for cards
+- [ ] Get All cards
+- [ ] Fiks that the app can run again
+
 # TODO`S
 
 - [ ] Build backend to just have one gallery
