@@ -44,15 +44,15 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
     }
 
-    [HttpGet("galleries/allcards")]
+    [HttpGet("cards/allcards")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<IEnumerable<Card>>> GetAllPlayerCards()
+    public async Task<ActionResult<IEnumerable<Card>>> GetAllCards()
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
 
-            IEnumerable<Card> cards = await _cardService.GetAllCardsFromAllGalleries(playerId);
+            IEnumerable<Card> cards = await _cardService.GetAllCards(playerId);
             return Ok(cards);
         }
         catch (Exception e)
@@ -61,31 +61,13 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
     }
 
-    [HttpGet("galleries/{galleryId}/cards")]
+    [HttpPost("cards/add")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<IEnumerable<Card>>> GetPlayerGalleryCards(int galleryId)
+    public async Task<ActionResult> AddCard([FromForm] CardInputDto cardDto)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-
-            IEnumerable<Card> cards = await _cardService.GetAllCards(playerId, galleryId);
-            return Ok(cards);
-        }
-        catch (Exception e)
-        {
-            return HandleException(e);
-        }
-    }
-
-    [HttpPost("galleries/{galleryId}/cards")]
-    [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> AddCardToGallery(int galleryId, [FromForm] CardInputDto cardDto)
-    {
-        try
-        {
-            int playerId = ParsePlayerIdClaim();
-            cardDto.GalleryID = galleryId;
             int cardId = await _cardService.CreateCard(playerId, cardDto);
 
             return Ok($"Card Created {cardId}");
@@ -95,29 +77,6 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
             return HandleException(e);
         }
     }
-
-    /*
-    // RM - for monetization
-    [HttpPut("galleries/{galleryId}/cards/{cardId}")]
-    [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdateCardInGallery(int galleryId, int cardId, [FromForm] CardInputDto updatedCardDto)
-    {
-        try
-        {
-            updatedCardDto.Card!.GalleryID = galleryId;
-            updatedCardDto.Card!.CardID = cardId;
-            int playerId = ParsePlayerIdClaim();
-            await _cardService.UpdateCard(playerId, updatedCardDto);
-
-            return Ok("Card Updated!");
-        }
-        catch (Exception e)
-        {
-            return HandleException(e);
-        }
-    }
-    */
-
 
     private ActionResult HandleException(Exception exception)
     {

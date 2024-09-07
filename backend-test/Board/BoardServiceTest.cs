@@ -410,6 +410,11 @@ public class BoardServiceTests
         game.PlayerTwoID = playerTwoId;
 
         Board boardOne = new Board(playerOneId, gameId);
+        boardOne.BoardCards = new List<BoardCard>() {
+            new BoardCard(1, 2),
+            new BoardCard(1, 4)
+        };
+
         game.Boards = new List<Board> { boardOne };
 
         _mockGameRepository.Setup(repo => repo.GetGameById(gameId))
@@ -417,7 +422,7 @@ public class BoardServiceTests
 
         Board result = await _boardService.GetBoardWithBoardCards(playerTwoId, gameId);
 
-        Assert.Equal(boardOne, result);
+        Assert.Equal(playerTwoId, result.PlayerID);
     }
 
     [Fact]

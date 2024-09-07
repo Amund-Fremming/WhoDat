@@ -1,12 +1,10 @@
 global using Microsoft.EntityFrameworkCore;
-global using Microsoft.Extensions.Logging;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.EntityFrameworkCore.Diagnostics;
 global using Microsoft.AspNetCore.SignalR;
-
 
 global using System.Security.Claims;
 global using System.IdentityModel.Tokens.Jwt;
@@ -20,7 +18,6 @@ global using BoardEntity;
 global using GameEntity;
 global using PlayerEntity;
 global using BoardCardEntity;
-global using GalleryEntity;
 global using CardEntity;
 global using MessageEntity;
 

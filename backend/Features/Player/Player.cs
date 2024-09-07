@@ -9,7 +9,7 @@ public class Player
     public string PasswordHash { get; set; }
     public string PasswordSalt { get; set; }
     public Role Role { get; set; }
-    public Gallery? Gallery { get; set; }
+    public IEnumerable<Card>? Cards { get; set; }
     public IEnumerable<Board>? Boards { get; set; }
     public IEnumerable<Message>? Messages { get; set; }
     public IEnumerable<Game>? GamesAsPlayerOne { get; set; }
