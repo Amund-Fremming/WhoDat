@@ -1,24 +1,23 @@
-namespace PlayerEntity;
+namespace CardEntity;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlayerController(ILogger<PlayerController> logger, IPlayerService playerService, ICardService cardService) : ControllerBase
+public class CardController(ILogger<PlayerController> logger, IPlayerService playerService, ICardService cardService) : ControllerBase
 {
     public readonly ILogger<PlayerController> _logger = logger;
     public readonly IPlayerService _playerService = playerService;
     public readonly ICardService _cardService = cardService;
 
-    [HttpPut("players/update-username")]
+    [HttpGet("all")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdatePlayerUsername([FromBody] string newUsername)
+    public async Task<ActionResult<IEnumerable<Card>>> GetAllCards()
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            string encodedNewUsername = EncodeForJsAndHtml(newUsername);
 
-            await _playerService.UpdateUsername(playerId, encodedNewUsername);
-            return Ok("Username Updated!");
+            IEnumerable<Card> cards = await _cardService.GetAllCards(playerId);
+            return Ok(cards);
         }
         catch (Exception e)
         {
@@ -26,17 +25,33 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
     }
 
-    [HttpPut("players/update-password")]
+    [HttpPost("add")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdatePlayerPassword([FromBody] string newPassword)
+    public async Task<ActionResult> AddCard([FromForm] CardInputDto cardDto)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            string encodedNewPassword = EncodeForJsAndHtml(newPassword);
+            int cardId = await _cardService.CreateCard(playerId, cardDto);
 
-            await _playerService.UpdatePassword(playerId, encodedNewPassword);
-            return Ok("Password Updated!");
+            return Ok($"Card Created {cardId}");
+        }
+        catch (Exception e)
+        {
+            return HandleException(e);
+        }
+    }
+
+    [HttpPost("delete/{cardId}")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult> DeleteCard(int cardId)
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            await _cardService.DeleteCard(playerId, cardId);
+
+            return Ok($"Card Deleted{cardId}");
         }
         catch (Exception e)
         {
@@ -63,7 +78,4 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
 
     [NonAction]
     private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
-
-    [NonAction]
-    private string EncodeForJsAndHtml(string input) => JavaScriptEncoder.Default.Encode(HtmlEncoder.Default.Encode(input));
 }

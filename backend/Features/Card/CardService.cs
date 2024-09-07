@@ -14,9 +14,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
             IFormFile? file = cardDto.Image;
 
             if (file == null || file.Length == 0)
-            {
                 throw new ArgumentNullException($"No image present!");
-            }
 
             string imageUrl = await UploadImageToCloudflare(file!);
             Card card = new Card(playerId);

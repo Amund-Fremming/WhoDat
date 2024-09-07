@@ -125,11 +125,6 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             if (game.Boards!.Count() <= 1)
                 return await CreatePlayerTwoBoard(playerId, game);
 
-            /*
-
-            if (playerTwoBoard == null && playerTwoBoard.PlayerID == playerId)
-                return await CreatePlayerTwoBoard(playerId, game);
-*/
             Board playerTwoBoard = game.Boards!.ElementAt(1);
 
             if (playerTwoBoard.PlayerID == playerId)

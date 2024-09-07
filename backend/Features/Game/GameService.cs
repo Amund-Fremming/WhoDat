@@ -144,20 +144,9 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             {
                 Player player = await _playerRepository.GetPlayerById(playerId);
                 Game game = await _gameRepository.GetGameById(gameId);
+
                 PlayerHasPermission(playerId, game);
-
-                if (game.State != State.BOTH_PICKED_PLAYERS)
-                    throw new ArgumentOutOfRangeException("Game cannot start at this state!");
-
-                if (game.PlayerOneID == null || game.PlayerTwoID == null)
-                    throw new ArgumentOutOfRangeException("Game cannot start, missing players!");
-
-                Board playerOneBoard = game.Boards!.ElementAt(0);
-                Board playerTwoBoard = game.Boards!.ElementAt(1) ??
-                    throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not created their board!");
-
-                if (playerOneBoard.ChosenCardID == null || playerTwoBoard.ChosenCardID == null)
-                    throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not choosen boardcard!");
+                GameInValidState(game);
 
                 await _gameRepository.UpdateGameState(game, State.P1_TURN_STARTED);
                 return State.P1_TURN_STARTED;
@@ -169,6 +158,22 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
                 throw;
             }
         }
+    }
+
+    public void GameInValidState(Game game)
+    {
+        if (game.State != State.BOTH_PICKED_PLAYERS)
+            throw new ArgumentOutOfRangeException("Game cannot start at this state!");
+
+        if (game.PlayerOneID == null || game.PlayerTwoID == null)
+            throw new ArgumentOutOfRangeException("Game cannot start, missing players!");
+
+        Board playerOneBoard = game.Boards!.ElementAt(0);
+        Board playerTwoBoard = game.Boards!.ElementAt(1) ??
+            throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not created their board!");
+
+        if (playerOneBoard.ChosenCardID == null || playerTwoBoard.ChosenCardID == null)
+            throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not choosen boardcard!");
     }
 
     public void PlayerHasPermission(int playerId, Game game)
