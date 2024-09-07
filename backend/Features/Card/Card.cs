@@ -7,8 +7,8 @@ public class Card
     public int CardID { get; set; }
 
     [Range(1, 10000000)]
-    public int GalleryID { get; set; }
-    public Gallery? Gallery { get; set; }
+    public int PlayerID { get; set; }
+    public Player? Player { get; set; }
 
     [StringLength(15, MinimumLength = 3)]
     [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "Only alphanumeric characters are allowed.")]
@@ -22,9 +22,9 @@ public class Card
 
     public Card() { }
 
-    public Card(int galleryId)
+    public Card(int playerId)
     {
-        GalleryID = galleryId;
+        PlayerID = playerId;
     }
 }
 

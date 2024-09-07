@@ -13,7 +13,6 @@ global using BoardEntity;
 global using GameEntity;
 global using PlayerEntity;
 global using BoardCardEntity;
-global using GalleryEntity;
 global using CardEntity;
 global using MessageEntity;
 global using ExceptionNamespace;

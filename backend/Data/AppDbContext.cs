@@ -3,7 +3,6 @@ namespace Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Player> Player { get; set; }
-    public DbSet<Gallery> Gallery { get; set; }
     public DbSet<Game> Game { get; set; }
     public DbSet<Message> Message { get; set; }
     public DbSet<Board> Board { get; set; }
@@ -26,25 +25,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Player>()
             .HasKey(p => p.PlayerID);
 
-        setupGallery(modelBuilder);
         setupGame(modelBuilder);
         setupMessage(modelBuilder);
         setupBoard(modelBuilder);
         setupCard(modelBuilder);
         setupBoardCard(modelBuilder);
 
-    }
-
-    private void setupGallery(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Gallery>()
-            .HasKey(g => g.GalleryID);
-
-        modelBuilder.Entity<Gallery>()
-            .HasOne(g => g.Player)
-            .WithOne(p => p.Gallery)
-            .HasForeignKey<Gallery>(g => g.PlayerID)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private void setupGame(ModelBuilder modelBuilder)
@@ -113,9 +99,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasKey(c => c.CardID);
 
         modelBuilder.Entity<Card>()
-            .HasOne(c => c.Gallery)
-            .WithMany(g => g.Cards)
-            .HasForeignKey(c => c.GalleryID)
+            .HasOne(c => c.Player)
+            .WithMany(p => p.Cards)
+            .HasForeignKey(c => c.PlayerID)
             .OnDelete(DeleteBehavior.Cascade);
     }
 

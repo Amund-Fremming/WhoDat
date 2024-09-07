@@ -2,10 +2,9 @@ namespace Admin;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AdminController(IPlayerService playerService, IGalleryService galleryService) : ControllerBase
+public class AdminController(IPlayerService playerService) : ControllerBase
 {
     public readonly IPlayerService _playerService = playerService;
-    public readonly IGalleryService _galleryService = galleryService;
 
     [HttpDelete("players/delete/{playerId}")]
     [Authorize(Roles = "ADMIN")]
@@ -32,23 +31,6 @@ public class AdminController(IPlayerService playerService, IGalleryService galle
             IEnumerable<PlayerDto> players = await _playerService.GetAllPlayers();
 
             return Ok(players);
-        }
-        catch (Exception e)
-        {
-            return HandleException(e);
-        }
-    }
-
-
-    [HttpDelete("galleries/{galleryId}")]
-    [Authorize(Roles = "ADMIN")]
-    public async Task<ActionResult> DeleteGallery(int galleryId, int playerId)
-    {
-        try
-        {
-            await _galleryService.DeleteGallery(playerId, galleryId);
-
-            return Ok("Card Deleted!");
         }
         catch (Exception e)
         {

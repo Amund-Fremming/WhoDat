@@ -36,17 +36,9 @@ public interface ICardService
     /// Retrives all cards from a gallery.
     /// </summary>
     /// <param name="playerId">The player retreiving the cards.</param>
-    /// <param name="galleryId">The gallery the cards are stored in.</param>
     /// <returns>A collection of cards.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the gallery does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the gallery.</exception>
-    public Task<IEnumerable<Card>> GetAllCards(int playerId, int galleryId);
-
-    /// <summary>
-    /// Fetches all Cards that a user has, from across all galleries 
-    /// </summary>
-    /// <param name="playerId">The player to fetch cards from.</param>
-    /// <returns>An Enumerable of cards.</returns>
-    public Task<IEnumerable<Card>> GetAllCardsFromAllGalleries(int playerId);
+    public Task<IEnumerable<Card>> GetAllCards(int playerId);
 }
 

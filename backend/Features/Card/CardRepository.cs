@@ -44,38 +44,10 @@ public class CardRepository(AppDbContext context, ILogger<ICardRepository> logge
         }
     }
 
-    // RM - Maybe make players pay for more cards?
-    public async Task UpdateCard(Card oldCard, Card newCard)
-    {
-        try
-        {
-            oldCard.GalleryID = newCard.GalleryID;
-            oldCard.Gallery = newCard.Gallery;
-            oldCard.Name = newCard.Name;
-            oldCard.Url = newCard.Url;
-
-            _context.Card.Update(oldCard);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error updating Card with id {oldCard.CardID} .(CardRepository)");
-            throw;
-        }
-    }
-
-    public async Task<IEnumerable<Card>> GetAllCards(int galleryId)
+    public async Task<IEnumerable<Card>> GetAllCards(int playerId)
     {
         return await _context.Card
-            .Where(c => c.GalleryID == galleryId)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Card>> GetAllCardsFromAllGalleries(int playerId)
-    {
-        return await _context.Card
-            .Where(c => c.Gallery != null && c.Gallery.PlayerID == playerId)
+            .Where(c => c.PlayerID == playerId)
             .ToListAsync();
     }
 }

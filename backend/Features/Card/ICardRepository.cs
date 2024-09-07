@@ -23,23 +23,9 @@ public interface ICardRepository
     Task DeleteCard(Card card);
 
     /// <summary>
-    /// Updates a card with new values and stores it in the database.
-    /// </summary>
-    /// <param name="oldCard">The old card with old values.</param>
-    /// <param name="newCard">The new card with the new values we are going to set.</param>
-    Task UpdateCard(Card oldCard, Card newCard);
-
-    /// <summary>
     /// Fetches all Cards form a specific gallery.
     /// </summary>
     /// <param name="galleryId">The gallery to fetch cards from.</param>
     /// <returns>An Enumerable of cards.</returns>
     Task<IEnumerable<Card>> GetAllCards(int galleryId);
-
-    /// <summary>
-    /// Fetches all Cards that a user has, from across all galleries 
-    /// </summary>
-    /// <param name="playerId">The player to fetch cards from.</param>
-    /// <returns>An Enumerable of cards.</returns>
-    Task<IEnumerable<Card>> GetAllCardsFromAllGalleries(int playerId);
 }

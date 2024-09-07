@@ -1,3 +1,15 @@
+## Todos - remove gallery
+
+- [ ] Alle modeller skal ha controllere
+- [ ] Solid, del opp funksjoner
+- [ ] Feature folder
+- [ ] Create Crud for cards
+- [ ] Get All cards
+- [ ] Fiks that the app can run again
+- [ ] Fiks that the tests can run again
+- [ ] Ikke kast så mye exceptions
+- [ ] Mindre tester?
+
 # TODO`S
 
 - [ ] Build backend to just have one gallery

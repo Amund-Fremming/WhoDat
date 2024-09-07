@@ -118,13 +118,14 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             PlayerHasGamePermission(playerId, game);
 
             Board playerOneBoard = game.Boards!.ElementAt(0);
-            Board playerTwoBoard = game.Boards!.ElementAt(1);
 
             if (playerOneBoard.PlayerID == playerId)
                 return playerOneBoard;
 
-            if (playerTwoBoard.PlayerID == playerId && playerTwoBoard == null)
+            if (game.Boards!.Count() <= 1)
                 return await CreatePlayerTwoBoard(playerId, game);
+
+            Board playerTwoBoard = game.Boards!.ElementAt(1);
 
             if (playerTwoBoard.PlayerID == playerId)
                 return playerTwoBoard;
@@ -222,7 +223,9 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     private async Task<Board> CreatePlayerTwoBoard(int playerId, Game game)
     {
         Player player = await _playerRepository.GetPlayerById(playerId);
-        Board playerOneBoard = game.Boards!.ElementAt(1);
+
+
+        Board playerOneBoard = playerOneBoard = game.Boards!.ElementAt(0);
 
         Board playerTwoBoard = new Board(playerId, game.GameID);
         List<BoardCard> tempBoardCards = new List<BoardCard>();

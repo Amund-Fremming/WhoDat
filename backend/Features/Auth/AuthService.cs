@@ -2,7 +2,7 @@ namespace Auth;
 
 public class AuthService(AppDbContext context, IConfiguration configuration, ILogger<IAuthService> logger,
         IPasswordHasher<Player> passwordHasher, IPlayerRepository playerRepository,
-        IGalleryService galleryService, IPlayerService playerService) : IAuthService
+        IPlayerService playerService) : IAuthService
 {
     public readonly AppDbContext _context = context;
     public readonly IConfiguration _configuration = configuration;
@@ -10,7 +10,6 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
     public readonly IPasswordHasher<Player> _passwordHasher = passwordHasher;
     public readonly IPlayerService _playerService = playerService;
     public readonly IPlayerRepository _playerRepository = playerRepository;
-    public readonly IGalleryService _galleryService = galleryService;
 
     public string GenerateToken(Player player)
     {
@@ -95,9 +94,6 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
 
             Player player = new Player(request.Username, hashedPassword, salt, Role.USER);
             await _playerService.CreatePlayer(player);
-
-            Gallery gallery = new Gallery(player.PlayerID, "Default");
-            await _galleryService.CreateGallery(player.PlayerID, gallery);
 
             return player;
         }

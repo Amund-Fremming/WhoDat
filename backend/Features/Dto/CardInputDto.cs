@@ -2,7 +2,7 @@ namespace Dto;
 
 public class CardInputDto
 {
-    public int GalleryID { get; set; }
+    public int PlayerID { get; set; }
 
     [StringLength(15, MinimumLength = 3)]
     [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "Only alphanumeric characters are allowed.")]
