@@ -1,14 +1,14 @@
 ## Todos - remove gallery
 
-- [ ] Alle modeller skal ha controllere
+- [x] Alle modeller skal ha controllere
 - [ ] Solid, del opp funksjoner
-- [ ] Feature folder
-- [ ] Create Crud for cards
-- [ ] Get All cards
-- [ ] Fiks that the app can run again
-- [ ] Fiks that the tests can run again
+- [x] Feature folder
+- [x] Create Crud for cards
+- [x] Get All cards
+- [x] Fiks that the app can run again
+- [x] Fiks that the tests can run again
 - [ ] Ikke kast så mye exceptions
-- [ ] Mindre tester?
+- [x] Mindre tester?
 
 # TODO`S
 
