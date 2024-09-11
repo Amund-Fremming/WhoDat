@@ -10,7 +10,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
 
     [HttpGet("all")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<IEnumerable<Card>>> GetAllCards()
+    public async Task<ActionResult<IEnumerable<Card>>> GetAll()
     {
         try
         {
@@ -27,7 +27,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
 
     [HttpPost("add")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> AddCard([FromForm] CardInputDto cardDto)
+    public async Task<ActionResult> Add([FromForm] CardInputDto cardDto)
     {
         try
         {
@@ -44,7 +44,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
 
     [HttpPost("delete/{cardId}")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> DeleteCard(int cardId)
+    public async Task<ActionResult> Delete(int cardId)
     {
         try
         {

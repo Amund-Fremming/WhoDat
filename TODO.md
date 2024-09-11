@@ -1,22 +1,9 @@
 ## Todos - remove gallery
 
-- [x] Alle modeller skal ha controllere
-- [ ] Solid, del opp funksjoner
-- [x] Feature folder
-- [x] Create Crud for cards
-- [x] Get All cards
-- [x] Fiks that the app can run again
-- [x] Fiks that the tests can run again
 - [ ] Ikke kast så mye exceptions
-- [x] Mindre tester?
+- [ ] Bytt til OAuth2.0
 
 # TODO`S
-
-- [ ] Build backend to just have one gallery
-  - [ ] Adding cards to this gallery
-  - [ ] Removing cards to this gallery
-- [ ] make adding work
-- [ ] next gallery/page functionality, just render 25, then 25 and so on
 
 <hr />
 

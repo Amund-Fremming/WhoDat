@@ -21,6 +21,8 @@ global using BoardCardEntity;
 global using CardEntity;
 global using MessageEntity;
 
+global using Image;
+
 global using Data;
 global using Enum;
 global using Dto;

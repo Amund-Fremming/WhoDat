@@ -23,6 +23,7 @@ builder.Services.AddScoped<IBoardService, BoardService>();
 builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IBoardCardService, BoardCardService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 builder.Services.AddScoped<IPasswordHasher<Player>, PasswordHasher<Player>>();
 
