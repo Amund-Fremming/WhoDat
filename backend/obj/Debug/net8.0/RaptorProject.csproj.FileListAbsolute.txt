@@ -228,3 +228,6 @@
 /home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 /home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
 /home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/AWSSDK.Core.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/AWSSDK.S3.dll
+/home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/secret.json

@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "RaptorProject/1.0.0": {
         "dependencies": {
+          "AWSSDK.S3": "3.7.402.10",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.4",
           "Microsoft.AspNetCore.OpenApi": "8.0.1",
           "Microsoft.EntityFrameworkCore": "8.0.6",
@@ -20,6 +21,25 @@
         },
         "runtime": {
           "RaptorProject.dll": {}
+        }
+      },
+      "AWSSDK.Core/3.7.400.19": {
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.400.19"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.402.10": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.19"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.402.10"
+          }
         }
       },
       "Humanizer.Core/2.14.1": {
@@ -657,6 +677,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "AWSSDK.Core/3.7.400.19": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rrADTHB6OLnoaNkKkqGmfyjNxE8AmrihUzTvnImWL+ZLXk2dKEAmQv5rr/YDg/Q1CxyS1Q+RnEpZwxUVqgQ8OA==",
+      "path": "awssdk.core/3.7.400.19",
+      "hashPath": "awssdk.core.3.7.400.19.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.402.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GHaBHFGeI9REZxonylOnoZs50EOB1MKb7NYYku5iyEJ6CEx3sxnvm8O0FQ4Zo06XwBnbGOfuRKPXAHqxcCD7Xg==",
+      "path": "awssdk.s3/3.7.402.10",
+      "hashPath": "awssdk.s3.3.7.402.10.nupkg.sha512"
     },
     "Humanizer.Core/2.14.1": {
       "type": "package",

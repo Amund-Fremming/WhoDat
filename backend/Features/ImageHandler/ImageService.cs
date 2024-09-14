@@ -1,32 +1,55 @@
+using Amazon.S3;
+using Amazon.S3.Model;
+using Amazon.Runtime;
+
 namespace Image;
 
-public class ImageService(IHttpClientFactory httpClientFactory) : IImageService
+public class ImageService : IImageService
 {
-    public readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+    public readonly IAmazonS3 _s3Client;
+    public readonly IConfiguration _configuration;
+    public readonly string BucketName = "whodat-image-container";
+    public readonly string PublicUrlBase;
+
+    public ImageService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+
+        PublicUrlBase = configuration["CloudflareR2:PublicUrlBase"]!;
+
+        string accessKey = _configuration["CloudflareR2:AccessKey"]!;
+        string secretKey = _configuration["CloudflareR2:SecretKey"]!;
+        string accountId = _configuration["CloudflareR2:AccountId"]!;
+
+        Console.WriteLine("AccessKey: " + accessKey);
+        Console.WriteLine("SecretKey: " + secretKey);
+        Console.WriteLine("AccoundId: " + accountId);
+
+        var credentials = new BasicAWSCredentials(accessKey, secretKey);
+        _s3Client = new AmazonS3Client(credentials, new AmazonS3Config
+        {
+            ServiceURL = $"https://{accountId}.r2.cloudflarestorage.com",
+        });
+    }
 
     public async Task<string> Upload(IFormFile file)
     {
-        HttpClient client = _httpClientFactory.CreateClient();
-        // string containerEndpoint = "https://whodat-image-worker.amund-fremming.workers.dev/";
-        string containerEndpoint = "https://0b57699fd3dc67e5eadbdce80ca506a6.r2.cloudflarestorage.com/whodat-image-container";
+        string imageKey = Guid.NewGuid().ToString();
 
-        using (var ms = new MemoryStream())
+        var request = new PutObjectRequest
         {
-            await file.CopyToAsync(ms);
-            var content = new ByteArrayContent(ms.ToArray());
-            content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            BucketName = BucketName,
+            Key = imageKey,
+            InputStream = file.OpenReadStream(),
+            ContentType = file.ContentType,
+            DisablePayloadSigning = true
+        };
 
-            var response = await client.PutAsync(containerEndpoint, content);
-            Console.WriteLine("Response: " + response);
+        var response = await _s3Client.PutObjectAsync(request);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return response.Content.ToString()!;
-            }
-            else
-            {
-                throw new Exception("Failed to upload image");
-            }
-        }
+        string imageUrl = $"{PublicUrlBase}/{imageKey}";
+        Console.WriteLine($"Image uploaded successfully. Access URL: {imageUrl}");
+
+        return imageUrl;
     }
 }
