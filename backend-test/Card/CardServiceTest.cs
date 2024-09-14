@@ -11,7 +11,7 @@ public class CardServiceTest
 {
     public readonly Mock<ILogger<ICardService>> _mockLogger;
     public readonly Mock<ICardRepository> _mockCardRepository;
-    public readonly Mock<IHttpClientFactory> _mockHttpClientFactory;
+    public readonly Mock<IImageService> _mockImageService;
     public readonly ICardService _cardService;
     public readonly AppDbContext _context;
 
@@ -19,7 +19,7 @@ public class CardServiceTest
     {
         _mockLogger = new Mock<ILogger<ICardService>>();
         _mockCardRepository = new Mock<ICardRepository>();
-        _mockHttpClientFactory = new Mock<IHttpClientFactory>();
+        _mockImageService = new Mock<IImageService>();
 
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase("TestDatabase")
@@ -30,7 +30,7 @@ public class CardServiceTest
         _cardService = new CardService(
                 _mockLogger.Object,
                 _mockCardRepository.Object,
-                _mockHttpClientFactory.Object
+                _mockImageService.Object
                 );
     }
 

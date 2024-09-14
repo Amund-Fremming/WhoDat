@@ -254,3 +254,6 @@
 /home/amund/Documents/Projects/WhoDat/backend-test/obj/Debug/net8.0/ref/backend-test.dll
 /home/amund/Documents/Projects/WhoDat/backend-test/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll
 /Users/amundfremming/Documents/projects/WhoDat/backend-test/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll
+/home/amund/Documents/Projects/WhoDat/backend-test/bin/Debug/net8.0/secret.json
+/home/amund/Documents/Projects/WhoDat/backend-test/bin/Debug/net8.0/AWSSDK.Core.dll
+/home/amund/Documents/Projects/WhoDat/backend-test/bin/Debug/net8.0/AWSSDK.S3.dll

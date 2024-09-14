@@ -16,3 +16,5 @@ global using BoardCardEntity;
 global using CardEntity;
 global using MessageEntity;
 global using ExceptionNamespace;
+
+global using Image;

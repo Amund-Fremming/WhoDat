@@ -21,10 +21,6 @@ public class ImageService : IImageService
         string secretKey = _configuration["CloudflareR2:SecretKey"]!;
         string accountId = _configuration["CloudflareR2:AccountId"]!;
 
-        Console.WriteLine("AccessKey: " + accessKey);
-        Console.WriteLine("SecretKey: " + secretKey);
-        Console.WriteLine("AccoundId: " + accountId);
-
         var credentials = new BasicAWSCredentials(accessKey, secretKey);
         _s3Client = new AmazonS3Client(credentials, new AmazonS3Config
         {
