@@ -1,12 +1,14 @@
-import { Modal, View, Image, Pressable, TextInput } from "react-native";
+import { Modal, View, Image, Pressable, TextInput, Alert } from "react-native";
 import { styles, imageStyles } from "../AddCardModal/AddCardModalStyles";
 import BigButton from "@/components/BigButton/BigButton";
 import { Colors } from "@/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
-import { ICardInputDto } from "@/interfaces/GalleryTypes";
-import { addCardToGallery } from "@/api/GalleryApi";
 import { useAuthProvider } from "@/providers/AuthProvider";
+import { addCard } from "@/api/CardApi";
+import { validText } from "@/util/InputValitator";
+import { ICardInputDto } from "@/interfaces/CardTypes";
+import { pickImage } from "@/util/ImagePicker";
 
 interface AddCardModalProps {
   modalVisible: boolean;
@@ -21,20 +23,38 @@ export default function AddCardModal({
 
   const { token } = useAuthProvider();
 
-  const handleNameInput = (input: string) => {
-    if (input.length > 9) {
-      // Use util function with regex and length that also shows users alert
-      // on what went wrong
+  const handleNameInput = () => {
+    if (nameInput.length > 9 || !validText(nameInput)) {
+      setNameInput("");
+      Alert.alert(
+        "Input not valid",
+        "Name can only be letters and 8 characters long"
+      );
       return;
     }
 
-    input = input.toLowerCase();
-    setNameInput(input.charAt(0).toUpperCase() + input.slice(1));
+    setNameInput(
+      nameInput.charAt(0).toUpperCase() + nameInput.slice(1).toLowerCase()
+    );
   };
 
-  const handleAddCard = () => {
+  const handleAddCard = async () => {
     try {
-      addCardToGallery(galleryId, cardDto, token);
+      handleNameInput();
+
+      const uri: any = await pickImage();
+      if (uri === "EXIT") return;
+
+      const blobResponse = await fetch(uri);
+      const blob = await blobResponse.blob();
+
+      const dto: ICardInputDto = {
+        name: nameInput,
+        image: blob,
+      };
+
+      addCard(dto, token);
+      // TODO
     } catch (error) {
       console.error("Adding card failed");
     }
@@ -59,6 +79,8 @@ export default function AddCardModal({
             />
           </View>
           <TextInput
+            value={nameInput}
+            onChangeText={(input: string) => setNameInput(input)}
             style={styles.inputText}
             placeholder="Name ..."
             placeholderTextColor={Colors.Gray}

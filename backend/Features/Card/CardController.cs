@@ -8,7 +8,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
     public readonly IPlayerService _playerService = playerService;
     public readonly ICardService _cardService = cardService;
 
-    [HttpGet("all")]
+    [HttpGet("getall")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult<IEnumerable<Card>>> GetAll()
     {
@@ -42,7 +42,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
         }
     }
 
-    [HttpPost("delete/{cardId}")]
+    [HttpDelete("delete/{cardId}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> Delete(int cardId)
     {

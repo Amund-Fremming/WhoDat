@@ -231,3 +231,6 @@
 /home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/AWSSDK.Core.dll
 /home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/AWSSDK.S3.dll
 /home/amund/Documents/Projects/WhoDat/backend/bin/Debug/net8.0/secret.json
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/AWSSDK.Core.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/AWSSDK.S3.dll
+/Users/amundfremming/Documents/projects/WhoDat/backend/bin/Debug/net8.0/secret.json

@@ -1,14 +1,14 @@
 import { View, Text } from "react-native";
 import { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
-import { ICard, ICardInputDto } from "@/interfaces/GalleryTypes";
+import { ICard } from "@/interfaces/CardTypes";
 import BigButton from "@/components/BigButton/BigButton";
 import Card from "./components/Card/Card";
 import CardModal from "./components/CardModal/CardModal";
 import styles from "./GalleryStyles";
 import { AddCard } from "./components/AddCard/AddCard";
 import AddCardModal from "./components/AddCardModal/AddCardModal";
-import { GetAllPlayerCards, addCardToGallery } from "@/api/GalleryApi";
+import { getAllCards } from "@/api/CardApi";
 import { useAuthProvider } from "@/providers/AuthProvider";
 
 const defaultCard: ICard = {
@@ -33,10 +33,10 @@ export default function Gallery() {
 
   const fetchPlayerCards = async () => {
     try {
-      const data = await GetAllPlayerCards(token);
+      const data = await getAllCards(token);
       setCards(data);
     } catch (error) {
-      console.error("Fetching cards failed");
+      console.error("Fetching cards failed " + error);
     }
   };
 
