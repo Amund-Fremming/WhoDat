@@ -25,15 +25,14 @@ export const getAllCards = async (token: string) => {
   }
 };
 
-export const addCard = async (cardInputDto: ICardInputDto, token: string) => {
+export const addCard = async (formData: FormData, token: string) => {
   try {
     const response = await fetch(`${CARD_ENDPOINT}/add`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(cardInputDto),
+      body: formData,
     });
 
     if (!response.ok) {

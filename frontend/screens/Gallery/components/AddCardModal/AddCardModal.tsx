@@ -1,4 +1,12 @@
-import { Modal, View, Image, Pressable, TextInput, Alert } from "react-native";
+import {
+  Modal,
+  View,
+  Image,
+  Pressable,
+  TextInput,
+  Alert,
+  Text,
+} from "react-native";
 import { styles, imageStyles } from "../AddCardModal/AddCardModalStyles";
 import BigButton from "@/components/BigButton/BigButton";
 import { Colors } from "@/constants/Colors";
@@ -7,7 +15,6 @@ import { useState } from "react";
 import { useAuthProvider } from "@/providers/AuthProvider";
 import { addCard } from "@/api/CardApi";
 import { validText } from "@/util/InputValitator";
-import { ICardInputDto } from "@/interfaces/CardTypes";
 import { pickImage } from "@/util/ImagePicker";
 
 interface AddCardModalProps {
@@ -20,6 +27,9 @@ export default function AddCardModal({
   setModalVisible,
 }: AddCardModalProps) {
   const [nameInput, setNameInput] = useState<string>("");
+  const [imageUri, setImageUri] = useState<any>(
+    "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+  );
 
   const { token } = useAuthProvider();
 
@@ -38,24 +48,35 @@ export default function AddCardModal({
     );
   };
 
+  const handleUploadImage = async () => {
+    try {
+      const uri: any = await pickImage();
+      if (uri === "EXIT") return;
+
+      setImageUri(uri);
+    } catch (Exception) {
+      console.error("Image picker failed");
+    }
+  };
+
   const handleAddCard = async () => {
     try {
       handleNameInput();
 
-      const uri: any = await pickImage();
-      if (uri === "EXIT") return;
+      const blobResponse = await fetch(imageUri);
+      const blob: Blob = await blobResponse.blob();
 
-      const blobResponse = await fetch(uri);
-      const blob = await blobResponse.blob();
+      const formData = new FormData();
 
-      const dto: ICardInputDto = {
-        name: nameInput,
-        image: blob,
-      };
+      formData.append("Name", nameInput);
+      formData.append("Image", blob, "image.jpg");
 
-      addCard(dto, token);
+      console.log(blob.type);
+
+      await addCard(formData, token);
       // TODO
     } catch (error) {
+      // TODO
       console.error("Adding card failed");
     }
   };
@@ -71,10 +92,13 @@ export default function AddCardModal({
             <FontAwesome name="close" size={36} color={Colors.DarkGray} />
           </Pressable>
           <View style={styles.card}>
+            <Pressable style={styles.uploadButton} onPress={handleUploadImage}>
+              <Text style={styles.uploadText}>upload</Text>
+            </Pressable>
             <Image
               style={imageStyles.imageStyle}
               source={{
-                uri: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
+                uri: imageUri,
               }}
             />
           </View>

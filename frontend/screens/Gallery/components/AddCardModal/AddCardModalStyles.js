@@ -83,6 +83,26 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(15),
     marginBottom: verticalScale(15),
   },
+
+  uploadButton: {
+    zIndex: 10,
+    position: "absolute",
+    width: horizontalScale(90),
+    height: verticalScale(35),
+    backgroundColor: Colors.DarkGray,
+    borderRadius: moderateScale(10),
+    justifyContent: "center",
+    alignItems: "center",
+    opacity: 0.8,
+    bottom: verticalScale(18),
+    left: horizontalScale(20),
+  },
+
+  uploadText: {
+    color: Colors.Cream,
+    fontFamily: "InikaBold",
+    fontSize: moderateScale(20),
+  },
 });
 
 export const imageStyles = StyleSheet.create({
