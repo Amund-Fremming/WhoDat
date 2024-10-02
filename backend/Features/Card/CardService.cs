@@ -10,8 +10,6 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
     {
         try
         {
-            _logger.LogInformation($"Received Name: {cardDto.Name}, Image: {cardDto.Image}");
-
             string name = cardDto.Name!;
             IFormFile? file = cardDto.Image;
 

@@ -64,16 +64,9 @@ export default function AddCardModal({
       handleNameInput();
 
       const blobResponse = await fetch(imageUri);
-      const blob: Blob = await blobResponse.blob();
+      const blob = await blobResponse.blob();
 
-      const formData = new FormData();
-
-      formData.append("Name", nameInput);
-      formData.append("Image", blob, "image.jpg");
-
-      console.log(blob.type);
-
-      await addCard(formData, token);
+      await addCard(blob, token);
       // TODO
     } catch (error) {
       // TODO

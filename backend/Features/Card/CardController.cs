@@ -31,6 +31,9 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
     {
         try
         {
+            _logger.LogInformation(cardDto.Name);
+            Console.WriteLine("here: " + cardDto.Image);
+
             int playerId = ParsePlayerIdClaim();
             int cardId = await _cardService.CreateCard(playerId, cardDto);
 
