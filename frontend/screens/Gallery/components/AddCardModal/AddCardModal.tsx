@@ -50,10 +50,10 @@ export default function AddCardModal({
 
   const handleUploadImage = async () => {
     try {
-      const uri: any = await pickImage();
-      if (uri === "EXIT") return;
+      const result: any = await pickImage();
+      if (result === "EXIT") return;
 
-      setImageUri(uri);
+      setImageUri(result);
     } catch (Exception) {
       console.error("Image picker failed");
     }
@@ -63,17 +63,7 @@ export default function AddCardModal({
     try {
       handleNameInput();
 
-      const blobResponse = await fetch(imageUri);
-      const blob: Blob = await blobResponse.blob();
-
-      const formData = new FormData();
-
-      formData.append("Name", nameInput);
-      formData.append("Image", blob, "image.jpg");
-
-      console.log(blob.type);
-
-      await addCard(formData, token);
+      await addCard(imageUri, nameInput, token);
     } catch (Exception) {
       // TODO
       console.error("Adding card failed");

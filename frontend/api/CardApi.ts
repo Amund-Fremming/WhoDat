@@ -1,5 +1,6 @@
 import { CARD_ENDPOINT } from "./URL_PATHS";
 import { ICard, ICardInputDto } from "@/interfaces/CardTypes";
+import axios from "axios";
 
 export const getAllCards = async (token: string) => {
   try {
@@ -25,15 +26,16 @@ export const getAllCards = async (token: string) => {
   }
 };
 
-export const addCard = async (formData: FormData, token: string) => {
-  console.log(`${CARD_ENDPOINT}/add`);
+export const addCard = async (blob: Blob, name: string, token: string) => {
   try {
-    const response = await fetch(`${CARD_ENDPOINT}/add`, {
+    const response = await fetch(`${CARD_ENDPOINT}/test-upload`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "image/jpeg",
+        "X-Card-Name": name,
       },
-      body: formData,
+      body: blob,
     });
 
     if (!response.ok) {
@@ -44,6 +46,21 @@ export const addCard = async (formData: FormData, token: string) => {
     throw new Error("Error when adding a card " + error);
   }
 };
+/*
+export const addCard = async (formData: FormData, token: string) => {
+  try {
+    await axios.post(`${CARD_ENDPOINT}/add`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (error) {
+    console.error("Error when adding a card " + error);
+    throw new Error("Error when adding a card " + error);
+  }
+};
+*/
 
 export const deleteCard = async (cardId: number, token: string) => {
   try {

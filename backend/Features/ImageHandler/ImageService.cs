@@ -48,4 +48,27 @@ public class ImageService : IImageService
 
         return imageUrl;
     }
+
+    /*
+    public async Task<string> Upload(IFormFile file)
+    {
+        string imageKey = Guid.NewGuid().ToString();
+
+        var request = new PutObjectRequest
+        {
+            BucketName = BucketName,
+            Key = imageKey,
+            InputStream = file.OpenReadStream(),
+            ContentType = file.ContentType,
+            DisablePayloadSigning = true
+        };
+
+        var response = await _s3Client.PutObjectAsync(request);
+
+        string imageUrl = $"{PublicUrlBase}/{imageKey}";
+        Console.WriteLine($"Image uploaded successfully. Access URL: {imageUrl}");
+
+        return imageUrl;
+    }
+    */
 }
