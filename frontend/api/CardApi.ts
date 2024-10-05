@@ -1,6 +1,5 @@
 import { CARD_ENDPOINT } from "./URL_PATHS";
-import { ICard, ICardInputDto } from "@/interfaces/CardTypes";
-import axios from "axios";
+import { ICard } from "@/interfaces/CardTypes";
 
 export const getAllCards = async (token: string) => {
   try {
@@ -26,9 +25,12 @@ export const getAllCards = async (token: string) => {
   }
 };
 
-export const addCard = async (blob: Blob, name: string, token: string) => {
+export const addCard = async (uri: string, name: string, token: string) => {
   try {
-    const response = await fetch(`${CARD_ENDPOINT}/test-upload`, {
+    const blobResponse = await fetch(uri);
+    const blob = await blobResponse.blob();
+
+    const response = await fetch(`${CARD_ENDPOINT}/add`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
