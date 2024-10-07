@@ -17,7 +17,7 @@ export const getAllCards = async (token: string) => {
       );
     }
 
-    const data: Array<ICard> = await response.json();
+    const data: ICard[] = await response.json();
     return data;
   } catch (error) {
     console.error("Error while fetching all cards " + error);
@@ -48,23 +48,9 @@ export const addCard = async (uri: string, name: string, token: string) => {
     throw new Error("Error when adding a card " + error);
   }
 };
-/*
-export const addCard = async (formData: FormData, token: string) => {
-  try {
-    await axios.post(`${CARD_ENDPOINT}/add`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  } catch (error) {
-    console.error("Error when adding a card " + error);
-    throw new Error("Error when adding a card " + error);
-  }
-};
-*/
 
 export const deleteCard = async (cardId: number, token: string) => {
+  console.log(`${CARD_ENDPOINT}/delete/${cardId}`);
   try {
     const response = await fetch(`${CARD_ENDPOINT}/delete/${cardId}`, {
       method: "DELETE",
@@ -80,7 +66,7 @@ export const deleteCard = async (cardId: number, token: string) => {
       );
     }
   } catch (error) {
-    console.error("Error x" + error);
-    throw new Error("Error x" + error);
+    console.error("Error delete card " + error);
+    throw new Error("Error delete card " + error);
   }
 };

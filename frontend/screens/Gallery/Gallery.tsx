@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { ICard } from "@/interfaces/CardTypes";
@@ -8,12 +8,11 @@ import CardModal from "./components/CardModal/CardModal";
 import styles from "./GalleryStyles";
 import { AddCard } from "./components/AddCard/AddCard";
 import AddCardModal from "./components/AddCardModal/AddCardModal";
-import { getAllCards } from "@/api/CardApi";
+import { deleteCard, getAllCards } from "@/api/CardApi";
 import { useAuthProvider } from "@/providers/AuthProvider";
 
 const defaultCard: ICard = {
-  cardId: -1,
-  galleryID: -1,
+  cardID: -1,
   name: "Default",
   url: "None",
 };
@@ -29,7 +28,7 @@ export default function Gallery() {
 
   useEffect(() => {
     fetchPlayerCards();
-  }, []);
+  }, [addCardModalVisible]);
 
   const fetchPlayerCards = async () => {
     try {
@@ -45,12 +44,18 @@ export default function Gallery() {
     setCardModalVisible(true);
   };
 
-  const handleDeleteCardPressed = (card: ICard) => {
-    // Delete card from db
+  const handleDeleteCardPressed = async (card: ICard) => {
     setCardModalVisible(false);
     setCards([
-      ...cards.filter((prevCard: ICard) => prevCard.cardId != card.cardId),
+      ...cards.filter((prevCard: ICard) => prevCard.cardID != card.cardID),
     ]);
+
+    try {
+      await deleteCard(card.cardID, token);
+    } catch (error) {
+      // TODO - better handling
+      Alert.alert("Something went wrong!", "Try again later");
+    }
   };
 
   return (
@@ -59,7 +64,7 @@ export default function Gallery() {
         modalVisible={cardModalVisible}
         setModalVisible={setCardModalVisible}
         card={cardPressed}
-        onDeleteCardPressed={() => handleDeleteCardPressed(cardPressed)}
+        onDeleteCardPressed={async () => handleDeleteCardPressed(cardPressed)}
       />
 
       <AddCardModal
@@ -78,7 +83,7 @@ export default function Gallery() {
           <View style={styles.boardContainer}>
             {cards.map((card: ICard) => (
               <Card
-                key={card.cardId}
+                key={card.cardID}
                 card={card}
                 onCardPress={() => handleCardPressed(card)}
               />

@@ -1,6 +1,5 @@
 export interface ICard {
-  cardId: number;
-  galleryID: number;
+  cardID: number;
   name: string;
   url: string;
 }
