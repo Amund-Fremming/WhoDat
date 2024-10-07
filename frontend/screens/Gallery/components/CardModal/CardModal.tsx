@@ -1,4 +1,4 @@
-import { Modal, View, Image, Pressable, TextInput } from "react-native";
+import { Modal, View, Image, Pressable } from "react-native";
 import { styles, imageStyles } from "./CardModalStyles";
 import BigButton from "@/components/BigButton/BigButton";
 import { Colors } from "@/constants/Colors";
@@ -22,26 +22,13 @@ export default function CardModal({
   onDeleteCardPressed,
 }: CardModalProps) {
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [newNameInput, setNewNameInput] = useState<string>("");
 
   useEffect(() => {
-    setNewNameInput("");
     setEditMode(false);
   }, [modalVisible]);
 
   const handleEditCardPressed = () => {
-    // TODO
     setEditMode(false);
-  };
-
-  const handleNewNameInput = (input: string) => {
-    if (input.length > 9) {
-      // Use util function with regex and length that also shows users alert
-      // on what went wrong
-      return;
-    }
-    input = input.toLowerCase();
-    setNewNameInput(input.charAt(0).toUpperCase() + input.slice(1));
   };
 
   return (
@@ -94,11 +81,10 @@ export default function CardModal({
           )}
           {editMode && (
             <>
-              <TextInput
-                onChangeText={(input: string) => handleNewNameInput(input)}
-                style={styles.newNameInput}
-                value={newNameInput}
-                placeholder={card.name}
+              <StrokedText
+                text={card.name}
+                fontBaseSize={40}
+                smallBorder={false}
               />
               <View style={styles.buttonWrapper}>
                 <BigButton

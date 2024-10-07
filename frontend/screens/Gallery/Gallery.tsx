@@ -45,17 +45,31 @@ export default function Gallery() {
   };
 
   const handleDeleteCardPressed = async (card: ICard) => {
-    setCardModalVisible(false);
-    setCards([
-      ...cards.filter((prevCard: ICard) => prevCard.cardID != card.cardID),
-    ]);
+    Alert.alert("Are you sure?", `Do you want to delete ${card.name}`, [
+      {
+        text: "No",
+        onPress: () => console.log("No Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "Yes",
+        onPress: async () => {
+          setCardModalVisible(false);
+          setCards([
+            ...cards.filter(
+              (prevCard: ICard) => prevCard.cardID != card.cardID
+            ),
+          ]);
 
-    try {
-      await deleteCard(card.cardID, token);
-    } catch (error) {
-      // TODO - better handling
-      Alert.alert("Something went wrong!", "Try again later");
-    }
+          try {
+            await deleteCard(card.cardID, token);
+          } catch (error) {
+            // TODO - better handling
+            Alert.alert("Something went wrong!", "Try again later");
+          }
+        },
+      },
+    ]);
   };
 
   return (

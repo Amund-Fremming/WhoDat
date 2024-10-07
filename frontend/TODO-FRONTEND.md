@@ -2,17 +2,13 @@
 
 ### Next
 
-- [ ] make adding work
-- [ ] next gallery/page functionality, just render 25, then 25 and so on
-
-### Generic
-
-- [x] Navigation
-- [x] Colors
-- [x] Dimentions
-- [x] BigButton
-- [ ] MediumButton
-- [ ] SmallButton
+- [ ] max 20 cards or make new pages?
+- [ ] Create a game, host choosing, and connect to socket
+- [ ] Create a game, both choosing, and connect to socket
+- [ ] Join a game, host choosing, both gets the right state, renders next step
+- [ ] Join a game, both choosing, both gets the right state, renders next step
+- [ ] Host sends choosen cards, both gets the right state, renders next step
+- [ ] player one sends choosen cards, other player gets new state, renders waiting
 
 ### Login / Register
 
