@@ -33,35 +33,34 @@ export default function AddCardModal({
 
   const { token } = useAuthProvider();
 
-  const handleNameInput = () => {
-    if (nameInput.length > 9 || !validText(nameInput)) {
-      setNameInput("");
+  const handleNameInput = (name: string): boolean => {
+    if (name.length > 9 || !validText(name)) {
       Alert.alert(
         "Input not valid",
         "Name can only be letters and 8 characters long"
       );
-      return;
+      return false;
     }
 
     setNameInput(
       nameInput.charAt(0).toUpperCase() + nameInput.slice(1).toLowerCase()
     );
+    return true;
   };
 
-  const handleUploadImage = async () => {
+  const handleImageInput = async () => {
     try {
       const result: any = await pickImage();
-      if (result === "EXIT") return;
-
       setImageUri(result);
     } catch (Exception) {
       console.error("Image picker failed");
     }
   };
 
-  const handleAddCard = async () => {
+  const uploadCard = async () => {
     try {
-      handleNameInput();
+      const namePresent = handleNameInput(nameInput);
+      if (!namePresent) return;
 
       await addCard(imageUri, nameInput, token);
       setModalVisible(false);
@@ -86,7 +85,7 @@ export default function AddCardModal({
             <FontAwesome name="close" size={36} color={Colors.DarkGray} />
           </Pressable>
           <View style={styles.card}>
-            <Pressable style={styles.uploadButton} onPress={handleUploadImage}>
+            <Pressable style={styles.uploadButton} onPress={handleImageInput}>
               <Text style={styles.uploadText}>upload</Text>
             </Pressable>
             <Image
@@ -109,7 +108,7 @@ export default function AddCardModal({
               text="Add Card"
               color={Colors.BurgundyRed}
               inverted={false}
-              onButtonPress={handleAddCard}
+              onButtonPress={uploadCard}
             />
           </View>
         </View>

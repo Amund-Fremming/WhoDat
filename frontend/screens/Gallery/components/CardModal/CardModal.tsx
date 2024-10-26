@@ -57,7 +57,7 @@ export default function CardModal({
             <Image
               style={imageStyles.imageStyle}
               source={{
-                uri: "https://www.wikihow.com/images/thumb/9/90/What_type_of_person_are_you_quiz_pic.png/1200px-What_type_of_person_are_you_quiz_pic.png",
+                uri: card.url,
               }}
             />
           </View>

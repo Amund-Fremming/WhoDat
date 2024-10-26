@@ -1,5 +1,9 @@
 import { Colors } from "@/constants/Colors";
-import { moderateScale, verticalScale } from "@/constants/Dimentions";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "@/constants/Dimentions";
 import { StyleSheet } from "react-native";
 
 export default styles = StyleSheet.create({
@@ -39,5 +43,10 @@ export default styles = StyleSheet.create({
 
   buttonWrapper: {
     paddingBottom: verticalScale(30),
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: horizontalScale(20),
   },
 });

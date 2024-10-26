@@ -11,6 +11,6 @@ export const pickImage = async () => {
   if (!result.canceled) {
     return result.assets[0].uri;
   } else {
-    return "EXIT";
+    throw new Error("No uri present");
   }
 };
