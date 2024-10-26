@@ -37,6 +37,7 @@ export default styles = StyleSheet.create({
     gap: moderateScale(7),
     flexDirection: "row",
     flexWrap: "wrap",
+    alignItems: "center",
     justifyContent: "center",
     marginBottom: verticalScale(30),
   },
