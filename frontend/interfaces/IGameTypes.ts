@@ -1,5 +1,5 @@
 export interface IGame {
-  gameId: number;
+  gameId?: number;
   playerOneID?: number;
   // player obj
   playerTwoID?: number;

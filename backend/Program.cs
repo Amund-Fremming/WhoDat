@@ -117,6 +117,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<GameHub>("hub/gamehub");
+app.MapHub<GameHub>("/hub");
 
 app.Run();

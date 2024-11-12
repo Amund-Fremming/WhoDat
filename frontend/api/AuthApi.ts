@@ -20,6 +20,7 @@ export const loginPlayer = async (request: ILoginRequest) => {
     }
 
     const data: IAuthResponse = await response.json();
+    console.log("auth response :" + data.playerID);
     return data;
   } catch (error) {
     console.error("Error while logging in a user " + error);

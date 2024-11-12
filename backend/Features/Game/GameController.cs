@@ -12,7 +12,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
 
     [HttpPost("games")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> CreateGame(Game game)
+    public async Task<ActionResult<int>> CreateGame(Game game)
     {
         try
         {
@@ -20,7 +20,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
             int gameId = await _gameService.CreateGame(playerId, game);
             await _boardService.CreateBoard(playerId, gameId);
 
-            return Ok($"Game {gameId} Created!");
+            return Ok(gameId);
         }
         catch (Exception e)
         {

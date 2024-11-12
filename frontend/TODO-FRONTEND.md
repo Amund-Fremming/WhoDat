@@ -2,7 +2,6 @@
 
 ### Next
 
-- [ ] max 20 cards or make new pages?
 - [ ] Create a game, host choosing, and connect to socket
 - [ ] Create a game, both choosing, and connect to socket
 - [ ] Join a game, host choosing, both gets the right state, renders next step

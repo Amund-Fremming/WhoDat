@@ -4,8 +4,8 @@ import { useState } from "react";
 interface IAuthContext {
   token: string;
   setToken: React.Dispatch<React.SetStateAction<string>>;
-  playerID: string;
-  setPlayerID: React.Dispatch<React.SetStateAction<string>>;
+  playerID: number;
+  setPlayerID: React.Dispatch<React.SetStateAction<number>>;
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -13,7 +13,7 @@ interface IAuthContext {
 const defaultContextValue: IAuthContext = {
   token: "",
   setToken: () => {},
-  playerID: "",
+  playerID: 0,
   setPlayerID: () => {},
   username: "",
   setUsername: () => {},
@@ -25,7 +25,7 @@ export const useAuthProvider = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string>("");
-  const [playerID, setPlayerID] = useState<string>("");
+  const [playerID, setPlayerID] = useState<number>(0);
   const [username, setUsername] = useState<string>("");
 
   const value = {

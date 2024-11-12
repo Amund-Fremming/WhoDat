@@ -31,7 +31,6 @@ export default function Gallery() {
   const { token } = useAuthProvider();
 
   useEffect(() => {
-    console.log("use effect triggered");
     fetchPlayerCards();
   }, [addCardModalVisible]);
 
@@ -54,7 +53,6 @@ export default function Gallery() {
   };
 
   const handleNextPressed = () => {
-    console.log("pagenumber " + pageNumber);
     const skip = pageNumber * 20;
     const take = 20 * (pageNumber + 1);
     const cardsToDisplay = allCards.slice(skip, take);
@@ -70,7 +68,6 @@ export default function Gallery() {
 
   const handlePreviousPressed = () => {
     setDisplayNext(true);
-    console.log("pagenumber " + pageNumber);
     const skip = (pageNumber - 2) * 20;
     const take = 20 * (pageNumber - 1);
     const cardsToDisplay = allCards.slice(skip, take);

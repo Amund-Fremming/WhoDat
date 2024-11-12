@@ -18,7 +18,7 @@ export const createGame = async (game: IGame, token: string) => {
 
     const gameId = await response.text();
     console.log(`Game ${gameId} Created!`); // Log the gameId or return it
-    return gameId;
+    return parseInt(gameId);
   } catch (error) {
     console.error("Error when creating a game: " + error);
     throw error;

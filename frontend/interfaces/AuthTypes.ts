@@ -9,7 +9,7 @@ export interface ILoginRequest {
 }
 
 export interface IAuthResponse {
-  playerID: string;
+  playerID: number;
   username: string;
   token: string;
 }
