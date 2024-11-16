@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { styles } from "./RegisterStyles";
+import { styles } from "./RegisterComponentStyles";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/src/shared/assets/constants/Colors";
 import BigButton from "@/src/shared/components/BigButton/BigButton";
@@ -17,11 +17,11 @@ import { IAuthResponse, IRegistrationRequest } from "@/src/domain/AuthTypes";
 import { registerPlayer } from "@/src/infrastructure/AuthClient";
 import { useAuthProvider } from "@/src/shared/AuthProvider";
 
-interface RegisterProps {
+interface RegisterComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function Register({ setView }: RegisterProps) {
+export function RegisterComponent({ setView }: RegisterComponentProps) {
   const { setToken, setPlayerID, setUsername } = useAuthProvider();
 
   const [retypedPassword, setRetypedPassword] = useState<string>("");

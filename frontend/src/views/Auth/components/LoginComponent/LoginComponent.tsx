@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { styles } from "./LoginStyles";
+import { styles } from "./LoginComponentStyles";
 import Feather from "@expo/vector-icons/Feather";
 import { Colors } from "@/src/shared/assets/constants/Colors";
 import BigButton from "@/src/shared/components/BigButton/BigButton";
@@ -16,11 +16,11 @@ import { useState } from "react";
 import { useAuthProvider } from "@/src/shared/AuthProvider";
 import { loginPlayer } from "@/src/infrastructure/AuthClient";
 
-interface LoginProps {
+interface LoginComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function Login({ setView }: LoginProps) {
+export function LoginComponent({ setView }: LoginComponentProps) {
   const { setToken, setPlayerID, setUsername } = useAuthProvider();
 
   const [loginRequest, setLoginRequest] = useState<ILoginRequest>({

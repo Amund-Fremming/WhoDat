@@ -2,10 +2,10 @@ import { View, Text, Alert } from "react-native";
 import { useEffect, useState } from "react";
 import { Colors } from "@/src/shared/assets/constants/Colors";
 import { ICard } from "@/src/domain/CardTypes";
-import Card from "./components/Card/Card";
+import Card from "./components/CardComponent/CardComponent";
 import CardModal from "./components/CardModal/CardModal";
 import styles from "./GalleryStyles";
-import { AddCard } from "./components/AddCard/AddCard";
+import { AddCardComponent } from "./components/AddCardComponent/AddCardComponent";
 import AddCardModal from "./components/AddCardModal/AddCardModal";
 import { deleteCard, getAllCards } from "@/src/infrastructure/CardClient";
 import { useAuthProvider } from "@/src/shared/AuthProvider";
@@ -136,7 +136,7 @@ export default function Gallery() {
               />
             ))}
             {cardsForThisPage.length < 20 && (
-              <AddCard onAddCardPress={() => setAddCardModalVisible(true)} />
+              <AddCardComponent onAddCardPress={() => setAddCardModalVisible(true)} />
             )}
           </View>
           <View style={styles.buttonWrapper}>

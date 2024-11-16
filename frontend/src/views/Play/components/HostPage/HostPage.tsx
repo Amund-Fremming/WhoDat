@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 import styles from "./HostPageStyles";
 import { PlayPages } from "../../PlayPages";
-import IconButton from "../GenericComponents/IconButton/IconButton";
+import IconButton from "../../../../shared/components/IconButton/IconButton";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/src/shared/assets/constants/Colors";
 

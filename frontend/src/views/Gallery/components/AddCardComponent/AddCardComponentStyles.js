@@ -5,7 +5,6 @@ import {
   verticalScale,
 } from "@/constants/Dimentions";
 import { Colors } from "@/constants/Colors";
-import AddCardModal from "../AddCardModal/AddCardModal";
 
 export const styles = StyleSheet.create({
   container: {
