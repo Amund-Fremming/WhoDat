@@ -4,6 +4,7 @@ import {
   ILoginRequest,
   IAuthResponse,
 } from "@/src/domain/AuthTypes";
+import { Result } from "../shared/Result";
 
 export const loginPlayer = async (request: ILoginRequest) => {
   try {
@@ -16,15 +17,16 @@ export const loginPlayer = async (request: ILoginRequest) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in login response " + response.status);
+      console.error(response.status, " loginPlayer: response was not 200.")
+      return Result.failure("Login failed, password or username is wrong", null);
     }
 
     const data: IAuthResponse = await response.json();
-    console.log("auth response :" + data.playerID);
-    return data;
+    return Result.success(data);
   } catch (error) {
-    console.error("Error while logging in a user " + error);
-    throw new Error("Error while logging in a user " + error);
+    var err = error as Error;
+    console.error(error, " loginPlayer: request failed.");
+    return Result.failure<string>("Request failed.", err);
   }
 };
 
@@ -39,13 +41,14 @@ export const registerPlayer = async (request: IRegistrationRequest) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in register response " + response.status);
+      console.error(response.status, " registerPlayer: response was not 200.");
+      return Result.failure("Something went wrong, try another username.", null);
     }
 
     const data: IAuthResponse = await response.json();
     return data;
   } catch (error) {
-    console.error("Error while registering a user " + error);
+    console.error(error, " registerPlayer: request failed");
     throw new Error("Error while registering a user " + error);
   }
 };

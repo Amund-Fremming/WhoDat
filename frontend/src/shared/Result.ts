@@ -1,4 +1,4 @@
-class Result<T> {
+export class Result<T> {
     data: T | null;
     message: string;
     error: Error | null;
@@ -17,8 +17,9 @@ class Result<T> {
         return new Result<T>(data, "", null);
     }
 
-    public static failure<T>(message: string, error: Error)
+    public static failure<T>(message: string, error: Error | null)
     {
         return new Result<T>(null, message, error);
     }
+
 }
