@@ -2,8 +2,8 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
-import { Splash } from "@/screens/Splash/Splash";
-import { AuthProvider } from "@/providers/AuthProvider";
+import { Splash } from "@/src/views/Splash/Splash";
+import { AuthProvider } from "@/src/shared/AuthProvider";
 
 export default function RootLayout() {
   const [loadSplash, setLoadSplash] = useState<boolean>(true);

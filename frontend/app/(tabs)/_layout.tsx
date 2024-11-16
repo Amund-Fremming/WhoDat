@@ -1,10 +1,10 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { Colors } from "@/constants/Colors";
-import Auth from "@/screens/Auth/Auth";
+import { TabBarIcon } from "@/src/shared/components/navigation/TabBarIcon";
+import { Colors } from "@/src/shared/assets/constants/Colors";
+import Auth from "@/src/views/Auth/Auth";
 import { useEffect, useState } from "react";
-import { useAuthProvider } from "@/providers/AuthProvider";
+import { useAuthProvider } from "@/src/shared/AuthProvider";
 
 export default function TabLayout() {
   const { token } = useAuthProvider();
