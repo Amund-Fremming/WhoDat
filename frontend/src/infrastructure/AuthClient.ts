@@ -6,7 +6,7 @@ import {
 } from "@/src/domain/AuthTypes";
 import { Result } from "../shared/Result";
 
-export const loginPlayer = async (request: ILoginRequest) => {
+export const loginPlayer = async (request: ILoginRequest) : Promise<Result<IAuthResponse>> => {
   try {
     const response = await fetch(`${AUTH_ENDPOINT}/login`, {
       method: "POST",
@@ -26,7 +26,7 @@ export const loginPlayer = async (request: ILoginRequest) => {
   } catch (error) {
     var err = error as Error;
     console.error(error, " loginPlayer: request failed.");
-    return Result.failure<string>("Request failed.", err);
+    return Result.failure("Request failed.", err);
   }
 };
 

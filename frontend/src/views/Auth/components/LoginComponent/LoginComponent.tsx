@@ -15,6 +15,7 @@ import { IAuthResponse, ILoginRequest } from "@/src/domain/AuthTypes";
 import { useState } from "react";
 import { useAuthProvider } from "@/src/shared/AuthProvider";
 import { loginPlayer } from "@/src/infrastructure/AuthClient";
+import { Result } from "@/src/shared/Result";
 
 interface LoginComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
@@ -30,7 +31,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
 
   const handleLogin = async () => {
     try {
-      const response: IAuthResponse = await loginPlayer(loginRequest);
+      const response: Result<IAuthResponse> = await loginPlayer(loginRequest);
 
       console.log(response.username);
 
