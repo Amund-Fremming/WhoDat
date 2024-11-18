@@ -1,35 +1,33 @@
-using RaptorProject.Features.Data;
-using RaptorProject.Features.Shared.Enums;
+using Backend.Features.Database;
+using Backend.Features.Player;
+using Backend.Features.Shared.Enums;
 
-namespace Auth;
+namespace Backend.Features.Auth;
 
 public class AuthService(AppDbContext context, IConfiguration configuration, ILogger<IAuthService> logger,
-        IPasswordHasher<PlayerEntity.Player> passwordHasher, IPlayerRepository playerRepository,
+        IPasswordHasher<PlayerEntity> passwordHasher, IPlayerRepository playerRepository,
         IPlayerService playerService) : IAuthService
 {
     public readonly AppDbContext _context = context;
     public readonly IConfiguration _configuration = configuration;
     public readonly ILogger<IAuthService> _logger = logger;
-    public readonly IPasswordHasher<PlayerEntity.Player> _passwordHasher = passwordHasher;
+    public readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
     public readonly IPlayerService _playerService = playerService;
     public readonly IPlayerRepository _playerRepository = playerRepository;
 
-    public string GenerateToken(PlayerEntity.Player player)
+    public string GenerateToken(PlayerEntity player)
     {
         try
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var configurationKey = _configuration["Jwt:Key"];
-
-            if (configurationKey == null) throw new KeyNotFoundException("Jwt key not present in appsettings. (AuthService)");
-
+            var configurationKey = _configuration["Jwt:Key"] ?? throw new KeyNotFoundException("Jwt key not present in appsettings. (AuthService)");
             var key = Encoding.ASCII.GetBytes(configurationKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, player.PlayerID.ToString()),
-                    new Claim(ClaimTypes.Role, player.Role.ToString()),
+                    new Claim(ClaimTypes.Role, player.UserRole.ToString()),
                     new Claim(ClaimTypes.Name, player.Username),
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),       // TODO - JUSTER DENNE!!!
@@ -68,26 +66,22 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
     {
         try
         {
-            PlayerEntity.Player player = await _playerRepository.GetPlayerByUsername(request.Username);
+            PlayerEntity player = await _playerRepository.GetPlayerByUsername(request.Username);
 
             var saltedPassword = request.Password + player.PasswordSalt;
             PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
 
             if (result != PasswordVerificationResult.Success)
-            {
-                Console.WriteLine("Feil?");
                 throw new UnauthorizedAccessException("Credentials not valid!");
-            }
         }
         catch (Exception e)
         {
-            Console.WriteLine("Kastet?");
             _logger.LogError(e.Message, "Error while validating password with salt. (AuthService)");
             throw new UnauthorizedAccessException("Credentials not valid!");
         }
     }
 
-    public async Task<PlayerEntity.Player> RegisterNewPlayer(RegistrationRequest request)
+    public async Task<PlayerEntity> RegisterNewPlayer(RegistrationRequest request)
     {
         try
         {
@@ -95,7 +89,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             string saltedPassword = request.Password + salt;
             string hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
 
-            PlayerEntity.Player player = new PlayerEntity.Player(request.Username, hashedPassword, salt, Role.USER);
+            PlayerEntity player = new(request.Username, hashedPassword, salt, PlayerRole.USER);
             await _playerService.CreatePlayer(player);
 
             return player;

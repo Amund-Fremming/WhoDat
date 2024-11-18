@@ -1,4 +1,6 @@
-namespace PlayerEntity;
+using Backend.Features.Card;
+
+namespace Backend.Features.Player;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -50,12 +52,16 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         {
             case InvalidOperationException _:
                 return BadRequest(exception.Message);
+
             case KeyNotFoundException _:
                 return NotFound(exception.Message);
+
             case UnauthorizedAccessException _:
                 return Unauthorized(exception.Message);
+
             case ArgumentException _:
                 return Conflict(exception.Message);
+
             default:
                 return StatusCode(500, exception.Message);
         }

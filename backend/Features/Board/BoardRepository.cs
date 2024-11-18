@@ -1,20 +1,21 @@
-using RaptorProject.Features.Data;
+using Backend.Features.BoardCard;
+using Backend.Features.Database;
 
-namespace BoardEntity;
+namespace Backend.Features.Board;
 
 public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> logger) : IBoardRepository
 {
     public readonly AppDbContext _context = context;
     private readonly ILogger<IBoardRepository> _logger = logger;
 
-    public async Task<Board> GetBoardById(int boardId)
+    public async Task<BoardEntity> GetBoardById(int boardId)
     {
         return await _context.Board
             .Include(b => b.BoardCards)
             .FirstOrDefaultAsync(b => b.BoardID == boardId) ?? throw new KeyNotFoundException($"Board with id {boardId}, does not exist!");
     }
 
-    public async Task<int> CreateBoard(Board board)
+    public async Task<int> CreateBoard(BoardEntity board)
     {
         try
         {
@@ -31,7 +32,7 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
         }
     }
 
-    public async Task DeleteBoard(Board board)
+    public async Task DeleteBoard(BoardEntity board)
     {
         try
         {
@@ -47,7 +48,7 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
         }
     }
 
-    public async Task ChooseBoardCard(Board board, BoardCard boardCard)
+    public async Task ChooseBoardCard(BoardEntity board, BoardCardEntity boardCard)
     {
         try
         {
@@ -65,7 +66,7 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
         }
     }
 
-    public async Task UpdateBoardCardsLeft(Board board, int playersLeft)
+    public async Task UpdateBoardCardsLeft(BoardEntity board, int playersLeft)
     {
         try
         {

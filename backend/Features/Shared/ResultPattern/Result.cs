@@ -1,4 +1,4 @@
-﻿namespace RaptorProject.Features.Shared.ResultPattern
+﻿namespace Backend.Features.Shared.ResultPattern
 {
     public record Result<T>(T? Data, string Message = "", Exception? Exception = null) : IResult, IResult<T>
     {

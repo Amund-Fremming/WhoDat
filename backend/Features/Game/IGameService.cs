@@ -1,7 +1,6 @@
-using RaptorProject.Features.Game;
-using RaptorProject.Features.Shared.Enums;
+using Backend.Features.Shared.Enums;
 
-namespace GameEntity;
+namespace Backend.Features.Game;
 
 public interface IGameService
 {
@@ -12,7 +11,7 @@ public interface IGameService
     /// <param name="game">The game to be created</param>
     /// <returns>The id of the game created.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the player or game does not exist.</exception>
-    public Task<int> CreateGame(int playerId, Game game);
+    public Task<int> CreateGame(int playerId, GameEntity game);
 
     /// <summary>
     /// Deletes a existing game.
@@ -31,7 +30,7 @@ public interface IGameService
     /// <returns>The game the player was added to.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the game or player does not exist.</exception>
     /// <exception cref="GameFullException">Throws if the game already has to players added.</exception>
-    public Task<Game> JoinGameById(int playerId, int gameId);
+    public Task<GameEntity> JoinGameById(int playerId, int gameId);
 
     /// <summary>
     /// Removes a player from a game.
@@ -50,7 +49,7 @@ public interface IGameService
     /// <param name="state">The new state to be updated to.</param>
     /// <exception cref="KeyNotFoundException">Throws if the game does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the game.</exception>
-    public Task UpdateGameState(int playerId, int gameId, State state);
+    public Task UpdateGameState(int playerId, int gameId, GameState state);
 
     /// <summary>
     /// Fetches the most recent game a player has player based on the id of the games.
@@ -62,7 +61,7 @@ public interface IGameService
     public Task<int> GetRecentGamePlayed(int playerId);
 
     /// <summary>
-    /// Updates the game state so a player can start playing. 
+    /// Updates the game state so a player can start playing.
     /// </summary>
     /// <param name="playerId">The player starting the game.</param>
     /// <param name="gameId">The game to start.</param>
@@ -70,5 +69,5 @@ public interface IGameService
     /// <exception cref="KeyNotFoundException">Throws if the player or game does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the game.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Throws if the game state is not correct for starting the game, there is missing players or one or more player have not choosen a boardcard.</exception>
-    public Task<State> StartGame(int playerId, int gameId);
+    public Task<GameState> StartGame(int playerId, int gameId);
 }

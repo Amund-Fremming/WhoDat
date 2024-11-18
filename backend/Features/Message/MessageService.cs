@@ -1,6 +1,7 @@
-using RaptorProject.Features.Shared.Enums;
+using Backend.Features.Game;
+using Backend.Features.Shared.Enums;
 
-namespace MessageEntity;
+namespace Backend.Features.Message;
 
 public class MessageService(ILogger<IMessageService> logger, IMessageRepository messageRepository, IGameRepository gameRepository) : IMessageService
 {
@@ -12,11 +13,11 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
     {
         try
         {
-            Game game = await _gameRepository.GetGameById(gameId);
+            GameEntity game = await _gameRepository.GetGameById(gameId);
 
             bool canSendMessage = CanSendMessage(playerId, game);
             if (canSendMessage)
-                return await _messageRepository.CreateMessage(new Message(playerId, gameId, messageText));
+                return await _messageRepository.CreateMessage(new MessageEntity(playerId, gameId, messageText));
 
             throw new UnauthorizedAccessException($"This action is not allowed with the current game state. (MessageService)");
         }
@@ -27,17 +28,16 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
         }
     }
 
-    public bool CanSendMessage(int playerId, Game game)
+    public bool CanSendMessage(int playerId, GameEntity game)
     {
-        State state = game.State;
+        GameState state = game.GameState;
         bool playerIsP1 = playerId == game.PlayerOneID;
 
         if (playerIsP1)
-            return (state == State.P1_TURN_STARTED || state == State.P2_WAITING_ASK_REPLY || state == State.P2_WAITING_GUESS_REPLY);
-
+            return state == GameState.P1_TURN_STARTED || state == GameState.P2_WAITING_ASK_REPLY || state == GameState.P2_WAITING_GUESS_REPLY;
 
         if (!playerIsP1)
-            return (state == State.P2_TURN_STARTED || state == State.P1_WAITING_ASK_REPLY || state == State.P1_WAITING_GUESS_REPLY);
+            return state == GameState.P2_TURN_STARTED || state == GameState.P1_WAITING_ASK_REPLY || state == GameState.P1_WAITING_GUESS_REPLY;
 
         return false;
     }

@@ -1,8 +1,14 @@
-using Hubs;
-using Auth;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using RaptorProject.Features.Data;
+using Backend.Features.Auth;
+using Backend.Features.Board;
+using Backend.Features.BoardCard;
+using Backend.Features.Card;
+using Backend.Features.Database;
+using Backend.Features.Game;
+using Backend.Features.GameHub;
+using Backend.Features.Message;
+using Backend.Features.Player;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IPlayerRepository, PlayerEntity.PlayerRepository>();
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
@@ -118,6 +124,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<GameHub>("/hub");
+app.MapHub<GameHubBroker>("/hub");
 
 app.Run();

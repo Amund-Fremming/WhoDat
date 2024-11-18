@@ -1,20 +1,19 @@
-using RaptorProject.Features.Data;
-using RaptorProject.Features.PlayerEntity;
+using Backend.Features.Database;
 
-namespace PlayerEntity;
+namespace Backend.Features.Player;
 
 public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> logger) : IPlayerRepository
 {
     public readonly AppDbContext _context = context;
     public readonly ILogger<IPlayerRepository> _logger = logger;
 
-    public async Task<Player> GetPlayerById(int playerId)
+    public async Task<PlayerEntity> GetPlayerById(int playerId)
     {
         return await _context.Player
             .FindAsync(playerId) ?? throw new KeyNotFoundException($"Player with id {playerId}, does not exist!");
     }
 
-    public async Task<int> CreatePlayer(Player player)
+    public async Task<int> CreatePlayer(PlayerEntity player)
     {
         try
         {
@@ -31,7 +30,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         }
     }
 
-    public async Task DeletePlayer(Player player)
+    public async Task DeletePlayer(PlayerEntity player)
     {
         try
         {
@@ -47,14 +46,14 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         }
     }
 
-    public async Task<Player> GetPlayerByUsername(string username)
+    public async Task<PlayerEntity> GetPlayerByUsername(string username)
     {
         return await _context.Player
             .FirstAsync(p => p.Username == username)
             ?? throw new KeyNotFoundException($"Username {username} does not exist. (PlayerRepository)");
     }
 
-    public async Task UpdateUsername(Player player, string newUsername)
+    public async Task UpdateUsername(PlayerEntity player, string newUsername)
     {
         try
         {
@@ -71,7 +70,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         }
     }
 
-    public async Task UpdatePassword(Player player, string newPassword, string newSalt)
+    public async Task UpdatePassword(PlayerEntity player, string newPassword, string newSalt)
     {
         try
         {

@@ -1,4 +1,4 @@
-namespace MessageEntity;
+namespace Backend.Features.Message;
 
 public interface IMessageService
 {

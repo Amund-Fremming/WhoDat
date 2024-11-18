@@ -1,6 +1,6 @@
-using RaptorProject.Features.Player;
+using Backend.Features.Player;
 
-namespace Admin;
+namespace Backend.Features.Admin;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -46,17 +46,18 @@ public class AdminController(IPlayerService playerService) : ControllerBase
         {
             case InvalidOperationException _:
                 return BadRequest(exception.Message);
+
             case KeyNotFoundException _:
                 return NotFound(exception.Message);
+
             case UnauthorizedAccessException _:
                 return Unauthorized(exception.Message);
+
             case ArgumentException _:
                 return Conflict(exception.Message);
+
             default:
                 return StatusCode(500, exception.Message);
         }
     }
-
-    [NonAction]
-    private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 }

@@ -1,12 +1,12 @@
-namespace PlayerEntity;
+namespace Backend.Features.Player;
 
-public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository playerRepository, IPasswordHasher<Player> passwordHasher) : IPlayerService
+public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository playerRepository, IPasswordHasher<PlayerEntity> passwordHasher) : IPlayerService
 {
     public readonly ILogger<IPlayerService> _logger = logger;
     public readonly IPlayerRepository _playerRepository = playerRepository;
-    public readonly IPasswordHasher<Player> _passwordHasher = passwordHasher;
+    public readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
 
-    public async Task<int> CreatePlayer(Player player)
+    public async Task<int> CreatePlayer(PlayerEntity player)
     {
         try
         {
@@ -25,7 +25,7 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
     {
         try
         {
-            Player player = await _playerRepository.GetPlayerById(playerId);
+            PlayerEntity player = await _playerRepository.GetPlayerById(playerId);
 
             await _playerRepository.DeletePlayer(player);
         }
@@ -40,7 +40,7 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
     {
         try
         {
-            Player player = await _playerRepository.GetPlayerById(playerId);
+            PlayerEntity player = await _playerRepository.GetPlayerById(playerId);
             await _playerRepository.DoesUsernameExist(newUsername);
 
             await _playerRepository.UpdateUsername(player, newUsername);
@@ -56,7 +56,7 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
     {
         try
         {
-            Player player = await _playerRepository.GetPlayerById(playerId);
+            PlayerEntity player = await _playerRepository.GetPlayerById(playerId);
 
             string newSalt = GenerateSalt();
             string saltedPassword = newPassword + newSalt;

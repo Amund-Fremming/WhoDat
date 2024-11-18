@@ -1,4 +1,4 @@
-namespace PlayerEntity;
+namespace Backend.Features.Player;
 
 public interface IPlayerService
 {
@@ -8,7 +8,7 @@ public interface IPlayerService
     /// <param name="player">The new player to be created.</param>
     /// <returns>The newly created players id.</returns>
     /// <exception cref="ArgumentException">Throws if the username exist.</exception>
-    public Task<int> CreatePlayer(Player player);
+    public Task<int> CreatePlayer(PlayerEntity player);
 
     /// <summary>
     /// Deletes a player, only admin or this player can delete.

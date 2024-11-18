@@ -1,7 +1,9 @@
-using RaptorProject.Features.Data;
-using RaptorProject.Features.Shared.Enums;
+using Backend.Features.Board;
+using Backend.Features.Database;
+using Backend.Features.Player;
+using Backend.Features.Shared.Enums;
 
-namespace GameEntity;
+namespace Backend.Features.Game;
 
 public class GameService(AppDbContext context, ILogger<IGameService> logger, IGameRepository gameRepository, IPlayerRepository playerRepository) : IGameService
 {
@@ -10,13 +12,13 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
     public readonly IGameRepository _gameRepository = gameRepository;
     public readonly IPlayerRepository _playerRepository = playerRepository;
 
-    public async Task<int> CreateGame(int playerId, Game game)
+    public async Task<int> CreateGame(int playerId, GameEntity game)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
-                PlayerEntity.Player player = await _playerRepository.GetPlayerById(playerId);
+                PlayerEntity player = await _playerRepository.GetPlayerById(playerId);
                 game.PlayerTwoID = null;
                 int gameId = await _gameRepository.CreateGame(game, player);
 
@@ -36,7 +38,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
     {
         try
         {
-            Game game = await _gameRepository.GetGameById(gameId);
+            GameEntity game = await _gameRepository.GetGameById(gameId);
             PlayerHasPermission(playerId, game);
 
             await _gameRepository.DeleteGame(game);
@@ -48,18 +50,18 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
     }
 
-    public async Task<Game> JoinGameById(int playerId, int gameId)
+    public async Task<GameEntity> JoinGameById(int playerId, int gameId)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
-                Game game = await _gameRepository.GetGameById(gameId);
+                GameEntity game = await _gameRepository.GetGameById(gameId);
 
                 if (game.PlayerTwoID != null)
                     throw new GameFullException($"Game with id {gameId} is full!");
 
-                PlayerEntity.Player player = await _playerRepository.GetPlayerById(playerId);
+                PlayerEntity player = await _playerRepository.GetPlayerById(playerId);
                 await _gameRepository.JoinGame(game, player);
 
                 await transaction.CommitAsync();
@@ -80,7 +82,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         {
             try
             {
-                Game game = await _gameRepository.GetGameById(gameId);
+                GameEntity game = await _gameRepository.GetGameById(gameId);
                 PlayerHasPermission(playerId, game);
 
                 if (game.PlayerOneID == playerId)
@@ -102,13 +104,13 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
     }
 
-    public async Task UpdateGameState(int playerId, int gameId, State state)
+    public async Task UpdateGameState(int playerId, int gameId, GameState state)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
-                Game game = await _gameRepository.GetGameById(gameId);
+                GameEntity game = await _gameRepository.GetGameById(gameId);
                 PlayerHasPermission(playerId, game);
                 PlayerCanUpdateGame(playerId, game);
 
@@ -139,20 +141,20 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
     }
 
-    public async Task<State> StartGame(int playerId, int gameId)
+    public async Task<GameState> StartGame(int playerId, int gameId)
     {
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try
             {
-                PlayerEntity.Player player = await _playerRepository.GetPlayerById(playerId);
-                Game game = await _gameRepository.GetGameById(gameId);
+                PlayerEntity player = await _playerRepository.GetPlayerById(playerId);
+                GameEntity game = await _gameRepository.GetGameById(gameId);
 
                 PlayerHasPermission(playerId, game);
                 GameInValidState(game);
 
-                await _gameRepository.UpdateGameState(game, State.P1_TURN_STARTED);
-                return State.P1_TURN_STARTED;
+                await _gameRepository.UpdateGameState(game, GameState.P1_TURN_STARTED);
+                return GameState.P1_TURN_STARTED;
             }
             catch (Exception e)
             {
@@ -163,23 +165,23 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
     }
 
-    public void GameInValidState(Game game)
+    public void GameInValidState(GameEntity game)
     {
-        if (game.State != State.BOTH_PICKED_PLAYERS)
+        if (game.GameState != GameState.BOTH_PICKED_PLAYERS)
             throw new ArgumentOutOfRangeException("Game cannot start at this state!");
 
         if (game.PlayerOneID == null || game.PlayerTwoID == null)
             throw new ArgumentOutOfRangeException("Game cannot start, missing players!");
 
-        Board playerOneBoard = game.Boards!.ElementAt(0);
-        Board playerTwoBoard = game.Boards!.ElementAt(1) ??
+        BoardEntity playerOneBoard = game.Boards!.ElementAt(0);
+        BoardEntity playerTwoBoard = game.Boards!.ElementAt(1) ??
             throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not created their board!");
 
         if (playerOneBoard.ChosenCardID == null || playerTwoBoard.ChosenCardID == null)
             throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not choosen boardcard!");
     }
 
-    public void PlayerHasPermission(int playerId, Game game)
+    public void PlayerHasPermission(int playerId, GameEntity game)
     {
         if (playerId != game.PlayerOneID && playerId != game.PlayerTwoID)
         {
@@ -188,16 +190,15 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
     }
 
-    public void PlayerCanUpdateGame(int playerId, Game game)
+    public void PlayerCanUpdateGame(int playerId, GameEntity game)
     {
         bool isPlayerOne = game.PlayerOneID == playerId;
 
-        if ((isPlayerOne && (game.State != State.P1_ASK_REPLIED && game.State != State.P1_TURN_STARTED && game.State != State.P1_GUESS_REPLIED)) ||
-            (!isPlayerOne && (game.State != State.P2_ASK_REPLIED && game.State != State.P2_TURN_STARTED && game.State != State.P2_GUESS_REPLIED)))
+        if (isPlayerOne && game.GameState != GameState.P1_ASK_REPLIED && game.GameState != GameState.P1_TURN_STARTED && game.GameState != GameState.P1_GUESS_REPLIED ||
+            !isPlayerOne && game.GameState != GameState.P2_ASK_REPLIED && game.GameState != GameState.P2_TURN_STARTED && game.GameState != GameState.P2_GUESS_REPLIED)
         {
             _logger.LogInformation($"Player with id {playerId} tried to update the state when not allowed.");
             throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission to update the state (GameService)");
         }
     }
 }
-

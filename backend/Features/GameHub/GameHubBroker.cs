@@ -1,11 +1,14 @@
-using RaptorProject.Features.Hub;
-using RaptorProject.Features.Shared.Enums;
+using Backend.Features.Board;
+using Backend.Features.BoardCard;
+using Backend.Features.Game;
+using Backend.Features.Message;
+using Backend.Features.Shared.Enums;
 
-namespace Hubs;
+namespace Backend.Features.GameHub;
 
-public class GameHub : Hub
+public class GameHubBroker : Hub
 {
-    public readonly ILogger<GameHub> _logger;
+    public readonly ILogger<GameHubBroker> _logger;
     public readonly IGameService _gameService;
     public readonly IBoardService _boardService;
     public readonly IBoardCardService _boardCardService;
@@ -15,7 +18,7 @@ public class GameHub : Hub
     private readonly string MESSAGE_IDENTIFIER = "RECEIVE_MESSAGE";
     private readonly string BOARDCARDS_LEFT_IDENTIFIER = "RECEIVE_PLAYERS_LEFT";
 
-    public GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService)
+    public GameHubBroker(ILogger<GameHubBroker> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService)
     {
         _logger = logger;
         _gameService = gameService;
@@ -32,7 +35,7 @@ public class GameHub : Hub
             int recentGamePlayedId = await _gameService.GetRecentGamePlayed(playerId);
             string groupName = recentGamePlayedId.ToString();
 
-            await Clients.Group(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, State.DISCONNECTED);
+            await Clients.Group(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, GameState.DISCONNECTED);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
         catch (Exception e)
@@ -51,7 +54,7 @@ public class GameHub : Hub
 
             await _gameService.LeaveGameById(playerId, gameId);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-            await Clients.Group(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, State.PLAYER_LEFT);
+            await Clients.Group(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, GameState.PLAYER_LEFT);
         }
         catch (Exception e)
         {
@@ -66,14 +69,14 @@ public class GameHub : Hub
             int playerId = ParsePlayerIdClaim();
             string groupName = gameId.ToString();
 
-            Game game = await _gameService.JoinGameById(playerId, gameId);
+            GameEntity game = await _gameService.JoinGameById(playerId, gameId);
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
-            if (game.State == State.ONLY_HOST_CHOSING_CARDS)
-                await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, State.ONLY_HOST_CHOSING_CARDS);
+            if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS)
+                await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, GameState.ONLY_HOST_CHOSING_CARDS);
 
-            if (game.State == State.BOTH_CHOSING_CARDS)
-                await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, State.BOTH_CHOSING_CARDS);
+            if (game.GameState == GameState.BOTH_CHOSING_CARDS)
+                await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, GameState.BOTH_CHOSING_CARDS);
         }
         catch (Exception e)
         {
@@ -81,7 +84,7 @@ public class GameHub : Hub
         }
     }
 
-    public async Task UpdateGameState(int gameId, State state)
+    public async Task UpdateGameState(int gameId, GameState state)
     {
         try
         {
@@ -121,7 +124,7 @@ public class GameHub : Hub
             int playerId = ParsePlayerIdClaim();
             string groupName = gameId.ToString();
 
-            State state = await _boardService.GuessBoardCard(playerId, gameId, boardCardId);
+            GameState state = await _boardService.GuessBoardCard(playerId, gameId, boardCardId);
             await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, state);
         }
         catch (Exception e)
@@ -153,7 +156,7 @@ public class GameHub : Hub
             int playerId = ParsePlayerIdClaim();
             string groupName = gameId.ToString();
 
-            State state = await _boardCardService.CreateBoardCards(playerId, gameId, cardIds);
+            GameState state = await _boardCardService.CreateBoardCards(playerId, gameId, cardIds);
             await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, state);
         }
         catch (Exception e)
@@ -169,7 +172,7 @@ public class GameHub : Hub
             int playerId = ParsePlayerIdClaim();
             string groupName = gameId.ToString();
 
-            State state = await _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId);
+            GameState state = await _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId);
             await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, state);
         }
         catch (Exception e)
@@ -185,7 +188,7 @@ public class GameHub : Hub
             int playerId = ParsePlayerIdClaim();
             string groupName = gameId.ToString();
 
-            State state = await _gameService.StartGame(playerId, gameId);
+            GameState state = await _gameService.StartGame(playerId, gameId);
             await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameHubType.SYSTEM, state);
         }
         catch (Exception e)

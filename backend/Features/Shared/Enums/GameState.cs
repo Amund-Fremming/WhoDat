@@ -1,6 +1,6 @@
-namespace RaptorProject.Features.Shared.Enums;
+namespace Backend.Features.Shared.Enums;
 
-public enum State
+public enum GameState
 {
     // Chosing cards
     ONLY_HOST_CHOSING_CARDS,

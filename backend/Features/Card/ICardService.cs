@@ -1,6 +1,4 @@
-using RaptorProject.Features.CardEntity;
-
-namespace CardEntity;
+namespace Backend.Features.Card;
 
 public interface ICardService
 {
@@ -13,7 +11,7 @@ public interface ICardService
     /// <exception cref="KeyNotFoundException">Throws if the gallery does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the gallery.</exception>
     /// <exception cref="InvalidOperationException">Throws if there is no image file present in the dto.</exception>
-    public Task<int> CreateCard(int playerId, CardInputDto cardDto);
+    public Task<int> CreateCard(int playerId, CreateCardDto cardDto);
 
     /// <summary>
     /// Deletes a existing card.
@@ -41,5 +39,5 @@ public interface ICardService
     /// <returns>A collection of cards.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the gallery does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the gallery.</exception>
-    public Task<IEnumerable<Card>> GetAllCards(int playerId);
+    public Task<IEnumerable<CardEntity>> GetAllCards(int playerId);
 }

@@ -1,6 +1,4 @@
-using RaptorProject.Features.CardEntity;
-
-namespace CardEntity;
+namespace Backend.Features.Card;
 
 public class CardService(ILogger<ICardService> logger, ICardRepository cardRepository, IImageClient imageClient) : ICardService
 {
@@ -8,7 +6,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
     public readonly ICardRepository _cardRepository = cardRepository;
     public readonly IImageClient _imageClient = imageClient;
 
-    public async Task<int> CreateCard(int playerId, CardInputDto cardDto)
+    public async Task<int> CreateCard(int playerId, CreateCardDto cardDto)
     {
         try
         {
@@ -19,7 +17,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
                 throw new ArgumentNullException($"No image present!");
 
             string imageUrl = await _imageClient.Upload(file!);
-            Card card = new Card(playerId);
+            CardEntity card = new CardEntity(playerId);
             card.Name = name;
             card.Url = imageUrl;
 
@@ -37,7 +35,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
     {
         try
         {
-            Card card = await _cardRepository.GetCardById(cardId);
+            CardEntity card = await _cardRepository.GetCardById(cardId);
 
             await _cardRepository.DeleteCard(card);
         }
@@ -49,7 +47,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
         }
     }
 
-    public async Task<IEnumerable<Card>> GetAllCards(int playerId)
+    public async Task<IEnumerable<CardEntity>> GetAllCards(int playerId)
     {
         try
         {

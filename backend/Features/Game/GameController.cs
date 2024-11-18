@@ -1,4 +1,8 @@
-namespace GameEntity;
+using Backend.Features.Board;
+using Backend.Features.BoardCard;
+using Backend.Features.Message;
+
+namespace Backend.Features.Game;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,7 +16,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
 
     [HttpPost("games")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<int>> CreateGame(Game game)
+    public async Task<ActionResult<int>> CreateGame(GameEntity game)
     {
         try
         {
@@ -52,7 +56,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         try
         {
             int playerId = ParsePlayerIdClaim();
-            Board board = await _boardService.GetBoardWithBoardCards(playerId, gameId);
+            BoardEntity board = await _boardService.GetBoardWithBoardCards(playerId, gameId);
 
             return Ok(board);
         }
@@ -68,12 +72,16 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         {
             case InvalidOperationException _:
                 return BadRequest(exception.Message);
+
             case KeyNotFoundException _:
                 return NotFound(exception.Message);
+
             case UnauthorizedAccessException _:
                 return Unauthorized(exception.Message);
+
             case ArgumentException _:
                 return Conflict(exception.Message);
+
             default:
                 return StatusCode(500, exception.Message);
         }

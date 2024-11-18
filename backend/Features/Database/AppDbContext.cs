@@ -1,13 +1,20 @@
-namespace RaptorProject.Features.Data;
+using Backend.Features.Board;
+using Backend.Features.BoardCard;
+using Backend.Features.Card;
+using Backend.Features.Game;
+using Backend.Features.Message;
+using Backend.Features.Player;
+
+namespace Backend.Features.Database;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<Player> Player { get; set; }
-    public DbSet<Game> Game { get; set; }
-    public DbSet<Message> Message { get; set; }
-    public DbSet<Board> Board { get; set; }
-    public DbSet<Card> Card { get; set; }
-    public DbSet<BoardCard> BoardCard { get; set; }
+    public DbSet<PlayerEntity> Player { get; set; }
+    public DbSet<GameEntity> Game { get; set; }
+    public DbSet<MessageEntity> Message { get; set; }
+    public DbSet<BoardEntity> Board { get; set; }
+    public DbSet<CardEntity> Card { get; set; }
+    public DbSet<BoardCardEntity> BoardCard { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -21,7 +28,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Player>()
+        modelBuilder.Entity<PlayerEntity>()
             .HasKey(p => p.PlayerID);
 
         setupGame(modelBuilder);
@@ -33,16 +40,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     private void setupGame(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Game>()
+        modelBuilder.Entity<GameEntity>()
             .HasKey(g => g.GameID);
 
-        modelBuilder.Entity<Game>()
+        modelBuilder.Entity<GameEntity>()
             .HasOne(g => g.PlayerOne)
             .WithMany(p => p.GamesAsPlayerOne)
             .HasForeignKey(g => g.PlayerOneID)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Game>()
+        modelBuilder.Entity<GameEntity>()
             .HasOne(g => g.PlayerTwo)
             .WithMany(p => p.GamesAsPlayerTwo)
             .HasForeignKey(g => g.PlayerTwoID)
@@ -51,16 +58,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     private void setupMessage(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Message>()
+        modelBuilder.Entity<MessageEntity>()
             .HasKey(m => m.MessageID);
 
-        modelBuilder.Entity<Message>()
+        modelBuilder.Entity<MessageEntity>()
             .HasOne(m => m.Game)
             .WithMany(m => m.Messages)
             .HasForeignKey(m => m.GameID)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Message>()
+        modelBuilder.Entity<MessageEntity>()
             .HasOne(m => m.Player)
             .WithMany(p => p.Messages)
             .HasForeignKey(m => m.PlayerID)
@@ -69,22 +76,22 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     private void setupBoard(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Board>()
+        modelBuilder.Entity<BoardEntity>()
             .HasKey(b => b.BoardID);
 
-        modelBuilder.Entity<Board>()
+        modelBuilder.Entity<BoardEntity>()
             .HasOne(b => b.Game)
             .WithMany(g => g.Boards)
             .HasForeignKey(b => b.GameID)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Board>()
+        modelBuilder.Entity<BoardEntity>()
             .HasOne(b => b.Player)
             .WithMany(p => p.Boards)
             .HasForeignKey(b => b.PlayerID)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Board>()
+        modelBuilder.Entity<BoardEntity>()
             .HasOne(b => b.ChosenCard)
             .WithMany()
             .HasForeignKey(b => b.ChosenCardID)
@@ -93,10 +100,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     private void setupCard(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Card>()
+        modelBuilder.Entity<CardEntity>()
             .HasKey(c => c.CardID);
 
-        modelBuilder.Entity<Card>()
+        modelBuilder.Entity<CardEntity>()
             .HasOne(c => c.Player)
             .WithMany(p => p.Cards)
             .HasForeignKey(c => c.PlayerID)
@@ -105,16 +112,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     private void setupBoardCard(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<BoardCard>()
+        modelBuilder.Entity<BoardCardEntity>()
             .HasKey(bc => bc.BoardCardID);
 
-        modelBuilder.Entity<BoardCard>()
+        modelBuilder.Entity<BoardCardEntity>()
             .HasOne(bc => bc.Card)
             .WithMany(c => c.BoardCards)
             .HasForeignKey(bc => bc.CardID)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<BoardCard>()
+        modelBuilder.Entity<BoardCardEntity>()
             .HasOne(bc => bc.Board)
             .WithMany(b => b.BoardCards)
             .HasForeignKey(bc => bc.BoardID)

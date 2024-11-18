@@ -1,4 +1,6 @@
-namespace Auth;
+using Backend.Features.Player;
+
+namespace Backend.Features.Auth;
 
 [ApiController]
 [Route("api/auth")]
@@ -17,7 +19,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         {
             await _authService.ValidatePasswordWithSalt(request);
 
-            PlayerEntity.Player player = await _playerRepository.GetPlayerByUsername(request.Username);
+            PlayerEntity player = await _playerRepository.GetPlayerByUsername(request.Username);
             string token = _authService.GenerateToken(player);
 
             return Ok(new AuthResponse(player.PlayerID, player.Username, token));
@@ -43,7 +45,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         {
             await _playerRepository.DoesUsernameExist(request.Username);
 
-            PlayerEntity.Player? registeredPlayer = await _authService.RegisterNewPlayer(request);
+            PlayerEntity? registeredPlayer = await _authService.RegisterNewPlayer(request);
             string token = _authService.GenerateToken(registeredPlayer);
 
             return Ok(new AuthResponse(registeredPlayer.PlayerID, registeredPlayer.Username, token));

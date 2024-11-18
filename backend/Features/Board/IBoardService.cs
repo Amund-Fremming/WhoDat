@@ -1,6 +1,6 @@
-using RaptorProject.Features.Shared.Enums;
+using Backend.Features.Shared.Enums;
 
-namespace BoardEntity;
+namespace Backend.Features.Board;
 
 public interface IBoardService
 {
@@ -33,7 +33,7 @@ public interface IBoardService
     /// <exception cref="KeyNotFoundException">Throws if the board or boardcard does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player does not own the board or is in the game.</exception>
     /// <exception cref="InvalidOperationException">Throws if the state does not allow for choosing cards.</exception>
-    public Task<State> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId);
+    public Task<GameState> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId);
 
     /// <summary>
     /// Updates the active boardcards left on the players board.
@@ -45,8 +45,7 @@ public interface IBoardService
     /// <exception cref="UnauthorizedAccessException">Throws if the player does not own the board.</exception>
     public Task UpdateBoardCardsLeft(int playerId, int boardId, int activePlayers);
 
-    // TODO
-    public Task<Board> GetBoardWithBoardCards(int playerId, int gameId);
+    public Task<BoardEntity> GetBoardWithBoardCards(int playerId, int gameId);
 
     /// <summary>
     /// Takes in a guess for a boardcard, and checks if the guess is the same boardcard as the other player has selected on their board.
@@ -57,5 +56,5 @@ public interface IBoardService
     /// <returns>The new state of the game.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the game or boardcard does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player does not own the board.</exception>
-    public Task<State> GuessBoardCard(int playerId, int gameId, int guessedBoardCardId);
+    public Task<GameState> GuessBoardCard(int playerId, int gameId, int guessedBoardCardId);
 }

@@ -1,19 +1,19 @@
-using RaptorProject.Features.Data;
+using Backend.Features.Database;
 
-namespace BoardCardEntity;
+namespace Backend.Features.BoardCard;
 
 public class BoardCardRepository(AppDbContext context, ILogger<IBoardCardRepository> logger) : IBoardCardRepository
 {
     public readonly AppDbContext _context = context;
     public readonly ILogger<IBoardCardRepository> _logger = logger;
 
-    public async Task<BoardCard> GetBoardCardById(int boardCardId)
+    public async Task<BoardCardEntity> GetBoardCardById(int boardCardId)
     {
         return await _context.BoardCard
             .FindAsync(boardCardId) ?? throw new KeyNotFoundException($"BoardCard with id {boardCardId}, does not exist!");
     }
 
-    public async Task CreateBoardCards(IEnumerable<BoardCard> boardCards)
+    public async Task CreateBoardCards(IEnumerable<BoardCardEntity> boardCards)
     {
         try
         {
@@ -28,7 +28,7 @@ public class BoardCardRepository(AppDbContext context, ILogger<IBoardCardReposit
         }
     }
 
-    public async Task UpdateBoardCardsActivity(IDictionary<int, bool> updateMap, IEnumerable<BoardCard> boardCards)
+    public async Task UpdateBoardCardsActivity(IDictionary<int, bool> updateMap, IEnumerable<BoardCardEntity> boardCards)
     {
         try
         {
@@ -50,7 +50,7 @@ public class BoardCardRepository(AppDbContext context, ILogger<IBoardCardReposit
         }
     }
 
-    public async Task<IList<BoardCard>> GetBoardCardsFromBoard(int boardId)
+    public async Task<IList<BoardCardEntity>> GetBoardCardsFromBoard(int boardId)
     {
         try
         {

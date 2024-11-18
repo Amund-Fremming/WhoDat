@@ -1,4 +1,4 @@
-﻿namespace RaptorProject.Features.Shared.ResultPattern
+﻿namespace Backend.Features.Shared.ResultPattern
 {
     public interface IResult
     {

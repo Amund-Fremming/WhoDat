@@ -1,19 +1,19 @@
-using RaptorProject.Features.Data;
+using Backend.Features.Database;
 
-namespace MessageEntity;
+namespace Backend.Features.Message;
 
 public class MessageRepository(AppDbContext context, ILogger<IMessageRepository> logger) : IMessageRepository
 {
     public readonly AppDbContext _context = context;
     public readonly ILogger<IMessageRepository> _logger = logger;
 
-    public async Task<Message> GetMessageById(int messageId)
+    public async Task<MessageEntity> GetMessageById(int messageId)
     {
         return await _context.Message
             .FindAsync(messageId) ?? throw new KeyNotFoundException($"Message with id {messageId}, does not exist!");
     }
 
-    public async Task<int> CreateMessage(Message message)
+    public async Task<int> CreateMessage(MessageEntity message)
     {
         try
         {

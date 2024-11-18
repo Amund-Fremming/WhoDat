@@ -1,6 +1,6 @@
-using RaptorProject.Features.Shared.Enums;
+using Backend.Features.Shared.Enums;
 
-namespace BoardCardEntity;
+namespace Backend.Features.BoardCard;
 
 public interface IBoardCardService
 {
@@ -13,7 +13,7 @@ public interface IBoardCardService
     /// <returns>The new game State.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the game or board does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the game or board.</exception>
-    public Task<State> CreateBoardCards(int playerId, int gameId, IEnumerable<int> cardIds);
+    public Task<GameState> CreateBoardCards(int playerId, int gameId, IEnumerable<int> cardIds);
 
     /// <summary>
     /// Updates the activity for multiple boardcards at once.
@@ -34,6 +34,5 @@ public interface IBoardCardService
     /// <returns>A collection of boardcards.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the board does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the board.</exception>
-    public Task<IEnumerable<BoardCard>> GetBoardCardsFromBoard(int playerId, int boardId);
-
+    public Task<IEnumerable<BoardCardEntity>> GetBoardCardsFromBoard(int playerId, int boardId);
 }

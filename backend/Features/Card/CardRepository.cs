@@ -1,19 +1,19 @@
-using RaptorProject.Features.Data;
+using Backend.Features.Database;
 
-namespace CardEntity;
+namespace Backend.Features.Card;
 
 public class CardRepository(AppDbContext context, ILogger<ICardRepository> logger) : ICardRepository
 {
     public readonly AppDbContext _context = context;
     public readonly ILogger<ICardRepository> _logger = logger;
 
-    public async Task<Card> GetCardById(int cardId)
+    public async Task<CardEntity> GetCardById(int cardId)
     {
         return await _context.Card
             .FindAsync(cardId) ?? throw new KeyNotFoundException($"Card with id {cardId}, does not exist!");
     }
 
-    public async Task<int> CreateCard(Card card)
+    public async Task<int> CreateCard(CardEntity card)
     {
         try
         {
@@ -30,7 +30,7 @@ public class CardRepository(AppDbContext context, ILogger<ICardRepository> logge
         }
     }
 
-    public async Task DeleteCard(Card card)
+    public async Task DeleteCard(CardEntity card)
     {
         try
         {
@@ -46,7 +46,7 @@ public class CardRepository(AppDbContext context, ILogger<ICardRepository> logge
         }
     }
 
-    public async Task<IEnumerable<Card>> GetAllCards(int playerId)
+    public async Task<IEnumerable<CardEntity>> GetAllCards(int playerId)
     {
         return await _context.Card
             .Where(c => c.PlayerID == playerId)

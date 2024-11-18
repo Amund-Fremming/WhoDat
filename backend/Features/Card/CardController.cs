@@ -1,6 +1,6 @@
-using RaptorProject.Features.CardEntity;
+using Backend.Features.Player;
 
-namespace CardEntity;
+namespace Backend.Features.Card;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,13 +12,13 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
 
     [HttpGet("getall")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<IEnumerable<Card>>> GetAll()
+    public async Task<ActionResult<IEnumerable<CardEntity>>> GetAll()
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
 
-            IEnumerable<Card> cards = await _cardService.GetAllCards(playerId);
+            IEnumerable<CardEntity> cards = await _cardService.GetAllCards(playerId);
             return Ok(cards);
         }
         catch (Exception e)
@@ -73,7 +73,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
                 ContentType = contentType
             };
 
-            var cardDto = new CardInputDto
+            var cardDto = new CreateCardDto
             {
                 Name = name,
                 Image = formFile

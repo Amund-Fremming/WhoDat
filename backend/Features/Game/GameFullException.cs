@@ -1,4 +1,4 @@
-namespace RaptorProject.Features.GameEntity;
+namespace Backend.Features.Game;
 
 public class GameFullException : Exception
 {

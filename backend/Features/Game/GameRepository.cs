@@ -1,20 +1,21 @@
-using RaptorProject.Features.Data;
-using RaptorProject.Features.Shared.Enums;
+using Backend.Features.Database;
+using Backend.Features.Player;
+using Backend.Features.Shared.Enums;
 
-namespace GameEntity;
+namespace Backend.Features.Game;
 
 public class GameRepository(AppDbContext context, ILogger<IGameRepository> logger) : IGameRepository
 {
     public readonly AppDbContext _context = context;
     public readonly ILogger<IGameRepository> _logger = logger;
 
-    public async Task<Game> GetGameById(int gameId)
+    public async Task<GameEntity> GetGameById(int gameId)
     {
         return await _context.Game
             .FindAsync(gameId) ?? throw new KeyNotFoundException($"Game with id {gameId}, does not exist!");
     }
 
-    public async Task<int> CreateGame(Game game, PlayerEntity.Player player)
+    public async Task<int> CreateGame(GameEntity game, PlayerEntity player)
     {
         try
         {
@@ -34,7 +35,7 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
         }
     }
 
-    public async Task DeleteGame(Game game)
+    public async Task DeleteGame(GameEntity game)
     {
         try
         {
@@ -50,7 +51,7 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
         }
     }
 
-    public async Task JoinGame(Game game, PlayerEntity.Player player)
+    public async Task JoinGame(GameEntity game, PlayerEntity player)
     {
         try
         {
@@ -68,11 +69,11 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
         }
     }
 
-    public async Task LeaveGame(Game game)
+    public async Task LeaveGame(GameEntity game)
     {
         try
         {
-            game.State = State.PLAYER_LEFT;
+            game.GameState = GameState.PLAYER_LEFT;
 
             _context.Game.Update(game);
             await _context.SaveChangesAsync();
@@ -85,11 +86,11 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
         }
     }
 
-    public async Task UpdateGameState(Game game, State state)
+    public async Task UpdateGameState(GameEntity game, GameState state)
     {
         try
         {
-            game.State = state;
+            game.GameState = state;
 
             _context.Game.Update(game);
             await _context.SaveChangesAsync();
@@ -118,7 +119,7 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
         }
     }
 
-    public async Task UpdateGame(Game game)
+    public async Task UpdateGame(GameEntity game)
     {
         try
         {

@@ -1,4 +1,4 @@
-namespace RaptorProject.Features.Hub;
+namespace Backend.Features.GameHub;
 
 public enum GameHubType
 {

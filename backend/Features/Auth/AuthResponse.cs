@@ -1,15 +1,8 @@
-namespace Auth;
+namespace Backend.Features.Auth;
 
-public class AuthResponse
+public class AuthResponse(int playerId, string username, string token)
 {
-    public int PlayerID { get; set; }
-    public string Username { get; set; }
-    public string Token { get; set; }
-
-    public AuthResponse(int playerId, string username, string token)
-    {
-        PlayerID = playerId;
-        Username = username;
-        Token = token;
-    }
+    public int PlayerID { get; set; } = playerId;
+    public string Username { get; set; } = username;
+    public string Token { get; set; } = token;
 }

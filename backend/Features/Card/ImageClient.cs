@@ -2,7 +2,7 @@ using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 
-namespace Image;
+namespace Backend.Features.Card;
 
 public interface IImageClient
 {

@@ -1,4 +1,4 @@
-namespace MessageEntity;
+namespace Backend.Features.Message;
 
 public interface IMessageRepository
 {
@@ -8,11 +8,11 @@ public interface IMessageRepository
     /// <param name="messageId">The id for the Message.</param>
     /// <returns>The Message asked for.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the Message does not exist.</exception>
-    Task<Message> GetMessageById(int messageId);
+    Task<MessageEntity> GetMessageById(int messageId);
 
     /// <summary>
     /// Stores a new Message to the database.
     /// </summary>
     /// <param name="message">The Message to be stored.</param>
-    Task<int> CreateMessage(Message message);
+    Task<int> CreateMessage(MessageEntity message);
 }
