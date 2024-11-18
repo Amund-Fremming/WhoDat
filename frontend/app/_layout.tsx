@@ -3,7 +3,7 @@ import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import { Splash } from "@/src/views/Splash/Splash";
-import { AuthProvider } from "@/src/shared/AuthProvider";
+import { AuthProvider } from "@/src/shared/state/AuthProvider";
 
 export default function RootLayout() {
   const [loadSplash, setLoadSplash] = useState<boolean>(true);
