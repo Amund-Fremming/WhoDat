@@ -1,3 +1,6 @@
+using RaptorProject.Features.Data;
+using RaptorProject.Features.Shared.Enums;
+
 namespace BoardCardEntity;
 
 public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> logger,

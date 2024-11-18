@@ -1,3 +1,6 @@
+using RaptorProject.Features.Hub;
+using RaptorProject.Features.Shared.Enums;
+
 namespace Hubs;
 
 public class GameHub : Hub
@@ -199,9 +202,11 @@ public class GameHub : Hub
             case KeyNotFoundException _:
                 errorType = GameHubError.ENTITY_NOT_FOUND;
                 break;
+
             case UnauthorizedAccessException _:
                 errorType = GameHubError.UNAUTHORIZED;
                 break;
+
             case InvalidOperationException _:
                 errorType = GameHubError.OPERATION_FAILED;
                 break;

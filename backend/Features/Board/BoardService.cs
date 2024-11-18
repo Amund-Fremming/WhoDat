@@ -1,3 +1,6 @@
+using RaptorProject.Features.Data;
+using RaptorProject.Features.Shared.Enums;
+
 namespace BoardEntity;
 
 public class BoardService(ILogger<IBoardService> logger, AppDbContext context, IBoardRepository boardRepository, IBoardCardRepository boardCardRepository, IGameRepository gameRepository, IPlayerRepository playerRepository) : IBoardService
@@ -222,7 +225,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
     private async Task<Board> CreatePlayerTwoBoard(int playerId, Game game)
     {
-        Player player = await _playerRepository.GetPlayerById(playerId);
+        PlayerEntity.Player player = await _playerRepository.GetPlayerById(playerId);
 
 
         Board playerOneBoard = playerOneBoard = game.Boards!.ElementAt(0);

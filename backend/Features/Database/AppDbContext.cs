@@ -1,4 +1,4 @@
-namespace Data;
+namespace RaptorProject.Features.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
@@ -8,7 +8,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Board> Board { get; set; }
     public DbSet<Card> Card { get; set; }
     public DbSet<BoardCard> BoardCard { get; set; }
-
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -30,7 +29,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         setupBoard(modelBuilder);
         setupCard(modelBuilder);
         setupBoardCard(modelBuilder);
-
     }
 
     private void setupGame(ModelBuilder modelBuilder)

@@ -17,7 +17,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         {
             await _authService.ValidatePasswordWithSalt(request);
 
-            Player player = await _playerRepository.GetPlayerByUsername(request.Username);
+            PlayerEntity.Player player = await _playerRepository.GetPlayerByUsername(request.Username);
             string token = _authService.GenerateToken(player);
 
             return Ok(new AuthResponse(player.PlayerID, player.Username, token));
@@ -43,7 +43,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         {
             await _playerRepository.DoesUsernameExist(request.Username);
 
-            Player? registeredPlayer = await _authService.RegisterNewPlayer(request);
+            PlayerEntity.Player? registeredPlayer = await _authService.RegisterNewPlayer(request);
             string token = _authService.GenerateToken(registeredPlayer);
 
             return Ok(new AuthResponse(registeredPlayer.PlayerID, registeredPlayer.Username, token));

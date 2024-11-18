@@ -1,10 +1,12 @@
+using RaptorProject.Features.CardEntity;
+
 namespace CardEntity;
 
-public class CardService(ILogger<ICardService> logger, ICardRepository cardRepository, IImageService imageService) : ICardService
+public class CardService(ILogger<ICardService> logger, ICardRepository cardRepository, IImageClient imageClient) : ICardService
 {
     public readonly ILogger<ICardService> _logger = logger;
     public readonly ICardRepository _cardRepository = cardRepository;
-    public readonly IImageService _imageService = imageService;
+    public readonly IImageClient _imageClient = imageClient;
 
     public async Task<int> CreateCard(int playerId, CardInputDto cardDto)
     {
@@ -16,7 +18,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
             if (file == null || file.Length == 0)
                 throw new ArgumentNullException($"No image present!");
 
-            string imageUrl = await _imageService.Upload(file!);
+            string imageUrl = await _imageClient.Upload(file!);
             Card card = new Card(playerId);
             card.Name = name;
             card.Url = imageUrl;

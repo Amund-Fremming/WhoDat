@@ -1,3 +1,5 @@
+using RaptorProject.Features.CardEntity;
+
 namespace CardEntity;
 
 [ApiController]
@@ -111,12 +113,16 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
         {
             case InvalidOperationException _:
                 return BadRequest(exception.Message);
+
             case KeyNotFoundException _:
                 return NotFound(exception.Message);
+
             case UnauthorizedAccessException _:
                 return Unauthorized(exception.Message);
+
             case ArgumentException _:
                 return Conflict(exception.Message);
+
             default:
                 return StatusCode(500, exception.Message);
         }

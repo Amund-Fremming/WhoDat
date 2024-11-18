@@ -1,3 +1,5 @@
+using RaptorProject.Features.Shared.Enums;
+
 namespace GameEntity;
 
 public class Game
@@ -8,11 +10,11 @@ public class Game
 
     [Range(1, 10000000)]
     public int? PlayerOneID { get; set; }
-    public Player? PlayerOne { get; set; }
+    public PlayerEntity.Player? PlayerOne { get; set; }
 
     [Range(1, 10000000)]
     public int? PlayerTwoID { get; set; }
-    public Player? PlayerTwo { get; set; }
+    public PlayerEntity.Player? PlayerTwo { get; set; }
 
     public State State { get; set; }
 

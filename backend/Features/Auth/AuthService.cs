@@ -1,17 +1,20 @@
+using RaptorProject.Features.Data;
+using RaptorProject.Features.Shared.Enums;
+
 namespace Auth;
 
 public class AuthService(AppDbContext context, IConfiguration configuration, ILogger<IAuthService> logger,
-        IPasswordHasher<Player> passwordHasher, IPlayerRepository playerRepository,
+        IPasswordHasher<PlayerEntity.Player> passwordHasher, IPlayerRepository playerRepository,
         IPlayerService playerService) : IAuthService
 {
     public readonly AppDbContext _context = context;
     public readonly IConfiguration _configuration = configuration;
     public readonly ILogger<IAuthService> _logger = logger;
-    public readonly IPasswordHasher<Player> _passwordHasher = passwordHasher;
+    public readonly IPasswordHasher<PlayerEntity.Player> _passwordHasher = passwordHasher;
     public readonly IPlayerService _playerService = playerService;
     public readonly IPlayerRepository _playerRepository = playerRepository;
 
-    public string GenerateToken(Player player)
+    public string GenerateToken(PlayerEntity.Player player)
     {
         try
         {
@@ -65,7 +68,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
     {
         try
         {
-            Player player = await _playerRepository.GetPlayerByUsername(request.Username);
+            PlayerEntity.Player player = await _playerRepository.GetPlayerByUsername(request.Username);
 
             var saltedPassword = request.Password + player.PasswordSalt;
             PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
@@ -84,7 +87,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         }
     }
 
-    public async Task<Player> RegisterNewPlayer(RegistrationRequest request)
+    public async Task<PlayerEntity.Player> RegisterNewPlayer(RegistrationRequest request)
     {
         try
         {
@@ -92,7 +95,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             string saltedPassword = request.Password + salt;
             string hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
 
-            Player player = new Player(request.Username, hashedPassword, salt, Role.USER);
+            PlayerEntity.Player player = new PlayerEntity.Player(request.Username, hashedPassword, salt, Role.USER);
             await _playerService.CreatePlayer(player);
 
             return player;

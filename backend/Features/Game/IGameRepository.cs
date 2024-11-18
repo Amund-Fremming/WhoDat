@@ -1,3 +1,5 @@
+using RaptorProject.Features.Shared.Enums;
+
 namespace GameEntity;
 
 public interface IGameRepository
@@ -15,7 +17,7 @@ public interface IGameRepository
     /// </summary>
     /// <param name="game">The game object containing details about the game to be created.</param>
     /// <param name="player">The player who is initiating the game.</param>
-    Task<int> CreateGame(Game game, Player player);
+    Task<int> CreateGame(Game game, PlayerEntity.Player player);
 
     /// <summary>
     /// Deletes the specified game from the system.
@@ -28,7 +30,7 @@ public interface IGameRepository
     /// </summary>
     /// <param name="game">The game object representing the game to join.</param>
     /// <param name="player">The player who wants to join the game.</param>
-    Task JoinGame(Game game, Player player);
+    Task JoinGame(Game game, PlayerEntity.Player player);
 
     /// <summary>
     /// Allows a player to leave an existing game.

@@ -41,7 +41,7 @@ public interface IPlayerService
     public Task<IEnumerable<PlayerDto>> GetAllPlayers();
 
     /// <summary>
-    /// Generates salt for seeding passwords. 
+    /// Generates salt for seeding passwords.
     /// </summary>
     /// <returns>Generated salt</returns>
     public string GenerateSalt();

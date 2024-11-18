@@ -5,7 +5,7 @@ public class Board
     [Key]
     public int BoardID { get; set; }
     public int PlayerID { get; set; }
-    public Player? Player { get; set; }
+    public PlayerEntity.Player? Player { get; set; }
     public int GameID { get; set; }
     public Game? Game { get; set; }
     public int? ChosenCardID { get; set; }

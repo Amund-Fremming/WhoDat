@@ -1,3 +1,6 @@
+using RaptorProject.Features.Game;
+using RaptorProject.Features.Shared.Enums;
+
 namespace GameEntity;
 
 public interface IGameService

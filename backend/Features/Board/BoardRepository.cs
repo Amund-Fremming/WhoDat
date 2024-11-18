@@ -1,3 +1,5 @@
+using RaptorProject.Features.Data;
+
 namespace BoardEntity;
 
 public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> logger) : IBoardRepository

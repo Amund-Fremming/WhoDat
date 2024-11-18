@@ -1,3 +1,6 @@
+using RaptorProject.Features.Data;
+using RaptorProject.Features.Shared.Enums;
+
 namespace GameEntity;
 
 public class GameRepository(AppDbContext context, ILogger<IGameRepository> logger) : IGameRepository
@@ -11,7 +14,7 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
             .FindAsync(gameId) ?? throw new KeyNotFoundException($"Game with id {gameId}, does not exist!");
     }
 
-    public async Task<int> CreateGame(Game game, Player player)
+    public async Task<int> CreateGame(Game game, PlayerEntity.Player player)
     {
         try
         {
@@ -47,7 +50,7 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
         }
     }
 
-    public async Task JoinGame(Game game, Player player)
+    public async Task JoinGame(Game game, PlayerEntity.Player player)
     {
         try
         {

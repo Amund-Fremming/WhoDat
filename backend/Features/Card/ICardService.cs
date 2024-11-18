@@ -1,3 +1,5 @@
+using RaptorProject.Features.CardEntity;
+
 namespace CardEntity;
 
 public interface ICardService
@@ -41,4 +43,3 @@ public interface ICardService
     /// <exception cref="UnauthorizedAccessException">Throws if the player id does not exist in the gallery.</exception>
     public Task<IEnumerable<Card>> GetAllCards(int playerId);
 }
-

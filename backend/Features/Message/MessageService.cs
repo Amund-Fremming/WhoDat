@@ -1,3 +1,5 @@
+using RaptorProject.Features.Shared.Enums;
+
 namespace MessageEntity;
 
 public class MessageService(ILogger<IMessageService> logger, IMessageRepository messageRepository, IGameRepository gameRepository) : IMessageService

@@ -1,17 +1,25 @@
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
-using Amazon.Runtime;
 
 namespace Image;
 
-public class ImageService : IImageService
+public interface IImageClient
+{
+    /// <summary>
+    /// Uploads a image to CloudFlare Bucket and returns the URL for the image.
+    /// </summary>
+    Task<string> Upload(IFormFile form);
+}
+
+public class ImageClient : IImageClient
 {
     public readonly IAmazonS3 _s3Client;
     public readonly IConfiguration _configuration;
     public readonly string BucketName = "whodat-image-container";
     public readonly string PublicUrlBase;
 
-    public ImageService(IConfiguration configuration)
+    public ImageClient(IConfiguration configuration)
     {
         _configuration = configuration;
 

@@ -1,4 +1,4 @@
-namespace Dto;
+namespace RaptorProject.Features.PlayerEntity;
 
 public class PlayerDto
 {

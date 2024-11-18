@@ -1,3 +1,5 @@
+using RaptorProject.Features.Shared.Enums;
+
 namespace BoardCardEntity;
 
 public interface IBoardCardService

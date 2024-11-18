@@ -8,6 +8,7 @@ public class Card
 
     [Range(1, 10000000)]
     public int PlayerID { get; set; }
+
     public Player? Player { get; set; }
 
     [StringLength(15, MinimumLength = 3)]
@@ -20,11 +21,11 @@ public class Card
 
     public IEnumerable<BoardCard>? BoardCards { get; set; }
 
-    public Card() { }
+    public Card()
+    { }
 
     public Card(int playerId)
     {
         PlayerID = playerId;
     }
 }
-

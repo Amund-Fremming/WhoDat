@@ -1,4 +1,4 @@
-namespace Dto;
+namespace RaptorProject.Features.CardEntity;
 
 public class CardInputDto
 {
@@ -8,4 +8,3 @@ public class CardInputDto
 
     public IFormFile? Image { get; set; }
 }
-

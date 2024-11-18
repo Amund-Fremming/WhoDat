@@ -1,3 +1,5 @@
+using RaptorProject.Features.PlayerEntity;
+
 namespace PlayerEntity;
 
 public interface IPlayerRepository

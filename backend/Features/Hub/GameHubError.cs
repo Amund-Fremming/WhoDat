@@ -1,4 +1,4 @@
-namespace Enum;
+namespace RaptorProject.Features.Hub;
 
 public enum GameHubError
 {

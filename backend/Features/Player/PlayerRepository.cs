@@ -1,3 +1,6 @@
+using RaptorProject.Features.Data;
+using RaptorProject.Features.PlayerEntity;
+
 namespace PlayerEntity;
 
 public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> logger) : IPlayerRepository

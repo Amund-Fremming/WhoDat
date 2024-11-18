@@ -1,3 +1,5 @@
+using RaptorProject.Features.Data;
+
 namespace CardEntity;
 
 public class CardRepository(AppDbContext context, ILogger<ICardRepository> logger) : ICardRepository

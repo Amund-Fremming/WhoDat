@@ -1,3 +1,6 @@
+using RaptorProject.Features.Data;
+using RaptorProject.Features.Shared.Enums;
+
 namespace GameEntity;
 
 public class GameService(AppDbContext context, ILogger<IGameService> logger, IGameRepository gameRepository, IPlayerRepository playerRepository) : IGameService
@@ -13,7 +16,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         {
             try
             {
-                Player player = await _playerRepository.GetPlayerById(playerId);
+                PlayerEntity.Player player = await _playerRepository.GetPlayerById(playerId);
                 game.PlayerTwoID = null;
                 int gameId = await _gameRepository.CreateGame(game, player);
 
@@ -56,7 +59,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
                 if (game.PlayerTwoID != null)
                     throw new GameFullException($"Game with id {gameId} is full!");
 
-                Player player = await _playerRepository.GetPlayerById(playerId);
+                PlayerEntity.Player player = await _playerRepository.GetPlayerById(playerId);
                 await _gameRepository.JoinGame(game, player);
 
                 await transaction.CommitAsync();
@@ -142,7 +145,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         {
             try
             {
-                Player player = await _playerRepository.GetPlayerById(playerId);
+                PlayerEntity.Player player = await _playerRepository.GetPlayerById(playerId);
                 Game game = await _gameRepository.GetGameById(gameId);
 
                 PlayerHasPermission(playerId, game);

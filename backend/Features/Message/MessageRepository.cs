@@ -1,3 +1,5 @@
+using RaptorProject.Features.Data;
+
 namespace MessageEntity;
 
 public class MessageRepository(AppDbContext context, ILogger<IMessageRepository> logger) : IMessageRepository
