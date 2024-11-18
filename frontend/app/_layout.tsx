@@ -2,7 +2,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
-import { Splash } from "@/src/views/Splash/Splash";
+import { Splash } from "@/src/Splash/Splash";
 import { AuthProvider } from "@/src/shared/state/AuthProvider";
 
 export default function RootLayout() {
