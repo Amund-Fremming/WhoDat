@@ -28,5 +28,14 @@
 
             action.Invoke(result);
         }
+
+        // new
+        public static Result RemoveType<T>(this Result<T> result)
+        {
+            if (result.IsSuccess)
+                return Result.Success();
+
+            return Result.Failure(result.Exception!, result.Message);
+        }
     }
 }

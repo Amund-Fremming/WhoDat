@@ -6,35 +6,35 @@ public class PlayerService(ILogger<IPlayerService> logger, IPlayerRepository pla
     public readonly IPlayerRepository _playerRepository = playerRepository;
     public readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
 
-    public async Task<int> CreatePlayer(PlayerEntity player)
-    {
-        try
-        {
-            await _playerRepository.DoesUsernameExist(player.Username);
+    //public async Task<int> CreatePlayer(PlayerEntity player)
+    //{
+    //    try
+    //    {
+    //        await _playerRepository.DoesUsernameExist(player.Username);
 
-            return await _playerRepository.CreatePlayer(player);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message, $"Error while creating Player with id {player.PlayerID}. (PlayerService)");
-            throw;
-        }
-    }
+    //        return await _playerRepository.CreatePlayer(player);
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        _logger.LogError(e.Message, $"Error while creating Player with id {player.PlayerID}. (PlayerService)");
+    //        throw;
+    //    }
+    //}
 
-    public async Task DeletePlayer(int playerId)
-    {
-        try
-        {
-            PlayerEntity player = await _playerRepository.GetPlayerById(playerId);
+    //public async Task DeletePlayer(int playerId)
+    //{
+    //    try
+    //    {
+    //        PlayerEntity player = await _playerRepository.GetPlayerById(playerId);
 
-            await _playerRepository.DeletePlayer(player);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message, $"Error while deleting Player with id {playerId}. (PlayerService)");
-            throw;
-        }
-    }
+    //        await _playerRepository.DeletePlayer(player);
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        _logger.LogError(e.Message, $"Error while deleting Player with id {playerId}. (PlayerService)");
+    //        throw;
+    //    }
+    //}
 
     public async Task UpdateUsername(int playerId, string newUsername)
     {

@@ -1,4 +1,5 @@
 using Backend.Features.Database;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Player;
 
@@ -7,53 +8,61 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
     public readonly AppDbContext _context = context;
     public readonly ILogger<IPlayerRepository> _logger = logger;
 
-    public async Task<PlayerEntity> GetPlayerById(int playerId)
+    public async Task<Result<PlayerEntity>> GetPlayerById(int playerId)
     {
-        return await _context.Player
-            .FindAsync(playerId) ?? throw new KeyNotFoundException($"Player with id {playerId}, does not exist!");
+        var player = await _context.Player.FindAsync(playerId);
+        if (player == null)
+            return Result<PlayerEntity>.Failure("Player does not exist.");
+
+        return Result<PlayerEntity>.Success(player);
     }
 
-    public async Task<int> CreatePlayer(PlayerEntity player)
+    public async Task<Result> CreatePlayer(PlayerEntity player)
     {
         try
         {
             await _context.AddAsync(player);
             await _context.SaveChangesAsync();
 
-            return player.PlayerID;
+            return Result.Success();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error creating Player with id {player.PlayerID}. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(PlayerRepository)");
+            return Result.Failure(e, "Failed to create player. Please try again later.");
         }
     }
 
-    public async Task DeletePlayer(PlayerEntity player)
+    public async Task<Result> DeletePlayer(int playerId)
     {
         try
         {
-            _context.Player.Remove(player);
+            var result = await GetPlayerById(playerId);
+            if (!result.IsSuccess)
+                return result.RemoveType();
+
+            _context.Player.Remove(result.Data);
 
             await _context.SaveChangesAsync();
+            return Result.Success();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error deleting Player with id {player.PlayerID}. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(PlayerRepository)");
+            return Result.Failure(e, "Failed to delete user. Please try again later.");
         }
     }
 
-    public async Task<PlayerEntity> GetPlayerByUsername(string username)
+    public async Task<Result<PlayerEntity>> GetPlayerByUsername(string username)
     {
-        return await _context.Player
-            .FirstAsync(p => p.Username == username)
-            ?? throw new KeyNotFoundException($"Username {username} does not exist. (PlayerRepository)");
+        var user = await _context.Player.FirstAsync(p => p.Username == username);
+        if (user == null)
+            return Result<PlayerEntity>.Failure("Username does not exist");
+
+        return user;
     }
 
-    public async Task UpdateUsername(PlayerEntity player, string newUsername)
+    public async Task<Result> UpdateUsername(PlayerEntity player, string newUsername)
     {
         try
         {
@@ -61,16 +70,16 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
             _context.Player.Update(player);
 
             await _context.SaveChangesAsync();
+            return Result.Success();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID}. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(PlayerRepository)");
+            return Result.Failure(e, "Failed to update username. Please try again later.");
         }
     }
 
-    public async Task UpdatePassword(PlayerEntity player, string newPassword, string newSalt)
+    public async Task<Result> UpdatePassword(PlayerEntity player, string newPassword, string newSalt)
     {
         try
         {
@@ -80,16 +89,16 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
             _context.Player.Update(player);
 
             await _context.SaveChangesAsync();
+            return Result.Success();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID}. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(PlayerRepository)");
+            return Result.Failure(e, "Failed to update password. Please try again later.");
         }
     }
 
-    public async Task<IEnumerable<PlayerDto>> GetAllPlayers()
+    public async Task<Result<IEnumerable<PlayerDto>>> GetAllPlayers()
     {
         try
         {
@@ -99,18 +108,27 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error getting all players. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(PlayerRepository)");
+            return Result<IEnumerable<PlayerDto>>.Failure(e, "Failed to retrieve players. Please try again later.\r\n");
         }
     }
 
-    public async Task DoesUsernameExist(string username)
+    public async Task<Result> DoesUsernameExist(string username)
     {
-        bool usernameExist = await _context.Player
-            .AnyAsync(p => p.Username == username);
+        try
+        {
+            bool usernameExist = await _context.Player
+        .AnyAsync(p => p.Username == username);
 
-        if (usernameExist)
-            throw new ArgumentException($"Username {username} already exists!");
+            if (usernameExist)
+                return Result.Failure("Username exists");
+
+            return Result.Success();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(DoesUsernameExist)");
+            return Result.Failure(e, "Failed to check username existence. Please try again later.");
+        }
     }
 }
