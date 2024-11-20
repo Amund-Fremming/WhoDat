@@ -1,14 +1,11 @@
-using Backend.Features.Card;
-
 namespace Backend.Features.Player;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlayerController(ILogger<PlayerController> logger, IPlayerService playerService, ICardService cardService) : ControllerBase
+public class PlayerController(ILogger<PlayerController> logger, IPlayerRepository playerRepository) : ControllerBase
 {
     public readonly ILogger<PlayerController> _logger = logger;
-    public readonly IPlayerService _playerService = playerService;
-    public readonly ICardService _cardService = cardService;
+    public readonly IPlayerRepository _playerRepository = playerRepository;
 
     [HttpPut("players/update-username")]
     [Authorize(Roles = "ADMIN,USER")]
@@ -19,12 +16,14 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
             int playerId = ParsePlayerIdClaim();
             string encodedNewUsername = EncodeForJsAndHtml(newUsername);
 
-            await _playerService.UpdateUsername(playerId, encodedNewUsername);
-            return Ok("Username Updated!");
+            var result = await _playerRepository.UpdateUsername(playerId, encodedNewUsername);
+
+            return result.IsSuccess ? Ok("Username was updated.") : BadRequest(result.Message);
         }
         catch (Exception e)
         {
-            return HandleException(e);
+            _logger.LogError(e, "(UpdatePlayerUsername)");
+            return StatusCode(500);
         }
     }
 
@@ -37,33 +36,14 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
             int playerId = ParsePlayerIdClaim();
             string encodedNewPassword = EncodeForJsAndHtml(newPassword);
 
-            await _playerService.UpdatePassword(playerId, encodedNewPassword);
-            return Ok("Password Updated!");
+            var result = await _playerRepository.UpdatePassword(playerId, encodedNewPassword);
+
+            return result.IsSuccess ? Ok("Password was updated.") : BadRequest(result.Message);
         }
         catch (Exception e)
         {
-            return HandleException(e);
-        }
-    }
-
-    private ActionResult HandleException(Exception exception)
-    {
-        switch (exception)
-        {
-            case InvalidOperationException _:
-                return BadRequest(exception.Message);
-
-            case KeyNotFoundException _:
-                return NotFound(exception.Message);
-
-            case UnauthorizedAccessException _:
-                return Unauthorized(exception.Message);
-
-            case ArgumentException _:
-                return Conflict(exception.Message);
-
-            default:
-                return StatusCode(500, exception.Message);
+            _logger.LogError(e, "(UpdatePlayerPassword)");
+            return StatusCode(500);
         }
     }
 
@@ -71,5 +51,5 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 
     [NonAction]
-    private string EncodeForJsAndHtml(string input) => JavaScriptEncoder.Default.Encode(HtmlEncoder.Default.Encode(input));
+    private static string EncodeForJsAndHtml(string input) => JavaScriptEncoder.Default.Encode(HtmlEncoder.Default.Encode(input));
 }

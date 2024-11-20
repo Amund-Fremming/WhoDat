@@ -4,9 +4,10 @@ namespace Backend.Features.Admin;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AdminController(IPlayerService playerService) : ControllerBase
+public class AdminController(ILogger<AdminController> logger, IPlayerRepository playerRepository) : ControllerBase
 {
-    public readonly IPlayerService _playerService = playerService;
+    public readonly IPlayerRepository _playerRepository = playerRepository;
+    public readonly ILogger<AdminController> _logger = logger;
 
     [HttpDelete("players/delete/{playerId}")]
     [Authorize(Roles = "ADMIN")]
@@ -14,50 +15,29 @@ public class AdminController(IPlayerService playerService) : ControllerBase
     {
         try
         {
-            await _playerService.DeletePlayer(playerId);
-
-            return Ok("Player Deleted!");
+            var result = await _playerRepository.DeletePlayer(playerId);
+            return result.IsSuccess ? Ok("Player was deleted.") : BadRequest(result.Message);
         }
         catch (Exception e)
         {
-            return HandleException(e);
+            _logger.LogError(e, "(DeletePlayer)");
+            return StatusCode(500);
         }
     }
 
     [HttpGet("players")]
     [Authorize(Roles = "ADMIN")]
-    public async Task<ActionResult<IEnumerable<PlayerDto>>> GetAllPlayers()
+    public async Task<ActionResult> GetAllPlayers()
     {
         try
         {
-            IEnumerable<PlayerDto> players = await _playerService.GetAllPlayers();
-
-            return Ok(players);
+            var result = await _playerRepository.GetAllPlayers();
+            return result.IsSuccess ? Ok(result.Data) : BadRequest(result.Message);
         }
         catch (Exception e)
         {
-            return HandleException(e);
-        }
-    }
-
-    private ActionResult HandleException(Exception exception)
-    {
-        switch (exception)
-        {
-            case InvalidOperationException _:
-                return BadRequest(exception.Message);
-
-            case KeyNotFoundException _:
-                return NotFound(exception.Message);
-
-            case UnauthorizedAccessException _:
-                return Unauthorized(exception.Message);
-
-            case ArgumentException _:
-                return Conflict(exception.Message);
-
-            default:
-                return StatusCode(500, exception.Message);
+            _logger.LogError(e, "(GetAllPlayers)");
+            return StatusCode(500);
         }
     }
 }

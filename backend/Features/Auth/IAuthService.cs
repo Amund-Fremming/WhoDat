@@ -1,4 +1,5 @@
 using Backend.Features.Player;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Auth;
 
@@ -9,7 +10,7 @@ public interface IAuthService
     /// </summary>
     /// <param name="player">The player to generate a token for.</param>
     /// <returns>The generated token as a string.</returns>
-    string GenerateToken(PlayerEntity player);
+    Result<string> GenerateToken(PlayerEntity player);
 
     /// <summary>
     /// Generates the salt used to be stored with a players password.
@@ -31,5 +32,5 @@ public interface IAuthService
     /// <param name="request">Object containing all data for regirering a user.</param>
     /// <returns>The Player created.</returns>
     /// <exception cref="ArgumentException">Throws if username already exists.</exception>
-    Task<PlayerEntity> RegisterNewPlayer(RegistrationRequest request);
+    Task<Result<PlayerEntity>> RegisterNewPlayer(RegistrationRequest request);
 }

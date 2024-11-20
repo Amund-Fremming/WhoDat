@@ -1,16 +1,15 @@
 # TODO REFACTOR
 
 ## Result Pattern + Logging
-- [ ] Admin
-- [ ] Auth
+- [x] Admin
+- [x] Auth
 - [ ] Board
 - [ ] BoardCard
 - [ ] Card
 - [ ] Game 
 - [ ] Hub
-- [ ] ImageHandler
 - [ ] Message
-- [ ] Player
+- [x] Player
 
 
 MIGHT ME SOME PLACES WHERE I WROTE GAMESTATE AND NOT GAMEENTITY
@@ -25,4 +24,11 @@ MIGHT ME SOME PLACES WHERE I WROTE GAMESTATE AND NOT GAMEENTITY
 - [x] Change namespace to match folder structure
 - [ ] Make State object that game can hold for all state logic
 - [ ] Solid
+- [ ] Dto from class to record
+- [ ] Implement caching
+- [ ] use [FromServices]
+
+### Refactor later
+- [ ] Identity provider
+- [ ] Options pattern
 

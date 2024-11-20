@@ -21,8 +21,8 @@ public interface IPlayerRepository
     /// <summary>
     /// Deletes a Player from the database.
     /// </summary>
-    /// <param name="player">The Player to be deleted</param>
-    Task<Result> DeletePlayer(PlayerEntity player);
+    /// <param name="playerId">The Player to be deleted</param>
+    Task<Result> DeletePlayer(int playerId);
 
     /// <summary>
     /// Fetches a Player by giving their username.
@@ -34,17 +34,16 @@ public interface IPlayerRepository
     /// <summary>
     /// Updates the username for a given Player.
     /// </summary>
-    /// <param name="player">The player to update its username.</param>
+    /// <param name="playerId">The player to update its username.</param>
     /// <param name="newUsername">The new username.</param>
-    Task<Result> UpdateUsername(PlayerEntity player, string newUsername);
+    Task<Result> UpdateUsername(int playerId, string newUsername);
 
     /// <summary>
     /// Updates the password and salt for a player.
     /// </summary>
-    /// <param name="player">The player to update on.</param>
+    /// <param name="playerId">The player to update on.</param>
     /// <param name="newPassword">The new hashed password.</param>
-    /// <param name="newSalt">The new generated salt.</param>
-    Task<Result> UpdatePassword(PlayerEntity player, string newPassword, string newSalt);
+    Task<Result> UpdatePassword(int playerId, string newPassword);
 
     /// <summary>
     /// Fetches all Players.

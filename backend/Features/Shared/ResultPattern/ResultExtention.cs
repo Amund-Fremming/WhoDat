@@ -2,7 +2,7 @@
 {
     public static class ResultExtention
     {
-        public static ActionResult Resolve<T>(this Result<T> result, Func<Result<T>, ActionResult> success, Func<Result<T>, ActionResult> failure)
+        public static ActionResult Resolve<T>(this Result<T> result, Func<Result<T>, OkObjectResult> success, Func<Result<T>, BadRequestObjectResult> failure)
             => result.IsSuccess ? success(result) : failure(result);
 
         public static void HandleSuccess<T>(this Result<T> result, Action<Result<T>> action)

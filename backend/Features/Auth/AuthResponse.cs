@@ -1,8 +1,8 @@
+using Backend.Features.Player;
+
 namespace Backend.Features.Auth;
 
-public class AuthResponse(int playerId, string username, string token)
+public record AuthResponse(int PlayerId, string Username, string Token)
 {
-    public int PlayerID { get; set; } = playerId;
-    public string Username { get; set; } = username;
-    public string Token { get; set; } = token;
+    public static AuthResponse Convert(PlayerEntity player, string token) => new(player.PlayerID, player.Username, token);
 }

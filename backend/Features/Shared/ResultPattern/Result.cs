@@ -1,14 +1,25 @@
 ﻿namespace Backend.Features.Shared.ResultPattern
 {
     // new (rekkefølge på ex og message byttet, er likt logger nå)
+    // Blir aldri brukt
     public record Result<T>(T Data, Exception? Exception = null, string Message = "") : IResult, IResult<T>
     {
         public bool IsSuccess => Data is not null;
 
         public static Result<T> Failure(Exception exception, string message) => new(default!, exception, message);
-        public static Result<T> Failure(string message) => new(default!, null, message);
         public static Result<T> Success(T data) => new(data);
         public static implicit operator Result<T>(T data) => new(data);
+        // new
+        public static implicit operator Result<T>((Exception? exception, string message) failureTuple) => new(default!, failureTuple.exception, failureTuple.message);
+
+        // new (brukes om du har mange result du vil chaine resultat på om alle var en suksess)
+        public static Result<T> operator &(Result<T> left, Result<T> right)
+        {
+            if (!left.IsSuccess)
+                return left;
+
+            return right;
+        }
     }
 
     public record Result(Exception? Exception = null, string Message = "") : IResult
@@ -19,5 +30,7 @@
         public static Result Failure(Exception exception, string message) => new(exception, message);
         // new
         public static Result Failure(string message) => new(null, message);
+        // new
+        public static implicit operator Result((Exception exception, string Message) failureTuple) => new(failureTuple.exception, failureTuple.Message);
     }
 }

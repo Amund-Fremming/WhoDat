@@ -3,18 +3,19 @@ using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Player;
 
-public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> logger) : IPlayerRepository
+public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> logger, IPasswordHasher<PlayerEntity> passwordHasher) : IPlayerRepository
 {
     public readonly AppDbContext _context = context;
     public readonly ILogger<IPlayerRepository> _logger = logger;
+    public readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
 
     public async Task<Result<PlayerEntity>> GetPlayerById(int playerId)
     {
         var player = await _context.Player.FindAsync(playerId);
         if (player == null)
-            return Result<PlayerEntity>.Failure("Player does not exist.");
+            return (null, "Player does not exist.");
 
-        return Result<PlayerEntity>.Success(player);
+        return player;
     }
 
     public async Task<Result> CreatePlayer(PlayerEntity player)
@@ -29,7 +30,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return Result.Failure(e, "Failed to create player. Please try again later.");
+            return (e, "Failed to create player. Please try again later.");
         }
     }
 
@@ -49,7 +50,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return Result.Failure(e, "Failed to delete user. Please try again later.");
+            return (e, "Failed to delete user. Please try again later.");
         }
     }
 
@@ -57,15 +58,20 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
     {
         var user = await _context.Player.FirstAsync(p => p.Username == username);
         if (user == null)
-            return Result<PlayerEntity>.Failure("Username does not exist");
+            return (null, "Username does not exist");
 
         return user;
     }
 
-    public async Task<Result> UpdateUsername(PlayerEntity player, string newUsername)
+    public async Task<Result> UpdateUsername(int playerId, string newUsername)
     {
         try
         {
+            var result = await GetPlayerById(playerId);
+            if (!result.IsSuccess)
+                return result.RemoveType();
+
+            var player = result.Data;
             player.Username = newUsername;
             _context.Player.Update(player);
 
@@ -75,16 +81,21 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return Result.Failure(e, "Failed to update username. Please try again later.");
+            return (e, "Failed to update username. Please try again later.");
         }
     }
 
-    public async Task<Result> UpdatePassword(PlayerEntity player, string newPassword, string newSalt)
+    public async Task<Result> UpdatePassword(int playerId, string newPassword)
     {
         try
         {
+            var result = await GetPlayerById(playerId);
+            if (!result.IsSuccess)
+                return result.RemoveType();
+
+            var player = result.Data;
             player.PasswordHash = newPassword;
-            player.PasswordSalt = newSalt;
+            player.PasswordSalt = GenerateSalt();
 
             _context.Player.Update(player);
 
@@ -94,7 +105,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return Result.Failure(e, "Failed to update password. Please try again later.");
+            return (e, "Failed to update password. Please try again later.");
         }
     }
 
@@ -103,13 +114,13 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         try
         {
             return await _context.Player
-                .Select(p => new PlayerDto() { PlayerID = p.PlayerID, Username = p.Username, ImageUrl = p.ImageUrl })
+                .Select(p => new PlayerDto(p.PlayerID, p.Username, "", p.ImageUrl))
                 .ToListAsync();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return Result<IEnumerable<PlayerDto>>.Failure(e, "Failed to retrieve players. Please try again later.\r\n");
+            return (e, "Failed to retrieve players. Please try again later.");
         }
     }
 
@@ -118,7 +129,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         try
         {
             bool usernameExist = await _context.Player
-        .AnyAsync(p => p.Username == username);
+                .AnyAsync(p => p.Username == username);
 
             if (usernameExist)
                 return Result.Failure("Username exists");
@@ -128,7 +139,15 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         catch (Exception e)
         {
             _logger.LogError(e, "(DoesUsernameExist)");
-            return Result.Failure(e, "Failed to check username existence. Please try again later.");
+            return (e, "Failed to check username existence. Please try again later.");
         }
+    }
+
+    public string GenerateSalt()
+    {
+        var buffer = new byte[16];
+        RandomNumberGenerator.Fill(buffer);
+
+        return Convert.ToBase64String(buffer);
     }
 }

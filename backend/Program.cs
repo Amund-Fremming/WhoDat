@@ -1,5 +1,3 @@
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Backend.Features.Auth;
 using Backend.Features.Board;
 using Backend.Features.BoardCard;
@@ -9,6 +7,8 @@ using Backend.Features.Game;
 using Backend.Features.GameHub;
 using Backend.Features.Message;
 using Backend.Features.Player;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,14 +29,13 @@ builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IBoardCardRepository, BoardCardRepository>();
 
-builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IBoardService, BoardService>();
 builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IBoardCardService, BoardCardService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IImageService, ImageClient>();
+builder.Services.AddScoped<IImageClient, ImageClient>();
 
 builder.Services.AddScoped<IPasswordHasher<PlayerEntity>, PasswordHasher<PlayerEntity>>();
 
