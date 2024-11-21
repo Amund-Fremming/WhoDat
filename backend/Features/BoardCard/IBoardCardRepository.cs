@@ -1,3 +1,5 @@
+using Backend.Features.Shared.ResultPattern;
+
 namespace Backend.Features.BoardCard;
 
 public interface IBoardCardRepository
@@ -8,7 +10,7 @@ public interface IBoardCardRepository
     /// <param name="boardCardId">The id for the BoardCard.</param>
     /// <returns>The BoardCard asked for.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the BoardCard does not exist.</exception>
-    Task<BoardCardEntity> GetBoardCardById(int boardCardId);
+    Task<Result<BoardCardEntity>> GetBoardCardById(int boardCardId);
 
     /// <summary>
     /// Stores a enumerable of BoardCards in a batch to the database.

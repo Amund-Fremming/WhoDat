@@ -11,11 +11,19 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
 
     public async Task<Result<PlayerEntity>> GetPlayerById(int playerId)
     {
-        var player = await _context.Player.FindAsync(playerId);
-        if (player == null)
-            return (null, "Player does not exist.");
+        try
+        {
+            var player = await _context.Player.FindAsync(playerId);
+            if (player == null)
+                return (new KeyNotFoundException("Player id does not exist"), "Player does not exist.");
 
-        return player;
+            return player;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(GetPlayerById)");
+            return (e, "System error. Please try again later.");
+        }
     }
 
     public async Task<Result> CreatePlayer(PlayerEntity player)
@@ -56,11 +64,19 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
 
     public async Task<Result<PlayerEntity>> GetPlayerByUsername(string username)
     {
-        var user = await _context.Player.FirstAsync(p => p.Username == username);
-        if (user == null)
-            return (null, "Username does not exist");
+        try
+        {
+            var user = await _context.Player.FirstAsync(p => p.Username == username);
+            if (user == null)
+                return (null, "Username does not exist");
 
-        return user;
+            return user;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(GetPlayerByUsername)");
+            return (e, "Failed to get username. Please try again later.");
+        }
     }
 
     public async Task<Result> UpdateUsername(int playerId, string newUsername)
@@ -120,7 +136,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return (e, "Failed to retrieve players. Please try again later.");
+            return (e, "Failed to get all players. Please try again later.");
         }
     }
 
@@ -139,7 +155,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         catch (Exception e)
         {
             _logger.LogError(e, "(DoesUsernameExist)");
-            return (e, "Failed to check username existence. Please try again later.");
+            return (e, "System error. Please try again later.");
         }
     }
 

@@ -3,6 +3,7 @@ using Backend.Features.Database;
 using Backend.Features.Game;
 using Backend.Features.Player;
 using Backend.Features.Shared.Enums;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Board;
 
@@ -15,98 +16,107 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     public readonly IGameRepository _gameRepository = gameRepository;
     public readonly IPlayerRepository _playerRepository = playerRepository;
 
-    public async Task<int> CreateBoard(int playerId, int gameId)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                await _playerRepository.GetPlayerById(playerId);
-                await _gameRepository.GetGameById(gameId);
+    //public async Task<int> CreateBoard(int playerId, int gameId)
+    //{
+    //    try
+    //    {
+    //        await _playerRepository.GetPlayerById(playerId);
+    //        await _gameRepository.GetGameById(gameId);
 
-                BoardEntity board = new(playerId, gameId);
-                int boardId = await _boardRepository.CreateBoard(board);
+    //        BoardEntity board = new(playerId, gameId);
+    //        int boardId = await _boardRepository.CreateBoard(board);
 
-                await transaction.CommitAsync();
-                return boardId;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, $"Error while creating Board. (BoardService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
+    //        return boardId;
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        _logger.LogError(e.Message, $"Error while creating Board. (BoardService)");
+    //        throw;
+    //    }
+    //}
 
-    public async Task DeleteBoard(int playerId, int boardId)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                BoardEntity board = await _boardRepository.GetBoardById(boardId);
-                PlayerHasBoardPermission(playerId, board);
-
-                await _boardRepository.DeleteBoard(board);
-                await transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, $"Error while deleting Board with id {boardId}. (BoardService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task<GameState> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                BoardEntity board = await _boardRepository.GetBoardById(boardId);
-                GameEntity game = await _gameRepository.GetGameById(gameId);
-
-                PlayerHasBoardPermission(playerId, board);
-                PlayerHasGamePermission(playerId, game);
-                PlayerCanChooseCard(playerId, game, board);
-
-                BoardCardEntity boardCard = await _boardCardRepository.GetBoardCardById(boardCardId);
-                await _boardRepository.ChooseBoardCard(board, boardCard);
-
-                bool isPlayerOne = game.PlayerOneID == playerId;
-                if (isPlayerOne && game.GameState == GameState.BOTH_PICKING_PLAYER)
-                    game.GameState = GameState.P2_PICKING_PLAYER;
-
-                if (!isPlayerOne && game.GameState == GameState.BOTH_PICKING_PLAYER)
-                    game.GameState = GameState.P1_PICKING_PLAYER;
-
-                if (isPlayerOne && game.GameState == GameState.P1_PICKING_PLAYER || !isPlayerOne && game.GameState == GameState.P2_PICKING_PLAYER)
-                    game.GameState = GameState.BOTH_PICKED_PLAYERS;
-
-                await _gameRepository.UpdateGameState(game, game.GameState);
-                await transaction.CommitAsync();
-                return game.GameState;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, $"Error chosing a card on Board with id {boardId}. (BoardService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task UpdateBoardCardsLeft(int playerId, int boardId, int activePlayers)
+    public async Task<Result> DeleteBoard(int playerId, int boardId)
     {
         try
         {
-            BoardEntity board = await _boardRepository.GetBoardById(boardId);
+            var result = await _boardRepository.GetBoardById(boardId);
+            if (!result.IsSuccess)
+                return result.RemoveType();
+
+            var board = result.Data;
             PlayerHasBoardPermission(playerId, board);
 
-            await _boardRepository.UpdateBoardCardsLeft(board, activePlayers);
+            return await _boardRepository.DeleteBoard(board);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(DeleteBoard)");
+            return (e, "Failed to delete board. Please try again later.");
+        }
+    }
+
+    public async Task<Result<GameState>> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var boardResult = await _boardRepository.GetBoardById(boardId);
+            if (!boardResult.IsSuccess)
+                return (boardResult.Exception, boardResult.Message);
+
+            var gameResult = await _gameRepository.GetGameById(gameId);
+            if (!boardResult.IsSuccess)
+                return (gameResult.Exception, gameResult.Message);
+
+            var board = boardResult.Data;
+            var game = gameResult.Data;
+
+            PlayerHasBoardPermission(playerId, board);
+            PlayerHasGamePermission(playerId, game);
+            PlayerCanChooseCard(playerId, game, board);
+
+            var bcResult = await _boardCardRepository.GetBoardCardById(boardCardId);
+            if (!bcResult.IsSuccess)
+                return (bcResult.Exception, bcResult.Message);
+
+            var boardCard = bcResult.Data;
+            await _boardRepository.ChooseBoardCard(board, boardCard);
+
+            bool isPlayerOne = game.PlayerOneID == playerId;
+            if (isPlayerOne && game.GameState == GameState.BOTH_PICKING_PLAYER)
+                game.GameState = GameState.P2_PICKING_PLAYER;
+
+            if (!isPlayerOne && game.GameState == GameState.BOTH_PICKING_PLAYER)
+                game.GameState = GameState.P1_PICKING_PLAYER;
+
+            if (isPlayerOne && game.GameState == GameState.P1_PICKING_PLAYER || !isPlayerOne && game.GameState == GameState.P2_PICKING_PLAYER)
+                game.GameState = GameState.BOTH_PICKED_PLAYERS;
+
+            await _gameRepository.UpdateGameState(game, game.GameState);
+            await transaction.CommitAsync();
+            return game.GameState;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(ChooseBoardCard)");
+            await transaction.RollbackAsync();
+            return (e, "Failed to choose boardcard. Please try again later.");
+        }
+    }
+
+    public async Task<Result> UpdateBoardCardsLeft(int playerId, int boardId, int activePlayers)
+    {
+        try
+        {
+            var result = await _boardRepository.GetBoardById(boardId);
+            if (!result.IsSuccess)
+                return result.RemoveType();
+
+            var board = result.Data;
+            PlayerHasBoardPermission(playerId, board);
+
+            return await _boardRepository.UpdateBoardCardsLeft(board, activePlayers);
         }
         catch (Exception e)
         {

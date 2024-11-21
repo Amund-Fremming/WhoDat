@@ -1,6 +1,7 @@
 using Backend.Features.Database;
 using Backend.Features.Player;
 using Backend.Features.Shared.Enums;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Game;
 
@@ -9,10 +10,13 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
     public readonly AppDbContext _context = context;
     public readonly ILogger<IGameRepository> _logger = logger;
 
-    public async Task<GameEntity> GetGameById(int gameId)
+    public async Task<Result<GameEntity>> GetGameById(int gameId)
     {
-        return await _context.Game
-            .FindAsync(gameId) ?? throw new KeyNotFoundException($"Game with id {gameId}, does not exist!");
+        var game = await _context.Game.FindAsync(gameId);
+        if (game == null)
+            return (new KeyNotFoundException("Game id does not exist."), "Game does not exist.");
+
+        return game;
     }
 
     public async Task<int> CreateGame(GameEntity game, PlayerEntity player)

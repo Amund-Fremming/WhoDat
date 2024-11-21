@@ -11,15 +11,6 @@
         public static implicit operator Result<T>(T data) => new(data);
         // new
         public static implicit operator Result<T>((Exception? exception, string message) failureTuple) => new(default!, failureTuple.exception, failureTuple.message);
-
-        // new (brukes om du har mange result du vil chaine resultat på om alle var en suksess)
-        public static Result<T> operator &(Result<T> left, Result<T> right)
-        {
-            if (!left.IsSuccess)
-                return left;
-
-            return right;
-        }
     }
 
     public record Result(Exception? Exception = null, string Message = "") : IResult

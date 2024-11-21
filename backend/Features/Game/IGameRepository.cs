@@ -1,5 +1,6 @@
 using Backend.Features.Player;
 using Backend.Features.Shared.Enums;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Game;
 
@@ -11,7 +12,7 @@ public interface IGameRepository
     /// <param name="galleryId">The id for the Gallery.</param>
     /// <returns>The Gallery asked for.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the Gallery does not exist.</exception>
-    Task<GameEntity> GetGameById(int gameId);
+    Task<Result<GameEntity>> GetGameById(int gameId);
 
     /// <summary>
     /// Creates a new game with the specified game details and initiates it with the provided player.
