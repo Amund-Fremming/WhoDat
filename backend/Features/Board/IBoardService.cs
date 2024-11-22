@@ -1,18 +1,10 @@
 using Backend.Features.Shared.Enums;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Board;
 
 public interface IBoardService
 {
-    /// <summary>
-    /// Creates a new instance of a board for a player in a game.
-    /// </summary>
-    /// <param name="playerId">The id of the player to create a board for.</param>
-    /// <param name="gameId">The id of the game to create a board for.</param>
-    /// <returns>The id of the board created</returns>
-    /// <exception cref="KeyNotFoundException">Throws if the player or game does not exist.</exception>
-    public Task<int> CreateBoard(int playerId, int gameId);
-
     /// <summary>
     /// Deletes a instance of a board for a player.
     /// </summary>
@@ -20,7 +12,7 @@ public interface IBoardService
     /// <param name="boardId">The id of the board to delete.</param>
     /// <exception cref="KeyNotFoundException">Throws if the board does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player does not own the board.</exception>
-    public Task DeleteBoard(int playerId, int boardId);
+    public Task<Result> DeleteBoard(int playerId, int boardId);
 
     /// <summary>
     /// Sets the players choosen card on the board to play the game with.
@@ -33,7 +25,7 @@ public interface IBoardService
     /// <exception cref="KeyNotFoundException">Throws if the board or boardcard does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player does not own the board or is in the game.</exception>
     /// <exception cref="InvalidOperationException">Throws if the state does not allow for choosing cards.</exception>
-    public Task<GameState> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId);
+    public Task<Result<GameState>> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId);
 
     /// <summary>
     /// Updates the active boardcards left on the players board.
@@ -43,9 +35,9 @@ public interface IBoardService
     /// <param name="activePlayers">The number of currently active boardcards on the board.</param>
     /// <exception cref="KeyNotFoundException">Throws if the board does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player does not own the board.</exception>
-    public Task UpdateBoardCardsLeft(int playerId, int boardId, int activePlayers);
+    public Task<Result> UpdateBoardCardsLeft(int playerId, int boardId, int activePlayers);
 
-    public Task<BoardEntity> GetBoardWithBoardCards(int playerId, int gameId);
+    public Task<Result<BoardEntity>> GetBoardWithBoardCards(int playerId, int gameId);
 
     /// <summary>
     /// Takes in a guess for a boardcard, and checks if the guess is the same boardcard as the other player has selected on their board.
@@ -56,5 +48,5 @@ public interface IBoardService
     /// <returns>The new state of the game.</returns>
     /// <exception cref="KeyNotFoundException">Throws if the game or boardcard does not exist.</exception>
     /// <exception cref="UnauthorizedAccessException">Throws if the player does not own the board.</exception>
-    public Task<GameState> GuessBoardCard(int playerId, int gameId, int guessedBoardCardId);
+    public Task<Result<GameState>> GuessBoardCard(int playerId, int gameId, int guessedBoardCardId);
 }

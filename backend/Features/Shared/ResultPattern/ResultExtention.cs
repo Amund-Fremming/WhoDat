@@ -2,40 +2,25 @@
 {
     public static class ResultExtention
     {
-        public static ActionResult Resolve<T>(this Result<T> result, Func<Result<T>, OkObjectResult> success, Func<Result<T>, BadRequestObjectResult> failure)
-            => result.IsSuccess ? success(result) : failure(result);
+        public static ActionResult Resolve<T>(this Result<T> result, Func<Result<T>, ActionResult> success, Func<Result<T>, ActionResult> error)
+            => result.IsError ? error(result) : success(result);
 
-        public static void HandleSuccess<T>(this Result<T> result, Action<Result<T>> action)
-        {
-            if (!result.IsSuccess)
-                throw new ResultException("Operation was not successful.");
+        public static ActionResult Resolve(this Result result, Func<Result, ActionResult> success, Func<Result, ActionResult> error)
+            => result.IsError ? error(result) : success(result);
 
-            action.Invoke(result);
-        }
+        /// <summary>
+        /// Changes type
+        /// </summary>
+        // public static Result<U> ToResult<T, U>(this Result<T> result) => new(default!, result.Error!);
 
-        public static void HandleFailure<T>(this Result<T> result, Action<Result<T>> action)
-        {
-            if (result.IsSuccess)
-                throw new ResultException("Operation was successful, cannot handle failure.");
+        /// <summary>
+        /// Adds type
+        /// </summary>
+        public static Result<T> ToResult<T>(this Result result) => new(default!, result.Error!);
 
-            action.Invoke(result);
-        }
-
-        public static void HandleFailure(this Result result, Action<Result> action)
-        {
-            if (result.IsSuccess)
-                throw new ResultException("Operation was successful, cannot handle failure.");
-
-            action.Invoke(result);
-        }
-
-        // new
-        public static Result RemoveType<T>(this Result<T> result)
-        {
-            if (result.IsSuccess)
-                return Result.Success();
-
-            return Result.Failure(result.Exception!, result.Message);
-        }
+        /// <summary>
+        /// Removed type
+        /// </summary>
+        public static Result ToResult<T>(this Result<T> result) => new(result.Error);
     }
 }

@@ -1,27 +1,35 @@
 ﻿namespace Backend.Features.Shared.ResultPattern
 {
-    // new (rekkefølge på ex og message byttet, er likt logger nå)
-    // Blir aldri brukt
-    public record Result<T>(T Data, Exception? Exception = null, string Message = "") : IResult, IResult<T>
+    public record Error(Exception Exception, string Message);
+    public record Result<T>(T Data, Error Error) : IResult, IResult<T>
     {
-        public bool IsSuccess => Data is not null;
+        public bool IsError => Error is not null && Error.Exception is not null;
+        public string Message => Error.Message ?? string.Empty;
 
-        public static Result<T> Failure(Exception exception, string message) => new(default!, exception, message);
-        public static Result<T> Success(T data) => new(data);
+        public static Result<T> Ok(T data) => new(data);
+
         public static implicit operator Result<T>(T data) => new(data);
-        // new
-        public static implicit operator Result<T>((Exception? exception, string message) failureTuple) => new(default!, failureTuple.exception, failureTuple.message);
+        public static implicit operator Result<T>(Error error) => new(default!, error);
+        public static implicit operator Result(Result<T> result) => new(result.Error);
     }
 
-    public record Result(Exception? Exception = null, string Message = "") : IResult
+    public record Result(Error Error) : IResult
     {
-        public bool IsSuccess => Exception == null;
+        public bool IsError => Error is not null && Error.Exception is not null;
+        public string Message => Error!.Message;
+        public static Result Ok() => new(null!);
+        public static implicit operator Result(Error error) => new(error);
 
-        public static Result Success() => new();
-        public static Result Failure(Exception exception, string message) => new(exception, message);
-        // new
-        public static Result Failure(string message) => new(null, message);
-        // new
-        public static implicit operator Result((Exception exception, string Message) failureTuple) => new(failureTuple.exception, failureTuple.Message);
+        public static Result operator &(Result left, Result right)
+        {
+            if (left.IsError)
+                return left;
+
+            return right;
+        }
     }
+
+    // Needs
+    // - Solution for implicit operator for retunring a collection
+    // - Maybe A list of results so i can store Enumerable on direct return
 }

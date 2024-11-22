@@ -41,7 +41,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         catch (Exception e)
         {
             _logger.LogError(e, "(GenerateToken)");
-            return (e, "Authentication failed. Please try again later.");
+            return new Error(e, "Authentication failed.");
         }
     }
 
@@ -63,7 +63,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         try
         {
             var result = await _playerRepository.GetPlayerByUsername(request.Username);
-            if (!result.IsSuccess)
+            if (result.IsError)
                 throw new UnauthorizedAccessException("Unauthorized.");
 
             var player = result.Data;
@@ -91,15 +91,15 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
 
             PlayerEntity player = new(request.Username, hashedPassword, salt, PlayerRole.USER);
             var result = await _playerRepository.CreatePlayer(player);
-            if (!result.IsSuccess)
-                return (result.Exception, "Registration failed. Please try again.");
+            if (result.IsError)
+                return result.ToResult<PlayerEntity>();
 
             return player;
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(RegisterNewPlayer)");
-            return (e, "Registration failed. Please try again.");
+            return new Error(e, "Registration failed.");
         }
     }
 }

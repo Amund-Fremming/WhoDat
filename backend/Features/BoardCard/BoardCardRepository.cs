@@ -14,33 +14,34 @@ public class BoardCardRepository(AppDbContext context, ILogger<IBoardCardReposit
         {
             var boardCard = await _context.BoardCard.FindAsync(boardCardId);
             if (boardCard == null)
-                return (new KeyNotFoundException("Boardcard id does not exist."), "Board card does not exist.");
+                return new Error(new KeyNotFoundException("Boardcard id does not exist."), "Board card does not exist.");
 
             return boardCard;
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(GetBoardCardById)");
-            return (e, "Failed to get board card. Please try again later.");
+            return new Error(e, "Failed to get board card.");
         }
     }
 
-    public async Task CreateBoardCards(IEnumerable<BoardCardEntity> boardCards)
+    public async Task<Result> CreateBoardCards(IEnumerable<BoardCardEntity> boardCards)
     {
         try
         {
             await _context.BoardCard.AddRangeAsync(boardCards);
             await _context.SaveChangesAsync();
+
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error creating BoardCards for Board. (BoardCardRepository)");
-            throw;
+            _logger.LogError(e, "(CreateBoardCards)");
+            return new Error(e, "Failed to create board cards.");
         }
     }
 
-    public async Task UpdateBoardCardsActivity(IDictionary<int, bool> updateMap, IEnumerable<BoardCardEntity> boardCards)
+    public async Task<Result> UpdateBoardCardsActivity(IDictionary<int, bool> updateMap, IEnumerable<BoardCardEntity> boardCards)
     {
         try
         {
@@ -53,29 +54,30 @@ public class BoardCardRepository(AppDbContext context, ILogger<IBoardCardReposit
             }
 
             await _context.SaveChangesAsync();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error updating BoardCards. (BoardCardRepository)");
-            throw;
+            _logger.LogError(e, "(UpdateBoardCardsActivity)");
+            return new Error(e, "Failed to update active board cards.");
         }
     }
 
-    public async Task<IList<BoardCardEntity>> GetBoardCardsFromBoard(int boardId)
+    public async Task<Result<IEnumerable<BoardCardEntity>>> GetBoardCardsFromBoard(int boardId)
     {
         try
         {
-            return await _context.BoardCard
+            var cards = await _context.BoardCard
                 .Where(b => b.BoardID == boardId)
                 .Include(b => b.Card)
                 .ToListAsync();
+
+            return cards;
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error fetching BoardCards from Board with id {boardId}. (BoardCardRepository)");
-            throw;
+            _logger.LogError(e, "(GetBoardCardsFromBoard)");
+            return new Error(e, "Failed to get boardcards for board.");
         }
     }
 }

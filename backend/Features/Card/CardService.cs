@@ -1,3 +1,5 @@
+using Backend.Features.Shared.ResultPattern;
+
 namespace Backend.Features.Card;
 
 public class CardService(ILogger<ICardService> logger, ICardRepository cardRepository, IImageClient imageClient) : ICardService
@@ -6,7 +8,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
     public readonly ICardRepository _cardRepository = cardRepository;
     public readonly IImageClient _imageClient = imageClient;
 
-    public async Task<int> CreateCard(int playerId, CreateCardDto cardDto)
+    public async Task<Result> CreateCard(int playerId, CreateCardDto cardDto)
     {
         try
         {
@@ -14,40 +16,48 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
             IFormFile? file = cardDto.Image;
 
             if (file == null || file.Length == 0)
-                throw new ArgumentNullException($"No image present!");
+                return new Error(new ArgumentNullException("No image present."), "No image present to be uploaded.");
 
-            string imageUrl = await _imageClient.Upload(file!);
-            CardEntity card = new CardEntity(playerId);
-            card.Name = name;
-            card.Url = imageUrl;
+            var result = await _imageClient.Upload(file!);
+            if (result.IsError)
+                return result;
+
+            var imageUrl = result.Data;
+            CardEntity card = new(playerId)
+            {
+                Name = name,
+                Url = imageUrl
+            };
 
             return await _cardRepository.CreateCard(card);
         }
         catch (Exception e)
         {
-            // ADD HANDLING
-            _logger.LogError(e.Message, $"Error while creating Card with player id {playerId}. (CardService)");
-            throw;
+            _logger.LogError(e, "(CreateCard)");
+            return new Error(e, "Failed to create card.");
         }
     }
 
-    public async Task DeleteCard(int playerId, int cardId)
+    public async Task<Result> DeleteCard(int playerId, int cardId)
     {
         try
         {
-            CardEntity card = await _cardRepository.GetCardById(cardId);
+            var result = await _cardRepository.GetCardById(cardId);
+            if (result.IsError)
+                return result;
 
+            var card = result.Data;
             await _cardRepository.DeleteCard(card);
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // ADD HANDLING
-            _logger.LogError(e.Message, $"Error while deleting Card with id {cardId}. (CardService)");
-            throw;
+            _logger.LogError(e, "(DeleteCard)");
+            return new Error(e, "Failed to delete card.");
         }
     }
 
-    public async Task<IEnumerable<CardEntity>> GetAllCards(int playerId)
+    public async Task<Result<IEnumerable<CardEntity>>> GetAllCards(int playerId)
     {
         try
         {
@@ -55,9 +65,8 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
         }
         catch (Exception e)
         {
-            // ADD HANDLING
-            _logger.LogError(e.Message, $"Error while getting all cards. (CardService)");
-            throw;
+            _logger.LogError(e, "(GetAllCards)");
+            return new Error(e, "Failed to get all cards.");
         }
     }
 }

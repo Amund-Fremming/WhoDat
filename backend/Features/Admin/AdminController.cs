@@ -1,4 +1,5 @@
 using Backend.Features.Player;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Admin;
 
@@ -16,7 +17,9 @@ public class AdminController(ILogger<AdminController> logger, IPlayerRepository 
         try
         {
             var result = await _playerRepository.DeletePlayer(playerId);
-            return result.IsSuccess ? Ok("Player was deleted.") : BadRequest(result.Message);
+            return result.Resolve(
+                suc => Ok(),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
@@ -32,7 +35,9 @@ public class AdminController(ILogger<AdminController> logger, IPlayerRepository 
         try
         {
             var result = await _playerRepository.GetAllPlayers();
-            return result.IsSuccess ? Ok(result.Data) : BadRequest(result.Message);
+            return result.Resolve(
+                suc => Ok(suc.Data),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {

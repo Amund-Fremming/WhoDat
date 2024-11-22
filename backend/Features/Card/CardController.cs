@@ -1,13 +1,14 @@
 using Backend.Features.Player;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Card;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CardController(ILogger<PlayerController> logger, IPlayerService playerService, ICardService cardService) : ControllerBase
+public class CardController(ILogger<PlayerController> logger, IPlayerRepository playerRepository, ICardService cardService) : ControllerBase
 {
     public readonly ILogger<PlayerController> _logger = logger;
-    public readonly IPlayerService _playerService = playerService;
+    public readonly IPlayerRepository _playerRepository = playerRepository;
     public readonly ICardService _cardService = cardService;
 
     [HttpGet("getall")]
@@ -18,30 +19,16 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
         {
             int playerId = ParsePlayerIdClaim();
 
-            IEnumerable<CardEntity> cards = await _cardService.GetAllCards(playerId);
-            return Ok(cards);
+            var result = await _cardService.GetAllCards(playerId);
+            return result.Resolve(
+                suc => Ok(suc.Data),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
-            return HandleException(e);
+            _logger.LogError(e, "(GetAll)");
+            return StatusCode(500);
         }
-    }
-
-    [HttpPost("test-upload")]
-    public async Task<IActionResult> TestUpload()
-    {
-        using (var memoryStream = new MemoryStream())
-        {
-            await Request.Body.CopyToAsync(memoryStream);
-            var imageData = memoryStream.ToArray();
-
-            var tempFilePath = Path.Combine(Path.GetFullPath(Directory.GetCurrentDirectory()), "test_upload_image.jpg");
-            await System.IO.File.WriteAllBytesAsync(tempFilePath, imageData);
-
-            _logger.LogInformation($"Image saved to: {tempFilePath}", tempFilePath);
-        }
-
-        return Ok("Upload successful");
     }
 
     [HttpPost("add")]
@@ -79,14 +66,15 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
                 Image = formFile
             };
 
-            int cardId = await _cardService.CreateCard(playerId, cardDto);
-
-            return Ok($"Card Created {cardId}");
+            var result = await _cardService.CreateCard(playerId, cardDto);
+            return result.Resolve(
+                suc => Ok(),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error occurred while adding a card");
-            return BadRequest(e.Message);
+            _logger.LogError(e, "(Add)");
+            return StatusCode(500);
         }
     }
 
@@ -97,34 +85,15 @@ public class CardController(ILogger<PlayerController> logger, IPlayerService pla
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _cardService.DeleteCard(playerId, cardId);
-
-            return Ok($"Card Deleted{cardId}");
+            var result = await _cardService.DeleteCard(playerId, cardId);
+            return result.Resolve(
+                suc => Ok(),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
-            return HandleException(e);
-        }
-    }
-
-    private ActionResult HandleException(Exception exception)
-    {
-        switch (exception)
-        {
-            case InvalidOperationException _:
-                return BadRequest(exception.Message);
-
-            case KeyNotFoundException _:
-                return NotFound(exception.Message);
-
-            case UnauthorizedAccessException _:
-                return Unauthorized(exception.Message);
-
-            case ArgumentException _:
-                return Conflict(exception.Message);
-
-            default:
-                return StatusCode(500, exception.Message);
+            _logger.LogError(e, "(Delete)");
+            return StatusCode(500);
         }
     }
 

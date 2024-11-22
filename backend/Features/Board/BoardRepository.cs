@@ -18,14 +18,14 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
                 .FirstOrDefaultAsync(b => b.BoardID == boardId);
 
             if (board == null)
-                return (new KeyNotFoundException("Board with id does not exist"), "The board does not exist.");
+                return new Error(new KeyNotFoundException("Board with id does not exist"), "The board does not exist.");
 
             return board;
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(GetBoardById)");
-            return (e, "System error. Please try again later.");
+            return new Error(e, "System error.");
         }
     }
 
@@ -34,14 +34,14 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
         try
         {
             await _context.Board.AddAsync(board);
-            await _context.SaveChangesAsync();
+            var id = await _context.SaveChangesAsync();
 
             return board;
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(CreateBoard)");
-            return (e, "Creation of board failed. Please try again later.");
+            return new Error(e, "Creation of board failed.");
         }
     }
 
@@ -52,12 +52,12 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
             _context.Board.Remove(board);
             await _context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(DeleteBoard)");
-            return (e, "Failed to delete board. Please try again later.");
+            return new Error(e, "Failed to delete board.");
         }
     }
 
@@ -71,12 +71,12 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
             _context.Board.Update(board);
             await _context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(ChooseBoardCard)");
-            return (e, "Failed to choose board card. Please try again later.");
+            return new Error(e, "Failed to choose board card.");
         }
     }
 
@@ -89,12 +89,12 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
             _context.Board.Update(board);
             await _context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(UpdateBoardCardsLeft)");
-            return (e, "Failed to update board cards left. Please try again later");
+            return new Error(e, "Failed to update board cards left.");
         }
     }
 }

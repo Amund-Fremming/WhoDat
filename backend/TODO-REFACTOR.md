@@ -3,9 +3,9 @@
 ## Result Pattern + Logging
 - [x] Admin
 - [x] Auth
-- [ ] Board
-- [ ] BoardCard
-- [ ] Card
+- [x] Board
+- [x] BoardCard
+- [x] Card
 - [ ] Game 
 - [ ] Hub
 - [ ] Message
@@ -31,10 +31,16 @@ HUB KAN FÅ RESULTS MED FEIL, DISSE MÅ SENDES PÅ SAMME KANAL SOM VED SUKSESS OG M
 - [ ] use [FromServices]
 - [ ] Når repo skal oppdatere no etrenger jeg ikke 4 funksjoner, bare en. Kanskje flytte til generisk repo, med base klasse implementert?
 
+- [   ] DO NOT RETURN RESULTS, (Mostly in repositories i think, one possibility is to make a Implicit operator to convert to result)
+
 ### Refactor later
 - [ ] Identity provider
 - [ ] Options pattern
 - [ ] Når fail skjer i repo, må service ofte retunrere annen type Data.
       Ender ofte med å måtte retunere ny tuple eller ny Result, skulle gjerne
       kunnet retunrert resultatet direkte fra repo i service og videre opp.
+
+### Bloated classes
+- BoardService
+- BoardCardService
 

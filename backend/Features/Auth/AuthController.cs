@@ -18,12 +18,12 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
             await _authService.ValidatePasswordWithSalt(request);
 
             var result = await _playerRepository.GetPlayerByUsername(request.Username);
-            if (!result.IsSuccess)
+            if (result.IsError)
                 return BadRequest(result.Message);
 
             var player = result.Data;
             var tokenResult = _authService.GenerateToken(player);
-            if (!tokenResult.IsSuccess)
+            if (tokenResult.IsError)
                 return BadRequest(result.Message);
 
             var token = tokenResult.Data;
@@ -47,15 +47,15 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         try
         {
             var usernameResult = await _playerRepository.DoesUsernameExist(request.Username);
-            if (!usernameResult.IsSuccess)
+            if (usernameResult.IsError)
                 return BadRequest(usernameResult.Message);
 
             var playerResult = await _authService.RegisterNewPlayer(request);
-            if (!playerResult.IsSuccess)
+            if (playerResult.IsError)
                 return BadRequest(playerResult.Message);
 
             var tokenResult = _authService.GenerateToken(playerResult.Data);
-            if (!tokenResult.IsSuccess)
+            if (tokenResult.IsError)
                 return BadRequest(tokenResult.Message);
 
             return Ok(AuthResponse.Convert(playerResult.Data, tokenResult.Data));

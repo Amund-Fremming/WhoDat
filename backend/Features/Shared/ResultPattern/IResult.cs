@@ -2,8 +2,7 @@
 {
     public interface IResult
     {
-        string? Message { get; }
-        Exception? Exception { get; }
+        Error? Error { get; }
     }
 
     public interface IResult<out T> : IResult

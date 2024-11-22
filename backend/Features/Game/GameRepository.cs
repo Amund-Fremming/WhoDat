@@ -14,12 +14,12 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
     {
         var game = await _context.Game.FindAsync(gameId);
         if (game == null)
-            return (new KeyNotFoundException("Game id does not exist."), "Game does not exist.");
+            return new Error(new KeyNotFoundException("Game id does not exist."), "Game does not exist.");
 
         return game;
     }
 
-    public async Task<int> CreateGame(GameEntity game, PlayerEntity player)
+    public async Task<Result<int>> CreateGame(GameEntity game, PlayerEntity player)
     {
         try
         {
@@ -33,29 +33,27 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error creating Game with id {game.GameID} .(GameRepository)");
-            throw;
+            _logger.LogError(e, "(CreateGame)");
+            return new Error(e, "Failed creating game.");
         }
     }
 
-    public async Task DeleteGame(GameEntity game)
+    public async Task<Result> DeleteGame(GameEntity game)
     {
         try
         {
             _context.Game.Remove(game);
-
             await _context.SaveChangesAsync();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error deleting Game with id {game.GameID} .(GameRepository)");
-            throw;
+            _logger.LogError(e, "(DeleteGame)");
+            return new Error(e, "Failed to delete game.");
         }
     }
 
-    public async Task JoinGame(GameEntity game, PlayerEntity player)
+    public async Task<Result> JoinGame(GameEntity game, PlayerEntity player)
     {
         try
         {
@@ -64,16 +62,16 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
 
             _context.Game.Update(game);
             await _context.SaveChangesAsync();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error joining Game with id {game.GameID} .(GameRepository)");
-            throw;
+            _logger.LogError(e, "(JoinGame)");
+            return new Error(e, "Failed to join game");
         }
     }
 
-    public async Task LeaveGame(GameEntity game)
+    public async Task<Result> LeaveGame(GameEntity game)
     {
         try
         {
@@ -81,33 +79,32 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
 
             _context.Game.Update(game);
             await _context.SaveChangesAsync();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error leaving Game with id {game.GameID} .(GameRepository)");
-            throw;
+            _logger.LogError(e, "Failed to leave game.");
+            return new Error(e, "Failed to leave game.");
         }
     }
 
-    public async Task UpdateGameState(GameEntity game, GameState state)
+    public async Task<Result> UpdateGameState(GameEntity game, GameState state)
     {
         try
         {
             game.GameState = state;
-
             _context.Game.Update(game);
             await _context.SaveChangesAsync();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error updating Game State with id {game.GameID} .(GameRepository)");
-            throw;
+            _logger.LogError(e, "(UpdateGameState)");
+            return new Error(e, "Failed to update gamestate.");
         }
     }
 
-    public async Task<int> GetRecentGamePlayed(int playerId)
+    public async Task<Result<int>> GetRecentGamePlayed(int playerId)
     {
         try
         {
@@ -117,24 +114,23 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error while getting players recent Game with PlayerID {playerId}. (GameRepository)");
-            throw;
+            _logger.LogError(e, "(GetRecentGamePlayed)");
+            return new Error(e, "Failed to get recent game played.");
         }
     }
 
-    public async Task UpdateGame(GameEntity game)
+    public async Task<Result> UpdateGame(GameEntity game)
     {
         try
         {
             _context.Game.Update(game);
             await _context.SaveChangesAsync();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error updating Game with id {game.GameID}. (GameRepository)");
-            throw;
+            _logger.LogError(e, "(UpdateGame)");
+            return new Error(e, "Failed to update game.");
         }
     }
 }
