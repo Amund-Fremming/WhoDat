@@ -23,13 +23,13 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
     {
         try
         {
-            game.PlayerOneID = player.PlayerID;
+            game.PlayerOneID = player.ID;
             game.PlayerOne = player;
 
             await _context.AddAsync(game);
             await _context.SaveChangesAsync();
 
-            return game.GameID;
+            return game.ID;
         }
         catch (Exception e)
         {
@@ -57,7 +57,7 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
     {
         try
         {
-            game.PlayerTwoID = player.PlayerID;
+            game.PlayerTwoID = player.ID;
             game.PlayerTwo = player;
 
             _context.Game.Update(game);
@@ -110,7 +110,7 @@ public class GameRepository(AppDbContext context, ILogger<IGameRepository> logge
         {
             return await _context.Game
                 .Where(g => g.PlayerOneID == playerId || g.PlayerTwoID == playerId)
-                .MaxAsync(g => g.GameID);
+                .MaxAsync(g => g.ID);
         }
         catch (Exception e)
         {

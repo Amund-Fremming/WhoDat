@@ -69,7 +69,9 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
                 return bcResult.Error;
 
             var boardCard = bcResult.Data;
-            await _boardRepository.ChooseBoardCard(board, boardCard);
+            var chooseResult = await _boardRepository.ChooseBoardCard(board, boardCard);
+            if (chooseResult.IsError)
+                return chooseResult.Error;
 
             bool isPlayerOne = game.PlayerOneID == playerId;
             if (isPlayerOne && game.GameState == GameState.BOTH_PICKING_PLAYER)
@@ -81,7 +83,10 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             if (isPlayerOne && game.GameState == GameState.P1_PICKING_PLAYER || !isPlayerOne && game.GameState == GameState.P2_PICKING_PLAYER)
                 game.GameState = GameState.BOTH_PICKED_PLAYERS;
 
-            await _gameRepository.UpdateGameState(game, game.GameState);
+            var stateResult = await _gameRepository.UpdateGameState(game, game.GameState);
+            if (stateResult.IsError)
+                return stateResult.Error;
+
             await transaction.CommitAsync();
             return game.GameState;
         }
@@ -189,13 +194,13 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
                 return guessResult.Error;
 
             var guessedCard = guessResult.Data;
-            if (guessedCard.BoardCardID == otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerOneID)
+            if (guessedCard.ID == otherPlayersBoard.ChosenCard!.ID && playerId == game.PlayerOneID)
                 game.GameState = GameState.P1_WON;
-            if (guessedCard.BoardCardID == otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerTwoID)
+            if (guessedCard.ID == otherPlayersBoard.ChosenCard!.ID && playerId == game.PlayerTwoID)
                 game.GameState = GameState.P2_WON;
-            if (guessedCard.BoardCardID != otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerTwoID)
+            if (guessedCard.ID != otherPlayersBoard.ChosenCard!.ID && playerId == game.PlayerTwoID)
                 game.GameState = GameState.P1_TURN_STARTED;
-            if (guessedCard.BoardCardID != otherPlayersBoard.ChosenCard!.BoardCardID && playerId == game.PlayerOneID)
+            if (guessedCard.ID != otherPlayersBoard.ChosenCard!.ID && playerId == game.PlayerOneID)
                 game.GameState = GameState.P2_TURN_STARTED;
 
             await _gameRepository.UpdateGame(game);
@@ -215,7 +220,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             return result.Error;
 
         BoardEntity playerOneBoard = game.Boards!.ElementAt(0);
-        BoardEntity playerTwoBoard = new(playerId, game.GameID);
+        BoardEntity playerTwoBoard = new(playerId, game.ID);
         List<BoardCardEntity> tempBoardCards = [];
 
         foreach (BoardCardEntity boardCard in playerOneBoard.BoardCards!)

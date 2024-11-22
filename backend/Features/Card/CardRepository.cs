@@ -23,7 +23,7 @@ public class CardRepository(AppDbContext context, ILogger<ICardRepository> logge
         {
             await _context.Card.AddAsync(card);
             await _context.SaveChangesAsync();
-            return card.CardID;
+            return card.ID;
         }
         catch (Exception e)
         {

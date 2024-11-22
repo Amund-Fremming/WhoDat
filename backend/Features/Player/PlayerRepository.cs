@@ -130,7 +130,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         try
         {
             return await _context.Player
-                .Select(p => new PlayerDto(p.PlayerID, p.Username, "", p.ImageUrl))
+                .Select(p => new PlayerDto(p.ID, p.Username, "", p.ImageUrl))
                 .ToListAsync();
         }
         catch (Exception e)

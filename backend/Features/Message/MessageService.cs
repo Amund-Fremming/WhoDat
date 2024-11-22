@@ -23,11 +23,7 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
             if (!canSendMessage)
                 return new Error(new InvalidOperationException("Player cannot send message in current context"), "Cannot send message in current state.");
 
-            var messageResult = await _messageRepository.CreateMessage(new MessageEntity(playerId, gameId, messageText));
-            if (messageResult.IsError)
-                return messageResult.Error;
-
-            return messageResult.Data;
+            return await _messageRepository.CreateMessage(new MessageEntity(playerId, gameId, messageText));
         }
         catch (Exception e)
         {

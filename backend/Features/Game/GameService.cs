@@ -23,11 +23,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             var player = result.Data;
             game.PlayerTwoID = null;
 
-            var gameResult = await _gameRepository.CreateGame(game, player);
-            if (gameResult.IsError)
-                return gameResult.Error;
-
-            return gameResult.Data;
+            return await _gameRepository.CreateGame(game, player);
         }
         catch (Exception e)
         {
@@ -160,11 +156,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             if (result.IsError)
                 return result.Error;
 
-            var recentResult = await _gameRepository.GetRecentGamePlayed(playerId);
-            if (recentResult.IsError)
-                return recentResult.Error;
-
-            return recentResult.Data;
+            return await _gameRepository.GetRecentGamePlayed(playerId);
         }
         catch (Exception e)
         {

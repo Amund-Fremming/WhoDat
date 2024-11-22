@@ -33,7 +33,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             if (validation.IsError)
                 return validation.Error;
 
-            int boardId = game.Boards!.ElementAt(0).BoardID;
+            int boardId = game.Boards!.ElementAt(0).ID;
             if (game.Boards!.ElementAt(0) == null)
             {
                 BoardEntity board = new(playerId, gameId);
@@ -97,7 +97,10 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
                 & await _boardRepository.UpdateBoardCardsLeft(board, boardcardsLeft);
 
             if (combinedResult.IsError)
+            {
+                await transaction.RollbackAsync();
                 return combinedResult.Error;
+            }
 
             await transaction.CommitAsync();
             return boardcardsLeft;

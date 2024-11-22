@@ -30,7 +30,7 @@ public class MessageRepository(AppDbContext context, ILogger<IMessageRepository>
         try
         {
             await _context.AddAsync(message);
-            return message.MessageID;
+            return message.ID;
         }
         catch (Exception e)
         {

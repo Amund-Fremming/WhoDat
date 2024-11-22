@@ -25,7 +25,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, player.PlayerID.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, player.ID.ToString()),
                     new Claim(ClaimTypes.Role, player.PlayerRole.ToString()),
                     new Claim(ClaimTypes.Name, player.Username),
                 }),

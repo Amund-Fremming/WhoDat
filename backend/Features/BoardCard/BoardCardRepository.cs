@@ -47,10 +47,8 @@ public class BoardCardRepository(AppDbContext context, ILogger<IBoardCardReposit
         {
             foreach (var boardCard in boardCards)
             {
-                if (updateMap.TryGetValue(boardCard.BoardCardID, out bool update))
-                {
+                if (updateMap.TryGetValue(boardCard.ID, out bool update))
                     boardCard.Active = update;
-                }
             }
 
             await _context.SaveChangesAsync();

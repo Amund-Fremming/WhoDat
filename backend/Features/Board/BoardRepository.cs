@@ -13,9 +13,7 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
     {
         try
         {
-            var board = await _context.Board
-                .Include(b => b.BoardCards)
-                .FirstOrDefaultAsync(b => b.BoardID == boardId);
+            var board = await _context.Board.FindAsync(boardId);
 
             if (board == null)
                 return new Error(new KeyNotFoundException("Board with id does not exist"), "The board does not exist.");
@@ -66,7 +64,7 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
         try
         {
             board.ChosenCard = boardCard;
-            board.ChosenCardID = boardCard.BoardCardID;
+            board.ChosenCardID = boardCard.ID;
 
             _context.Board.Update(board);
             await _context.SaveChangesAsync();
