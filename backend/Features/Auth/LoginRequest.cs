@@ -1,6 +1,6 @@
 namespace Backend.Features.Auth;
 
-public record LoginRequest(string Username, string Password)
+public class LoginRequest(string Username, string Password)
 {
     [Required]
     [StringLength(10, MinimumLength = 3)]

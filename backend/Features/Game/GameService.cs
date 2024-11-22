@@ -147,47 +147,62 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error while updating state in Game with id {gameId}. (GameService)");
-            throw;
+            _logger.LogError(e, "(UpdateGameState)");
+            return new Error(e, "Failed to update game state.");
         }
     }
 
-    public async Task<int> GetRecentGamePlayed(int playerId)
+    public async Task<Result<int>> GetRecentGamePlayed(int playerId)
     {
         try
         {
-            await _playerRepository.GetPlayerById(playerId);
+            var result = await _playerRepository.GetPlayerById(playerId);
+            if (result.IsError)
+                return result.Error;
 
-            return await _gameRepository.GetRecentGamePlayed(playerId);
+            var recentResult = await _gameRepository.GetRecentGamePlayed(playerId);
+            if (recentResult.IsError)
+                return recentResult.Error;
+
+            return recentResult.Data;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error while getting players recent Game with PlayerID {playerId}. (GameService)");
-            throw;
+            _logger.LogError(e, "(GetRecentGamePlayed)");
+            return new Error(e, "Failed to get recent games.");
         }
     }
 
-    public async Task<GameState> StartGame(int playerId, int gameId)
+    public async Task<Result<GameState>> StartGame(int playerId, int gameId)
     {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
+        try
         {
-            try
-            {
-                PlayerEntity player = await _playerRepository.GetPlayerById(playerId);
-                GameEntity game = await _gameRepository.GetGameById(gameId);
+            var playerResult = await _playerRepository.GetPlayerById(playerId);
+            var gameResult = await _gameRepository.GetGameById(gameId);
+            if (playerResult.IsError)
+                return playerResult.Error;
 
-                PlayerHasPermission(playerId, game);
-                GameInValidState(game);
+            if (gameResult.IsError)
+                return gameResult.Error;
 
-                await _gameRepository.UpdateGameState(game, GameState.P1_TURN_STARTED);
-                return GameState.P1_TURN_STARTED;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error while starting Game with ID {gameId}. (GameService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
+            var player = playerResult.Data;
+            var game = gameResult.Data;
+            var validation = GameValidation.HasPermission(playerId, game)
+                & GameValidation.ValidState(game);
+
+            if (validation.IsError)
+                return validation.Error;
+
+            var updateResult = await _gameRepository.UpdateGameState(game, GameState.P1_TURN_STARTED);
+            if (updateResult.IsError)
+                return updateResult.Error;
+
+            return GameState.P1_TURN_STARTED;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(StartGame)");
+            return new Error(e, "Failed to start game.");
         }
     }
 }

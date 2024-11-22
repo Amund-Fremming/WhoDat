@@ -71,7 +71,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
         }
     }
 
-    public async Task<Result> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
+    public async Task<Result<int>> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
     {
         using var transaction = await _context.Database.BeginTransactionAsync();
         try
@@ -85,7 +85,6 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             if (validation.IsError)
                 return validation.Error;
 
-            IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.BoardCardID, update => update.Active);
             var bcResult = await _boardcardRepository.GetBoardCardsFromBoard(boardId);
             if (bcResult.IsError)
                 return bcResult.Error;
@@ -93,17 +92,21 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             var boardCards = bcResult.Data;
             int boardcardsLeft = boardCards.Count(bc => bc.Active);
 
-            await _boardcardRepository.UpdateBoardCardsActivity(updateMap, boardCards);
-            await _boardRepository.UpdateBoardCardsLeft(board, boardcardsLeft);
+            IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.BoardCardID, update => update.Active);
+            var combinedResult = await _boardcardRepository.UpdateBoardCardsActivity(updateMap, boardCards)
+                & await _boardRepository.UpdateBoardCardsLeft(board, boardcardsLeft);
+
+            if (combinedResult.IsError)
+                return combinedResult.Error;
 
             await transaction.CommitAsync();
-            return Result.Ok();
+            return boardcardsLeft;
         }
         catch (Exception e)
         {
-            _logger.LogError(e.Message, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
+            _logger.LogError(e, "(UpdateBoardCardsActivity)");
             await transaction.RollbackAsync();
-            throw;
+            return new Error(e, "Failed updating board cards activity.");
         }
     }
 
@@ -119,6 +122,9 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             var validation = BoardCardValidation.HasBoardPermission(playerId, board);
             if (validation.IsError)
                 return validation.Error;
+
+            if (board.BoardCards == null)
+                return new Error(new NullReferenceException("Boards boardcards collection is null."), "Board does not have any boardcards.");
 
             return Result<IEnumerable<BoardCardEntity>>.Ok(board.BoardCards);
         }

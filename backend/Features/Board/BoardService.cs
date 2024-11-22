@@ -27,7 +27,11 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             var board = result.Data;
             BoardValidation.HasBoardPermission(playerId, board);
 
-            return await _boardRepository.DeleteBoard(board);
+            var boardResult = await _boardRepository.DeleteBoard(board);
+            if (boardResult.IsError)
+                return result;
+
+            return Result.Ok();
         }
         catch (Exception e)
         {
@@ -102,7 +106,11 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             if (validation.IsError)
                 return result;
 
-            return await _boardRepository.UpdateBoardCardsLeft(board, activePlayers);
+            var boardResult = await _boardRepository.UpdateBoardCardsLeft(board, activePlayers);
+            if (boardResult.IsError)
+                return boardResult;
+
+            return Result.Ok();
         }
         catch (Exception e)
         {
@@ -121,21 +129,29 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
             var game = result.Data;
             var validation = BoardValidation.HasGamePermission(playerId, game);
+            if (game.Boards == null)
+                return new Error(new NullReferenceException("Game does not have boards instanciated."), "Game boards have not been created.");
 
-            BoardEntity playerOneBoard = game.Boards!.ElementAt(0);
+            BoardEntity playerOneBoard = game.Boards.ElementAt(0);
 
             if (playerOneBoard.PlayerID == playerId)
                 return playerOneBoard;
 
             if (game.Boards!.Count() <= 1)
-                return await CreatePlayerTwoBoard(playerId, game);
+            {
+                var boardResult = await CreatePlayerTwoBoard(playerId, game);
+                if (boardResult.IsError)
+                    return boardResult.Error;
 
-            BoardEntity playerTwoBoard = game.Boards!.ElementAt(1);
+                return boardResult.Data;
+            }
 
-            if (playerTwoBoard.PlayerID == playerId)
-                return playerTwoBoard;
+            BoardEntity playerTwoBoard = game.Boards.ElementAt(1);
 
-            return null!;
+            if (playerTwoBoard.PlayerID != playerId)
+                return new Error(new KeyNotFoundException("Board does not exist"), "You dont have permission to this board.");
+
+            return playerTwoBoard;
         }
         catch (Exception e)
         {

@@ -1,4 +1,5 @@
 using Backend.Features.Database;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Message;
 
@@ -7,13 +8,24 @@ public class MessageRepository(AppDbContext context, ILogger<IMessageRepository>
     public readonly AppDbContext _context = context;
     public readonly ILogger<IMessageRepository> _logger = logger;
 
-    public async Task<MessageEntity> GetMessageById(int messageId)
+    public async Task<Result<MessageEntity>> GetMessageById(int messageId)
     {
-        return await _context.Message
-            .FindAsync(messageId) ?? throw new KeyNotFoundException($"Message with id {messageId}, does not exist!");
+        try
+        {
+            var message = await _context.Message.FindAsync(messageId);
+            if (message == null)
+                return new Error(new KeyNotFoundException($"Message with id {messageId}, does not exist!"), "Message does not exist.");
+
+            return message;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(GetMessageById)");
+            return new Error(e, "Failed getting message.");
+        }
     }
 
-    public async Task<int> CreateMessage(MessageEntity message)
+    public async Task<Result<int>> CreateMessage(MessageEntity message)
     {
         try
         {
@@ -22,9 +34,8 @@ public class MessageRepository(AppDbContext context, ILogger<IMessageRepository>
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error creating Message with id {message.MessageID} .(MessageRepository)");
-            throw;
+            _logger.LogError(e, "(CreateMessage)");
+            return new Error(e, "Failed to create message.");
         }
     }
 }

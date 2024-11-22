@@ -1,3 +1,5 @@
+using Backend.Features.Shared.ResultPattern;
+
 namespace Backend.Features.Message;
 
 public interface IMessageService
@@ -9,7 +11,5 @@ public interface IMessageService
     /// <param name="gameId">The game to create the message in.</param>
     /// <param name="messageText">The message text to be sendt.</param>
     /// <returns>The id of the new message created.</returns>
-    /// <exception cref="KeyNotFoundException">Throws if the game does not exist.</exception>
-    /// <exception cref="UnauthorizedAccessException">Throws if the game is not in a state where this player is allowed to send a message or reply to one.</exception>
-    public Task<int> CreateMessage(int playerId, int gameId, string messageText);
+    public Task<Result<int>> CreateMessage(int playerId, int gameId, string messageText);
 }

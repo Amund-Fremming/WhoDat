@@ -4,7 +4,6 @@ using Backend.Features.BoardCard;
 using Backend.Features.Card;
 using Backend.Features.Database;
 using Backend.Features.Game;
-using Backend.Features.GameHub;
 using Backend.Features.Message;
 using Backend.Features.Player;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

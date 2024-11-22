@@ -23,7 +23,6 @@ public interface IAuthService
     /// This method does not return anything, but throws it the password is invalid.
     /// </summary>
     /// <param name="loginRequest">Object containing all data needed for a login.</param>
-    /// <exception cref="UnauthorizedAccessException">Throws if password is invalid.</exception>
     Task ValidatePasswordWithSalt(LoginRequest loginRequest);
 
     /// <summary>
@@ -31,6 +30,5 @@ public interface IAuthService
     /// </summary>
     /// <param name="request">Object containing all data for regirering a user.</param>
     /// <returns>The Player created.</returns>
-    /// <exception cref="ArgumentException">Throws if username already exists.</exception>
     Task<Result<PlayerEntity>> RegisterNewPlayer(RegistrationRequest request);
 }

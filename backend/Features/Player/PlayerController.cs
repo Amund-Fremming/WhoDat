@@ -1,3 +1,5 @@
+using Backend.Features.Shared.ResultPattern;
+
 namespace Backend.Features.Player;
 
 [ApiController]
@@ -17,8 +19,9 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerRepositor
             string encodedNewUsername = EncodeForJsAndHtml(newUsername);
 
             var result = await _playerRepository.UpdateUsername(playerId, encodedNewUsername);
-
-            return result.IsSuccess ? Ok("Username was updated.") : BadRequest(result.Message);
+            return result.Resolve(
+                suc => Ok(),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
@@ -37,8 +40,9 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerRepositor
             string encodedNewPassword = EncodeForJsAndHtml(newPassword);
 
             var result = await _playerRepository.UpdatePassword(playerId, encodedNewPassword);
-
-            return result.IsSuccess ? Ok("Password was updated.") : BadRequest(result.Message);
+            return result.Resolve(
+                suc => Ok(),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {

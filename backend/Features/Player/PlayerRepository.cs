@@ -1,5 +1,6 @@
 using Backend.Features.Database;
 using Backend.Features.Shared.ResultPattern;
+using System.Data;
 
 namespace Backend.Features.Player;
 
@@ -15,14 +16,14 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         {
             var player = await _context.Player.FindAsync(playerId);
             if (player == null)
-                return (new KeyNotFoundException("Player id does not exist"), "Player does not exist.");
+                return new Error(new KeyNotFoundException("Player id does not exist"), "Player does not exist.");
 
             return player;
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(GetPlayerById)");
-            return (e, "System error. Please try again later.");
+            return new Error(e, "Failed to get player.");
         }
     }
 
@@ -33,12 +34,12 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
             await _context.AddAsync(player);
             await _context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return (e, "Failed to create player. Please try again later.");
+            return new Error(e, "Failed to create player.");
         }
     }
 
@@ -47,18 +48,17 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         try
         {
             var result = await GetPlayerById(playerId);
-            if (!result.IsSuccess)
-                return result.RemoveType();
+            if (result.IsError)
+                return result;
 
             _context.Player.Remove(result.Data);
-
             await _context.SaveChangesAsync();
-            return Result.Success();
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return (e, "Failed to delete user. Please try again later.");
+            return new Error(e, "Failed to delete user.");
         }
     }
 
@@ -68,14 +68,14 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         {
             var user = await _context.Player.FirstAsync(p => p.Username == username);
             if (user == null)
-                return (null, "Username does not exist");
+                return new Error(new KeyNotFoundException("Username does not exist."), "Username does not exist");
 
             return user;
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(GetPlayerByUsername)");
-            return (e, "Failed to get username. Please try again later.");
+            return new Error(e, "Failed to get username.");
         }
     }
 
@@ -84,20 +84,20 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         try
         {
             var result = await GetPlayerById(playerId);
-            if (!result.IsSuccess)
-                return result.RemoveType();
+            if (result.IsError)
+                return result;
 
             var player = result.Data;
             player.Username = newUsername;
             _context.Player.Update(player);
 
             await _context.SaveChangesAsync();
-            return Result.Success();
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return (e, "Failed to update username. Please try again later.");
+            return new Error(e, "Failed to update username.");
         }
     }
 
@@ -106,8 +106,8 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         try
         {
             var result = await GetPlayerById(playerId);
-            if (!result.IsSuccess)
-                return result.RemoveType();
+            if (result.IsError)
+                return result;
 
             var player = result.Data;
             player.PasswordHash = newPassword;
@@ -116,12 +116,12 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
             _context.Player.Update(player);
 
             await _context.SaveChangesAsync();
-            return Result.Success();
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return (e, "Failed to update password. Please try again later.");
+            return new Error(e, "Failed to update password.");
         }
     }
 
@@ -136,7 +136,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
-            return (e, "Failed to get all players. Please try again later.");
+            return new Error(e, "Failed to get all players.");
         }
     }
 
@@ -148,14 +148,14 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
                 .AnyAsync(p => p.Username == username);
 
             if (usernameExist)
-                return Result.Failure("Username exists");
+                return new Error(new DuplicateNameException("Username exists"), "Username alreay exists.");
 
-            return Result.Success();
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(DoesUsernameExist)");
-            return (e, "System error. Please try again later.");
+            return new Error(e, "System error. Please try again later.");
         }
     }
 

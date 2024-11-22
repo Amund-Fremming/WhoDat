@@ -21,7 +21,7 @@ public interface IBoardCardService
     /// <param name="boardId">The game where the boardcards are stored.</param>
     /// <param name="boardCardUpdates">A collection of boardcard ids and a active variable with their new activity.</param>
     /// <returns>The number of boardcard left on the board.</returns>
-    public Task<Result> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates);
+    public Task<Result<int>> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates);
 
     /// <summary>
     /// Retrieves the boardcards from a board.

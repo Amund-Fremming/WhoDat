@@ -29,14 +29,14 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
         }
     }
 
-    public async Task<Result<BoardEntity>> CreateBoard(BoardEntity board)
+    public async Task<Result<int>> CreateBoard(BoardEntity board)
     {
         try
         {
             await _context.Board.AddAsync(board);
             var id = await _context.SaveChangesAsync();
 
-            return board;
+            return id;
         }
         catch (Exception e)
         {

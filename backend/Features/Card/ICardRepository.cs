@@ -9,7 +9,6 @@ public interface ICardRepository
     /// </summary>
     /// <param name="cardId">The id for the Card.</param>
     /// <returns>The Card asked for.</returns>
-    /// <exception cref="KeyNotFoundException">Throws if the Card does not exist.</exception>
     Task<Result<CardEntity>> GetCardById(int cardId);
 
     /// <summary>

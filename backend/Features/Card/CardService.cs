@@ -29,7 +29,11 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
                 Url = imageUrl
             };
 
-            return await _cardRepository.CreateCard(card);
+            var cardResult = await _cardRepository.CreateCard(card);
+            if (cardResult.IsError)
+                return cardResult;
+
+            return Result.Ok();
         }
         catch (Exception e)
         {
@@ -54,19 +58,6 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
         {
             _logger.LogError(e, "(DeleteCard)");
             return new Error(e, "Failed to delete card.");
-        }
-    }
-
-    public async Task<Result<IEnumerable<CardEntity>>> GetAllCards(int playerId)
-    {
-        try
-        {
-            return await _cardRepository.GetAllCards(playerId);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "(GetAllCards)");
-            return new Error(e, "Failed to get all cards.");
         }
     }
 }

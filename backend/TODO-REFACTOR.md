@@ -6,14 +6,13 @@
 - [x] Board
 - [x] BoardCard
 - [x] Card
-- [ ] Game 
-- [ ] Hub
-- [ ] Message
+- [x] Game 
+- [x] Hub
+- [x] Message
 - [x] Player
 
 
 MIGHT ME SOME PLACES WHERE I WROTE GAMESTATE AND NOT GAMEENTITY
-
 HUB KAN FÅ RESULTS MED FEIL, DISSE MÅ SENDES PÅ SAMME KANAL SOM VED SUKSESS OG MÅ VISES TIL SLUTTBRUKER, OG DISCONNECTE
 
 ## Refactoring
@@ -22,16 +21,10 @@ HUB KAN FÅ RESULTS MED FEIL, DISSE MÅ SENDES PÅ SAMME KANAL SOM VED SUKSESS OG M
 - [x] ImageHandler to its use case or Shared
 - [x] Rename prohect files to backend not RaptorProject
 - [x] Change namespaces to match the projectname and features
-- [ ] RUN NEW MIGRATIONS, NAMES HAVE CHANGED
 - [x] Change namespace to match folder structure
 - [ ] Make State object that game can hold for all state logic
-- [ ] Solid
-- [ ] Dto from class to record
-- [ ] Implement caching
-- [ ] use [FromServices]
+- [ ] RUN NEW MIGRATIONS, NAMES HAVE CHANGED
 - [ ] Når repo skal oppdatere no etrenger jeg ikke 4 funksjoner, bare en. Kanskje flytte til generisk repo, med base klasse implementert?
-
-- [   ] DO NOT RETURN RESULTS, (Mostly in repositories i think, one possibility is to make a Implicit operator to convert to result)
 
 ### Refactor later
 - [ ] Identity provider

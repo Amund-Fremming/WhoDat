@@ -1,5 +1,6 @@
 using Backend.Features.Game;
 using Backend.Features.Shared.Enums;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Message;
 
@@ -9,26 +10,33 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
     public readonly IMessageRepository _messageRepository = messageRepository;
     public readonly IGameRepository _gameRepository = gameRepository;
 
-    public async Task<int> CreateMessage(int playerId, int gameId, string messageText)
+    public async Task<Result<int>> CreateMessage(int playerId, int gameId, string messageText)
     {
         try
         {
-            GameEntity game = await _gameRepository.GetGameById(gameId);
+            var result = await _gameRepository.GetGameById(gameId);
+            if (result.IsError)
+                return result.Error;
 
+            var game = result.Data;
             bool canSendMessage = CanSendMessage(playerId, game);
-            if (canSendMessage)
-                return await _messageRepository.CreateMessage(new MessageEntity(playerId, gameId, messageText));
+            if (!canSendMessage)
+                return new Error(new InvalidOperationException("Player cannot send message in current context"), "Cannot send message in current state.");
 
-            throw new UnauthorizedAccessException($"This action is not allowed with the current game state. (MessageService)");
+            var messageResult = await _messageRepository.CreateMessage(new MessageEntity(playerId, gameId, messageText));
+            if (messageResult.IsError)
+                return messageResult.Error;
+
+            return messageResult.Data;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error while creating Message for game with id {gameId}. (MessageService)");
-            throw;
+            _logger.LogError(e, "(CreateMessage)");
+            return new Error(e, "Failed to create message.");
         }
     }
 
-    public bool CanSendMessage(int playerId, GameEntity game)
+    private static bool CanSendMessage(int playerId, GameEntity game)
     {
         GameState state = game.GameState;
         bool playerIsP1 = playerId == game.PlayerOneID;

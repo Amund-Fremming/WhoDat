@@ -9,7 +9,6 @@ public interface IPlayerRepository
     /// </summary>
     /// <param name="playerId">The id for the Player.</param>
     /// <returns>The Player asked for.</returns>
-    /// <exception cref="KeyNotFoundException">Throws if the Player does not exist.</exception>
     Task<Result<PlayerEntity>> GetPlayerById(int playerId);
 
     /// <summary>

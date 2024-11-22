@@ -10,7 +10,6 @@ public interface IBoardRepository
     /// </summary>
     /// <param name="boardId">The id for the board.</param>
     /// <returns>The board asked for.</returns>
-    /// <exception cref="KeyNotFoundException">Throws if the board does not exist.</exception>
     Task<Result<BoardEntity>> GetBoardById(int boardId);
 
     /// <summary>
@@ -18,7 +17,7 @@ public interface IBoardRepository
     /// </summary>
     /// <param name="board">Board to be stored.</param>
     /// <returns>The id of the stored board.</returns>
-    Task<Result> CreateBoard(BoardEntity board);
+    Task<Result<int>> CreateBoard(BoardEntity board);
 
     /// <summary>
     /// Deletes a board from the database.

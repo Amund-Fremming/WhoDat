@@ -5,10 +5,11 @@ namespace Backend.Features.Card;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CardController(ILogger<PlayerController> logger, IPlayerRepository playerRepository, ICardService cardService) : ControllerBase
+public class CardController(ILogger<PlayerController> logger, IPlayerRepository playerRepository, ICardRepository cardRepository, ICardService cardService) : ControllerBase
 {
     public readonly ILogger<PlayerController> _logger = logger;
     public readonly IPlayerRepository _playerRepository = playerRepository;
+    public readonly ICardRepository _cardRepository = cardRepository;
     public readonly ICardService _cardService = cardService;
 
     [HttpGet("getall")]
@@ -19,7 +20,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
         {
             int playerId = ParsePlayerIdClaim();
 
-            var result = await _cardService.GetAllCards(playerId);
+            var result = await _cardRepository.GetAllCards(playerId);
             return result.Resolve(
                 suc => Ok(suc.Data),
                 err => BadRequest(err.Message));

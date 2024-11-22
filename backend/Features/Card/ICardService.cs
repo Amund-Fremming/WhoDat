@@ -25,11 +25,4 @@ public interface ICardService
     /// <param name="playerId">The player updating the card.</param>
     /// <param name="newCardDto">Dto containing the card object and a image file.</param>
     //public Task UpdateCard(int playerId, CardInputDto newCardDto);
-
-    /// <summary>
-    /// Retrives all cards from a gallery.
-    /// </summary>
-    /// <param name="playerId">The player retreiving the cards.</param>
-    /// <returns>A collection of cards.</returns>
-    public Task<Result<IEnumerable<CardEntity>>> GetAllCards(int playerId);
 }

@@ -1,15 +1,17 @@
 using Backend.Features.Board;
 using Backend.Features.BoardCard;
 using Backend.Features.Message;
+using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Game;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GameController(ILogger<GameController> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService) : ControllerBase
+public class GameController(ILogger<GameController> logger, IGameService gameService, IBoardService boardService, IBoardRepository boardRepository, IBoardCardService boardCardService, IMessageService messageService) : ControllerBase
 {
     public readonly ILogger<GameController> _logger = logger;
     public readonly IGameService _gameService = gameService;
+    public readonly IBoardRepository _boardRepository = boardRepository;
     public readonly IBoardService _boardService = boardService;
     public readonly IBoardCardService _boardCardService = boardCardService;
     public readonly IMessageService _messageService = messageService;
@@ -21,14 +23,20 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         try
         {
             int playerId = ParsePlayerIdClaim();
-            int gameId = await _gameService.CreateGame(playerId, game);
-            await _boardService.CreateBoard(playerId, gameId);
+            var gameRes = await _gameService.CreateGame(playerId, game);
+            if (gameRes.IsError)
+                return BadRequest(gameRes.Message);
 
-            return Ok(gameId);
+            var gameId = gameRes.Data;
+            var boardRes = await _boardRepository.CreateBoard(new BoardEntity(playerId, gameId));
+            return boardRes.Resolve(
+                suc => Ok(suc.Data),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
-            return HandleException(e);
+            _logger.LogError(e, "(CreateGame)");
+            return StatusCode(500);
         }
     }
 
@@ -39,13 +47,15 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         try
         {
             int playerId = ParsePlayerIdClaim();
-            await _gameService.DeleteGame(playerId, gameId);
-
-            return Ok("Game Deleted!");
+            var result = await _gameService.DeleteGame(playerId, gameId);
+            return result.Resolve(
+                suc => Ok(),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
-            return HandleException(e);
+            _logger.LogError(e, "(DeleteGame)");
+            return StatusCode(500);
         }
     }
 
@@ -56,34 +66,15 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         try
         {
             int playerId = ParsePlayerIdClaim();
-            BoardEntity board = await _boardService.GetBoardWithBoardCards(playerId, gameId);
-
-            return Ok(board);
+            var result = await _boardService.GetBoardWithBoardCards(playerId, gameId);
+            return result.Resolve(
+                suc => Ok(suc.Data),
+                err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
-            return HandleException(e);
-        }
-    }
-
-    private ActionResult HandleException(Exception exception)
-    {
-        switch (exception)
-        {
-            case InvalidOperationException _:
-                return BadRequest(exception.Message);
-
-            case KeyNotFoundException _:
-                return NotFound(exception.Message);
-
-            case UnauthorizedAccessException _:
-                return Unauthorized(exception.Message);
-
-            case ArgumentException _:
-                return Conflict(exception.Message);
-
-            default:
-                return StatusCode(500, exception.Message);
+            _logger.LogError(e, "(GetBoardWithBoardCards)");
+            return StatusCode(500);
         }
     }
 
