@@ -1,13 +1,14 @@
 using Backend.Features.BoardCard;
 using Backend.Features.Player;
+using Backend.Features.Shared.Common.Entity;
 
 namespace Backend.Features.Card;
 
-public class CardEntity
+public class CardEntity : IEntity
 {
     [Key]
     [Range(1, 10000000)]
-    public int CardID { get; set; }
+    public int ID { get; set; }
 
     [Range(1, 10000000)]
     public int PlayerID { get; set; }

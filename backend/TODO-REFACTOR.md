@@ -1,39 +1,19 @@
 # TODO REFACTOR
 
-## Result Pattern + Logging
-- [x] Admin
-- [x] Auth
-- [x] Board
-- [x] BoardCard
-- [x] Card
-- [x] Game 
-- [x] Hub
-- [x] Message
-- [x] Player
-
-
-MIGHT ME SOME PLACES WHERE I WROTE GAMESTATE AND NOT GAMEENTITY
-HUB KAN FÅ RESULTS MED FEIL, DISSE MÅ SENDES PÅ SAMME KANAL SOM VED SUKSESS OG MÅ VISES TIL SLUTTBRUKER, OG DISCONNECTE
-
 ## Refactoring
-- [x] Enum to its use case or Shared
-- [x] Exception to its use case or Shared
-- [x] ImageHandler to its use case or Shared
-- [x] Rename prohect files to backend not RaptorProject
-- [x] Change namespaces to match the projectname and features
-- [x] Change namespace to match folder structure
 - [ ] Make State object that game can hold for all state logic
 - [ ] RUN NEW MIGRATIONS, NAMES HAVE CHANGED
+- [ ] Services direct return await on repo funcitons (I changed away from this, but maybe it is better)
 - [ ] Når repo skal oppdatere no etrenger jeg ikke 4 funksjoner, bare en. Kanskje flytte til generisk repo, med base klasse implementert?
 
 ### Refactor later
 - [ ] Identity provider
 - [ ] Options pattern
-- [ ] Når fail skjer i repo, må service ofte retunrere annen type Data.
-      Ender ofte med å måtte retunere ny tuple eller ny Result, skulle gjerne
-      kunnet retunrert resultatet direkte fra repo i service og videre opp.
+- [ ] State in game to a own object ??
+- [ ] Refactor bloaded classes (Board- and BoardCardService)
 
-### Bloated classes
-- BoardService
-- BoardCardService
-
+### TODO
+- [ ] Run new migrations, test login and so on.
+- [ ] Understand how to add IRepo, maybe implement this in repo classes, then extend RepoBase in the repo classes
+- [ ] Implement The base repos
+- [ ] Maybe possible to make generic services or controllers

@@ -2,14 +2,15 @@ using Backend.Features.Board;
 using Backend.Features.Card;
 using Backend.Features.Game;
 using Backend.Features.Message;
+using Backend.Features.Shared.Common.Entity;
 using Backend.Features.Shared.Enums;
 
 namespace Backend.Features.Player;
 
-public class PlayerEntity
+public class PlayerEntity : IEntity
 {
     [Key]
-    public int PlayerID { get; set; }
+    public int ID { get; set; }
 
     public string Username { get; set; }
     public string? ImageUrl { get; set; }

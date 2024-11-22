@@ -1,13 +1,14 @@
 using Backend.Features.Game;
 using Backend.Features.Player;
+using Backend.Features.Shared.Common.Entity;
 
 namespace Backend.Features.Message;
 
-public class MessageEntity
+public class MessageEntity : IEntity
 {
     [Key]
     [Range(1, 10000000)]
-    public int MessageID { get; set; }
+    public int ID { get; set; }
 
     [Range(1, 10000000)]
     public int GameID { get; set; }

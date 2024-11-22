@@ -31,17 +31,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<PlayerEntity>()
             .HasKey(p => p.PlayerID);
 
-        setupGame(modelBuilder);
-        setupMessage(modelBuilder);
-        setupBoard(modelBuilder);
-        setupCard(modelBuilder);
-        setupBoardCard(modelBuilder);
+        SetupGame(modelBuilder);
+        SetupMessage(modelBuilder);
+        SetupBoard(modelBuilder);
+        SetupCard(modelBuilder);
+        SetupBoardCard(modelBuilder);
     }
 
-    private void setupGame(ModelBuilder modelBuilder)
+    private static void SetupGame(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<GameEntity>()
-            .HasKey(g => g.GameID);
+            .HasKey(g => g.ID);
 
         modelBuilder.Entity<GameEntity>()
             .HasOne(g => g.PlayerOne)
@@ -56,10 +56,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .OnDelete(DeleteBehavior.Cascade);
     }
 
-    private void setupMessage(ModelBuilder modelBuilder)
+    private static void SetupMessage(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<MessageEntity>()
-            .HasKey(m => m.MessageID);
+            .HasKey(m => m.ID);
 
         modelBuilder.Entity<MessageEntity>()
             .HasOne(m => m.Game)
@@ -74,10 +74,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .OnDelete(DeleteBehavior.Cascade);
     }
 
-    private void setupBoard(ModelBuilder modelBuilder)
+    private static void SetupBoard(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BoardEntity>()
-            .HasKey(b => b.BoardID);
+            .HasKey(b => b.ID);
 
         modelBuilder.Entity<BoardEntity>()
             .HasOne(b => b.Game)
@@ -98,10 +98,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .OnDelete(DeleteBehavior.Cascade);
     }
 
-    private void setupCard(ModelBuilder modelBuilder)
+    private static void SetupCard(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<CardEntity>()
-            .HasKey(c => c.CardID);
+            .HasKey(c => c.ID);
 
         modelBuilder.Entity<CardEntity>()
             .HasOne(c => c.Player)
@@ -110,10 +110,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .OnDelete(DeleteBehavior.Cascade);
     }
 
-    private void setupBoardCard(ModelBuilder modelBuilder)
+    private static void SetupBoardCard(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BoardCardEntity>()
-            .HasKey(bc => bc.BoardCardID);
+            .HasKey(bc => bc.ID);
 
         modelBuilder.Entity<BoardCardEntity>()
             .HasOne(bc => bc.Card)

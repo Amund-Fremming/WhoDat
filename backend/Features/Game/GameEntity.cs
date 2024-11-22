@@ -1,15 +1,16 @@
 using Backend.Features.Board;
 using Backend.Features.Message;
 using Backend.Features.Player;
+using Backend.Features.Shared.Common.Entity;
 using Backend.Features.Shared.Enums;
 
 namespace Backend.Features.Game;
 
-public class GameEntity
+public class GameEntity : IEntity
 {
     [Key]
     [Range(1, 10000000)]
-    public int GameID { get; set; }
+    public int ID { get; set; }
 
     [Range(1, 10000000)]
     public int? PlayerOneID { get; set; }

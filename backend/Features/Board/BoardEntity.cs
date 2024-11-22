@@ -2,13 +2,14 @@ using Backend.Features.BoardCard;
 using Backend.Features.Game;
 using Backend.Features.Message;
 using Backend.Features.Player;
+using Backend.Features.Shared.Common.Entity;
 
 namespace Backend.Features.Board;
 
-public class BoardEntity
+public class BoardEntity : IEntity
 {
     [Key]
-    public int BoardID { get; set; }
+    public int ID { get; set; }
 
     public int PlayerID { get; set; }
     public PlayerEntity? Player { get; set; }

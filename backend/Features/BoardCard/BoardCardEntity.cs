@@ -1,12 +1,13 @@
 using Backend.Features.Board;
 using Backend.Features.Card;
+using Backend.Features.Shared.Common.Entity;
 
 namespace Backend.Features.BoardCard;
 
-public class BoardCardEntity
+public class BoardCardEntity : IEntity
 {
     [Key]
-    public int BoardCardID { get; set; }
+    public int ID { get; set; }
 
     public int BoardID { get; set; }
     public BoardEntity? Board { get; set; }
