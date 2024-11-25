@@ -22,14 +22,14 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
         {
             var result = await _boardRepository.GetBoardById(boardId);
             if (result.IsError)
-                return result;
+                return result.Error;
 
             var board = result.Data;
             BoardValidation.HasBoardPermission(playerId, board);
 
             var boardResult = await _boardRepository.DeleteBoard(board);
             if (boardResult.IsError)
-                return result;
+                return result.Error;
 
             return Result.Ok();
         }
@@ -104,12 +104,12 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
         {
             var result = await _boardRepository.GetBoardById(boardId);
             if (result.IsError)
-                return result;
+                return result.Error;
 
             var board = result.Data;
             var validation = BoardValidation.HasBoardPermission(playerId, board);
             if (validation.IsError)
-                return result;
+                return result.Error;
 
             var boardResult = await _boardRepository.UpdateBoardCardsLeft(board, activePlayers);
             if (boardResult.IsError)
@@ -181,7 +181,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             BoardEntity otherPlayersBoard = null!;
 
             if (game.Boards!.Count() < 2)
-                throw new NullReferenceException($"Players board is null in game {game.GameID}.");
+                throw new NullReferenceException($"Players board is null in game {game.ID}.");
 
             if (game.Boards!.ElementAt(0).PlayerID == playerId)
                 otherPlayersBoard = game.Boards!.ElementAt(1);

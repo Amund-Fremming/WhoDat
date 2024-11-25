@@ -49,7 +49,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         {
             var result = await GetPlayerById(playerId);
             if (result.IsError)
-                return result;
+                return result.Error;
 
             _context.Player.Remove(result.Data);
             await _context.SaveChangesAsync();
@@ -85,7 +85,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         {
             var result = await GetPlayerById(playerId);
             if (result.IsError)
-                return result;
+                return result.Error;
 
             var player = result.Data;
             player.Username = newUsername;
@@ -107,7 +107,7 @@ public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> l
         {
             var result = await GetPlayerById(playerId);
             if (result.IsError)
-                return result;
+                return result.Error;
 
             var player = result.Data;
             player.PasswordHash = newPassword;

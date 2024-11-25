@@ -23,6 +23,9 @@ public class PlayerEntity : IEntity
     public IEnumerable<GameEntity>? GamesAsPlayerOne { get; set; }
     public IEnumerable<GameEntity>? GamesAsPlayerTwo { get; set; }
 
+    public PlayerEntity()
+    { }
+
     public PlayerEntity(string username, string passwordHash, string passwordSalt, PlayerRole role)
     {
         Username = username;

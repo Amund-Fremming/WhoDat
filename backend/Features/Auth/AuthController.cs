@@ -63,7 +63,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         catch (Exception e)
         {
             _logger.LogError(e, "(RegisterNewPlayer)");
-            return StatusCode(500);
+            return StatusCode(500, e.Message);
         }
     }
 }

@@ -8,9 +8,8 @@
 
         public static Result<T> Ok(T data) => new(data);
 
-        public static implicit operator Result<T>(T data) => new(data);
+        public static implicit operator Result<T>(T data) => new(data, null!);
         public static implicit operator Result<T>(Error error) => new(default!, error);
-        public static implicit operator Result(Result<T> result) => new(result.Error);
     }
 
     public record Result(Error Error) : IResult
@@ -28,8 +27,4 @@
             return right;
         }
     }
-
-    // Needs
-    // - Solution for implicit operator for retunring a collection
-    // - Maybe A list of results so i can store Enumerable on direct return
 }
