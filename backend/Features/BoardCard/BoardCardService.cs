@@ -21,7 +21,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
     {
         try
         {
-            var result = await _gameRepository.GetGameById(gameId);
+            var result = await _gameRepository.GetById(gameId);
             if (result.IsError)
                 return result.Error;
 
@@ -37,7 +37,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             if (game.Boards!.ElementAt(0) == null)
             {
                 BoardEntity board = new(playerId, gameId);
-                var boardResult = await _boardRepository.CreateBoard(board);
+                var boardResult = await _boardRepository.Create(board);
                 if (boardResult.IsError)
                     return boardResult.Error;
             }
@@ -76,7 +76,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
         using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            var result = await _boardRepository.GetBoardById(boardId);
+            var result = await _boardRepository.GetById(boardId);
             if (result.IsError)
                 return result.Error;
 
@@ -117,7 +117,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
     {
         try
         {
-            var result = await _boardRepository.GetBoardById(boardId);
+            var result = await _boardRepository.GetById(boardId);
             if (result.IsError)
                 return result.Error;
 

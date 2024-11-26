@@ -16,7 +16,12 @@ public class AdminController(ILogger<AdminController> logger, IPlayerRepository 
     {
         try
         {
-            var result = await _playerRepository.DeletePlayer(playerId);
+            var playerResult = await _playerRepository.GetById(playerId);
+            if (playerResult.IsError)
+                return BadRequest(playerResult.Message);
+
+            var player = playerResult.Data;
+            var result = await _playerRepository.Delete(player);
             return result.Resolve(
                 suc => Ok(),
                 err => BadRequest(err.Message));

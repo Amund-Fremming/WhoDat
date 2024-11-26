@@ -1,28 +1,10 @@
+using Backend.Features.Shared.Common.Repository;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Player;
 
-public interface IPlayerRepository
+public interface IPlayerRepository : IRepository<PlayerEntity>
 {
-    /// <summary>
-    /// Get a Player corresponding to the given id.
-    /// </summary>
-    /// <param name="playerId">The id for the Player.</param>
-    /// <returns>The Player asked for.</returns>
-    Task<Result<PlayerEntity>> GetPlayerById(int playerId);
-
-    /// <summary>
-    /// Stores a new Player to the database.
-    /// </summary>
-    /// <param name="player">The Player to be stored.</param>
-    Task<Result> CreatePlayer(PlayerEntity player);
-
-    /// <summary>
-    /// Deletes a Player from the database.
-    /// </summary>
-    /// <param name="playerId">The Player to be deleted</param>
-    Task<Result> DeletePlayer(int playerId);
-
     /// <summary>
     /// Fetches a Player by giving their username.
     /// </summary>

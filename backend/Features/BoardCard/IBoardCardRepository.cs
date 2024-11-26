@@ -1,16 +1,10 @@
+using Backend.Features.Shared.Common.Repository;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.BoardCard;
 
-public interface IBoardCardRepository
+public interface IBoardCardRepository : IRepository<BoardCardEntity>
 {
-    /// <summary>
-    /// Get a BoardCard corresponding to the given id.
-    /// </summary>
-    /// <param name="boardCardId">The id for the BoardCard.</param>
-    /// <returns>The BoardCard asked for.</returns>
-    Task<Result<BoardCardEntity>> GetBoardCardById(int boardCardId);
-
     /// <summary>
     /// Stores a enumerable of BoardCards in a batch to the database.
     /// </summary>

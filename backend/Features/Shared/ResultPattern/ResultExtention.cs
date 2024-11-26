@@ -11,7 +11,7 @@
         /// <summary>
         /// Changes type
         /// </summary>
-        // public static Result<U> ToResult<T, U>(this Result<T> result) => new(default!, result.Error!);
+        public static Result<U> ToResult<T, U>(this Result<T> result) => new(default!, result.Error!);
 
         /// <summary>
         /// Adds type

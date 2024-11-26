@@ -1,29 +1,14 @@
 using Backend.Features.Database;
+using Backend.Features.Shared.Common.Repository;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.BoardCard;
 
-public class BoardCardRepository(AppDbContext context, ILogger<IBoardCardRepository> logger) : IBoardCardRepository
+public class BoardCardRepository(AppDbContext context, ILogger<BoardCardRepository> logger)
+    : RepositoryBase<BoardCardEntity, BoardCardRepository>(logger, context), IBoardCardRepository
 {
     public readonly AppDbContext _context = context;
-    public readonly ILogger<IBoardCardRepository> _logger = logger;
-
-    public async Task<Result<BoardCardEntity>> GetBoardCardById(int boardCardId)
-    {
-        try
-        {
-            var boardCard = await _context.BoardCard.FindAsync(boardCardId);
-            if (boardCard == null)
-                return new Error(new KeyNotFoundException("Boardcard id does not exist."), "Board card does not exist.");
-
-            return boardCard;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "(GetBoardCardById)");
-            return new Error(e, "Failed to get board card.");
-        }
-    }
+    public readonly ILogger<BoardCardRepository> _logger = logger;
 
     public async Task<Result> CreateBoardCards(IEnumerable<BoardCardEntity> boardCards)
     {

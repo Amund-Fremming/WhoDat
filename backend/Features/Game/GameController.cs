@@ -29,7 +29,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
                 return BadRequest(gameRes.Message);
 
             var gameId = gameRes.Data;
-            var boardRes = await _boardRepository.CreateBoard(new BoardEntity(playerId, gameId));
+            var boardRes = await _boardRepository.Create(new BoardEntity(playerId, gameId));
             return boardRes.Resolve(
                 suc => Ok(suc.Data),
                 err => BadRequest(err.Message));

@@ -1,28 +1,10 @@
+using Backend.Features.Shared.Common.Repository;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Card;
 
-public interface ICardRepository
+public interface ICardRepository : IRepository<CardEntity>
 {
-    /// <summary>
-    /// Get a Card corresponding to the given id.
-    /// </summary>
-    /// <param name="cardId">The id for the Card.</param>
-    /// <returns>The Card asked for.</returns>
-    Task<Result<CardEntity>> GetCardById(int cardId);
-
-    /// <summary>
-    /// Stores a new Card to the database.
-    /// </summary>
-    /// <param name="card">The card to be stored.</param>
-    Task<Result<int>> CreateCard(CardEntity card);
-
-    /// <summary>
-    /// Deletes a Card from the database.
-    /// </summary>
-    /// <param name="card">The card to be deleted</param>
-    Task<Result> DeleteCard(CardEntity card);
-
     /// <summary>
     /// Fetches all Cards form a specific gallery.
     /// </summary>

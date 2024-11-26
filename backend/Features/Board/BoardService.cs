@@ -20,14 +20,14 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     {
         try
         {
-            var result = await _boardRepository.GetBoardById(boardId);
+            var result = await _boardRepository.GetById(boardId);
             if (result.IsError)
                 return result.Error;
 
             var board = result.Data;
             BoardValidation.HasBoardPermission(playerId, board);
 
-            var boardResult = await _boardRepository.DeleteBoard(board);
+            var boardResult = await _boardRepository.Delete(board);
             if (boardResult.IsError)
                 return result.Error;
 
@@ -46,11 +46,11 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
         try
         {
-            var boardResult = await _boardRepository.GetBoardById(boardId);
+            var boardResult = await _boardRepository.GetById(boardId);
             if (boardResult.IsError)
                 return boardResult.Error;
 
-            var gameResult = await _gameRepository.GetGameById(gameId);
+            var gameResult = await _gameRepository.GetById(gameId);
             if (boardResult.IsError)
                 return gameResult.Error;
 
@@ -64,14 +64,17 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             if (result.IsError)
                 return result.Error;
 
-            var bcResult = await _boardCardRepository.GetBoardCardById(boardCardId);
+            var bcResult = await _boardCardRepository.GetById(boardCardId);
             if (bcResult.IsError)
                 return bcResult.Error;
 
             var boardCard = bcResult.Data;
             var chooseResult = await _boardRepository.ChooseBoardCard(board, boardCard);
             if (chooseResult.IsError)
+            {
+                await transaction.RollbackAsync();
                 return chooseResult.Error;
+            }
 
             bool isPlayerOne = game.PlayerOneID == playerId;
             if (isPlayerOne && game.GameState == GameState.BOTH_PICKING_PLAYER)
@@ -102,7 +105,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     {
         try
         {
-            var result = await _boardRepository.GetBoardById(boardId);
+            var result = await _boardRepository.GetById(boardId);
             if (result.IsError)
                 return result.Error;
 
@@ -128,7 +131,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     {
         try
         {
-            var result = await _gameRepository.GetGameById(gameId);
+            var result = await _gameRepository.GetById(gameId);
             if (result.IsError)
                 return result.Error;
 
@@ -169,7 +172,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     {
         try
         {
-            var result = await _gameRepository.GetGameById(gameId);
+            var result = await _gameRepository.GetById(gameId);
             if (result.IsError)
                 return result.Error;
 
@@ -189,7 +192,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             if (game.Boards!.ElementAt(1).PlayerID == playerId)
                 otherPlayersBoard = game.Boards!.ElementAt(0);
 
-            var guessResult = await _boardCardRepository.GetBoardCardById(boardCardId);
+            var guessResult = await _boardCardRepository.GetById(boardCardId);
             if (guessResult.IsError)
                 return guessResult.Error;
 
@@ -215,7 +218,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
     private async Task<Result<BoardEntity>> CreatePlayerTwoBoard(int playerId, GameEntity game)
     {
-        var result = await _playerRepository.GetPlayerById(playerId);
+        var result = await _playerRepository.GetById(playerId);
         if (result.IsError)
             return result.Error;
 
@@ -231,7 +234,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
         playerTwoBoard.BoardCards = tempBoardCards;
 
-        var createResult = await _boardRepository.CreateBoard(playerTwoBoard);
+        var createResult = await _boardRepository.Create(playerTwoBoard);
         if (createResult.IsError)
             return result.Error;
 

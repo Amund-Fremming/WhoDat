@@ -1,31 +1,12 @@
 using Backend.Features.Player;
+using Backend.Features.Shared.Common.Repository;
 using Backend.Features.Shared.Enums;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Game;
 
-public interface IGameRepository
+public interface IGameRepository : IRepository<GameEntity>
 {
-    /// <summary>
-    /// Get a Gallery corresponding to the given id.
-    /// </summary>
-    /// <param name="galleryId">The id for the Gallery.</param>
-    /// <returns>The Gallery asked for.</returns>
-    Task<Result<GameEntity>> GetGameById(int gameId);
-
-    /// <summary>
-    /// Creates a new game with the specified game details and initiates it with the provided player.
-    /// </summary>
-    /// <param name="game">The game object containing details about the game to be created.</param>
-    /// <param name="player">The player who is initiating the game.</param>
-    Task<Result<int>> CreateGame(GameEntity game, PlayerEntity player);
-
-    /// <summary>
-    /// Deletes the specified game from the system.
-    /// </summary>
-    /// <param name="game">The game object representing the game to be deleted.</param>
-    Task<Result> DeleteGame(GameEntity game);
-
     /// <summary>
     /// Allows a player to join an existing game.
     /// </summary>

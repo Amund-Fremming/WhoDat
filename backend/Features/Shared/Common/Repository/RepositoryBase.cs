@@ -4,9 +4,9 @@ using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Shared.Common.Repository
 {
-    public class RepositoryBase<T>(ILogger<RepositoryBase<T>> logger, AppDbContext context) : IRepository<T> where T : class, IEntity
+    public abstract class RepositoryBase<T, U>(ILogger<U> logger, AppDbContext context) : IRepository<T> where T : class, IEntity
     {
-        private readonly ILogger<RepositoryBase<T>> _logger = logger;
+        private readonly ILogger<U> _logger = logger;
         private readonly AppDbContext _context = context;
 
         public async Task<Result<int>> Create(T entity)
@@ -28,6 +28,10 @@ namespace Backend.Features.Shared.Common.Repository
         {
             try
             {
+                var result = await GetById(entity.ID);
+                if (result.IsError)
+                    return new Error(new KeyNotFoundException($"{typeof(T).Name} id does not exist"), $"{typeof(T).Name} does not exist.");
+
                 _context.Remove(entity);
                 await _context.SaveChangesAsync();
                 return Result.Ok();

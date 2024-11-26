@@ -19,7 +19,6 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
         try
         {
             int playerId = ParsePlayerIdClaim();
-
             var result = await _cardRepository.GetAllCards(playerId);
             return result.Resolve(
                 suc => Ok(suc.Data),

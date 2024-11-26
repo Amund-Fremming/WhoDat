@@ -23,12 +23,12 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             var key = Encoding.ASCII.GetBytes(configurationKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
+                Subject = new ClaimsIdentity(
+                [
                     new Claim(ClaimTypes.NameIdentifier, player.ID.ToString()),
                     new Claim(ClaimTypes.Role, player.PlayerRole.ToString()),
                     new Claim(ClaimTypes.Name, player.Username),
-                }),
+                ]),
                 Expires = DateTime.UtcNow.AddDays(1),       // TODO - JUSTER DENNE!!!
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Issuer = _configuration["Jwt:Issuer"],
@@ -64,7 +64,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         {
             var result = await _playerRepository.GetPlayerByUsername(request.Username);
             if (result.IsError)
-                throw new UnauthorizedAccessException("Unauthorized.");
+                throw new UnauthorizedAccessException("Password or username is wrong.");
 
             var player = result.Data;
 
@@ -72,12 +72,12 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             PasswordVerificationResult verificationResult = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
 
             if (verificationResult != PasswordVerificationResult.Success)
-                throw new UnauthorizedAccessException("Unauthorized.");
+                throw new UnauthorizedAccessException("Password or username is wrong.");
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Error while validating password with salt. (AuthService)");
-            throw new UnauthorizedAccessException("Unauthorized.");
+            throw new UnauthorizedAccessException("Password or username is wrong.");
         }
     }
 
@@ -90,9 +90,9 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             string hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
 
             PlayerEntity player = new(request.Username, hashedPassword, salt, PlayerRole.USER);
-            var result = await _playerRepository.CreatePlayer(player);
+            var result = await _playerRepository.Create(player);
             if (result.IsError)
-                return result.ToResult<PlayerEntity>();
+                return result.ToResult<int, PlayerEntity>();
 
             return player;
         }

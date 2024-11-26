@@ -29,7 +29,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
                 Url = imageUrl
             };
 
-            var cardResult = await _cardRepository.CreateCard(card);
+            var cardResult = await _cardRepository.Create(card);
             if (cardResult.IsError)
                 return cardResult.Error;
 
@@ -46,7 +46,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
     {
         try
         {
-            var result = await _cardRepository.GetCardById(cardId);
+            var result = await _cardRepository.GetById(cardId);
             if (result.IsError)
                 return result.Error;
 
@@ -54,7 +54,7 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
             if (card.PlayerID != playerId)
                 return new Error(new UnauthorizedAccessException("Not this players card."), "Cannot delete other players cards.");
 
-            return await _cardRepository.DeleteCard(card);
+            return await _cardRepository.Delete(card);
         }
         catch (Exception e)
         {
