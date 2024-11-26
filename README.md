@@ -1,4 +1,5 @@
 # Who Dat?
+
 [![runs with Expo Go](https://img.shields.io/badge/Runs%20with%20Expo%20Go-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://expo.dev/client)
 
 The application is inspired by the classic game "Guess Who?" and introduces a unique twist by integrating personalized gameplay.
@@ -15,20 +16,3 @@ with any other player they wish to invite.
 ## Resources
 
 - [Design](https://www.figma.com/file/oBgpl8HkiowbkUFe6HchFL/Untitled?type=design&node-id=0-1&mode=design&t=W4NL2TyfNhpunoWo-0)
-- [DB-diagram](https://dbdiagram.io/d/660ad5ff37b7e33fd739f990)
-- [Timetable](https://docs.google.com/spreadsheets/d/1KFKwdz5Q3xCVQ-m_2pZSbf9XOyshvaPcvhxkFS2Z6TE/edit#gid=0)
-
-## Tech used
-
-- Design
-  - Figma
-  - mycolor.space
-- Frontend
-  - React-native
-  - Eas Expo
-- Backend
-  - dotnet
-  - postgreSQL
-  - OAuth
-  - Azure
-  - CloudFlare R2

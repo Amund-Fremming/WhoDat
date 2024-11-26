@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "GlUEoySk4Ugwrl1fiIjjk7Cq7j+0cMsP7voExQZ31lg=",
-  "Source": "RaptorProject",
-  "BasePath": "_content/RaptorProject",
+  "Hash": "n5xgAQ6zUIaWw0GRiBAnxS+iKccCeaRf+F00sBYdNq4=",
+  "Source": "Backend",
+  "BasePath": "_content/Backend",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

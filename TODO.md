@@ -3,7 +3,6 @@
 ## Backend
 
 - WARNING CreatePlayerTwoBoard may need to store each boardcard in the db with a repo method tracking the boardcards.
-- [ ] Ikke kast så mye exceptions
 - [ ] Change authentication to use OAuth
 - [ ] Create premade cards and their endpoints
 - [ ] Setup Azure env

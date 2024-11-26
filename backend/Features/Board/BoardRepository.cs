@@ -1,69 +1,86 @@
-namespace BoardEntity;
+using Backend.Features.BoardCard;
+using Backend.Features.Database;
+using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.ResultPattern;
 
-public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> logger) : IBoardRepository
+namespace Backend.Features.Board;
+
+public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logger)
+    : RepositoryBase<BoardEntity, BoardRepository>(logger, context), IBoardRepository
 {
     public readonly AppDbContext _context = context;
-    private readonly ILogger<IBoardRepository> _logger = logger;
+    private readonly ILogger<BoardRepository> _logger = logger;
 
-    public async Task<Board> GetBoardById(int boardId)
+    public async Task<Result<BoardEntity>> GetBoardById(int boardId)
     {
-        return await _context.Board
-            .Include(b => b.BoardCards)
-            .FirstOrDefaultAsync(b => b.BoardID == boardId) ?? throw new KeyNotFoundException($"Board with id {boardId}, does not exist!");
+        try
+        {
+            var board = await _context.Board.FindAsync(boardId);
+
+            if (board == null)
+                return new Error(new KeyNotFoundException("Board with id does not exist"), "The board does not exist.");
+
+            return board;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(GetBoardById)");
+            return new Error(e, "System error.");
+        }
     }
 
-    public async Task<int> CreateBoard(Board board)
+    public async Task<Result<int>> CreateBoard(BoardEntity board)
     {
         try
         {
             await _context.Board.AddAsync(board);
-            await _context.SaveChangesAsync();
+            var id = await _context.SaveChangesAsync();
 
-            return board.BoardID;
+            return id;
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error creating board with id {board.BoardID}. (BoardRepository)");
-            throw;
+            _logger.LogError(e, "(CreateBoard)");
+            return new Error(e, "Creation of board failed.");
         }
     }
 
-    public async Task DeleteBoard(Board board)
+    public async Task<Result> DeleteBoard(BoardEntity board)
     {
         try
         {
             _context.Board.Remove(board);
-
             await _context.SaveChangesAsync();
+
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error deleting board with id {board.BoardID}. (BoardRepository)");
-            throw;
+            _logger.LogError(e, "(DeleteBoard)");
+            return new Error(e, "Failed to delete board.");
         }
     }
 
-    public async Task ChooseBoardCard(Board board, BoardCard boardCard)
+    public async Task<Result> ChooseBoardCard(BoardEntity board, BoardCardEntity boardCard)
     {
         try
         {
             board.ChosenCard = boardCard;
-            board.ChosenCardID = boardCard.BoardCardID;
+            board.ChosenCardID = boardCard.ID;
 
             _context.Board.Update(board);
             await _context.SaveChangesAsync();
+
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error setting ChosenCard in board with id {board.BoardID}. (BoardRepository)");
-            throw;
+            _logger.LogError(e, "(ChooseBoardCard)");
+            return new Error(e, "Failed to choose board card.");
         }
     }
 
-    public async Task UpdateBoardCardsLeft(Board board, int playersLeft)
+    public async Task<Result> UpdateBoardCardsLeft(BoardEntity board, int playersLeft)
     {
         try
         {
@@ -71,12 +88,13 @@ public class BoardRepository(AppDbContext context, ILogger<IBoardRepository> log
 
             _context.Board.Update(board);
             await _context.SaveChangesAsync();
+
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error updating players left in board with id {board.BoardID}. (BoardRepository)");
-            throw;
+            _logger.LogError(e, "(UpdateBoardCardsLeft)");
+            return new Error(e, "Failed to update board cards left.");
         }
     }
 }
