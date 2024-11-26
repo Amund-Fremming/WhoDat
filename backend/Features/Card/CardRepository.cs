@@ -1,53 +1,28 @@
-namespace CardEntity;
+using Backend.Features.Database;
+using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.ResultPattern;
 
-public class CardRepository(AppDbContext context, ILogger<ICardRepository> logger) : ICardRepository
+namespace Backend.Features.Card;
+
+public class CardRepository(ILogger<CardRepository> logger, AppDbContext context)
+    : RepositoryBase<CardEntity, CardRepository>(logger, context), ICardRepository
 {
-    public readonly AppDbContext _context = context;
-    public readonly ILogger<ICardRepository> _logger = logger;
+    private readonly ILogger<CardRepository> _logger = logger;
+    private readonly AppDbContext _context = context;
 
-    public async Task<Card> GetCardById(int cardId)
-    {
-        return await _context.Card
-            .FindAsync(cardId) ?? throw new KeyNotFoundException($"Card with id {cardId}, does not exist!");
-    }
-
-    public async Task<int> CreateCard(Card card)
+    public async Task<Result<IEnumerable<CardDto>>> GetAllCards(int playerId)
     {
         try
         {
-            await _context.Card.AddAsync(card);
-            await _context.SaveChangesAsync();
-
-            return card.CardID;
+            return await _context.Card
+                .Where(c => c.PlayerID == playerId)
+                .Select(ce => new CardDto(ce.ID, ce.Name, ce.Url))
+                .ToArrayAsync();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error creating Card with id {card.CardID} .(CardRepository)");
-            throw;
+            _logger.LogError(e, "(GetAllCards)");
+            return new Error(e, "Failed to get all cards");
         }
-    }
-
-    public async Task DeleteCard(Card card)
-    {
-        try
-        {
-            _context.Remove(card);
-
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            // TODO - more exceptions
-            _logger.LogError(e.Message, $"Error deleting Card with id {card.CardID} .(CardRepository)");
-            throw;
-        }
-    }
-
-    public async Task<IEnumerable<Card>> GetAllCards(int playerId)
-    {
-        return await _context.Card
-            .Where(c => c.PlayerID == playerId)
-            .ToListAsync();
     }
 }

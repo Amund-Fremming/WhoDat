@@ -1,6 +1,7 @@
-using PlayerEntity;
+using Backend.Features.Player;
+using Backend.Features.Shared.ResultPattern;
 
-namespace Auth;
+namespace Backend.Features.Auth;
 
 public interface IAuthService
 {
@@ -9,7 +10,7 @@ public interface IAuthService
     /// </summary>
     /// <param name="player">The player to generate a token for.</param>
     /// <returns>The generated token as a string.</returns>
-    string GenerateToken(Player player);
+    Result<string> GenerateToken(PlayerEntity player);
 
     /// <summary>
     /// Generates the salt used to be stored with a players password.
@@ -22,7 +23,6 @@ public interface IAuthService
     /// This method does not return anything, but throws it the password is invalid.
     /// </summary>
     /// <param name="loginRequest">Object containing all data needed for a login.</param>
-    /// <exception cref="UnauthorizedAccessException">Throws if password is invalid.</exception>
     Task ValidatePasswordWithSalt(LoginRequest loginRequest);
 
     /// <summary>
@@ -30,7 +30,5 @@ public interface IAuthService
     /// </summary>
     /// <param name="request">Object containing all data for regirering a user.</param>
     /// <returns>The Player created.</returns>
-    /// <exception cref="ArgumentException">Throws if username already exists.</exception>
-    Task<Player> RegisterNewPlayer(RegistrationRequest request);
+    Task<Result<PlayerEntity>> RegisterNewPlayer(RegistrationRequest request);
 }
-

@@ -1,4 +1,11 @@
-namespace BoardCardEntity;
+using Backend.Features.Board;
+using Backend.Features.Card;
+using Backend.Features.Database;
+using Backend.Features.Game;
+using Backend.Features.Shared.Enums;
+using Backend.Features.Shared.ResultPattern;
+
+namespace Backend.Features.BoardCard;
 
 public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> logger,
         IBoardCardRepository boardcardRepository, IBoardRepository boardRepository, ICardRepository cardRepository, IGameRepository gameRepository) : IBoardCardService
@@ -10,136 +17,124 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
     public readonly ICardRepository _cardRepository = cardRepository;
     public readonly IGameRepository _gameRepository = gameRepository;
 
-    public async Task<State> CreateBoardCards(int playerId, int gameId, IEnumerable<int> cardIds)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                Game game = await _gameRepository.GetGameById(gameId);
-
-                PlayerHasGamePermission(playerId, game);
-                ValidatePlayerPermissions(playerId, game, cardIds);
-
-                int boardId = game.Boards!.ElementAt(0).BoardID;
-
-                if (game.Boards!.ElementAt(0) == null)
-                {
-                    Board board = new Board(playerId, gameId);
-                    boardId = await _boardRepository.CreateBoard(board);
-                    _logger.LogInformation("Board not created, creating board...");
-                }
-
-                if (game.State == State.ONLY_HOST_CHOSING_CARDS)
-                    cardIds = cardIds.Take(20);
-                else
-                    cardIds = cardIds.Take(10);
-
-                IEnumerable<BoardCard> newBoardCards = cardIds.Select(cardId => new BoardCard(boardId, cardId)).ToList();
-
-                bool isPlayerOne = game.PlayerOneID == playerId;
-                if (game.State == State.P1_CHOOSING && !isPlayerOne || game.State == State.P2_CHOOSING && isPlayerOne)
-                    throw new ArgumentException("Player cannot create more BoardCards!");
-                else if (game.State == State.ONLY_HOST_CHOSING_CARDS || game.State == State.P1_CHOOSING && isPlayerOne || game.State == State.P2_CHOOSING && !isPlayerOne)
-                    game.State = State.BOTH_PICKING_PLAYER;
-                else if (game.State == State.BOTH_CHOSING_CARDS && isPlayerOne)
-                    game.State = State.P2_CHOOSING;
-                else if (game.State == State.BOTH_CHOSING_CARDS && !isPlayerOne)
-                    game.State = State.P1_CHOOSING;
-
-                await _gameRepository.UpdateGameState(game, game.State);
-                await _boardcardRepository.CreateBoardCards(newBoardCards);
-                await transaction.CommitAsync();
-
-                return game.State;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, $"Error while creating BoardCards for game with id {gameId}. (BoardCardService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task<int> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                Board board = await _boardRepository.GetBoardById(boardId);
-                PlayerHasBoardPermission(playerId, board);
-
-                IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.BoardCardID, update => update.Active);
-                IList<BoardCard> boardCards = await _boardcardRepository.GetBoardCardsFromBoard(boardId);
-                int boardcardsLeft = boardCards.Count(bc => bc.Active);
-
-                await _boardcardRepository.UpdateBoardCardsActivity(updateMap, boardCards);
-                await _boardRepository.UpdateBoardCardsLeft(board, boardcardsLeft);
-
-                await transaction.CommitAsync();
-                return boardcardsLeft;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task<IEnumerable<BoardCard>> GetBoardCardsFromBoard(int playerId, int boardId)
+    public async Task<Result<GameState>> CreateBoardCards(int playerId, int gameId, IEnumerable<int> cardIds)
     {
         try
         {
-            Board board = await _boardRepository.GetBoardById(boardId);
-            PlayerHasBoardPermission(playerId, board);
+            var result = await _gameRepository.GetById(gameId);
+            if (result.IsError)
+                return result.Error;
 
-            return await _boardcardRepository.GetBoardCardsFromBoard(boardId);
+            var game = result.Data;
+
+            var validation = BoardCardValidation.HasGamePermission(playerId, game)
+                & BoardCardValidation.PlayerPermissions(playerId, game, cardIds);
+
+            if (validation.IsError)
+                return validation.Error;
+
+            int boardId = game.Boards!.ElementAt(0).ID;
+            if (game.Boards!.ElementAt(0) == null)
+            {
+                BoardEntity board = new(playerId, gameId);
+                var boardResult = await _boardRepository.Create(board);
+                if (boardResult.IsError)
+                    return boardResult.Error;
+            }
+
+            if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS)
+                cardIds = cardIds.Take(20);
+            else
+                cardIds = cardIds.Take(10);
+
+            IEnumerable<BoardCardEntity> newBoardCards = cardIds.Select(cardId => new BoardCardEntity(boardId, cardId)).ToList();
+
+            bool isPlayerOne = game.PlayerOneID == playerId;
+            if (game.GameState == GameState.P1_CHOOSING && !isPlayerOne || game.GameState == GameState.P2_CHOOSING && isPlayerOne)
+                throw new ArgumentException("Player cannot create more BoardCards!");
+            else if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS || game.GameState == GameState.P1_CHOOSING && isPlayerOne || game.GameState == GameState.P2_CHOOSING && !isPlayerOne)
+                game.GameState = GameState.BOTH_PICKING_PLAYER;
+            else if (game.GameState == GameState.BOTH_CHOSING_CARDS && isPlayerOne)
+                game.GameState = GameState.P2_CHOOSING;
+            else if (game.GameState == GameState.BOTH_CHOSING_CARDS && !isPlayerOne)
+                game.GameState = GameState.P1_CHOOSING;
+
+            await _gameRepository.UpdateGameState(game, game.GameState);
+            await _boardcardRepository.CreateBoardCards(newBoardCards);
+
+            return game.GameState;
         }
         catch (Exception e)
         {
-            _logger.LogError(e.Message, $"Error while updating BoardCard for Board with id {boardId}. (BoardCardService)");
-            throw;
+            _logger.LogError(e, "(CreateBoardCards)");
+            return new Error(e, "Failed to create boardcards.");
         }
     }
 
-    private void ValidatePlayerPermissions(int playerId, Game game, IEnumerable<int> cardIds)
+    public async Task<Result<int>> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
     {
-        if (game.State == State.ONLY_HOST_CHOSING_CARDS && game.PlayerTwoID == playerId)
-            throw new UnauthorizedAccessException($"Player {playerId} does not have permission to create cards");
-
-        if (game.State == State.ONLY_HOST_CHOSING_CARDS && cardIds.Count() != 20)
-            throw new ArgumentException("Too few cardIds provided, needs 20");
-
-        if ((game.State == State.BOTH_CHOSING_CARDS || game.State == State.P2_CHOOSING || game.State == State.P1_CHOOSING) && cardIds.Count() != 10)
-            throw new ArgumentException("Too few cardIds provided, needs 10");
-
-        if (game.State == State.P1_CHOOSING && game.PlayerTwoID == playerId)
-            throw new UnauthorizedAccessException($"Player {playerId} does not have permission to create cards");
-
-        if (game.State == State.P2_CHOOSING && game.PlayerOneID == playerId)
-            throw new UnauthorizedAccessException($"Player {playerId} does not have permission to create cards");
-    }
-
-
-    public void PlayerHasBoardPermission(int playerId, Board board)
-    {
-        if (board.PlayerID != playerId)
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
         {
-            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
-            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
+            var result = await _boardRepository.GetById(boardId);
+            if (result.IsError)
+                return result.Error;
+
+            var board = result.Data;
+            var validation = BoardCardValidation.HasBoardPermission(playerId, board);
+            if (validation.IsError)
+                return validation.Error;
+
+            var bcResult = await _boardcardRepository.GetBoardCardsFromBoard(boardId);
+            if (bcResult.IsError)
+                return bcResult.Error;
+
+            var boardCards = bcResult.Data;
+            int boardcardsLeft = boardCards.Count(bc => bc.Active);
+
+            IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.BoardCardID, update => update.Active);
+            var combinedResult = await _boardcardRepository.UpdateBoardCardsActivity(updateMap, boardCards)
+                & await _boardRepository.UpdateBoardCardsLeft(board, boardcardsLeft);
+
+            if (combinedResult.IsError)
+            {
+                await transaction.RollbackAsync();
+                return combinedResult.Error;
+            }
+
+            await transaction.CommitAsync();
+            return boardcardsLeft;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(UpdateBoardCardsActivity)");
+            await transaction.RollbackAsync();
+            return new Error(e, "Failed updating board cards activity.");
         }
     }
 
-    public void PlayerHasGamePermission(int playerId, Game game)
+    public async Task<Result<IEnumerable<BoardCardEntity>>> GetBoardCardsFromBoard(int playerId, int boardId)
     {
-        if (game.PlayerOneID != playerId && game.PlayerTwoID != playerId)
+        try
         {
-            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
-            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission");
+            var result = await _boardRepository.GetById(boardId);
+            if (result.IsError)
+                return result.Error;
+
+            var board = result.Data;
+            var validation = BoardCardValidation.HasBoardPermission(playerId, board);
+            if (validation.IsError)
+                return validation.Error;
+
+            if (board.BoardCards == null)
+                return new Error(new NullReferenceException("Boards boardcards collection is null."), "Board does not have any boardcards.");
+
+            return Result<IEnumerable<BoardCardEntity>>.Ok(board.BoardCards);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(GetBardCardsFromBoard) - board could be null, boardcards might not be attached.");
+            return new Error(e, "Failed to get board cards for your board.");
         }
     }
 }

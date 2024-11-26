@@ -1,114 +1,138 @@
-namespace PlayerEntity;
+using Backend.Features.Database;
+using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.ResultPattern;
+using System.Data;
 
-public class PlayerRepository(AppDbContext context, ILogger<IPlayerRepository> logger) : IPlayerRepository
+namespace Backend.Features.Player;
+
+public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> logger, IPasswordHasher<PlayerEntity> passwordHasher)
+    : RepositoryBase<PlayerEntity, PlayerRepository>(logger, context), IPlayerRepository
 {
     public readonly AppDbContext _context = context;
     public readonly ILogger<IPlayerRepository> _logger = logger;
+    public readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
 
-    public async Task<Player> GetPlayerById(int playerId)
-    {
-        return await _context.Player
-            .FindAsync(playerId) ?? throw new KeyNotFoundException($"Player with id {playerId}, does not exist!");
-    }
-
-    public async Task<int> CreatePlayer(Player player)
+    public async Task<Result> DeletePlayer(int playerId)
     {
         try
         {
-            await _context.AddAsync(player);
-            await _context.SaveChangesAsync();
+            var result = await GetById(playerId);
+            if (result.IsError)
+                return result.Error;
 
-            return player.PlayerID;
+            _context.Player.Remove(result.Data);
+            await _context.SaveChangesAsync();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error creating Player with id {player.PlayerID}. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(PlayerRepository)");
+            return new Error(e, "Failed to delete user.");
         }
     }
 
-    public async Task DeletePlayer(Player player)
+    public async Task<Result<PlayerEntity>> GetPlayerByUsername(string username)
     {
         try
         {
-            _context.Player.Remove(player);
+            var user = await _context.Player.FirstAsync(p => p.Username == username);
+            if (user == null)
+                return new Error(new KeyNotFoundException("Username does not exist."), "Username does not exist");
 
-            await _context.SaveChangesAsync();
+            return user;
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error deleting Player with id {player.PlayerID}. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(GetPlayerByUsername)");
+            return new Error(e, "Failed to get username.");
         }
     }
 
-    public async Task<Player> GetPlayerByUsername(string username)
-    {
-        return await _context.Player
-            .FirstAsync(p => p.Username == username)
-            ?? throw new KeyNotFoundException($"Username {username} does not exist. (PlayerRepository)");
-    }
-
-    public async Task UpdateUsername(Player player, string newUsername)
+    public async Task<Result> UpdateUsername(int playerId, string newUsername)
     {
         try
         {
+            var result = await GetById(playerId);
+            if (result.IsError)
+                return result.Error;
+
+            var player = result.Data;
             player.Username = newUsername;
             _context.Player.Update(player);
 
             await _context.SaveChangesAsync();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID}. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(PlayerRepository)");
+            return new Error(e, "Failed to update username.");
         }
     }
 
-    public async Task UpdatePassword(Player player, string newPassword, string newSalt)
+    public async Task<Result> UpdatePassword(int playerId, string newPassword)
     {
         try
         {
+            var result = await GetById(playerId);
+            if (result.IsError)
+                return result.Error;
+
+            var player = result.Data;
             player.PasswordHash = newPassword;
-            player.PasswordSalt = newSalt;
+            player.PasswordSalt = GenerateSalt();
 
             _context.Player.Update(player);
 
             await _context.SaveChangesAsync();
+            return Result.Ok();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error updating username for Player with id {player.PlayerID}. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(PlayerRepository)");
+            return new Error(e, "Failed to update password.");
         }
     }
 
-    public async Task<IEnumerable<PlayerDto>> GetAllPlayers()
+    public async Task<Result<IEnumerable<PlayerDto>>> GetAllPlayers()
     {
         try
         {
             return await _context.Player
-                .Select(p => new PlayerDto() { PlayerID = p.PlayerID, Username = p.Username, ImageUrl = p.ImageUrl })
+                .Select(p => new PlayerDto(p.ID, p.Username, "", p.ImageUrl))
                 .ToListAsync();
         }
         catch (Exception e)
         {
-            // TODO - more exceptions
-            _logger.LogError(e, $"Error getting all players. (PlayerRepository)");
-            throw;
+            _logger.LogError(e, "(PlayerRepository)");
+            return new Error(e, "Failed to get all players.");
         }
     }
 
-    public async Task DoesUsernameExist(string username)
+    public async Task<Result> DoesUsernameExist(string username)
     {
-        bool usernameExist = await _context.Player
-            .AnyAsync(p => p.Username == username);
+        try
+        {
+            bool usernameExist = await _context.Player
+                .AnyAsync(p => p.Username == username);
 
-        if (usernameExist)
-            throw new ArgumentException($"Username {username} already exists!");
+            if (usernameExist)
+                return new Error(new DuplicateNameException("Username exists"), "Username alreay exists.");
+
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(DoesUsernameExist)");
+            return new Error(e, "System error. Please try again later.");
+        }
+    }
+
+    public string GenerateSalt()
+    {
+        var buffer = new byte[16];
+        RandomNumberGenerator.Fill(buffer);
+
+        return Convert.ToBase64String(buffer);
     }
 }

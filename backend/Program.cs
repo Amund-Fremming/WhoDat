@@ -1,10 +1,16 @@
-using Hubs;
-using Auth;
-using Microsoft.OpenApi.Models;
+using Backend.Features.Auth;
+using Backend.Features.Board;
+using Backend.Features.BoardCard;
+using Backend.Features.Card;
+using Backend.Features.Database;
+using Backend.Features.Game;
+using Backend.Features.Message;
+using Backend.Features.Player;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// test
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -15,23 +21,22 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IPlayerRepository, PlayerEntity.PlayerRepository>();
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IBoardCardRepository, BoardCardRepository>();
 
-builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IBoardService, BoardService>();
 builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IBoardCardService, BoardCardService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IImageClient, ImageClient>();
 
-builder.Services.AddScoped<IPasswordHasher<Player>, PasswordHasher<Player>>();
+builder.Services.AddScoped<IPasswordHasher<PlayerEntity>, PasswordHasher<PlayerEntity>>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
@@ -98,7 +103,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 };
             });
 
-builder.Services.AddDbContext<Data.AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseNpgsql(connectionString);
@@ -117,6 +122,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<GameHub>("/hub");
+app.MapHub<GameHubBroker>("/hub");
 
 app.Run();
