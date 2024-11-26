@@ -28,5 +28,5 @@ public interface ICardRepository
     /// </summary>
     /// <param name="galleryId">The gallery to fetch cards from.</param>
     /// <returns>An Enumerable of cards.</returns>
-    Task<Result<IEnumerable<CardEntity>>> GetAllCards(int galleryId);
+    Task<Result<IEnumerable<CardDto>>> GetAllCards(int galleryId);
 }

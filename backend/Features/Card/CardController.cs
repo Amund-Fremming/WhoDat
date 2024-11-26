@@ -14,7 +14,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
 
     [HttpGet("getall")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<IEnumerable<CardEntity>>> GetAll()
+    public async Task<ActionResult<IEnumerable<CardDto>>> GetAll()
     {
         try
         {

@@ -18,12 +18,13 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
 
     [HttpPost("games")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<int>> CreateGame(GameEntity game)
+    public async Task<ActionResult<int>> CreateGame(CreateGameRequest gameRequest)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            var gameRes = await _gameService.CreateGame(playerId, game);
+            gameRequest.PlayerOneID = playerId;
+            var gameRes = await _gameService.CreateGame(playerId, gameRequest);
             if (gameRes.IsError)
                 return BadRequest(gameRes.Message);
 

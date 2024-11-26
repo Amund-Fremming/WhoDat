@@ -47,13 +47,14 @@ public class CardRepository(AppDbContext context, ILogger<ICardRepository> logge
         }
     }
 
-    public async Task<Result<IEnumerable<CardEntity>>> GetAllCards(int playerId)
+    public async Task<Result<IEnumerable<CardDto>>> GetAllCards(int playerId)
     {
         try
         {
             return await _context.Card
                 .Where(c => c.PlayerID == playerId)
-                .ToListAsync();
+                .Select(ce => new CardDto(ce.ID, ce.Name, ce.Url))
+                .ToArrayAsync();
         }
         catch (Exception e)
         {

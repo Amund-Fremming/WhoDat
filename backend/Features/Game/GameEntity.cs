@@ -33,7 +33,11 @@ public class GameEntity : IEntity
     public GameEntity(int playerOneId, GameState gameState)
     {
         PlayerOneID = playerOneId;
+        PlayerOne = null;
         PlayerTwoID = null;
+        PlayerTwo = null;
+        Messages = null;
+        Boards = null;
         GameState = gameState;
     }
 }

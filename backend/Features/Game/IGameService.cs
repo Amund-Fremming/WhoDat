@@ -11,7 +11,7 @@ public interface IGameService
     /// <param name="playerId">The player creating the game.</param>
     /// <param name="game">The game to be created</param>
     /// <returns>The id of the game created.</returns>
-    public Task<Result<int>> CreateGame(int playerId, GameEntity game);
+    public Task<Result<int>> CreateGame(int playerId, CreateGameRequest gameRequest);
 
     /// <summary>
     /// Deletes a existing game.
