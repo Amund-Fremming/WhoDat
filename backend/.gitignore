@@ -2,4 +2,5 @@
 
 secret.json
 backend/obj
+backend\obj
 backend/vs
