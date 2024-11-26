@@ -2,20 +2,21 @@ import {
   View,
   Text,
   TextInput,
-  Alert,
   Pressable,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
 import { styles } from "./RegisterComponentStyles";
 import Feather from "@expo/vector-icons/Feather";
-import { Colors } from "@/src/shared/assets/constants/Colors";
-import BigButton from "@/src/shared/components/BigButton/BigButton";
+import { Colors } from "@/src/Shared/assets/constants/Colors";
+import BigButton from "@/src/Shared/components/BigButton/BigButton";
 import { useState } from "react";
-import { validUsername } from "@/src/shared/functions/InputValitator";
+import { validUsername } from "@/src/Shared/functions/InputValitator";
 import { IAuthResponse, IRegistrationRequest } from "@/src/Auth/AuthTypes";
-import { registerPlayer } from "@/src/infrastructure/AuthClient";
-import { useAuthProvider } from "@/src/shared/state/AuthProvider";
+import { registerPlayer } from "../../AuthClient";
+import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
+import { Result } from "@/src/Shared/domain/Result";
+import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
 
 interface RegisterComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
@@ -23,31 +24,37 @@ interface RegisterComponentProps {
 
 export function RegisterComponent({ setView }: RegisterComponentProps) {
   const { setToken, setPlayerID, setUsername } = useAuthProvider();
-
   const [retypedPassword, setRetypedPassword] = useState<string>("");
   const [registrationRequest, setRegistrationRequest] =
     useState<IRegistrationRequest>({
       username: "",
       password: "",
     });
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
+
+  const handleError = (message: string) => {
+    setErrorMessage(message);
+    setErrorModalVisible(true);
+  };
 
   const handleRegister = async () => {
     const validInput: boolean = handleInputValidationAndFeedback();
     if (!validInput) return;
-    console.log("Registering user...");
 
-    try {
-      const response: IAuthResponse = await registerPlayer(registrationRequest);
+    const result: Result<IAuthResponse> = await registerPlayer(
+      registrationRequest
+    );
 
-      setToken(response.token);
-      setPlayerID(response.playerID);
-      setUsername(response.username);
-    } catch {
-      Alert.alert(
-        "Invalid Registration!",
-        "Something went wrong, try another username."
-      );
+    if (result.isError) {
+      handleError(result.message);
+      return;
     }
+
+    var response = result.data;
+    setToken(response!.token);
+    setPlayerID(response!.playerID);
+    setUsername(response!.username);
   };
 
   const handleInputValidationAndFeedback = (): boolean => {
@@ -55,12 +62,12 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
       registrationRequest.username.length === 0 ||
       registrationRequest.password.length === 0
     ) {
-      Alert.alert("Invalid Input!", "Username and password cannot be empty.");
+      handleError("Username and password cannot be empty.");
       return false;
     }
 
     if (registrationRequest.password !== retypedPassword) {
-      Alert.alert("Invalid Input!", "The passwords do not match.");
+      handleError("The passwords do not match.");
       return false;
     }
 
@@ -68,8 +75,7 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
       !validUsername(registrationRequest.username) ||
       registrationRequest.username.length > 10
     ) {
-      Alert.alert(
-        "Invalid Input!",
+      handleError(
         "Username can only consist of letters and numbers, with a max length of 10."
       );
       return false;
@@ -83,6 +89,12 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
+      <ErrorModal
+        errorModalVisible={errorModalVisible}
+        setErrorModalVisible={setErrorModalVisible}
+        message={errorMessage}
+      />
+
       <Text style={styles.header}>Register</Text>
       <View style={styles.card}>
         <View style={styles.inputContainer}>

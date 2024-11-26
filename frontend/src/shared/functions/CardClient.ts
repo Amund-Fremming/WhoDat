@@ -1,7 +1,8 @@
 import { CARD_ENDPOINT } from "../domain/URL_PATHS";
-import { ICard } from "@/src/shared/domain/CardTypes";
+import { ICard } from "@/src/Shared/domain/CardTypes";
+import { Result } from "../domain/Result";
 
-export const getAllCards = async (token: string) => {
+export const getAllCards = async (token: string) : Promise<Result<Array<ICard>>> => {
   try {
     const response = await fetch(`${CARD_ENDPOINT}/getall`, {
       method: "GET",
@@ -12,20 +13,20 @@ export const getAllCards = async (token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error(
-        "Error in getCardsFromGallery response " + response.status
-      );
+      console.error("getAllCards: response was not 200."); 
+      const errorMessage = await response.json();
+      return Result.failure(errorMessage);
     }
 
     const data: ICard[] = await response.json();
-    return data;
+    return Result.ok(data);
   } catch (error) {
-    console.error("Error while fetching all cards " + error);
-    throw new Error("Error while fetching all cards " + error);
+    console.error("(getAllCards)" + error);
+    return Result.failure("Something went wrong.");
   }
 };
 
-export const addCard = async (uri: string, name: string, token: string) => {
+export const addCard = async (uri: string, name: string, token: string) : Promise<Result<boolean>> => {
   try {
     const blobResponse = await fetch(uri);
     const blob = await blobResponse.blob();
@@ -41,15 +42,19 @@ export const addCard = async (uri: string, name: string, token: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Error in addCardToGallery response " + response.status);
+      console.error("addCard: response was not 200."); 
+      const errorMessage = await response.json();
+      return Result.failure(errorMessage);
     }
+
+    return Result.ok(true);
   } catch (error) {
-    console.error("Error when adding a card " + error);
-    throw new Error("Error when adding a card " + error);
+    console.error("(addCard)" + error);
+    return Result.failure("Something went wrong.");
   }
 };
 
-export const deleteCard = async (cardId: number, token: string) => {
+export const deleteCard = async (cardId: number, token: string) : Promise<Result<boolean>> => {
   console.log(`${CARD_ENDPOINT}/delete/${cardId}`);
   try {
     const response = await fetch(`${CARD_ENDPOINT}/delete/${cardId}`, {
@@ -65,8 +70,10 @@ export const deleteCard = async (cardId: number, token: string) => {
         "Error in deleteCardFromGallery response " + response.status
       );
     }
+
+    return Result.ok(true);
   } catch (error) {
-    console.error("Error delete card " + error);
-    throw new Error("Error delete card " + error);
+    console.error("(deleteCard)" + error);
+    return Result.failure("Something went wrong.");
   }
 };

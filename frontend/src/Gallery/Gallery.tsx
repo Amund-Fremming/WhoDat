@@ -1,15 +1,17 @@
 import { View, Text, Alert } from "react-native";
 import { useEffect, useState } from "react";
-import { Colors } from "@/src/shared/assets/constants/Colors";
-import { ICard } from "@/src/shared/domain/CardTypes";
+import { Colors } from "@/src/Shared/assets/constants/Colors";
+import { ICard } from "@/src/Shared/domain/CardTypes";
 import Card from "./components/Card/CardComponent";
 import CardModal from "./components/CardModal/CardModal";
 import styles from "./GalleryStyles";
 import { AddCardComponent } from "./components/AddCard/AddCardComponent";
 import AddCardModal from "./components/AddCardModal/AddCardModal";
-import { deleteCard, getAllCards } from "@/src/shared/functions/CardClient";
-import { useAuthProvider } from "@/src/shared/state/AuthProvider";
-import MediumButton from "@/src/shared/components/MediumButton/MediumButton";
+import { deleteCard, getAllCards } from "@/src/Shared/functions/CardClient";
+import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
+import MediumButton from "@/src/Shared/components/MediumButton/MediumButton";
+import { Result } from "../Shared/domain/Result";
+import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
 
 const defaultCard: ICard = {
   cardID: -1,
@@ -27,6 +29,13 @@ export default function Gallery() {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [displayPrevious, setDisplayPrevious] = useState<boolean>(false);
   const [displayNext, setDisplayNext] = useState<boolean>(true);
+  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const handleError = (message: string) => {
+    setErrorModalVisible(true);
+    setErrorMessage(message);
+  };
 
   const { token } = useAuthProvider();
 
@@ -35,16 +44,17 @@ export default function Gallery() {
   }, [addCardModalVisible]);
 
   const fetchPlayerCards = async () => {
-    try {
-      const data = await getAllCards(token);
-      setAllCards(data);
-
-      const skip = (pageNumber - 1) * 20;
-      const take = 20 * pageNumber;
-      setCardsForThisPage(data.slice(skip, take));
-    } catch (error) {
-      console.error("Fetching allCards failed " + error);
+    const result: Result<Array<ICard>> = await getAllCards(token);
+    if (result.isError) {
+      handleError(result.message);
     }
+
+    const data = result.data;
+    setAllCards(data!);
+
+    const skip = (pageNumber - 1) * 20;
+    const take = 20 * pageNumber;
+    setCardsForThisPage(data!.slice(skip, take));
   };
 
   const handleCardPressed = (card: ICard) => {
@@ -97,8 +107,7 @@ export default function Gallery() {
           try {
             await deleteCard(card.cardID, token);
           } catch (error) {
-            // TODO - better handling
-            Alert.alert("Something went wrong!", "Try again later");
+            handleError("Something went wrong.");
           }
         },
       },
@@ -107,6 +116,12 @@ export default function Gallery() {
 
   return (
     <>
+      <ErrorModal
+        errorModalVisible={errorModalVisible}
+        setErrorModalVisible={setErrorModalVisible}
+        message={errorMessage}
+      />
+
       <CardModal
         modalVisible={cardModalVisible}
         setModalVisible={setCardModalVisible}
@@ -136,7 +151,9 @@ export default function Gallery() {
               />
             ))}
             {cardsForThisPage.length < 20 && (
-              <AddCardComponent onAddCardPress={() => setAddCardModalVisible(true)} />
+              <AddCardComponent
+                onAddCardPress={() => setAddCardModalVisible(true)}
+              />
             )}
           </View>
           <View style={styles.buttonWrapper}>

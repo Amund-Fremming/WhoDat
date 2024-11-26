@@ -1,6 +1,6 @@
 import { Text, Pressable } from "react-native";
 import styles from "./BigButtonStyles";
-import { Colors } from "@/src/shared/assets/constants/Colors";
+import { Colors } from "@/src/Shared/assets/constants/Colors";
 
 interface BigButtonProps {
     text: string;

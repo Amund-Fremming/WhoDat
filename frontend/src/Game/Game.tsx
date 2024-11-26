@@ -13,17 +13,26 @@ import {
   joinGame,
   leaveGame,
   startGame,
-} from "@/src/Game/functions/GameHubClient";
+} from "@/src/Game/GameHubClient";
 import { HubConnection } from "@microsoft/signalr";
-import { createGame } from "@/src/Game/functions/GameClient";
+import { createGame } from "@/src/Game/GameClient";
 import { IGame, State } from "@/src/Game/types/GameTypes";
-import { useAuthProvider } from "@/src/shared/state/AuthProvider";
+import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
+import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
 
 export default function Game() {
   const [page, setPage] = useState<PlayPages>(PlayPages.MAIN_PAGE);
   const [connection, setConnection] = useState<HubConnection>();
   const [gameId, setGameId] = useState<number>(0);
   const { token, playerID } = useAuthProvider();
+  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [stateToCreate, setStateToCreate] = useState<State>();
+
+  const handleError = (message: string) => {
+    setErrorModalVisible(true);
+    setErrorMessage(message);
+  };
 
   //return () => {
   //if (connection) stopConnection(connection);
@@ -73,19 +82,20 @@ export default function Game() {
     }
   };
 
-  const handleCreateGame = async (state: State) => {
-    try {
-      const game: IGame = {
-        playerOneID: playerID,
-        state: state,
-      };
-
-      const createdGameId = await createGame(game, token);
-      setGameId(createdGameId);
-    } catch (error) {
-      console.error("Error creating game");
-    }
+  const handleCreateGame = async () => {
+    // TODO
   };
+
+  if (errorModalVisible)
+    return (
+      <>
+        <ErrorModal
+          errorModalVisible={errorModalVisible}
+          setErrorModalVisible={setErrorModalVisible}
+          message={errorMessage}
+        />
+      </>
+    );
 
   switch (page) {
     case PlayPages.MAIN_PAGE:
@@ -93,7 +103,7 @@ export default function Game() {
     case PlayPages.JOIN_PAGE:
       return <JoinPage setPage={setPage} />;
     case PlayPages.HOST_PAGE:
-      return <HostPage setPage={setPage} />;
+      return <HostPage setStateToCreate={stateToCreate} setPage={setPage} />;
     case PlayPages.BOARD_PAGE:
       return <BoardPage setPage={setPage} />;
     case PlayPages.LOBBY_PAGE:

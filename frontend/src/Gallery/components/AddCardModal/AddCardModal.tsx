@@ -8,13 +8,13 @@ import {
   Text,
 } from "react-native";
 import { styles, imageStyles } from "./AddCardModalStyles";
-import BigButton from "@/src/shared/components/BigButton/BigButton";
-import { Colors } from "@/src/shared/assets/constants/Colors";
+import BigButton from "@/src/Shared/components/BigButton/BigButton";
+import { Colors } from "@/src/Shared/assets/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
-import { useAuthProvider } from "@/src/shared/state/AuthProvider";
-import { addCard } from "@/src/shared/functions/CardClient";
-import { validText } from "@/src/shared/functions/InputValitator";
+import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
+import { addCard } from "@/src/Shared/functions/CardClient";
+import { validText } from "@/src/Shared/functions/InputValitator";
 import { pickImage } from "@/src/services/GalleryService/ImagePicker";
 
 interface AddCardModalProps {

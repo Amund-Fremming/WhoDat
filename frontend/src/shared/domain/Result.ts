@@ -1,25 +1,22 @@
 export class Result<T> {
     data: T | null;
     message: string;
-    error: Error | null;
 
-    constructor(data: T | null, message: string = "", error: Error | null) {
+    constructor(data: T | null, message: string = "") {
         this.data = data;
         this.message = message;
-        this.error = error;
     }
 
-    public get isSuccess(): boolean {
-        return this.data !== null && this.error === null;
+    public get isError(): boolean {
+        return this.message !== "";
     }
 
-    public static success<T>(data: T) : Result<T> {
-        return new Result<T>(data, "", null);
+    public static ok<T>(data: T) : Result<T> {
+        return new Result<T>(data, "");
     }
 
-    public static failure<T>(message: string, error: Error | null)
+    public static failure<T>(message: string)
     {
-        return new Result<T>(null, message, error);
+        return new Result<T>(null, message);
     }
-
 }

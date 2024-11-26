@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import styles from "./MainPageStyles";
 import { PlayPages } from "../../GamePages";
-import IconButton from "../../../shared/components/IconButton/IconButton";
+import IconButton from "../../../Shared/components/IconButton/IconButton";
 
 interface MainPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
