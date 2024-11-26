@@ -1,3 +1,5 @@
 # Gitignore
 
 secret.json
+backend/obj
+backend/vs

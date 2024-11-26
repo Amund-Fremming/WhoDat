@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\RaptorProject.csproj": {}
+    "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\RaptorProject.csproj": {
+    "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\RaptorProject.csproj",
-        "projectName": "RaptorProject",
-        "projectPath": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\RaptorProject.csproj",
+        "projectUniqueName": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj",
+        "projectName": "Backend",
+        "projectPath": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\amund.fremming\\.nuget\\packages\\",
         "outputPath": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\obj\\",
         "projectStyle": "PackageReference",
