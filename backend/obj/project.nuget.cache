@@ -2,7 +2,7 @@
   "version": 2,
   "dgSpecHash": "MjlFnG24r3c=",
   "success": true,
-  "projectFilePath": "/Users/amundfremming/Documents/projects/WhoDat/backend/RaptorProject.csproj",
+  "projectFilePath": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\amund.fremming\\.nuget\\packages\\awssdk.core\\3.7.400.19\\awssdk.core.3.7.400.19.nupkg.sha512",
     "C:\\Users\\amund.fremming\\.nuget\\packages\\awssdk.s3\\3.7.402.10\\awssdk.s3.3.7.402.10.nupkg.sha512",
