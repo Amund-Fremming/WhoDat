@@ -2,4 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/backend/.vs/backend/config
+/backend/.vs
+/backend/bin/Debug/net8.0
+/.vs/WhoDat/CopilotIndices/0.2.1653.9816
+/.vs/WhoDat/v17
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
