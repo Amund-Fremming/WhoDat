@@ -20,9 +20,12 @@ expo-env.d.ts
 # @end expo-cli
 
 # Build Results
-bin/
+backend/bin/
 obj/
 backend/obj/
+backend\obj
+Backend/obj/
+Backend\obj
 *Debug/
 
 # User-Specific Files
