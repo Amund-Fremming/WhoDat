@@ -14,7 +14,7 @@ import { useState } from "react";
 import { validUsername } from "@/src/Shared/functions/InputValitator";
 import { IAuthResponse, IRegistrationRequest } from "@/src/Auth/AuthTypes";
 import { registerPlayer } from "../../AuthClient";
-import { useAuthProvider } from "@/src/shared/state/AuthProvider";
+import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
 import Result from "@/src/Shared/domain/Result";
 import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
 

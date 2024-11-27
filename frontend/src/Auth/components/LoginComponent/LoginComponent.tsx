@@ -12,7 +12,7 @@ import { Colors } from "@/src/Shared/assets/constants/Colors";
 import BigButton from "@/src/Shared/components/BigButton/BigButton";
 import { IAuthResponse, ILoginRequest } from "@/src/Auth/AuthTypes";
 import { useState } from "react";
-import { useAuthProvider } from "@/src/shared/state/AuthProvider";
+import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
 import { loginPlayer } from "../../AuthClient";
 import Result from "@/src/Shared/domain/Result";
 import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";

@@ -8,7 +8,7 @@ import styles from "./GalleryStyles";
 import { AddCardComponent } from "./components/AddCard/AddCardComponent";
 import AddCardModal from "./components/AddCardModal/AddCardModal";
 import { deleteCard, getAllCards } from "@/src/Shared/functions/CardClient";
-import { useAuthProvider } from "@/src/shared/state/AuthProvider";
+import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
 import MediumButton from "@/src/Shared/components/MediumButton/MediumButton";
 import Result from "@/src/Shared/domain/Result";
 import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
