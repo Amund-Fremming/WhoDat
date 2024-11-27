@@ -1,9 +1,9 @@
 import { Modal, View, Image, Pressable } from "react-native";
 import { styles, imageStyles } from "./CardModalStyles";
-import BigButton from "@/src/shared/components/BigButton/BigButton";
-import { Colors } from "@/src/shared/assets/constants/Colors";
-import StrokedText from "@/src/shared/components/StokedText/StrokedText";
-import { ICard } from "@/src/shared/domain/CardTypes";
+import BigButton from "@/src/Shared/components/BigButton/BigButton";
+import { Colors } from "@/src/Shared/assets/constants/Colors";
+import StrokedText from "@/src/Shared/components/StokedText/StrokedText";
+import { ICard } from "@/src/Shared/domain/CardTypes";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";

@@ -1,14 +1,23 @@
-import { Pressable } from "react-native";
+import { Modal, Pressable } from "react-native";
 import styles from "./ErrorModalStyles";
 
 interface ErrorModalProps {
-    message: string;
-    onCloseAction: () => void;
+  message: string;
+  errorModalVisible: boolean;
+  setErrorModalVisible: (condition: boolean) => void;
 }
 
-export default function ErrorModal ({message, onCloseAction} : ErrorModalProps) {
-    return(
-        <Pressable style={styles.container}>
-        </Pressable>
-    );
+export default function ErrorModal({
+  message,
+  errorModalVisible,
+  setErrorModalVisible,
+}: ErrorModalProps) {
+  return (
+    <Modal style={styles.container} visible={errorModalVisible}>
+      <p>{message}</p>
+      <Pressable
+        onPress={() => setErrorModalVisible(!errorModalVisible)}
+      ></Pressable>
+    </Modal>
+  );
 }
