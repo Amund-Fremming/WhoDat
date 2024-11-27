@@ -1,14 +1,14 @@
-namespace Auth;
+using Backend.Features.Player;
+
+namespace Backend.Features.Auth;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(ILogger<AuthController> logger, IAuthService authService,
-        IPlayerService playerService, IPlayerRepository playerRepository) : ControllerBase
+public class AuthController(ILogger<AuthController> logger, IAuthService authService, IPlayerRepository playerRepository) : ControllerBase
 {
-    public readonly ILogger<AuthController> _logger = logger;
-    public readonly IAuthService _authService = authService;
-    public readonly IPlayerService _playerService = playerService;
-    public readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly ILogger<AuthController> _logger = logger;
+    private readonly IAuthService _authService = authService;
+    private readonly IPlayerRepository _playerRepository = playerRepository;
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -17,22 +17,27 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         {
             await _authService.ValidatePasswordWithSalt(request);
 
-            Player player = await _playerRepository.GetPlayerByUsername(request.Username);
-            string token = _authService.GenerateToken(player);
+            var result = await _playerRepository.GetPlayerByUsername(request.Username);
+            if (result.IsError)
+                return BadRequest(result.Message);
 
-            return Ok(new AuthResponse(player.PlayerID, player.Username, token));
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
+            var player = result.Data;
+            var tokenResult = _authService.GenerateToken(player);
+            if (tokenResult.IsError)
+                return BadRequest(result.Message);
+
+            var token = tokenResult.Data;
+            return Ok(AuthResponse.Convert(player, token));
         }
         catch (UnauthorizedAccessException e)
         {
+            _logger.LogError(e, "(Login) - Unauthorized, problem lies under ValidatePasswordWithSalt.");
             return Unauthorized(e.Message);
         }
         catch (Exception e)
         {
-            return StatusCode(500, e.Message);
+            _logger.LogError(e, "(Login)");
+            return StatusCode(500);
         }
     }
 
@@ -41,23 +46,23 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
     {
         try
         {
-            await _playerRepository.DoesUsernameExist(request.Username);
+            var usernameResult = await _playerRepository.DoesUsernameExist(request.Username);
+            if (usernameResult.IsError)
+                return BadRequest(usernameResult.Message);
 
-            Player? registeredPlayer = await _authService.RegisterNewPlayer(request);
-            string token = _authService.GenerateToken(registeredPlayer);
+            var playerResult = await _authService.RegisterNewPlayer(request);
+            if (playerResult.IsError)
+                return BadRequest(playerResult.Message);
 
-            return Ok(new AuthResponse(registeredPlayer.PlayerID, registeredPlayer.Username, token));
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-        catch (ArgumentException e)
-        {
-            return Conflict(e.Message);
+            var tokenResult = _authService.GenerateToken(playerResult.Data);
+            if (tokenResult.IsError)
+                return BadRequest(tokenResult.Message);
+
+            return Ok(AuthResponse.Convert(playerResult.Data, tokenResult.Data));
         }
         catch (Exception e)
         {
+            _logger.LogError(e, "(RegisterNewPlayer)");
             return StatusCode(500, e.Message);
         }
     }

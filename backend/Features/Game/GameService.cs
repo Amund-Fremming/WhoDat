@@ -1,200 +1,202 @@
-namespace GameEntity;
+using Backend.Features.Database;
+using Backend.Features.Player;
+using Backend.Features.Shared.Enums;
+using Backend.Features.Shared.ResultPattern;
+
+namespace Backend.Features.Game;
 
 public class GameService(AppDbContext context, ILogger<IGameService> logger, IGameRepository gameRepository, IPlayerRepository playerRepository) : IGameService
 {
-    public readonly AppDbContext _context = context;
-    public readonly ILogger<IGameService> _logger = logger;
-    public readonly IGameRepository _gameRepository = gameRepository;
-    public readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly AppDbContext _context = context;
+    private readonly ILogger<IGameService> _logger = logger;
+    private readonly IGameRepository _gameRepository = gameRepository;
+    private readonly IPlayerRepository _playerRepository = playerRepository;
 
-    public async Task<int> CreateGame(int playerId, Game game)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                Player player = await _playerRepository.GetPlayerById(playerId);
-                game.PlayerTwoID = null;
-                int gameId = await _gameRepository.CreateGame(game, player);
-
-                await transaction.CommitAsync();
-                return gameId;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error while creating Game with id {game.GameID}. (GameService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task DeleteGame(int playerId, int gameId)
+    public async Task<Result<int>> CreateGame(int playerId, CreateGameRequest gameRequest)
     {
         try
         {
-            Game game = await _gameRepository.GetGameById(gameId);
-            PlayerHasPermission(playerId, game);
+            var result = await _playerRepository.GetById(playerId);
+            if (result.IsError)
+                return result.Error;
 
-            await _gameRepository.DeleteGame(game);
+            var player = result.Data;
+            var game = new GameEntity(gameRequest.PlayerOneID, gameRequest.GameState)
+            {
+                PlayerOne = player
+            };
+            return await _gameRepository.Create(game);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error while deleting Game with id {gameId}. (GameService)");
-            throw;
+            _logger.LogError(e, "(CreateGame)");
+            return new Error(e, "Failed to create game.");
         }
     }
 
-    public async Task<Game> JoinGameById(int playerId, int gameId)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                Game game = await _gameRepository.GetGameById(gameId);
-
-                if (game.PlayerTwoID != null)
-                    throw new GameFullException($"Game with id {gameId} is full!");
-
-                Player player = await _playerRepository.GetPlayerById(playerId);
-                await _gameRepository.JoinGame(game, player);
-
-                await transaction.CommitAsync();
-                return game;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error while joining Game with id {gameId}. (GameService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task LeaveGameById(int playerId, int gameId)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                Game game = await _gameRepository.GetGameById(gameId);
-                PlayerHasPermission(playerId, game);
-
-                if (game.PlayerOneID == playerId)
-                    game.PlayerOneID = null;
-
-                if (game.PlayerTwoID == playerId)
-                    game.PlayerTwoID = null;
-
-                await _gameRepository.LeaveGame(game);
-
-                await transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error while leaving Game with id {gameId}. (GameService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task UpdateGameState(int playerId, int gameId, State state)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
-        {
-            try
-            {
-                Game game = await _gameRepository.GetGameById(gameId);
-                PlayerHasPermission(playerId, game);
-                PlayerCanUpdateGame(playerId, game);
-
-                await _gameRepository.UpdateGameState(game, state);
-                await transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error while updating state in Game with id {gameId}. (GameService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-    }
-
-    public async Task<int> GetRecentGamePlayed(int playerId)
+    public async Task<Result> DeleteGame(int playerId, int gameId)
     {
         try
         {
-            await _playerRepository.GetPlayerById(playerId);
+            var result = await _gameRepository.GetById(gameId);
+            if (result.IsError)
+                return result.Error;
+
+            var game = result.Data;
+            var validation = GameValidation.HasPermission(playerId, game);
+            if (validation.IsError)
+                return validation.Error;
+
+            var gameResult = await _gameRepository.Delete(game);
+            if (game.PlayerTwoID != null)
+                return result.Error;
+
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(DeleteGame)");
+            return new Error(e, "Failed to delete game");
+        }
+    }
+
+    public async Task<Result<GameEntity>> JoinGameById(int playerId, int gameId)
+    {
+        try
+        {
+            var result = await _gameRepository.GetById(gameId);
+            if (result.IsError)
+                return result.Error;
+
+            var game = result.Data;
+            if (game.PlayerTwoID != null)
+                throw new GameFullException($"Game with id {gameId} is full!");
+
+            var playerResult = await _playerRepository.GetById(playerId);
+            if (playerResult.IsError)
+                result = playerResult.Error;
+
+            var player = playerResult.Data;
+            var joinResult = await _gameRepository.JoinGame(game, player);
+            if (joinResult.IsError)
+                return joinResult.Error;
+
+            return game;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(JoinGameById)");
+            return new Error(e, "Failed to join game.");
+        }
+    }
+
+    public async Task<Result> LeaveGameById(int playerId, int gameId)
+    {
+        try
+        {
+            var result = await _gameRepository.GetById(gameId);
+            if (result.IsError)
+                return result.Error;
+
+            var game = result.Data;
+            var validation = GameValidation.HasPermission(playerId, game);
+            if (validation.IsError)
+                return validation.Error;
+
+            if (game.PlayerOneID == playerId)
+                game.PlayerOneID = null;
+
+            if (game.PlayerTwoID == playerId)
+                game.PlayerTwoID = null;
+
+            var leaveResult = await _gameRepository.LeaveGame(game);
+            if (leaveResult.IsError)
+                return result.Error;
+
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(LeaveGameById)");
+            return new Error(e, "Faoled to leave game.");
+        }
+    }
+
+    public async Task<Result> UpdateGameState(int playerId, int gameId, GameState state)
+    {
+        try
+        {
+            var result = await _gameRepository.GetById(gameId);
+            if (result.IsError)
+                return result.Error;
+
+            var game = result.Data;
+            var validation = GameValidation.HasPermission(playerId, game)
+                & GameValidation.CanUpdateGame(playerId, game);
+
+            if (validation.IsError)
+                return validation.Error;
+
+            var gameResult = await _gameRepository.UpdateGameState(game, state);
+            if (gameResult.IsError)
+                return gameResult.Error;
+
+            return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(UpdateGameState)");
+            return new Error(e, "Failed to update game state.");
+        }
+    }
+
+    public async Task<Result<int>> GetRecentGamePlayed(int playerId)
+    {
+        try
+        {
+            var result = await _playerRepository.GetById(playerId);
+            if (result.IsError)
+                return result.Error;
 
             return await _gameRepository.GetRecentGamePlayed(playerId);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error while getting players recent Game with PlayerID {playerId}. (GameService)");
-            throw;
+            _logger.LogError(e, "(GetRecentGamePlayed)");
+            return new Error(e, "Failed to get recent games.");
         }
     }
 
-    public async Task<State> StartGame(int playerId, int gameId)
+    public async Task<Result<GameState>> StartGame(int playerId, int gameId)
     {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
+        try
         {
-            try
-            {
-                Player player = await _playerRepository.GetPlayerById(playerId);
-                Game game = await _gameRepository.GetGameById(gameId);
+            var playerResult = await _playerRepository.GetById(playerId);
+            var gameResult = await _gameRepository.GetById(gameId);
+            if (playerResult.IsError)
+                return playerResult.Error;
 
-                PlayerHasPermission(playerId, game);
-                GameInValidState(game);
+            if (gameResult.IsError)
+                return gameResult.Error;
 
-                await _gameRepository.UpdateGameState(game, State.P1_TURN_STARTED);
-                return State.P1_TURN_STARTED;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error while starting Game with ID {gameId}. (GameService)");
-                await transaction.RollbackAsync();
-                throw;
-            }
+            var player = playerResult.Data;
+            var game = gameResult.Data;
+            var validation = GameValidation.HasPermission(playerId, game)
+                & GameValidation.ValidState(game);
+
+            if (validation.IsError)
+                return validation.Error;
+
+            var updateResult = await _gameRepository.UpdateGameState(game, GameState.P1_TURN_STARTED);
+            if (updateResult.IsError)
+                return updateResult.Error;
+
+            return GameState.P1_TURN_STARTED;
         }
-    }
-
-    public void GameInValidState(Game game)
-    {
-        if (game.State != State.BOTH_PICKED_PLAYERS)
-            throw new ArgumentOutOfRangeException("Game cannot start at this state!");
-
-        if (game.PlayerOneID == null || game.PlayerTwoID == null)
-            throw new ArgumentOutOfRangeException("Game cannot start, missing players!");
-
-        Board playerOneBoard = game.Boards!.ElementAt(0);
-        Board playerTwoBoard = game.Boards!.ElementAt(1) ??
-            throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not created their board!");
-
-        if (playerOneBoard.ChosenCardID == null || playerTwoBoard.ChosenCardID == null)
-            throw new ArgumentOutOfRangeException("Game cannot start, player(s) have not choosen boardcard!");
-    }
-
-    public void PlayerHasPermission(int playerId, Game game)
-    {
-        if (playerId != game.PlayerOneID && playerId != game.PlayerTwoID)
+        catch (Exception e)
         {
-            _logger.LogInformation($"Player with id {playerId} tried accessing someone elses data");
-            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission (GameService)");
-        }
-    }
-
-    public void PlayerCanUpdateGame(int playerId, Game game)
-    {
-        bool isPlayerOne = game.PlayerOneID == playerId;
-
-        if ((isPlayerOne && (game.State != State.P1_ASK_REPLIED && game.State != State.P1_TURN_STARTED && game.State != State.P1_GUESS_REPLIED)) ||
-            (!isPlayerOne && (game.State != State.P2_ASK_REPLIED && game.State != State.P2_TURN_STARTED && game.State != State.P2_GUESS_REPLIED)))
-        {
-            _logger.LogInformation($"Player with id {playerId} tried to update the state when not allowed.");
-            throw new UnauthorizedAccessException($"Player with id {playerId} does not have permission to update the state (GameService)");
+            _logger.LogError(e, "(StartGame)");
+            return new Error(e, "Failed to start game.");
         }
     }
 }
-

@@ -1,6 +1,0 @@
-@RaptorProject_HostAddress = http://localhost:5158
-
-GET {{RaptorProject_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
