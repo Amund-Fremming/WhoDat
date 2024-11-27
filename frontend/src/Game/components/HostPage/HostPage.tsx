@@ -1,25 +1,24 @@
 import { View, Text, Pressable } from "react-native";
 import styles from "./HostPageStyles";
 import { PlayPages } from "../../GamePages";
-import IconButton from "../../../Shared/components/IconButton/IconButton";
+import IconButton from "@/src/shared/components/IconButton/IconButton";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
 import { State } from "../../types/GameTypes";
 
 interface HostPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
-  setStateToCreate: React.Dispatch<React.SetStateAction<State>>;
 }
 
-export default function HostPage({ setPage, setStateToCreate }: HostPageProps) {
+export default function HostPage({ setPage }: HostPageProps) {
   const handleBothChoosing = () => {
     setPage(PlayPages.WAITING_PAGE);
-    setStateToCreate(State.BOTH_CHOSING_CARDS);
+    //setStateToCreate(State.BOTH_CHOSING_CARDS);
   };
 
   const handleHostChoosing = () => {
     setPage(PlayPages.WAITING_PAGE);
-    setStateToCreate(State.ONLY_HOST_CHOSING_CARDS);
+    //setStateToCreate(State.ONLY_HOST_CHOSING_CARDS);
   };
 
   return (

@@ -4,9 +4,11 @@ import {
   ILoginRequest,
   IAuthResponse,
 } from "@/src/Auth/AuthTypes";
-import { Result } from "@/src/Shared/domain/Result";
+import Result from "../Shared/domain/Result";
 
-export const loginPlayer = async (request: ILoginRequest) : Promise<Result<IAuthResponse>> => {
+export const loginPlayer = async (
+  request: ILoginRequest
+): Promise<Result<IAuthResponse>> => {
   try {
     const response = await fetch(`${AUTH_ENDPOINT}/login`, {
       method: "POST",
@@ -17,7 +19,7 @@ export const loginPlayer = async (request: ILoginRequest) : Promise<Result<IAuth
     });
 
     if (!response.ok) {
-      console.error(response.status, " loginPlayer: response was not 200.")
+      console.error(response.status, " loginPlayer: response was not 200.");
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
@@ -30,7 +32,9 @@ export const loginPlayer = async (request: ILoginRequest) : Promise<Result<IAuth
   }
 };
 
-export const registerPlayer = async (request: IRegistrationRequest) : Promise<Result<IAuthResponse>> => {
+export const registerPlayer = async (
+  request: IRegistrationRequest
+): Promise<Result<IAuthResponse>> => {
   try {
     const response = await fetch(`${AUTH_ENDPOINT}/register`, {
       method: "POST",

@@ -16,7 +16,7 @@ import {
 } from "@/src/Game/GameHubClient";
 import { HubConnection } from "@microsoft/signalr";
 import { State } from "@/src/Game/types/GameTypes";
-import { useAuthProvider } from "@/src/shared/state/AuthProvider";
+import { useAuthProvider } from "../shared/state/AuthProvider";
 import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
 
 export default function Game() {
@@ -102,7 +102,7 @@ export default function Game() {
     case PlayPages.JOIN_PAGE:
       return <JoinPage setPage={setPage} />;
     case PlayPages.HOST_PAGE:
-      return <HostPage setStateToCreate={stateToCreate} setPage={setPage} />;
+      return <HostPage setPage={setPage} />;
     case PlayPages.BOARD_PAGE:
       return <BoardPage setPage={setPage} />;
     case PlayPages.LOBBY_PAGE:

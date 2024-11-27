@@ -12,10 +12,10 @@ import BigButton from "@/src/Shared/components/BigButton/BigButton";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
-import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
+import { useAuthProvider } from "@/src/shared/state/AuthProvider";
 import { addCard } from "@/src/Shared/functions/CardClient";
 import { validText } from "@/src/Shared/functions/InputValitator";
-import { pickImage } from "@/src/services/GalleryService/ImagePicker";
+//import { pickImage } from "@/src/services/GalleryService/ImagePicker";
 
 interface AddCardModalProps {
   modalVisible: boolean;
@@ -47,15 +47,16 @@ export default function AddCardModal({
     );
     return true;
   };
-
-  const handleImageInput = async () => {
-    try {
-      const result: any = await pickImage();
-      setImageUri(result);
-    } catch (Exception) {
-      console.error("Image picker failed");
-    }
-  };
+  /*
+            const handleImageInput = async () => {
+              try {
+                const result: any = await pickImage();
+                setImageUri(result);
+              } catch (Exception) {
+                console.error("Image picker failed");
+              }
+            };
+            */
 
   const uploadCard = async () => {
     try {
@@ -85,7 +86,9 @@ export default function AddCardModal({
             <FontAwesome name="close" size={36} color={Colors.DarkGray} />
           </Pressable>
           <View style={styles.card}>
-            <Pressable style={styles.uploadButton} onPress={handleImageInput}>
+            <Pressable
+              style={styles.uploadButton} /*onPress={handleImageInput}*/
+            >
               <Text style={styles.uploadText}>upload</Text>
             </Pressable>
             <Image
