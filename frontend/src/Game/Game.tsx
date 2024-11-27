@@ -15,9 +15,8 @@ import {
   startGame,
 } from "@/src/Game/GameHubClient";
 import { HubConnection } from "@microsoft/signalr";
-import { createGame } from "@/src/Game/GameClient";
-import { IGame, State } from "@/src/Game/types/GameTypes";
-import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
+import { State } from "@/src/Game/types/GameTypes";
+import { useAuthProvider } from "@/src/shared/state/AuthProvider";
 import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
 
 export default function Game() {

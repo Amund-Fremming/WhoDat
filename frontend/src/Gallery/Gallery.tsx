@@ -1,16 +1,16 @@
 import { View, Text, Alert } from "react-native";
 import { useEffect, useState } from "react";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
-import { ICard } from "@/src/Shared/domain/CardTypes";
+import { Colors } from "@/src/shared/assets/constants/Colors";
+import { ICard } from "@/src/shared/domain/CardTypes";
 import Card from "./components/Card/CardComponent";
 import CardModal from "./components/CardModal/CardModal";
 import styles from "./GalleryStyles";
 import { AddCardComponent } from "./components/AddCard/AddCardComponent";
 import AddCardModal from "./components/AddCardModal/AddCardModal";
-import { deleteCard, getAllCards } from "@/src/Shared/functions/CardClient";
-import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
-import MediumButton from "@/src/Shared/components/MediumButton/MediumButton";
-import { Result } from "../Shared/domain/Result";
+import { deleteCard, getAllCards } from "@/src/shared/functions/CardClient";
+import { useAuthProvider } from "@/src/shared/state/AuthProvider";
+import MediumButton from "@/src/shared/components/MediumButton/MediumButton";
+import Result from "../Shared/domain/Result";
 import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
 
 const defaultCard: ICard = {
