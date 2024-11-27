@@ -24,10 +24,15 @@ public class CardEntity : IEntity
     public IEnumerable<BoardCardEntity>? BoardCards { get; set; }
 
     public CardEntity()
-    { }
+    {
+        Name = string.Empty;
+        Url = string.Empty;
+    }
 
     public CardEntity(int playerId)
     {
         PlayerID = playerId;
+        Name = string.Empty;
+        Url = string.Empty;
     }
 }

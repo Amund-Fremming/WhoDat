@@ -7,8 +7,8 @@ namespace Backend.Features.BoardCard;
 public class BoardCardRepository(AppDbContext context, ILogger<BoardCardRepository> logger)
     : RepositoryBase<BoardCardEntity, BoardCardRepository>(logger, context), IBoardCardRepository
 {
-    public readonly AppDbContext _context = context;
-    public readonly ILogger<BoardCardRepository> _logger = logger;
+    private readonly AppDbContext _context = context;
+    private readonly ILogger<BoardCardRepository> _logger = logger;
 
     public async Task<Result> CreateBoardCards(IEnumerable<BoardCardEntity> boardCards)
     {

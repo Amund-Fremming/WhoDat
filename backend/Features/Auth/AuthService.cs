@@ -8,11 +8,11 @@ namespace Backend.Features.Auth;
 public class AuthService(AppDbContext context, IConfiguration configuration, ILogger<IAuthService> logger,
         IPasswordHasher<PlayerEntity> passwordHasher, IPlayerRepository playerRepository) : IAuthService
 {
-    public readonly AppDbContext _context = context;
-    public readonly IConfiguration _configuration = configuration;
-    public readonly ILogger<IAuthService> _logger = logger;
-    public readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
-    public readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly AppDbContext _context = context;
+    private readonly IConfiguration _configuration = configuration;
+    private readonly ILogger<IAuthService> _logger = logger;
+    private readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
+    private readonly IPlayerRepository _playerRepository = playerRepository;
 
     public Result<string> GenerateToken(PlayerEntity player)
     {

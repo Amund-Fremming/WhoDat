@@ -9,12 +9,12 @@ namespace Backend.Features.Game;
 [Route("api/[controller]")]
 public class GameController(ILogger<GameController> logger, IGameService gameService, IBoardService boardService, IBoardRepository boardRepository, IBoardCardService boardCardService, IMessageService messageService) : ControllerBase
 {
-    public readonly ILogger<GameController> _logger = logger;
-    public readonly IGameService _gameService = gameService;
-    public readonly IBoardRepository _boardRepository = boardRepository;
-    public readonly IBoardService _boardService = boardService;
-    public readonly IBoardCardService _boardCardService = boardCardService;
-    public readonly IMessageService _messageService = messageService;
+    private readonly ILogger<GameController> _logger = logger;
+    private readonly IGameService _gameService = gameService;
+    private readonly IBoardRepository _boardRepository = boardRepository;
+    private readonly IBoardService _boardService = boardService;
+    private readonly IBoardCardService _boardCardService = boardCardService;
+    private readonly IMessageService _messageService = messageService;
 
     [HttpPost("games")]
     [Authorize(Roles = "ADMIN,USER")]

@@ -7,8 +7,8 @@ namespace Backend.Features.Admin;
 [Route("api/[controller]")]
 public class AdminController(ILogger<AdminController> logger, IPlayerRepository playerRepository) : ControllerBase
 {
-    public readonly IPlayerRepository _playerRepository = playerRepository;
-    public readonly ILogger<AdminController> _logger = logger;
+    private readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly ILogger<AdminController> _logger = logger;
 
     [HttpDelete("players/delete/{playerId}")]
     [Authorize(Roles = "ADMIN")]

@@ -8,7 +8,7 @@ namespace Backend.Features.Board;
 public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logger)
     : RepositoryBase<BoardEntity, BoardRepository>(logger, context), IBoardRepository
 {
-    public readonly AppDbContext _context = context;
+    private readonly AppDbContext _context = context;
     private readonly ILogger<BoardRepository> _logger = logger;
 
     public async Task<Result<BoardEntity>> GetBoardById(int boardId)

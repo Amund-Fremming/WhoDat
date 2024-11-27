@@ -7,11 +7,11 @@ namespace Backend.Features.Game;
 
 public class GameHubBroker(ILogger<GameHubBroker> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService) : Hub
 {
-    public readonly ILogger<GameHubBroker> _logger = logger;
-    public readonly IGameService _gameService = gameService;
-    public readonly IBoardService _boardService = boardService;
-    public readonly IBoardCardService _boardCardService = boardCardService;
-    public readonly IMessageService _messageService = messageService;
+    private readonly ILogger<GameHubBroker> _logger = logger;
+    private readonly IGameService _gameService = gameService;
+    private readonly IBoardService _boardService = boardService;
+    private readonly IBoardCardService _boardCardService = boardCardService;
+    private readonly IMessageService _messageService = messageService;
 
     private readonly string IDENTIFIER = "RECEIVE_STATE";
     private readonly string MESSAGE_IDENTIFIER = "RECEIVE_MESSAGE";

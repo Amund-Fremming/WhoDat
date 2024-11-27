@@ -9,12 +9,12 @@ namespace Backend.Features.Board;
 
 public class BoardService(ILogger<IBoardService> logger, AppDbContext context, IBoardRepository boardRepository, IBoardCardRepository boardCardRepository, IGameRepository gameRepository, IPlayerRepository playerRepository) : IBoardService
 {
-    public readonly ILogger<IBoardService> _logger = logger;
-    public readonly AppDbContext _context = context;
-    public readonly IBoardRepository _boardRepository = boardRepository;
-    public readonly IBoardCardRepository _boardCardRepository = boardCardRepository;
-    public readonly IGameRepository _gameRepository = gameRepository;
-    public readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly ILogger<IBoardService> _logger = logger;
+    private readonly AppDbContext _context = context;
+    private readonly IBoardRepository _boardRepository = boardRepository;
+    private readonly IBoardCardRepository _boardCardRepository = boardCardRepository;
+    private readonly IGameRepository _gameRepository = gameRepository;
+    private readonly IPlayerRepository _playerRepository = playerRepository;
 
     public async Task<Result> DeleteBoard(int playerId, int boardId)
     {

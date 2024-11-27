@@ -7,10 +7,10 @@ namespace Backend.Features.Card;
 [Route("api/[controller]")]
 public class CardController(ILogger<PlayerController> logger, IPlayerRepository playerRepository, ICardRepository cardRepository, ICardService cardService) : ControllerBase
 {
-    public readonly ILogger<PlayerController> _logger = logger;
-    public readonly IPlayerRepository _playerRepository = playerRepository;
-    public readonly ICardRepository _cardRepository = cardRepository;
-    public readonly ICardService _cardService = cardService;
+    private readonly ILogger<PlayerController> _logger = logger;
+    private readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly ICardRepository _cardRepository = cardRepository;
+    private readonly ICardService _cardService = cardService;
 
     [HttpGet("getall")]
     [Authorize(Roles = "ADMIN,USER")]

@@ -9,8 +9,8 @@ namespace Backend.Features.Game;
 public class GameRepository(AppDbContext context, ILogger<GameRepository> logger)
     : RepositoryBase<GameEntity, GameRepository>(logger, context), IGameRepository
 {
-    public readonly AppDbContext _context = context;
-    public readonly ILogger<GameRepository> _logger = logger;
+    private readonly AppDbContext _context = context;
+    private readonly ILogger<GameRepository> _logger = logger;
 
     public async Task<Result> JoinGame(GameEntity game, PlayerEntity player)
     {

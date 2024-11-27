@@ -6,9 +6,9 @@ namespace Backend.Features.Auth;
 [Route("api/auth")]
 public class AuthController(ILogger<AuthController> logger, IAuthService authService, IPlayerRepository playerRepository) : ControllerBase
 {
-    public readonly ILogger<AuthController> _logger = logger;
-    public readonly IAuthService _authService = authService;
-    public readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly ILogger<AuthController> _logger = logger;
+    private readonly IAuthService _authService = authService;
+    private readonly IPlayerRepository _playerRepository = playerRepository;
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)

@@ -7,10 +7,10 @@ namespace Backend.Features.Game;
 
 public class GameService(AppDbContext context, ILogger<IGameService> logger, IGameRepository gameRepository, IPlayerRepository playerRepository) : IGameService
 {
-    public readonly AppDbContext _context = context;
-    public readonly ILogger<IGameService> _logger = logger;
-    public readonly IGameRepository _gameRepository = gameRepository;
-    public readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly AppDbContext _context = context;
+    private readonly ILogger<IGameService> _logger = logger;
+    private readonly IGameRepository _gameRepository = gameRepository;
+    private readonly IPlayerRepository _playerRepository = playerRepository;
 
     public async Task<Result<int>> CreateGame(int playerId, CreateGameRequest gameRequest)
     {

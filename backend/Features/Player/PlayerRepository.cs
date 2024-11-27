@@ -8,9 +8,9 @@ namespace Backend.Features.Player;
 public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> logger, IPasswordHasher<PlayerEntity> passwordHasher)
     : RepositoryBase<PlayerEntity, PlayerRepository>(logger, context), IPlayerRepository
 {
-    public readonly AppDbContext _context = context;
-    public readonly ILogger<IPlayerRepository> _logger = logger;
-    public readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
+    private readonly AppDbContext _context = context;
+    private readonly ILogger<IPlayerRepository> _logger = logger;
+    private readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
 
     public async Task<Result> DeletePlayer(int playerId)
     {

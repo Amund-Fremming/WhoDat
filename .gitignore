@@ -21,12 +21,11 @@ expo-env.d.ts
 
 # Build Results
 backend/bin/
-obj/
-backend/obj/
-backend\obj
-Backend/obj/
-Backend\obj
+*obj/
 *Debug/
+backend/obj/
+backend/.vs/
+backend/Debug/
 
 # User-Specific Files
 *.user
@@ -54,10 +53,6 @@ Backend\obj
 *.snupkg
 .nuget/
 
-# Resharper and Other IDE Tools
-_ReSharper*/
-*.DotSettings.user
-
 # Visual Studio and Rider Specific Folders
-.vs/
-.idea/
+backend/.vs/
+backend/.idea/

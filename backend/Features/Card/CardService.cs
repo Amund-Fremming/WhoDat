@@ -4,9 +4,9 @@ namespace Backend.Features.Card;
 
 public class CardService(ILogger<ICardService> logger, ICardRepository cardRepository, IImageClient imageClient) : ICardService
 {
-    public readonly ILogger<ICardService> _logger = logger;
-    public readonly ICardRepository _cardRepository = cardRepository;
-    public readonly IImageClient _imageClient = imageClient;
+    private readonly ILogger<ICardService> _logger = logger;
+    private readonly ICardRepository _cardRepository = cardRepository;
+    private readonly IImageClient _imageClient = imageClient;
 
     public async Task<Result> CreateCard(int playerId, CreateCardDto cardDto)
     {

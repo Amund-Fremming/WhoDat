@@ -6,8 +6,8 @@ namespace Backend.Features.Player;
 [Route("api/[controller]")]
 public class PlayerController(ILogger<PlayerController> logger, IPlayerRepository playerRepository) : ControllerBase
 {
-    public readonly ILogger<PlayerController> _logger = logger;
-    public readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly ILogger<PlayerController> _logger = logger;
+    private readonly IPlayerRepository _playerRepository = playerRepository;
 
     [HttpPut("players/update-username")]
     [Authorize(Roles = "ADMIN,USER")]
