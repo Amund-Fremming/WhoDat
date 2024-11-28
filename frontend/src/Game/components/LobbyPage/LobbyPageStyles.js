@@ -1,10 +1,10 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/src/Shared/assets/constants/Colors";
 import { StyleSheet } from "react-native";
 import {
   moderateScale,
   verticalScale,
   horizontalScale,
-} from "@/constants/Dimentions";
+} from "@/src/Shared/assets/constants/Dimentions";
 
 export default styles = StyleSheet.create({
   container: {
