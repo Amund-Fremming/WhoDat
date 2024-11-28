@@ -1,6 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 
-import { HUB_ENDPOINT } from "@/src/shared/domain/URL_PATHS";
+import { HUB_ENDPOINT } from "@/src/Shared/domain/URL_PATHS";
 
 // Create a connection to the hub
 export const createConnection = (): signalR.HubConnection => {

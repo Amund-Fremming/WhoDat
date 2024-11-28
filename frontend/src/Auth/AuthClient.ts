@@ -1,12 +1,14 @@
-import { AUTH_ENDPOINT } from "./URL_PATHS";
+import { AUTH_ENDPOINT } from "@/src/Shared/domain/URL_PATHS";
 import {
   IRegistrationRequest,
   ILoginRequest,
   IAuthResponse,
 } from "@/src/Auth/AuthTypes";
-import { Result } from "../shared/Result";
+import Result from "../Shared/domain/Result";
 
-export const loginPlayer = async (request: ILoginRequest) : Promise<Result<IAuthResponse>> => {
+export const loginPlayer = async (
+  request: ILoginRequest
+): Promise<Result<IAuthResponse>> => {
   try {
     const response = await fetch(`${AUTH_ENDPOINT}/login`, {
       method: "POST",
@@ -17,20 +19,22 @@ export const loginPlayer = async (request: ILoginRequest) : Promise<Result<IAuth
     });
 
     if (!response.ok) {
-      console.error(response.status, " loginPlayer: response was not 200.")
-      return Result.failure("Login failed, password or username is wrong", null);
+      console.error(response.status, " loginPlayer: response was not 200.");
+      const errorMessage = await response.json();
+      return Result.failure(errorMessage);
     }
 
     const data: IAuthResponse = await response.json();
-    return Result.success(data);
+    return Result.ok(data);
   } catch (error) {
-    var err = error as Error;
     console.error(error, " loginPlayer: request failed.");
-    return Result.failure("Request failed.", err);
+    return Result.failure("Something went wrong.");
   }
 };
 
-export const registerPlayer = async (request: IRegistrationRequest) => {
+export const registerPlayer = async (
+  request: IRegistrationRequest
+): Promise<Result<IAuthResponse>> => {
   try {
     const response = await fetch(`${AUTH_ENDPOINT}/register`, {
       method: "POST",
@@ -42,13 +46,14 @@ export const registerPlayer = async (request: IRegistrationRequest) => {
 
     if (!response.ok) {
       console.error(response.status, " registerPlayer: response was not 200.");
-      return Result.failure("Something went wrong, try another username.", null);
+      const errorMessage = await response.json();
+      return Result.failure(errorMessage);
     }
 
     const data: IAuthResponse = await response.json();
-    return data;
+    return Result.ok(data);
   } catch (error) {
     console.error(error, " registerPlayer: request failed");
-    throw new Error("Error while registering a user " + error);
+    return Result.failure("Something went wrong.");
   }
 };

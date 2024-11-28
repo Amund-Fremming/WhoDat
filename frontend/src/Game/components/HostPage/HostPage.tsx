@@ -1,15 +1,26 @@
 import { View, Text, Pressable } from "react-native";
 import styles from "./HostPageStyles";
 import { PlayPages } from "../../GamePages";
-import IconButton from "../../../shared/components/IconButton/IconButton";
+import IconButton from "@/src/Shared/components/IconButton/IconButton";
 import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/src/shared/assets/constants/Colors";
+import { Colors } from "@/src/Shared/assets/constants/Colors";
+import { State } from "../../types/GameTypes";
 
 interface HostPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
 }
 
 export default function HostPage({ setPage }: HostPageProps) {
+  const handleBothChoosing = () => {
+    setPage(PlayPages.WAITING_PAGE);
+    //setStateToCreate(State.BOTH_CHOSING_CARDS);
+  };
+
+  const handleHostChoosing = () => {
+    setPage(PlayPages.WAITING_PAGE);
+    //setStateToCreate(State.ONLY_HOST_CHOSING_CARDS);
+  };
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -25,12 +36,12 @@ export default function HostPage({ setPage }: HostPageProps) {
       <IconButton
         text="Your cards"
         icon="user"
-        onButtonPress={() => setPage(PlayPages.WAITING_PAGE)}
+        onButtonPress={handleHostChoosing}
       />
       <IconButton
         text="Split 50/50"
         icon="users"
-        onButtonPress={() => setPage(PlayPages.WAITING_PAGE)}
+        onButtonPress={handleBothChoosing}
       />
     </View>
   );

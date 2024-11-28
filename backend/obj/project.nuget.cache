@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "MjlFnG24r3c=",
+  "dgSpecHash": "GB2j8GA13EU=",
   "success": true,
   "projectFilePath": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\amund.fremming\\.nuget\\packages\\awssdk.core\\3.7.400.19\\awssdk.core.3.7.400.19.nupkg.sha512",
-    "C:\\Users\\amund.fremming\\.nuget\\packages\\awssdk.s3\\3.7.402.10\\awssdk.s3.3.7.402.10.nupkg.sha512",
+    "C:\\Users\\amund.fremming\\.nuget\\packages\\awssdk.core\\3.7.400.58\\awssdk.core.3.7.400.58.nupkg.sha512",
+    "C:\\Users\\amund.fremming\\.nuget\\packages\\awssdk.s3\\3.7.408.1\\awssdk.s3.3.7.408.1.nupkg.sha512",
     "C:\\Users\\amund.fremming\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\amund.fremming\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.4\\microsoft.aspnetcore.authentication.jwtbearer.8.0.4.nupkg.sha512",
     "C:\\Users\\amund.fremming\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.1\\microsoft.aspnetcore.openapi.8.0.1.nupkg.sha512",

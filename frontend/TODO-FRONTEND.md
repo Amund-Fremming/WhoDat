@@ -9,25 +9,21 @@
 - [ ] Host sends choosen cards, both gets the right state, renders next step
 - [ ] player one sends choosen cards, other player gets new state, renders waiting
 
-### Login / Register
+flow
 
-- [ ] AuthBase
-- [ ] LoginCard
-- [ ] RegisterCard
+- Created game, host only => Waiting
+  Sub to socket
+  if player joins
+  set joined player to Waiting
+  host to => ChooseBoard
+  call CreateBoardCards
+  both to => GamePlay
+  sub to all required sockets
+  play the game step by step
 
-### Gallery (Cards)
-
-- [x] GalleryBase
-  - AddModal
-  - only render add card when gallery not full, may also need a indicator that the gallery is full?
-  - Next gallery functionallity
-  - Add gallery functionally or just make it one large?
-  - Input validation
-- [x] CardContainer
-- [ ] Card
-- [ ] CreateCard
-- [ ] CardModal
-
-### General
-
-- [ ] Set edit button on gallery to stick to bottom for when there is not a full gallery
+- Created game, both choosting => waiting
+  sub to socket
+  if player joins
+  set both => ChooseBoard
+  when done => waiting
+  when both done => GamePlay
