@@ -19,6 +19,11 @@ web-build/
 expo-env.d.ts
 # @end expo-cli
 
+/backend/appsettings.Development.json
+backend/appsettings.Development.json
+Backend/appsettings.Development.json
+/Backend/appsettings.Development.json
+
 # Build Results
 backend/bin/
 *obj/

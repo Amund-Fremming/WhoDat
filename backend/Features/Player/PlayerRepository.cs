@@ -5,12 +5,11 @@ using System.Data;
 
 namespace Backend.Features.Player;
 
-public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> logger, IPasswordHasher<PlayerEntity> passwordHasher)
+public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> logger)
     : RepositoryBase<PlayerEntity, PlayerRepository>(logger, context), IPlayerRepository
 {
     private readonly AppDbContext _context = context;
     private readonly ILogger<IPlayerRepository> _logger = logger;
-    private readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
 
     public async Task<Result> DeletePlayer(int playerId)
     {
