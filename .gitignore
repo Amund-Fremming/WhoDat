@@ -20,6 +20,10 @@ expo-env.d.ts
 # @end expo-cli
 
 # Build Results
+/backend/appsettings.Development.json
+backend/appsettings.Development.json
+Backend/appsettings.Development.json
+/Backend/appsettings.Development.json
 backend/bin/
 *obj/
 *Debug/
@@ -56,3 +60,4 @@ backend/Debug/
 # Visual Studio and Rider Specific Folders
 backend/.vs/
 backend/.idea/
+/backend/appsettings.Development.json
