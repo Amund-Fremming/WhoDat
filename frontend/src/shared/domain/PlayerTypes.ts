@@ -1,5 +1,5 @@
 import { ICard } from "./CardTypes";
-import { IGame } from "../views/Game/GameTypes";
+import { IGame } from "@/src/Game/types/GameTypes";
 
 export interface IPlayer {
   playerID?: number;

@@ -1,6 +1,6 @@
 import { Pressable, View, Text } from "react-native";
 import styles from "./IconButtonStyles";
-import { Colors } from "@/src/shared/assets/constants/Colors";
+import { Colors } from "@/src/Shared/assets/constants/Colors";
 import { Feather } from "@expo/vector-icons";
 
 interface IconButtonProps {

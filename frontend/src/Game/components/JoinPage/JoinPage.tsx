@@ -2,8 +2,8 @@ import { View, Pressable, Text, TextInput } from "react-native";
 import styles from "./JoinPageStyles";
 import { PlayPages } from "../../GamePages";
 import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/src/shared/assets/constants/Colors";
-import BigButton from "@/src/shared/components/BigButton/BigButton";
+import { Colors } from "@/src/Shared/assets/constants/Colors";
+import BigButton from "@/src/Shared/components/BigButton/BigButton";
 
 interface JoinPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;

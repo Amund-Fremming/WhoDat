@@ -1,5 +1,8 @@
-import { moderateScale, verticalScale } from "@/constants/Dimentions";
 import { StyleSheet } from "react-native";
+import {
+  moderateScale,
+  verticalScale,
+} from "../../assets/constants/Dimentions";
 
 export default styles = StyleSheet.create({
   button: {

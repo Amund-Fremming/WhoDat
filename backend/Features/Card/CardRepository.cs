@@ -16,6 +16,7 @@ public class CardRepository(ILogger<CardRepository> logger, AppDbContext context
         {
             return await _context.Card
                 .Where(c => c.PlayerID == playerId)
+                .AsNoTracking()
                 .Select(ce => new CardDto(ce.ID, ce.Name, ce.Url))
                 .ToArrayAsync();
         }

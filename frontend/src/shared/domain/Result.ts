@@ -1,25 +1,21 @@
-export class Result<T> {
-    data: T | null;
-    message: string;
-    error: Error | null;
+export default class Result<T> {
+  data: T | null;
+  message: string;
 
-    constructor(data: T | null, message: string = "", error: Error | null) {
-        this.data = data;
-        this.message = message;
-        this.error = error;
-    }
+  constructor(data: T | null, message: string = "") {
+    this.data = data;
+    this.message = message;
+  }
 
-    public get isSuccess(): boolean {
-        return this.data !== null && this.error === null;
-    }
+  public get isError(): boolean {
+    return this.message !== "";
+  }
 
-    public static success<T>(data: T) : Result<T> {
-        return new Result<T>(data, "", null);
-    }
+  public static ok<T>(data: T): Result<T> {
+    return new Result<T>(data, "");
+  }
 
-    public static failure<T>(message: string, error: Error | null)
-    {
-        return new Result<T>(null, message, error);
-    }
-
+  public static failure<T>(message: string) {
+    return new Result<T>(null, message);
+  }
 }

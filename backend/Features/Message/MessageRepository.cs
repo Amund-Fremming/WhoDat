@@ -6,6 +6,4 @@ namespace Backend.Features.Message;
 public class MessageRepository(AppDbContext context, ILogger<MessageRepository> logger)
     : RepositoryBase<MessageEntity, MessageRepository>(logger, context), IMessageRepository
 {
-    private readonly AppDbContext _context = context;
-    private readonly ILogger<MessageRepository> _logger = logger;
 }
