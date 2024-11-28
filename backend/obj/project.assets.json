@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "AWSSDK.Core/3.7.400.19": {
+      "AWSSDK.Core/3.7.400.58": {
         "type": "package",
         "compile": {
           "lib/net8.0/AWSSDK.Core.dll": {
@@ -15,10 +15,10 @@
           }
         }
       },
-      "AWSSDK.S3/3.7.402.10": {
+      "AWSSDK.S3/3.7.408.1": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.400.19, 4.0.0)"
+          "AWSSDK.Core": "[3.7.400.58, 4.0.0)"
         },
         "compile": {
           "lib/net8.0/AWSSDK.S3.dll": {
@@ -1149,15 +1149,15 @@
     }
   },
   "libraries": {
-    "AWSSDK.Core/3.7.400.19": {
-      "sha512": "rrADTHB6OLnoaNkKkqGmfyjNxE8AmrihUzTvnImWL+ZLXk2dKEAmQv5rr/YDg/Q1CxyS1Q+RnEpZwxUVqgQ8OA==",
+    "AWSSDK.Core/3.7.400.58": {
+      "sha512": "tsNRJMOxCpd6FXZq/3y3ei3MMEWmHO6uFgIg8GAkZS74hxtfDB6zyycAqd9vbo9UJBbX7lmtYfDPQ0sg2CUDRw==",
       "type": "package",
-      "path": "awssdk.core/3.7.400.19",
+      "path": "awssdk.core/3.7.400.58",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "awssdk.core.3.7.400.19.nupkg.sha512",
+        "awssdk.core.3.7.400.58.nupkg.sha512",
         "awssdk.core.nuspec",
         "images/AWSLogo.png",
         "lib/net35/AWSSDK.Core.dll",
@@ -1178,17 +1178,17 @@
         "tools/account-management.ps1"
       ]
     },
-    "AWSSDK.S3/3.7.402.10": {
-      "sha512": "GHaBHFGeI9REZxonylOnoZs50EOB1MKb7NYYku5iyEJ6CEx3sxnvm8O0FQ4Zo06XwBnbGOfuRKPXAHqxcCD7Xg==",
+    "AWSSDK.S3/3.7.408.1": {
+      "sha512": "73PmGWtNhpVXM/9oQeZsH9y6zuS2mA2soif7ZoU71CDvl8l58zHsOMCqzUUCk+B49BH7qGO2uV/sNtPkEY3w5w==",
       "type": "package",
-      "path": "awssdk.s3/3.7.402.10",
+      "path": "awssdk.s3/3.7.408.1",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.S3.CodeAnalysis.dll",
         "analyzers/dotnet/cs/SharedAnalysisCode.dll",
-        "awssdk.s3.3.7.402.10.nupkg.sha512",
+        "awssdk.s3.3.7.408.1.nupkg.sha512",
         "awssdk.s3.nuspec",
         "images/AWSLogo.png",
         "lib/net35/AWSSDK.S3.dll",
@@ -3141,7 +3141,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "AWSSDK.S3 >= 3.7.402.10",
+      "AWSSDK.S3 >= 3.7.408.1",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.4",
       "Microsoft.AspNetCore.OpenApi >= 8.0.1",
       "Microsoft.EntityFrameworkCore >= 8.0.6",
@@ -3154,25 +3154,30 @@
     ]
   },
   "packageFolders": {
-    "/Users/amundfremming/.nuget/packages/": {}
+    "C:\\Users\\amund.fremming\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/amundfremming/Documents/projects/WhoDat/backend/Backend.csproj",
+      "projectUniqueName": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj",
       "projectName": "Backend",
-      "projectPath": "/Users/amundfremming/Documents/projects/WhoDat/backend/Backend.csproj",
-      "packagesPath": "/Users/amundfremming/.nuget/packages/",
-      "outputPath": "/Users/amundfremming/Documents/projects/WhoDat/backend/obj/",
+      "projectPath": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj",
+      "packagesPath": "C:\\Users\\amund.fremming\\.nuget\\packages\\",
+      "outputPath": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/amundfremming/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\amund.fremming\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "https://api.nuget.org/v3/index.json": {}
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
+        "https://api.nuget.org/v3/index.json": {},
+        "https://nuget.epinova.no/nuget": {},
+        "https://nuget.optimizely.com/feed/packages.svc/": {}
       },
       "frameworks": {
         "net8.0": {
@@ -3184,6 +3189,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3192,7 +3202,7 @@
         "dependencies": {
           "AWSSDK.S3": {
             "target": "Package",
-            "version": "[3.7.402.10, )"
+            "version": "[3.7.408.1, )"
           },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
@@ -3252,7 +3262,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.1/libexec/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
