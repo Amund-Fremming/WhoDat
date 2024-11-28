@@ -25,11 +25,23 @@ backend/appsettings.Development.json
 Backend/appsettings.Development.json
 /Backend/appsettings.Development.json
 backend/bin/
+
+backend/Debug
+/Backend/Debug
+Backend/Debug
+/backend/Debug
+backend/obj
+/backend/obj
+Backend/obj
+/Backend/obj
+/backend/bin
+/Backend/bin
+backend/bin
+Backend/bin
+
 *obj/
 *Debug/
-backend/obj/
 backend/.vs/
-backend/Debug/
 
 # User-Specific Files
 *.user
