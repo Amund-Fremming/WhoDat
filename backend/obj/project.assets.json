@@ -3154,30 +3154,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\amund.fremming\\.nuget\\packages\\": {}
+    "/Users/amundfremming/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj",
+      "projectUniqueName": "/Users/amundfremming/Documents/projects/WhoDat/backend/Backend.csproj",
       "projectName": "Backend",
-      "projectPath": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\Backend.csproj",
-      "packagesPath": "C:\\Users\\amund.fremming\\.nuget\\packages\\",
-      "outputPath": "C:\\Code\\PersonalSandbox\\WhoDat\\backend\\obj\\",
+      "projectPath": "/Users/amundfremming/Documents/projects/WhoDat/backend/Backend.csproj",
+      "packagesPath": "/Users/amundfremming/.nuget/packages/",
+      "outputPath": "/Users/amundfremming/Documents/projects/WhoDat/backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\amund.fremming\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/amundfremming/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://nuget.epinova.no/nuget": {},
-        "https://nuget.optimizely.com/feed/packages.svc/": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
@@ -3189,11 +3184,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3262,7 +3252,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.1/libexec/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -24,10 +24,15 @@ expo-env.d.ts
 backend/appsettings.Development.json
 Backend/appsettings.Development.json
 /Backend/appsettings.Development.json
+backend/bin/Debug/net8.0/appsettings.Development.json
+/backend/bin/Debug/net8.0/appsettings.Development.json
+Backend/bin/Debug/net8.0/appsettings.Development.json
+/Backend/bin/Debug/net8.0/appsettings.Development.json
 backend/bin/
 *obj/
 *Debug/
-backend/obj/
+backend/obj/Debug
+/backend/obj/Debug
 backend/.vs/
 backend/Debug/
 
