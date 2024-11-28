@@ -29,9 +29,9 @@ public class ImageClient : IImageClient
         BucketName = _configuration["CloudflareR2:BucketName"]!;
         PublicUrlBase = _configuration["CloudflareR2:PublicUrlBase"]!;
 
-        string accessKey = Environment.GetEnvironmentVariable("CLOUDFLARE_ACCESS_KEY")!;
-        string secretKey = Environment.GetEnvironmentVariable("CLOUDFLARE_SECRET_KEY")!;
-        string accountId = Environment.GetEnvironmentVariable("CLOUDFLARE_ACCOUNT_ID")!;
+        string accessKey = _configuration["CloudflareR2:AccessKey"]!;
+        string secretKey = _configuration["CloudflareR2:SecretKey"]!;
+        string accountId = _configuration["CloudflareR2:AccountId"]!;
 
         var credentials = new BasicAWSCredentials(accessKey, secretKey);
         _s3Client = new AmazonS3Client(credentials, new AmazonS3Config

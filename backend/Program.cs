@@ -32,6 +32,12 @@ builder.Services.AddScoped<IImageClient, ImageClient>();
 
 builder.Services.AddScoped<IPasswordHasher<PlayerEntity>, PasswordHasher<PlayerEntity>>();
 
+// Load the base configuration (appsettings.json) and environment-specific config
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
 builder.Services.AddResponseCompression(options =>
 {
     options.EnableForHttps = true;
