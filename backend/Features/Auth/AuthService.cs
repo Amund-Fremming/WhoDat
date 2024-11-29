@@ -19,7 +19,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         try
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var configurationKey = _configuration["Jwt:Key"] ?? throw new KeyNotFoundException("Jwt key not present in appsettings. (AuthService)");
+            var configurationKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new KeyNotFoundException("Jwt key not present. (AuthService)");
             var key = Encoding.ASCII.GetBytes(configurationKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
