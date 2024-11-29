@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     width: "85%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.BurgundyRed,
+    backgroundColor: Colors.Green,
     borderRadius: moderateScale(6),
   },
 

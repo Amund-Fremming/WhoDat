@@ -16,6 +16,10 @@ import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
 import { loginPlayer } from "../../AuthClient";
 import Result from "@/src/Shared/domain/Result";
 import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
+import {
+  validText,
+  validUsername,
+} from "@/src/Shared/functions/InputValitator";
 
 interface LoginComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
@@ -37,6 +41,21 @@ export function LoginComponent({ setView }: LoginComponentProps) {
   });
 
   const handleLogin = async () => {
+    if (
+      loginRequest.password.length <= 0 ||
+      loginRequest.username.length <= 0
+    ) {
+      handleError("Username and password cannot be empty.");
+      return;
+    }
+
+    if (!validUsername(loginRequest.username)) {
+      handleError(
+        "Username can only be letters and numbers, and user 9 characters."
+      );
+      return false;
+    }
+
     const result: Result<IAuthResponse> = await loginPlayer(loginRequest);
     if (result.isError) {
       handleError(result.message);
@@ -90,6 +109,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
               color={Colors.DarkGray}
             />
             <TextInput
+              secureTextEntry={true}
               style={styles.textInput}
               placeholder="Password"
               placeholderTextColor={"gray"}

@@ -42,8 +42,9 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
     const validInput: boolean = handleInputValidationAndFeedback();
     if (!validInput) return;
 
-    const result: Result<IAuthResponse> =
-      await registerPlayer(registrationRequest);
+    const result: Result<IAuthResponse> = await registerPlayer(
+      registrationRequest
+    );
 
     if (result.isError) {
       handleError(result.message);
@@ -127,6 +128,7 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
               color={Colors.DarkGray}
             />
             <TextInput
+              secureTextEntry={true}
               style={styles.textInput}
               placeholder="Password"
               placeholderTextColor={"gray"}
@@ -149,6 +151,7 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
               color={Colors.DarkGray}
             />
             <TextInput
+              secureTextEntry={true}
               style={styles.textInput}
               placeholder="Retype password"
               placeholderTextColor={"gray"}

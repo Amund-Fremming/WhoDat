@@ -9,7 +9,7 @@ interface MediumButtonProps {
   onButtonPress: () => void;
 }
 
-export default function BigButton({
+export default function MediumButton({
   text,
   color,
   inverted,

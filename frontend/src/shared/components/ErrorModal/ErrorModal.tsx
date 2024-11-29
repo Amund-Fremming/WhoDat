@@ -1,5 +1,7 @@
-import { Modal, Pressable, Text } from "react-native";
+import { Modal, Text, View } from "react-native";
 import { styles } from "./ErrorModalStyles";
+import MediumButton from "../MediumButton/MediumButton";
+import { Colors } from "../../assets/constants/Colors";
 
 interface ErrorModalProps {
   message: string;
@@ -13,11 +15,21 @@ export default function ErrorModal({
   setErrorModalVisible,
 }: ErrorModalProps) {
   return (
-    <Modal style={styles.container} visible={errorModalVisible}>
-      <Text>{message}</Text>
-      <Pressable
-        onPress={() => setErrorModalVisible(!errorModalVisible)}
-      ></Pressable>
+    <Modal visible={errorModalVisible} animationType="fade" transparent={true}>
+      <View style={styles.container}>
+        <View style={styles.modal}>
+          <Text style={styles.header}>Ooops</Text>
+          <Text style={styles.message}>{message}</Text>
+          <View style={styles.absoluteButton}>
+            <MediumButton
+              text="close"
+              color={Colors.BurgundyRed}
+              inverted={false}
+              onButtonPress={() => setErrorModalVisible(!errorModalVisible)}
+            />
+          </View>
+        </View>
+      </View>
     </Modal>
   );
 }

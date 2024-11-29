@@ -8,7 +8,7 @@ export default class Result<T> {
   }
 
   public get isError(): boolean {
-    return this.message !== "";
+    return this.data === null;
   }
 
   public static ok<T>(data: T): Result<T> {

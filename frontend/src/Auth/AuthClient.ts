@@ -18,10 +18,11 @@ export const loginPlayer = async (
       body: JSON.stringify(request),
     });
 
+    if (response.status >= 400 && response.status <= 500)
+      return Result.failure("Invalid login, username or password was wrong.");
     if (response.status === 500) return Result.failure("Internal server error");
 
     if (!response.ok) {
-      console.error(response.status, " loginPlayer: response was not 200.");
       const errorMessage: string = await response.json();
       return Result.failure(errorMessage);
     }
