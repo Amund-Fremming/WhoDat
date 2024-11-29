@@ -19,7 +19,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         try
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var configurationKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new KeyNotFoundException("Jwt key not present. (AuthService)");
+            var configurationKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new KeyNotFoundException("(AuthService) Jwt key not present.");
             var key = Encoding.ASCII.GetBytes(configurationKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -31,8 +31,8 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
                 ]),
                 Expires = DateTime.UtcNow.AddDays(1),       // TODO - JUSTER DENNE!!!
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"]
+                Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new KeyNotFoundException("(AuthService) Jwt Issuer not present."),
+                Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new KeyNotFoundException("(AuthService) Jwt Audience not present.")
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
