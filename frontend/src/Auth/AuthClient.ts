@@ -20,6 +20,7 @@ export const loginPlayer = async (
 
     if (response.status >= 400 && response.status <= 500)
       return Result.failure("Invalid login, username or password was wrong.");
+
     if (response.status === 500) return Result.failure("Internal server error");
 
     if (!response.ok) {

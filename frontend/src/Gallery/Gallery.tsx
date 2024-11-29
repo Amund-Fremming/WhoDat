@@ -91,7 +91,6 @@ export default function Gallery() {
     Alert.alert("Are you sure?", `Do you want to delete ${card.name}`, [
       {
         text: "No",
-        onPress: () => console.log("No Pressed"),
         style: "cancel",
       },
       {
@@ -107,7 +106,7 @@ export default function Gallery() {
           try {
             await deleteCard(card.cardID, token);
           } catch (error) {
-            handleError("Something went wrong.");
+            Alert.alert("Something went wrong.");
           }
         },
       },

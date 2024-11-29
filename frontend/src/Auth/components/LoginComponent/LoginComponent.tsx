@@ -16,10 +16,7 @@ import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
 import { loginPlayer } from "../../AuthClient";
 import Result from "@/src/Shared/domain/Result";
 import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
-import {
-  validText,
-  validUsername,
-} from "@/src/Shared/functions/InputValitator";
+import { validUsername } from "@/src/Shared/functions/InputValitator";
 
 interface LoginComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
