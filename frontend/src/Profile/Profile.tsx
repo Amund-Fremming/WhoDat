@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import styles from "./ProfileStyles";
+import { styles } from "./ProfileStyles";
 
 export default function Profile() {
   return (

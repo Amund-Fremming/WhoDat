@@ -7,7 +7,7 @@ export const HUB_ENDPOINT: string = "http://localhost:5158/hub";
 */
 
 const BASE =
-  "https://prod-whodat-csg5cqckabfue8hh.northeurope-01.azurewebsites.net/";
+  "https://prod-whodat-csg5cqckabfue8hh.northeurope-01.azurewebsites.net";
 
 export const AUTH_ENDPOINT: string = `${BASE}/api/auth`;
 export const CARD_ENDPOINT: string = `${BASE}/api/Card`;

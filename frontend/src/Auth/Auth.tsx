@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import styles from "./AuthStyles";
+import { styles } from "./AuthStyles";
 import { LoginComponent } from "./components/LoginComponent/LoginComponent";
 import { RegisterComponent } from "./components/RegisterComponent/RegisterComponent";
 import { useState } from "react";

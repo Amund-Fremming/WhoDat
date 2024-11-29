@@ -1,5 +1,5 @@
 import { Modal, Pressable } from "react-native";
-import styles from "./ErrorModalStyles";
+import { styles } from "./ErrorModalStyles";
 
 interface ErrorModalProps {
   message: string;

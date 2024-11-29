@@ -1,5 +1,5 @@
 import { Text, Pressable } from "react-native";
-import styles from "./MediumButtonStyles";
+import { styles } from "./MediumButtonStyles";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
 
 interface MediumButtonProps {

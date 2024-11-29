@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import styles from "./StrokedTextStyles";
+import { styles } from "./StrokedTextStyles";
 import { moderateScale } from "@/src/Shared/assets/constants/Dimentions";
 
 interface StokedTextProps {

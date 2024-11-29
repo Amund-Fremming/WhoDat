@@ -4,7 +4,7 @@ import { Colors } from "@/src/Shared/assets/constants/Colors";
 import { ICard } from "@/src/Shared/domain/CardTypes";
 import Card from "./components/Card/CardComponent";
 import CardModal from "./components/CardModal/CardModal";
-import styles from "./GalleryStyles";
+import { viewStyles, textStyles } from "./GalleryStyles";
 import { AddCardComponent } from "./components/AddCard/AddCardComponent";
 import AddCardModal from "./components/AddCardModal/AddCardModal";
 import { deleteCard, getAllCards } from "@/src/Shared/functions/CardClient";
@@ -136,13 +136,13 @@ export default function Gallery() {
 
       <View
         style={{
-          ...styles.container,
+          ...viewStyles.container,
           opacity: cardModalVisible ? 0.6 : 1,
         }}
       >
-        <Text style={styles.header}>Gallery</Text>
-        <View style={styles.creamContainer}>
-          <View style={styles.boardContainer}>
+        <Text style={textStyles.header}>Gallery</Text>
+        <View style={viewStyles.creamContainer}>
+          <View style={viewStyles.boardContainer}>
             {cardsForThisPage.map((card: ICard) => (
               <Card
                 key={card.cardID}
@@ -156,7 +156,7 @@ export default function Gallery() {
               />
             )}
           </View>
-          <View style={styles.buttonWrapper}>
+          <View style={viewStyles.buttonWrapper}>
             {displayPrevious && (
               <MediumButton
                 text={"Prev"}

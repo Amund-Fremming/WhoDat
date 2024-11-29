@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from "react-native";
-import styles from "./WaitingPageStyles";
+import { styles } from "./WaitingPageStyles";
 import { PlayPages } from "../../GamePages";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";

@@ -20,7 +20,9 @@ export const loginPlayer = async (
 
     if (!response.ok) {
       console.error(response.status, " loginPlayer: response was not 200.");
-      const errorMessage = await response.json();
+      const errorMessage: string = await response.json();
+      // REMOVE THIS
+      console.error("Error message: " + errorMessage);
       return Result.failure(errorMessage);
     }
 

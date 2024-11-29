@@ -4,7 +4,7 @@ import {
   verticalScale,
 } from "../../assets/constants/Dimentions";
 
-export default styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   button: {
     width: verticalScale(140),
     height: moderateScale(50),
