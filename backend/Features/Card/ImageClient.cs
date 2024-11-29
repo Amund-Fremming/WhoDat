@@ -18,7 +18,7 @@ public class ImageClient : IImageClient
     public readonly IAmazonS3 _s3Client;
     public readonly IConfiguration _configuration;
     public readonly ILogger<ImageClient> _logger;
-    public readonly string BucketName = "whodat-image-container";
+    public readonly string BucketName;
     public readonly string PublicUrlBase;
 
     public ImageClient(IConfiguration configuration, ILogger<ImageClient> logger)

@@ -24,6 +24,10 @@ expo-env.d.ts
 backend/appsettings.Development.json
 Backend/appsettings.Development.json
 /Backend/appsettings.Development.json
+backend/bin/Debug/net8.0/appsettings.Development.json
+/backend/bin/Debug/net8.0/appsettings.Development.json
+Backend/bin/Debug/net8.0/appsettings.Development.json
+/Backend/bin/Debug/net8.0/appsettings.Development.json
 backend/bin/
 
 backend/Debug
@@ -41,6 +45,11 @@ Backend/bin
 
 *obj/
 *Debug/
+<<<<<<< HEAD
+=======
+backend/obj/Debug
+/backend/obj/Debug
+>>>>>>> 03eed7287257c261f04014559170611f8213d160
 backend/.vs/
 
 # User-Specific Files

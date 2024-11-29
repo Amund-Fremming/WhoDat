@@ -4,12 +4,12 @@ export interface IGame {
   // player obj
   playerTwoID?: number;
   // player obj
-  state: State;
+  gameState: GameState;
   messages?: Array<IMessage>;
   boards?: Array<IBoard>;
 }
 
-export enum State {
+export enum GameState {
   // Chosing cards
   ONLY_HOST_CHOSING_CARDS,
   BOTH_CHOSING_CARDS,

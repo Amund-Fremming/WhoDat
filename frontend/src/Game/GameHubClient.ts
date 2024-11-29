@@ -1,6 +1,7 @@
 import * as signalR from "@microsoft/signalr";
 
 import { HUB_ENDPOINT } from "@/src/Shared/domain/URL_PATHS";
+import Result from "../Shared/domain/Result";
 
 // Create a connection to the hub
 export const createConnection = (): signalR.HubConnection => {
@@ -10,19 +11,18 @@ export const createConnection = (): signalR.HubConnection => {
     .build();
 };
 
-// Start the connection
 export const startConnection = async (
   connection: signalR.HubConnection
-): Promise<void> => {
+): Promise<Result<boolean>> => {
   try {
     await connection.start();
     console.log("Connection started");
+    return Result.ok(true);
   } catch (error) {
-    console.error("GameHub Error: ", error);
+    return Result.failure("Falied to connect, check your wifi");
   }
 };
 
-// Stop the connection
 export const stopConnection = async (
   connection: signalR.HubConnection
 ): Promise<void> => {
@@ -34,19 +34,6 @@ export const stopConnection = async (
   }
 };
 
-// Define methods to call backend hub methods
-export const joinGame = async (
-  connection: signalR.HubConnection,
-  gameId: number
-): Promise<void> => {
-  try {
-    await connection.invoke("JoinGame", gameId);
-    console.log("Joined game:", gameId);
-  } catch (error) {
-    console.error("Error joining game:", error);
-  }
-};
-
 export const leaveGame = async (
   connection: signalR.HubConnection,
   gameId: number
@@ -54,32 +41,58 @@ export const leaveGame = async (
   try {
     await connection.invoke("LeaveGame", gameId);
     console.log("Left game:", gameId);
+  } catch (error) {}
+};
+
+export const joinGame = async (
+  connection: signalR.HubConnection,
+  gameId: number
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("JoinGame", gameId);
+    console.log("Joined game:", gameId);
+    return Result.ok(true);
   } catch (error) {
-    console.error("Error leaving game:", error);
+    return Result.failure("Falied to connect, check your wifi");
   }
 };
 
+//move
 export const startGame = async (
   connection: signalR.HubConnection,
   gameId: number
-): Promise<void> => {
+): Promise<Result<boolean>> => {
   try {
     await connection.invoke("StartGame", gameId);
     console.log("Game started:", gameId);
+    return Result.ok(true);
   } catch (error) {
-    console.error("Error starting game:", error);
+    return Result.failure("Falied to connect, check your wifi");
   }
 };
 
-// Register listeners for server-sent events
-export const registerEventListeners = (
-  connection: signalR.HubConnection
-): void => {
-  connection.on("ReceiveMessage", (message: string) => {
-    console.log("Message from hub:", message);
-  });
+export const x = async (
+  connection: signalR.HubConnection,
+  gameId: number
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("x", gameId);
+    console.log("x:", gameId);
+    return Result.ok(true);
+  } catch (error) {
+    return Result.failure("Falied to connect, check your wifi");
+  }
+};
 
-  connection.on("UpdateGameState", (state: any) => {
-    console.log("Game state updated:", state);
-  });
+export const updateGameState = async (
+  connection: signalR.HubConnection,
+  gameId: number
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("x", gameId);
+    console.log("x:", gameId);
+    return Result.ok(true);
+  } catch (error) {
+    return Result.failure("Falied to connect, check your wifi");
+  }
 };
