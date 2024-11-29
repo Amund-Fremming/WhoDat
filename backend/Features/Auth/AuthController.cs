@@ -46,7 +46,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
     {
         try
         {
-            var usernameResult = await _playerRepository.DoesUsernameExist(request.Username);
+            var usernameResult = await _playerRepository.UsernameExist(request.Username);
             if (usernameResult.IsError)
                 return BadRequest(usernameResult.Message);
 
