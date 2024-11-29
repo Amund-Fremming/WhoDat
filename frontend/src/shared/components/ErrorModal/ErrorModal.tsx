@@ -1,4 +1,4 @@
-import { Modal, Pressable } from "react-native";
+import { Modal, Pressable, Text } from "react-native";
 import { styles } from "./ErrorModalStyles";
 
 interface ErrorModalProps {
@@ -14,7 +14,7 @@ export default function ErrorModal({
 }: ErrorModalProps) {
   return (
     <Modal style={styles.container} visible={errorModalVisible}>
-      <p>{message}</p>
+      <Text>{message}</Text>
       <Pressable
         onPress={() => setErrorModalVisible(!errorModalVisible)}
       ></Pressable>

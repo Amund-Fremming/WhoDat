@@ -14,6 +14,8 @@ export const getAllCards = async (
       },
     });
 
+    if (response.status === 500) return Result.failure("Internal server error");
+
     if (!response.ok) {
       console.error("getAllCards: response was not 200.");
       const errorMessage = await response.json();
@@ -46,6 +48,8 @@ export const addCard = async (
       },
       body: blob,
     });
+
+    if (response.status === 500) return Result.failure("Internal server error");
 
     if (!response.ok) {
       console.error("addCard: response was not 200.");
