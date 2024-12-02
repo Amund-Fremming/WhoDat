@@ -131,31 +131,15 @@
   },
   {
     "ContainingType": "Backend.Features.Player.PlayerController",
-    "Method": "UpdatePlayerPassword",
-    "RelativePath": "api/Player/players/update-password",
+    "Method": "UpdatePlayer",
+    "RelativePath": "api/Player/players/update",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "newPassword",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Backend.Features.Player.PlayerController",
-    "Method": "UpdatePlayerUsername",
-    "RelativePath": "api/Player/players/update-username",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "newUsername",
-        "Type": "System.String",
+        "Name": "playerDto",
+        "Type": "Backend.Features.Player.PlayerDto",
         "IsRequired": true
       }
     ],
