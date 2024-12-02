@@ -1,5 +1,9 @@
 # TODO
 
+General
+
+- [ ] Touch feedback on buttons
+
 Profile
 
 - [ ] Design, style, implement

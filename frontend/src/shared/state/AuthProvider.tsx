@@ -8,6 +8,8 @@ interface IAuthContext {
   setPlayerID: React.Dispatch<React.SetStateAction<number>>;
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
+  imageUrl: string;
+  setImageUrl: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const defaultContextValue: IAuthContext = {
@@ -17,6 +19,8 @@ const defaultContextValue: IAuthContext = {
   setPlayerID: () => {},
   username: "",
   setUsername: () => {},
+  imageUrl: "",
+  setImageUrl: () => {},
 };
 
 const AuthContext = createContext<IAuthContext>(defaultContextValue);
@@ -27,6 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string>("");
   const [playerID, setPlayerID] = useState<number>(0);
   const [username, setUsername] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
 
   const value = {
     token,
@@ -35,6 +40,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setPlayerID,
     username,
     setUsername,
+    imageUrl,
+    setImageUrl,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

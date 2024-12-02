@@ -1,16 +1,12 @@
 import { StyleSheet } from "react-native";
-import { verticalScale, moderateScale, horizontalScale } from "../Shared/assets/constants/Dimentions";
+import {
+  verticalScale,
+  moderateScale,
+  horizontalScale,
+} from "../Shared/assets/constants/Dimentions";
 import { Colors } from "../Shared/assets/constants/Colors";
 
 export const styles = StyleSheet.create({
-  container: {
-    height: "100%",
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: Colors.Cream
-  },
-
   inputContainer: {
     rowGap: verticalScale(5),
   },
@@ -43,23 +39,73 @@ export const styles = StyleSheet.create({
   editContainer: {
     justifyContent: "center",
     alignItems: "center",
-    gap: verticalScale(20)
+    gap: verticalScale(20),
+    height: "100%",
   },
 
   buttonWrapper: {
     flexDirection: "row",
-    gap: horizontalScale(10)
-  },
-
-  imageContainer: {
-    width: horizontalScale(200),
-    height: verticalScale(100),
-    backgroundColor: "red"
+    gap: horizontalScale(10),
+    paddingTop: verticalScale(40),
   },
 
   nonEditContainer: {
     justifyContent: "center",
     alignItems: "center",
-    gap: verticalScale(20)
-  }
+    gap: verticalScale(20),
+    height: "100%",
+  },
+
+  username: {
+    fontFamily: "InikaBold",
+    fontSize: moderateScale(40),
+    paddingBottom: verticalScale(20),
+  },
+
+  container: {
+    height: "100%",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    backgroundColor: Colors.Orange,
+    paddingTop: verticalScale(40),
+  },
+
+  creamContainer: {
+    width: "100%",
+    height: "85%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: Colors.Cream,
+    borderTopStartRadius: moderateScale(30),
+    borderTopRightRadius: moderateScale(30),
+  },
+
+  header: {
+    fontSize: moderateScale(45),
+    fontFamily: "Modak",
+    color: Colors.Cream,
+  },
+
+  imageContainer: {
+    width: horizontalScale(270),
+    height: verticalScale(270),
+    backgroundColor: Colors.DarkGray,
+    borderRadius: moderateScale(400),
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: verticalScale(40),
+  },
+
+  uploadButton: {
+    position: "absolute",
+  },
+});
+
+export const imageStyles = StyleSheet.create({
+  imageStyle: {
+    width: "96%",
+    height: "96%",
+    borderRadius: moderateScale(400),
+  },
 });

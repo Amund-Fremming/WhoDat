@@ -1,14 +1,27 @@
 import { View, Text, Pressable, TextInput, Image } from "react-native";
-import { styles } from "./ProfileStyles";
-import { useState } from "react";
+import { styles, imageStyles } from "./ProfileStyles";
+import { useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { Colors } from "../Shared/assets/constants/Colors";
 import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
+import { useAuthProvider } from "../Shared/state/AuthProvider";
+import SmallButton from "../Shared/components/SmallButton/SmallButton";
+import MediumButton from "../Shared/components/MediumButton/MediumButton";
+import BigButton from "../Shared/components/BigButton/BigButton";
 
 export default function Profile() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [imageUri, setImageUri] = useState<any>(
+    "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+  );
+  const { imageUrl, username } = useAuthProvider();
+
+  useEffect(() => {
+    if (imageUrl != null) setImageUri(imageUrl);
+    console.log(imageUri);
+  }, []);
 
   const toggleEditMode = () => setEditMode(!editMode);
 
@@ -39,81 +52,96 @@ export default function Profile() {
         setErrorModalVisible={setErrorModalVisible}
         errorModalVisible={errorModalVisible}
       />
-
-      <Text>Profile</Text>
-      {!editMode && (
-        <View style={styles.nonEditContainer}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={{
-                uri: "https://fbi.cults3d.com/uploaders/32338244/illustration-file/f23d00d1-2861-40af-8e83-1e8f5eda7403/WhatsApp-Image-2024-08-27-at-6.36.25-PM.jpeg",
-              }}
-            />
-          </View>
-          <Text>Username</Text>
-          <Pressable onPress={toggleEditMode}>
-            <Text>Update user</Text>
-          </Pressable>
-        </View>
-      )}
-      {editMode && (
-        <View style={styles.editContainer}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={{
-                uri: "https://fbi.cults3d.com/uploaders/32338244/illustration-file/f23d00d1-2861-40af-8e83-1e8f5eda7403/WhatsApp-Image-2024-08-27-at-6.36.25-PM.jpeg",
-              }}
-            />
-            <Pressable>
-              <Text>Upload icon</Text>
-            </Pressable>
-          </View>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconAndInput}>
-              <Feather
-                style={styles.icon}
-                name="user"
-                size={35}
-                color={Colors.DarkGray}
-              />
-              <TextInput
-                style={styles.textInput}
-                placeholder="Username"
-                placeholderTextColor={"gray"}
+      <Text style={styles.header}>Profile</Text>
+      <View style={styles.creamContainer}>
+        {!editMode && (
+          <View style={styles.nonEditContainer}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={{
+                  uri: imageUri,
+                }}
+                style={imageStyles.imageStyle}
               />
             </View>
-            <View style={styles.border}></View>
+            <Text style={styles.username}>{username}</Text>
+            <BigButton
+              text="Update user"
+              color={Colors.BurgundyRed}
+              inverted={false}
+              onButtonPress={toggleEditMode}
+            />
+            <BigButton
+              text="Logout"
+              color={Colors.BurgundyRed}
+              inverted={true}
+              onButtonPress={handleLogout}
+            />
           </View>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconAndInput}>
-              <Feather
-                style={styles.icon}
-                name="lock"
-                size={35}
-                color={Colors.DarkGray}
+        )}
+        {editMode && (
+          <View style={styles.editContainer}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={{
+                  uri: imageUri,
+                }}
+                style={imageStyles.imageStyle}
               />
-              <TextInput
-                secureTextEntry={true}
-                style={styles.textInput}
-                placeholder="Password"
-                placeholderTextColor={"gray"}
+              <Pressable style={styles.uploadButton}>
+                <Text>Upload icon</Text>
+              </Pressable>
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconAndInput}>
+                <Feather
+                  style={styles.icon}
+                  name="user"
+                  size={35}
+                  color={Colors.DarkGray}
+                />
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="New username"
+                  placeholderTextColor={"gray"}
+                />
+              </View>
+              <View style={styles.border}></View>
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconAndInput}>
+                <Feather
+                  style={styles.icon}
+                  name="lock"
+                  size={35}
+                  color={Colors.DarkGray}
+                />
+                <TextInput
+                  secureTextEntry={true}
+                  style={styles.textInput}
+                  placeholder="New password"
+                  placeholderTextColor={"gray"}
+                />
+              </View>
+              <View style={styles.border}></View>
+            </View>
+            <View style={styles.buttonWrapper}>
+              <MediumButton
+                text="Cancel"
+                color={Colors.BurgundyRed}
+                inverted={true}
+                onButtonPress={toggleEditMode}
+              />
+              <MediumButton
+                text="Save"
+                color={Colors.BurgundyRed}
+                inverted={false}
+                onButtonPress={handleUpdatePlayer}
               />
             </View>
-            <View style={styles.border}></View>
           </View>
-          <View style={styles.buttonWrapper}>
-            <Pressable onPress={toggleEditMode}>
-              <Text>Cancel</Text>
-            </Pressable>
-            <Pressable onPress={handleUpdatePlayer}>
-              <Text>Save</Text>
-            </Pressable>
-          </View>
-        </View>
-      )}
-      <Pressable onPress={handleLogout}>
-        <Text>Logout</Text>
-      </Pressable>
+        )}
+      </View>
     </View>
   );
 }

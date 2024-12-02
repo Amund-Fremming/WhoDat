@@ -23,7 +23,7 @@ interface LoginComponentProps {
 }
 
 export function LoginComponent({ setView }: LoginComponentProps) {
-  const { setToken, setPlayerID, setUsername } = useAuthProvider();
+  const { setToken, setPlayerID, setUsername, setImageUrl } = useAuthProvider();
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -63,6 +63,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
     setToken(response!.token);
     setPlayerID(response!.playerID);
     setUsername(response!.username);
+    setImageUrl(response!.imageUrl);
   };
 
   return (
