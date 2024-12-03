@@ -99,6 +99,13 @@ export const styles = StyleSheet.create({
 
   uploadButton: {
     position: "absolute",
+    borderRadius: moderateScale(10),
+    paddingHorizontal: horizontalScale(20),
+    paddingVertical: verticalScale(7),
+    backgroundColor: Colors.DarkGray,
+    right: horizontalScale(10),
+    bottom: verticalScale(10),
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
 });
 

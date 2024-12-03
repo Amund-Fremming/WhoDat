@@ -12,5 +12,6 @@ const BASE =
 export const AUTH_ENDPOINT: string = `${BASE}/api/auth`;
 export const CARD_ENDPOINT: string = `${BASE}/api/Card`;
 export const GAME_ENDPOINT: string = `${BASE}/api/Game`;
+export const PLAYER_ENDPOINT: string = `${BASE}/api/Player`;
 
 export const HUB_ENDPOINT: string = `${BASE}/hub`;

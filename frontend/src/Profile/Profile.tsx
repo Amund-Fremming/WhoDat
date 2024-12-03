@@ -5,22 +5,26 @@ import { Feather } from "@expo/vector-icons";
 import { Colors } from "../Shared/assets/constants/Colors";
 import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
 import { useAuthProvider } from "../Shared/state/AuthProvider";
-import SmallButton from "../Shared/components/SmallButton/SmallButton";
 import MediumButton from "../Shared/components/MediumButton/MediumButton";
 import BigButton from "../Shared/components/BigButton/BigButton";
+import { pickImage } from "../Shared/functions/ImagePicker";
+import { TouchableOpacity } from "react-native";
+import { updatePlayer } from "./PlayerClient";
+import { IPlayerDto } from "../Shared/domain/PlayerTypes";
+import { DevSettings } from "react-native";
 
 export default function Profile() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
   const [imageUri, setImageUri] = useState<any>(
     "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
   );
-  const { imageUrl, username } = useAuthProvider();
+  const { imageUrl, username, playerID, setToken } = useAuthProvider();
 
   useEffect(() => {
     if (imageUrl != null) setImageUri(imageUrl);
-    console.log(imageUri);
   }, []);
 
   const toggleEditMode = () => setEditMode(!editMode);
@@ -30,19 +34,29 @@ export default function Profile() {
     setErrorMessage(message);
   };
 
-  const handleImageUpload = () => {
-    console.log("Image uploaded");
-    // TODO
+  const handleSelectImage = async () => {
+    const uri = await pickImage();
+    if (uri !== "EXIT") setImageUri(uri);
   };
 
-  const handleUpdatePlayer = () => {
-    console.log("Player updated");
-    // TODO
+  const handleUpdatePlayer = async () => {
+    const dto: IPlayerDto = {
+      playerID: playerID,
+      username: username,
+      password: newPassword,
+      imageUrl: imageUri,
+    };
+    const result = await updatePlayer(dto);
+    if (result.isError) {
+      handleError(result.message);
+    }
+
+    setEditMode(false);
   };
 
   const handleLogout = () => {
-    console.log("Logged out");
-    // TODO
+    setToken("");
+    DevSettings.reload();
   };
 
   return (
@@ -88,9 +102,13 @@ export default function Profile() {
                 }}
                 style={imageStyles.imageStyle}
               />
-              <Pressable style={styles.uploadButton}>
-                <Text>Upload icon</Text>
-              </Pressable>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={handleSelectImage}
+                style={styles.uploadButton}
+              >
+                <Feather name="upload" size={28} color={Colors.Cream} />
+              </TouchableOpacity>
             </View>
             <View style={styles.inputContainer}>
               <View style={styles.iconAndInput}>
@@ -117,6 +135,8 @@ export default function Profile() {
                   color={Colors.DarkGray}
                 />
                 <TextInput
+                  value={newPassword}
+                  onChangeText={(input) => setNewPassword(input)}
                   secureTextEntry={true}
                   style={styles.textInput}
                   placeholder="New password"
@@ -136,7 +156,7 @@ export default function Profile() {
                 text="Save"
                 color={Colors.BurgundyRed}
                 inverted={false}
-                onButtonPress={handleUpdatePlayer}
+                onButtonPress={async () => handleUpdatePlayer()}
               />
             </View>
           </View>
