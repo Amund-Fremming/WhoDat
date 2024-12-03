@@ -1,5 +1,9 @@
 # TODO
 
+TODO
+
+- [ ] Error handling for Register player (Needs username exists alert)
+
 General
 
 - [ ] Touch feedback on buttons

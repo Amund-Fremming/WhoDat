@@ -5,6 +5,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { styles } from "./LoginComponentStyles";
 import Feather from "@expo/vector-icons/Feather";

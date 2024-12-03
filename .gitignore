@@ -45,11 +45,8 @@ Backend/bin
 
 *obj/
 *Debug/
-<<<<<<< HEAD
-=======
 backend/obj/Debug
 /backend/obj/Debug
->>>>>>> 03eed7287257c261f04014559170611f8213d160
 backend/.vs/
 
 # User-Specific Files
