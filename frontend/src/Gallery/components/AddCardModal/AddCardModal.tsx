@@ -1,12 +1,4 @@
-import {
-  Modal,
-  View,
-  Image,
-  Pressable,
-  TextInput,
-  Alert,
-  Text,
-} from "react-native";
+import { Modal, View, Image, Pressable, TextInput, Text } from "react-native";
 import { styles, imageStyles } from "./AddCardModalStyles";
 import BigButton from "@/src/Shared/components/BigButton/BigButton";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
@@ -15,7 +7,9 @@ import { useState } from "react";
 import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
 import { addCard } from "@/src/Shared/functions/CardClient";
 import { validText } from "@/src/Shared/functions/InputValitator";
-//import { pickImage } from "@/src/services/GalleryService/ImagePicker";
+import { pickImage } from "@/src/Shared/functions/ImagePicker";
+import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
+import Result from "@/src/Shared/domain/Result";
 
 interface AddCardModalProps {
   modalVisible: boolean;
@@ -30,15 +24,23 @@ export default function AddCardModal({
   const [imageUri, setImageUri] = useState<any>(
     "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
   );
-
+  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const { token } = useAuthProvider();
 
+  const handleError = (message: string) => {
+    setErrorModalVisible(true);
+    setErrorMessage(message);
+  };
+
   const handleNameInput = (name: string): boolean => {
+    if (name.length <= 0) {
+      handleError("Name cannot be empty.");
+      return false;
+    }
+
     if (name.length > 9 || !validText(name)) {
-      Alert.alert(
-        "Input not valid",
-        "Name can only be letters and 8 characters long"
-      );
+      handleError("Name must be text only and under 9 letters long");
       return false;
     }
 
@@ -47,75 +49,80 @@ export default function AddCardModal({
     );
     return true;
   };
-  /*
-                const handleImageInput = async () => {
-                  try {
-                    const result: any = await pickImage();
-                    setImageUri(result);
-                  } catch (Exception) {
-                    console.error("Image picker failed");
-                  }
-                };
-                */
 
-  const uploadCard = async () => {
+  const handleImageInput = async () => {
     try {
-      const namePresent = handleNameInput(nameInput);
-      if (!namePresent) return;
-
-      await addCard(imageUri, nameInput, token);
-      setModalVisible(false);
-      setNameInput("");
-      setImageUri(
-        "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
-      );
+      const result: any = await pickImage();
+      setImageUri(result);
     } catch (Exception) {
-      // TODO
-      console.error("Adding card failed");
+      handleError("Image picker failed.");
     }
   };
 
+  const uploadCard = async () => {
+    const namePresent = handleNameInput(nameInput);
+    if (!namePresent) return;
+
+    var result: Result<boolean> = await addCard(imageUri, nameInput, token);
+    if (result.isError) {
+      handleError(result.message);
+      return;
+    }
+
+    setModalVisible(false);
+    setNameInput("");
+    setImageUri(
+      "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+    );
+  };
+
   return (
-    <Modal visible={modalVisible} animationType="fade" transparent={true}>
-      <View style={styles.container}>
-        <View style={styles.cardModal}>
-          <Pressable
-            style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
-          >
-            <FontAwesome name="close" size={36} color={Colors.DarkGray} />
-          </Pressable>
-          <View style={styles.card}>
+    <>
+      <ErrorModal
+        errorModalVisible={errorModalVisible}
+        setErrorModalVisible={setErrorModalVisible}
+        message={errorMessage}
+      />
+
+      <Modal visible={modalVisible} animationType="fade" transparent={true}>
+        <View style={styles.container}>
+          <View style={styles.cardModal}>
             <Pressable
-              style={styles.uploadButton} /*onPress={handleImageInput}*/
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.uploadText}>upload</Text>
+              <FontAwesome name="close" size={36} color={Colors.DarkGray} />
             </Pressable>
-            <Image
-              style={imageStyles.imageStyle}
-              source={{
-                uri: imageUri,
-              }}
+            <View style={styles.card}>
+              <Pressable style={styles.uploadButton} onPress={handleImageInput}>
+                <Text style={styles.uploadText}>upload</Text>
+              </Pressable>
+              <Image
+                style={imageStyles.imageStyle}
+                source={{
+                  uri: imageUri,
+                }}
+              />
+            </View>
+            <TextInput
+              value={nameInput}
+              onChangeText={(input: string) => setNameInput(input)}
+              style={styles.inputText}
+              placeholder="Name ..."
+              placeholderTextColor={Colors.Gray}
             />
-          </View>
-          <TextInput
-            value={nameInput}
-            onChangeText={(input: string) => setNameInput(input)}
-            style={styles.inputText}
-            placeholder="Name ..."
-            placeholderTextColor={Colors.Gray}
-          />
-          <View style={styles.border} />
-          <View style={styles.buttonWrapper}>
-            <BigButton
-              text="Add Card"
-              color={Colors.BurgundyRed}
-              inverted={false}
-              onButtonPress={uploadCard}
-            />
+            <View style={styles.border} />
+            <View style={styles.buttonWrapper}>
+              <BigButton
+                text="Add Card"
+                color={Colors.BurgundyRed}
+                inverted={false}
+                onButtonPress={uploadCard}
+              />
+            </View>
           </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </>
   );
 }

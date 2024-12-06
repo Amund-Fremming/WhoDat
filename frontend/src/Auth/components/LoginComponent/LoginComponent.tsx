@@ -5,6 +5,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { styles } from "./LoginComponentStyles";
 import Feather from "@expo/vector-icons/Feather";
@@ -16,13 +17,14 @@ import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
 import { loginPlayer } from "../../AuthClient";
 import Result from "@/src/Shared/domain/Result";
 import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
+import { validUsername } from "@/src/Shared/functions/InputValitator";
 
 interface LoginComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function LoginComponent({ setView }: LoginComponentProps) {
-  const { setToken, setPlayerID, setUsername } = useAuthProvider();
+  const { setToken, setPlayerID, setUsername, setImageUrl } = useAuthProvider();
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -37,6 +39,21 @@ export function LoginComponent({ setView }: LoginComponentProps) {
   });
 
   const handleLogin = async () => {
+    if (
+      loginRequest.password.length <= 0 ||
+      loginRequest.username.length <= 0
+    ) {
+      handleError("Username and password cannot be empty.");
+      return;
+    }
+
+    if (!validUsername(loginRequest.username)) {
+      handleError(
+        "Username can only be letters and numbers, and user 9 characters."
+      );
+      return false;
+    }
+
     const result: Result<IAuthResponse> = await loginPlayer(loginRequest);
     if (result.isError) {
       handleError(result.message);
@@ -47,6 +64,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
     setToken(response!.token);
     setPlayerID(response!.playerID);
     setUsername(response!.username);
+    setImageUrl(response!.imageUrl);
   };
 
   return (
@@ -90,6 +108,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
               color={Colors.DarkGray}
             />
             <TextInput
+              secureTextEntry={true}
               style={styles.textInput}
               placeholder="Password"
               placeholderTextColor={"gray"}

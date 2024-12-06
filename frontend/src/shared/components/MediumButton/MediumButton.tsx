@@ -1,5 +1,5 @@
-import { Text, Pressable } from "react-native";
-import styles from "./MediumButtonStyles";
+import { Text, TouchableOpacity } from "react-native";
+import { styles } from "./MediumButtonStyles";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
 
 interface MediumButtonProps {
@@ -9,7 +9,7 @@ interface MediumButtonProps {
   onButtonPress: () => void;
 }
 
-export default function BigButton({
+export default function MediumButton({
   text,
   color,
   inverted,
@@ -32,10 +32,14 @@ export default function BigButton({
   };
 
   return (
-    <Pressable onPress={onButtonPress} style={getStyles()}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={onButtonPress}
+      style={getStyles()}
+    >
       <Text style={{ ...styles.text, color: inverted ? color : Colors.Cream }}>
         {text}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 }

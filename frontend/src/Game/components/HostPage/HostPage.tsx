@@ -1,10 +1,10 @@
 import { View, Text, Pressable } from "react-native";
-import styles from "./HostPageStyles";
+import { styles } from "./HostPageStyles";
 import { PlayPages } from "../../GamePages";
 import IconButton from "@/src/Shared/components/IconButton/IconButton";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
-import { State } from "../../types/GameTypes";
+import { GameState } from "../../types/GameTypes";
 
 interface HostPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;

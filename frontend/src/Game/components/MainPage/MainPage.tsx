@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import styles from "./MainPageStyles";
+import { styles } from "./MainPageStyles";
 import { PlayPages } from "../../GamePages";
 import IconButton from "@/src/Shared/components/IconButton/IconButton";
 

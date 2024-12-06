@@ -11,5 +11,6 @@ export const validNumber = (input: string): boolean => {
 };
 
 export const validUsername = (input: string): boolean => {
+  if (input.length > 9) return false;
   return usernameRegex.test(input);
 };

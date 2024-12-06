@@ -1,5 +1,5 @@
 import { View, Pressable, Text, TextInput } from "react-native";
-import styles from "./JoinPageStyles";
+import { styles } from "./JoinPageStyles";
 import { PlayPages } from "../../GamePages";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/src/Shared/assets/constants/Colors";

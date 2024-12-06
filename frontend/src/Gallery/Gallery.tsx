@@ -4,7 +4,7 @@ import { Colors } from "@/src/Shared/assets/constants/Colors";
 import { ICard } from "@/src/Shared/domain/CardTypes";
 import Card from "./components/Card/CardComponent";
 import CardModal from "./components/CardModal/CardModal";
-import styles from "./GalleryStyles";
+import { viewStyles, textStyles } from "./GalleryStyles";
 import { AddCardComponent } from "./components/AddCard/AddCardComponent";
 import AddCardModal from "./components/AddCardModal/AddCardModal";
 import { deleteCard, getAllCards } from "@/src/Shared/functions/CardClient";
@@ -91,7 +91,6 @@ export default function Gallery() {
     Alert.alert("Are you sure?", `Do you want to delete ${card.name}`, [
       {
         text: "No",
-        onPress: () => console.log("No Pressed"),
         style: "cancel",
       },
       {
@@ -107,7 +106,7 @@ export default function Gallery() {
           try {
             await deleteCard(card.cardID, token);
           } catch (error) {
-            handleError("Something went wrong.");
+            Alert.alert("Something went wrong.");
           }
         },
       },
@@ -136,16 +135,16 @@ export default function Gallery() {
 
       <View
         style={{
-          ...styles.container,
+          ...viewStyles.container,
           opacity: cardModalVisible ? 0.6 : 1,
         }}
       >
-        <Text style={styles.header}>Gallery</Text>
-        <View style={styles.creamContainer}>
-          <View style={styles.boardContainer}>
-            {cardsForThisPage.map((card: ICard) => (
+        <Text style={textStyles.header}>Gallery</Text>
+        <View style={viewStyles.creamContainer}>
+          <View style={viewStyles.boardContainer}>
+            {cardsForThisPage.map((card: ICard, index: number) => (
               <Card
-                key={card.cardID}
+                key={index}
                 card={card}
                 onCardPress={() => handleCardPressed(card)}
               />
@@ -156,7 +155,7 @@ export default function Gallery() {
               />
             )}
           </View>
-          <View style={styles.buttonWrapper}>
+          <View style={viewStyles.buttonWrapper}>
             {displayPrevious && (
               <MediumButton
                 text={"Prev"}

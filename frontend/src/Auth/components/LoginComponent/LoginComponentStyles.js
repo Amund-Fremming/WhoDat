@@ -39,6 +39,8 @@ export const styles = StyleSheet.create({
   iconAndInput: {
     columnGap: horizontalScale(15),
     flexDirection: "row",
+    width: horizontalScale(180),
+    paddingLeft: horizontalScale(2),
   },
 
   icon: {
@@ -48,6 +50,8 @@ export const styles = StyleSheet.create({
   textInput: {
     fontSize: moderateScale(22),
     fontFamily: "InikaBold",
+    width: horizontalScale(180),
+    marginLeft: horizontalScale(5),
   },
 
   border: {

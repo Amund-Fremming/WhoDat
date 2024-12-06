@@ -6,19 +6,13 @@ import {
 } from "../Shared/assets/constants/Dimentions";
 import { StyleSheet } from "react-native";
 
-export default styles = StyleSheet.create({
+export const viewStyles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
     alignItems: "center",
     backgroundColor: Colors.Orange,
     paddingTop: verticalScale(40),
-  },
-
-  header: {
-    fontSize: moderateScale(45),
-    fontFamily: "Modak",
-    color: Colors.Cream,
   },
 
   creamContainer: {
@@ -50,4 +44,13 @@ export default styles = StyleSheet.create({
     flexDirection: "row",
     gap: horizontalScale(20),
   },
+});
+
+export const textStyles = StyleSheet.create({
+  header: {
+    fontSize: moderateScale(45),
+    fontFamily: "Modak",
+    color: Colors.Cream,
+  },
+
 });

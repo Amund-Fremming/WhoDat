@@ -14,6 +14,11 @@ export const getAllCards = async (
       },
     });
 
+    if (response.status >= 400 && response.status <= 500)
+      return Result.failure("Invalid login, username or password was wrong.");
+
+    if (response.status === 500) return Result.failure("Internal server error");
+
     if (!response.ok) {
       console.error("getAllCards: response was not 200.");
       const errorMessage = await response.json();
@@ -47,6 +52,11 @@ export const addCard = async (
       body: blob,
     });
 
+    if (response.status >= 400 && response.status <= 500)
+      return Result.failure("Invalid login, username or password was wrong.");
+
+    if (response.status === 500) return Result.failure("Internal server error");
+
     if (!response.ok) {
       console.error("addCard: response was not 200.");
       const errorMessage = await response.json();
@@ -66,6 +76,7 @@ export const deleteCard = async (
 ): Promise<Result<boolean>> => {
   console.log(`${CARD_ENDPOINT}/delete/${cardId}`);
   try {
+    throw new Error("dummy error");
     const response = await fetch(`${CARD_ENDPOINT}/delete/${cardId}`, {
       method: "DELETE",
       headers: {
@@ -73,6 +84,11 @@ export const deleteCard = async (
         Authorization: `Bearer ${token}`,
       },
     });
+
+    if (response.status >= 400 && response.status <= 500)
+      return Result.failure("Invalid login, username or password was wrong.");
+
+    if (response.status === 500) return Result.failure("Internal server error");
 
     if (!response.ok) {
       throw new Error(

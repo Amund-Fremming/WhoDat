@@ -6,7 +6,7 @@ import {
 } from "../../assets/constants/Dimentions";
 import { StyleSheet } from "react-native";
 
-export default styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     height: verticalScale(70),
     width: horizontalScale(330),

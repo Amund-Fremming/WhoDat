@@ -29,12 +29,25 @@ backend/bin/Debug/net8.0/appsettings.Development.json
 Backend/bin/Debug/net8.0/appsettings.Development.json
 /Backend/bin/Debug/net8.0/appsettings.Development.json
 backend/bin/
+
+backend/Debug
+/Backend/Debug
+Backend/Debug
+/backend/Debug
+backend/obj
+/backend/obj
+Backend/obj
+/Backend/obj
+/backend/bin
+/Backend/bin
+backend/bin
+Backend/bin
+
 *obj/
 *Debug/
 backend/obj/Debug
 /backend/obj/Debug
 backend/.vs/
-backend/Debug/
 
 # User-Specific Files
 *.user

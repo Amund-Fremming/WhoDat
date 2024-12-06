@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import styles from "./SmallButtonStyles";
+import { styles } from "./SmallButtonStyles";
 
 export default function SmallButton() {
   return (

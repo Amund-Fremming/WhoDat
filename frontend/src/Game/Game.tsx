@@ -9,13 +9,12 @@ import WaitingPage from "./components/WaitingPage/WaitingPage";
 import {
   createConnection,
   startConnection,
-  registerEventListeners,
   joinGame,
   leaveGame,
   startGame,
 } from "@/src/Game/GameHubClient";
 import { HubConnection } from "@microsoft/signalr";
-import { State } from "@/src/Game/types/GameTypes";
+import { GameState } from "./types/GameTypes";
 import { useAuthProvider } from "../Shared/state/AuthProvider";
 import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
 
@@ -26,7 +25,6 @@ export default function Game() {
   const { token, playerID } = useAuthProvider();
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [stateToCreate, setStateToCreate] = useState<State>();
 
   const handleError = (message: string) => {
     setErrorModalVisible(true);
@@ -38,23 +36,22 @@ export default function Game() {
   //}
 
   const connectToHub = async () => {
-    const conn = createConnection();
-    setConnection(conn);
+    const connection = createConnection();
+    setConnection(connection);
 
-    await startConnection(conn);
-    registerEventListeners(conn);
+    await startConnection(connection);
 
-    conn.on("RECEIVE_STATE", (state: string) => {
+    connection.on("RECEIVE_STATE", (state: string) => {
       console.log("Game state updated:", state);
       // set page and render according to return types from backend
     });
 
-    conn.on("RECEIVE_MESSAGE", (state: string) => {
+    connection.on("RECEIVE_MESSAGE", (state: string) => {
       console.log("Message received:", state);
       // set message and pass it down
     });
 
-    conn.on("RECEIVE_PLAYERS_LEFT", (state: string) => {
+    connection.on("RECEIVE_PLAYERS_LEFT", (state: string) => {
       console.log("Player left updated:", state);
       // set players left and pass down
     });

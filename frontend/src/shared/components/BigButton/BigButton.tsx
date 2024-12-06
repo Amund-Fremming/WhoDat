@@ -1,41 +1,45 @@
-import { Text, Pressable } from "react-native";
-import styles from "./BigButtonStyles";
+import { Text, TouchableOpacity } from "react-native";
+import { styles } from "./BigButtonStyles";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
 
 interface BigButtonProps {
-    text: string;
-    color: string;
-    inverted: boolean;
-    onButtonPress: () => void;
+  text: string;
+  color: string;
+  inverted: boolean;
+  onButtonPress: () => void;
 }
 
 export default function BigButton({
-    text,
-    color,
-    inverted,
-    onButtonPress,
+  text,
+  color,
+  inverted,
+  onButtonPress,
 }: BigButtonProps) {
-    const getStyles = () => {
-        if (inverted) {
-            return {
-                ...styles.button,
-                backgroundColor: Colors.Cream,
-                borderColor: color,
-            };
-        } else {
-            return {
-                ...styles.button,
-                backgroundColor: color,
-                borderColor: color,
-            };
-        }
-    };
+  const getStyles = () => {
+    if (inverted) {
+      return {
+        ...styles.button,
+        backgroundColor: Colors.Cream,
+        borderColor: color,
+      };
+    } else {
+      return {
+        ...styles.button,
+        backgroundColor: color,
+        borderColor: color,
+      };
+    }
+  };
 
-    return (
-        <Pressable onPress={onButtonPress} style={getStyles()}>
-            <Text style={{ ...styles.text, color: inverted ? color : Colors.Cream }}>
-                {text}
-            </Text>
-        </Pressable>
-    );
+  return (
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={onButtonPress}
+      style={getStyles()}
+    >
+      <Text style={{ ...styles.text, color: inverted ? color : Colors.Cream }}>
+        {text}
+      </Text>
+    </TouchableOpacity>
+  );
 }
