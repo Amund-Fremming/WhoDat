@@ -1,6 +1,7 @@
 import { GAME_ENDPOINT } from "../Shared/domain/URL_PATHS";
 import { IGame } from "@/src/Game/types/GameTypes";
 import Result from "../Shared/domain/Result";
+import { IBoard } from "./types/BoardTypes";
 
 export const createGame = async (
   game: IGame,

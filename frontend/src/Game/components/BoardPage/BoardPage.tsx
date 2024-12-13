@@ -4,9 +4,13 @@ import { PlayPages } from "../../GamePages";
 
 interface BoardPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
+  oponentCardsLeft: number;
 }
 
-export default function BoardPage({ setPage }: BoardPageProps) {
+export default function BoardPage({
+  setPage,
+  oponentCardsLeft,
+}: BoardPageProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>BoardPage</Text>

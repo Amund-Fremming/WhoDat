@@ -2,8 +2,9 @@ import * as signalR from "@microsoft/signalr";
 
 import { HUB_ENDPOINT } from "@/src/Shared/domain/URL_PATHS";
 import Result from "../Shared/domain/Result";
+import { GameState } from "./types/GameTypes";
+import { IBoardCardUpdate } from "./types/BoardTypes";
 
-// Create a connection to the hub
 export const createConnection = (): signalR.HubConnection => {
   return new signalR.HubConnectionBuilder()
     .withUrl(`${HUB_ENDPOINT}`)
@@ -57,7 +58,89 @@ export const joinGame = async (
   }
 };
 
-//move
+export const updateGameState = async (
+  connection: signalR.HubConnection,
+  gameState: GameState
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("UpdateGameState", gameState);
+    console.log("UpdateGameState:", gameState);
+    return Result.ok(true);
+  } catch (error) {
+    return Result.failure("Falied to connect, check your wifi");
+  }
+};
+
+export const sendMessage = async (
+  connection: signalR.HubConnection,
+  messageText: string
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("SendMessage", messageText);
+    console.log("SendMessage:", messageText);
+    return Result.ok(true);
+  } catch (error) {
+    return Result.failure("Falied to connect, check your wifi");
+  }
+};
+
+export const guessBoardCard = async (
+  connection: signalR.HubConnection,
+  boardCardId: number
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("GuessBoardCard", boardCardId);
+    console.log("GuessBoardCard:", boardCardId);
+    return Result.ok(true);
+  } catch (error) {
+    return Result.failure("Falied to connect, check your wifi");
+  }
+};
+
+export const updateBoardCardsActivity = async (
+  connection: signalR.HubConnection,
+  gameId: number,
+  boardId: number,
+  boardCardUpdates: Array<IBoardCardUpdate>
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("UpdateBoardCardsActivity");
+    console.log("UpdateBoardCardsActivity:", gameId, boardId, boardCardUpdates);
+    return Result.ok(true);
+  } catch (error) {
+    return Result.failure("Falied to connect, check your wifi");
+  }
+};
+
+export const createBoardCards = async (
+  connection: signalR.HubConnection,
+  gameId: number,
+  cardIds: Array<number>
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("CreateBoardCards", gameId, cardIds);
+    console.log("CreateBoardCards:", gameId);
+    return Result.ok(true);
+  } catch (error) {
+    return Result.failure("Falied to connect, check your wifi");
+  }
+};
+
+export const chooseBoardCard = async (
+  connection: signalR.HubConnection,
+  gameId: number,
+  boardId: number,
+  boardCardId: number
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("ChooseBoardCard", gameId, boardId, boardCardId);
+    console.log("ChooseBoardCard:", gameId);
+    return Result.ok(true);
+  } catch (error) {
+    return Result.failure("Falied to connect, check your wifi");
+  }
+};
+
 export const startGame = async (
   connection: signalR.HubConnection,
   gameId: number
@@ -65,32 +148,6 @@ export const startGame = async (
   try {
     await connection.invoke("StartGame", gameId);
     console.log("Game started:", gameId);
-    return Result.ok(true);
-  } catch (error) {
-    return Result.failure("Falied to connect, check your wifi");
-  }
-};
-
-export const x = async (
-  connection: signalR.HubConnection,
-  gameId: number
-): Promise<Result<boolean>> => {
-  try {
-    await connection.invoke("x", gameId);
-    console.log("x:", gameId);
-    return Result.ok(true);
-  } catch (error) {
-    return Result.failure("Falied to connect, check your wifi");
-  }
-};
-
-export const updateGameState = async (
-  connection: signalR.HubConnection,
-  gameId: number
-): Promise<Result<boolean>> => {
-  try {
-    await connection.invoke("x", gameId);
-    console.log("x:", gameId);
     return Result.ok(true);
   } catch (error) {
     return Result.failure("Falied to connect, check your wifi");
