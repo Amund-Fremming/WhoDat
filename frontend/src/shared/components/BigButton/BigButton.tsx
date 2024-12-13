@@ -1,4 +1,4 @@
-import { Text, Pressable } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { styles } from "./BigButtonStyles";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
 
@@ -32,10 +32,14 @@ export default function BigButton({
   };
 
   return (
-    <Pressable onPress={onButtonPress} style={getStyles()}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={onButtonPress}
+      style={getStyles()}
+    >
       <Text style={{ ...styles.text, color: inverted ? color : Colors.Cream }}>
         {text}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 }

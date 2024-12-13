@@ -6,7 +6,7 @@ TODO
 
 General
 
-- [ ] Touch feedback on buttons
+- [ ] Store token in local storage, invalidate if login auth fails? or use a timestamp?
 
 Profile
 

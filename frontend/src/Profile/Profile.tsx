@@ -1,4 +1,4 @@
-import { View, Text, Pressable, TextInput, Image } from "react-native";
+import { View, Text, TextInput, Image } from "react-native";
 import { styles, imageStyles } from "./ProfileStyles";
 import { useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
@@ -18,6 +18,7 @@ export default function Profile() {
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
+  const [newUsername, setNewUsername] = useState<string>("");
   const [imageUri, setImageUri] = useState<any>(
     "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
   );
@@ -27,7 +28,10 @@ export default function Profile() {
     if (imageUrl != null) setImageUri(imageUrl);
   }, []);
 
-  const toggleEditMode = () => setEditMode(!editMode);
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+    clearValues();
+  };
 
   const handleError = (message: string) => {
     setErrorModalVisible(true);
@@ -42,16 +46,24 @@ export default function Profile() {
   const handleUpdatePlayer = async () => {
     const dto: IPlayerDto = {
       playerID: playerID,
-      username: username,
+      username: newUsername,
       password: newPassword,
       imageUrl: imageUri,
     };
     const result = await updatePlayer(dto);
     if (result.isError) {
       handleError(result.message);
+      return;
     }
 
+    clearValues();
+
     setEditMode(false);
+  };
+
+  const clearValues = () => {
+    setNewPassword("");
+    setNewUsername("");
   };
 
   const handleLogout = () => {

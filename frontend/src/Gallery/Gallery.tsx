@@ -142,9 +142,9 @@ export default function Gallery() {
         <Text style={textStyles.header}>Gallery</Text>
         <View style={viewStyles.creamContainer}>
           <View style={viewStyles.boardContainer}>
-            {cardsForThisPage.map((card: ICard) => (
+            {cardsForThisPage.map((card: ICard, index: number) => (
               <Card
-                key={card.cardID}
+                key={index}
                 card={card}
                 onCardPress={() => handleCardPressed(card)}
               />
