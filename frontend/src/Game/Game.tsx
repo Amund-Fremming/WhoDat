@@ -8,13 +8,16 @@ import LobbyPage from "./components/LobbyPage/LobbyPage";
 import WaitingPage from "./components/WaitingPage/WaitingPage";
 import {
   createConnection,
+  joinGame,
   startConnection,
   stopConnection,
+  updateGameState,
 } from "@/src/Game/GameHubClient";
 import { HubConnection } from "@microsoft/signalr";
 import { GameState } from "./types/GameTypes";
 import { useAuthProvider } from "../Shared/state/AuthProvider";
 import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
+import { createGame } from "./GameClient";
 
 export default function Game() {
   const [page, setPage] = useState<PlayPages>(PlayPages.MAIN_PAGE);
@@ -22,11 +25,12 @@ export default function Game() {
     GameState.BOTH_CHOSING_CARDS
   );
   const [message, setMessage] = useState<string>("");
+  const [gameId, setGameId] = useState<number>(0);
   const [oponentCardsLeft, setOponentCardsLeft] = useState<number>(20);
-  const [connection, setConnection] = useState<HubConnection>();
-  const { token, playerID } = useAuthProvider();
+  const [connection, setConnection] = useState<signalR.HubConnection>();
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const { token, playerID } = useAuthProvider();
 
   useEffect(() => {
     connectToHub();
@@ -35,9 +39,29 @@ export default function Game() {
     };
   }, []);
 
+  useEffect(() => {
+    if (connection) updateGameState(connection, gameState);
+    return () => {
+      if (connection) stopConnection(connection);
+    };
+  }, [gameState]);
+
+  const handleCreateGame = async () => {
+    // TODO
+  };
+
   const handleError = (message: string) => {
     setErrorModalVisible(true);
     setErrorMessage(message);
+  };
+
+  const handleJoinGame = async () => {
+    if (connection) {
+      var result = await joinGame(connection, gameId);
+      if (result.isError) {
+        handleError("Something went wrong, start over.");
+      }
+    } else handleError("Connection was broken.");
   };
 
   const connectToHub = async () => {
@@ -73,9 +97,16 @@ export default function Game() {
     case PlayPages.MAIN_PAGE:
       return <MainPage setPage={setPage} />;
     case PlayPages.JOIN_PAGE:
-      return <JoinPage setPage={setPage} />;
+      return (
+        <JoinPage
+          handleJoinGame={handleJoinGame}
+          setGameId={setGameId}
+          setPage={setPage}
+          handleError={handleError}
+        />
+      );
     case PlayPages.HOST_PAGE:
-      return <HostPage setPage={setPage} />;
+      return <HostPage setGameState={setGameState} setPage={setPage} />;
     case PlayPages.BOARD_PAGE:
       return (
         <BoardPage setPage={setPage} oponentCardsLeft={oponentCardsLeft} />
@@ -83,6 +114,6 @@ export default function Game() {
     case PlayPages.LOBBY_PAGE:
       return <LobbyPage setPage={setPage} />;
     case PlayPages.WAITING_PAGE:
-      return <WaitingPage setPage={setPage} />;
+      return <WaitingPage gameId={gameId} setPage={setPage} />;
   }
 }

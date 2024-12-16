@@ -6,12 +6,13 @@ import { Ionicons } from "@expo/vector-icons";
 
 interface WaitingPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
+  gameId: number;
 }
 
-export default function WaitingPage({ setPage }: WaitingPageProps) {
+export default function WaitingPage({ setPage, gameId }: WaitingPageProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.id}>ID: 54234</Text>
+      <Text style={styles.id}>ID: {gameId}</Text>
       <Pressable
         style={styles.backIconWrapper}
         onPress={() => setPage(PlayPages.MAIN_PAGE)}

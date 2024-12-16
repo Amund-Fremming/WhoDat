@@ -5,20 +5,22 @@ import IconButton from "@/src/Shared/components/IconButton/IconButton";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
 import { GameState } from "../../types/GameTypes";
+import { HubConnection } from "@microsoft/signalr";
 
 interface HostPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
 }
 
-export default function HostPage({ setPage }: HostPageProps) {
+export default function HostPage({ setPage, setGameState }: HostPageProps) {
   const handleBothChoosing = () => {
     setPage(PlayPages.WAITING_PAGE);
-    //setStateToCreate(State.BOTH_CHOSING_CARDS);
+    setGameState(GameState.BOTH_CHOSING_CARDS);
   };
 
   const handleHostChoosing = () => {
     setPage(PlayPages.WAITING_PAGE);
-    //setStateToCreate(State.ONLY_HOST_CHOSING_CARDS);
+    setGameState(GameState.ONLY_HOST_CHOSING_CARDS);
   };
 
   return (
