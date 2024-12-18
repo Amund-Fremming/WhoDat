@@ -12,7 +12,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
     private readonly IGameRepository _gameRepository = gameRepository;
     private readonly IPlayerRepository _playerRepository = playerRepository;
 
-    public async Task<Result<int>> CreateGame(int playerId, CreateGameRequest gameRequest)
+    public async Task<Result<int>> CreateGame(int playerId, GameState gameState)
     {
         try
         {
@@ -21,7 +21,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
                 return result.Error;
 
             var player = result.Data;
-            var game = new GameEntity(gameRequest.PlayerOneID, gameRequest.GameState)
+            var game = new GameEntity(playerId, gameState)
             {
                 PlayerOne = player
             };

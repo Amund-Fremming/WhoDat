@@ -1,6 +1,7 @@
 using Backend.Features.Board;
 using Backend.Features.BoardCard;
 using Backend.Features.Message;
+using Backend.Features.Shared.Enums;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Game;
@@ -18,13 +19,12 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
 
     [HttpPost("games")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<int>> CreateGame(CreateGameRequest gameRequest)
+    public async Task<ActionResult<int>> CreateGame(GameState gameState)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            gameRequest.PlayerOneID = playerId;
-            var gameRes = await _gameService.CreateGame(playerId, gameRequest);
+            var gameRes = await _gameService.CreateGame(playerId, gameState);
             if (gameRes.IsError)
                 return BadRequest(gameRes.Message);
 
