@@ -3,6 +3,7 @@
 TODO
 
 - [ ] Error handling for Register player (Needs username exists alert)
+- [ ] Attach token to signal r request
 
 General
 

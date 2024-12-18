@@ -58,6 +58,19 @@ export const joinGame = async (
   }
 };
 
+export const subscribeToGameAsHost = async (
+  connection: signalR.HubConnection,
+  gameId: number
+): Promise<Result<boolean>> => {
+  try {
+    await connection.invoke("SubscribeToGameAsHost", gameId);
+    console.log("Host subscribed to game:", gameId);
+    return Result.ok(true);
+  } catch (error) {
+    return Result.failure("Falied to connect, check your wifi");
+  }
+};
+
 export const updateGameState = async (
   connection: signalR.HubConnection,
   gameState: GameState
