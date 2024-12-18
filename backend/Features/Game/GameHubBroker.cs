@@ -72,6 +72,7 @@ public class GameHubBroker(ILogger<GameHubBroker> logger, IGameService gameServi
         try
         {
             int playerId = ParsePlayerIdClaim();
+            _logger.LogInformation("Player " + playerId + ", joined the game " + gameId); // remove this
             string groupName = gameId.ToString();
 
             var result = await _gameService.JoinGameById(playerId, gameId);
@@ -118,6 +119,8 @@ public class GameHubBroker(ILogger<GameHubBroker> logger, IGameService gameServi
         try
         {
             int playerId = ParsePlayerIdClaim();
+
+            _logger.LogInformation("Player " + playerId + ", updated the the game " + gameId + ", to gamestate " + state); // remove this
             string groupName = gameId.ToString();
 
             var result = await _gameService.UpdateGameState(playerId, gameId, state);

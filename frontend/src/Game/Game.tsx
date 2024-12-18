@@ -11,6 +11,7 @@ import {
   joinGame,
   startConnection,
   stopConnection,
+  subscribeToGameAsHost,
   updateGameState,
 } from "@/src/Game/GameHubClient";
 import { HubConnection } from "@microsoft/signalr";
@@ -46,8 +47,18 @@ export default function Game() {
     };
   }, [gameState]);
 
-  const handleCreateGame = async () => {
-    // TODO
+  const handleCreateGame = async (gameState: GameState) => {
+    var result = await createGame(gameState, token);
+    if(result.isError) {
+      handleError(result.message)
+      return;
+      }
+      
+      if(result.data && connection){
+        setGameId(result.data);
+        await subscribeToGameAsHost(connection, result.data);
+      }
+      else handleError("Failed to set incomming game id. Connection failed.");
   };
 
   const handleError = (message: string) => {
@@ -82,6 +93,10 @@ export default function Game() {
     con.on("RECEIVE_PLAYERS_LEFT", (num: number) => {
       setOponentCardsLeft(num);
     });
+
+    con.on("RECEIVE_ERROR", (message: string) => {
+      handleError(message);
+    });
   };
 
   if (errorModalVisible)
@@ -106,7 +121,7 @@ export default function Game() {
         />
       );
     case PlayPages.HOST_PAGE:
-      return <HostPage setGameState={setGameState} setPage={setPage} />;
+      return <HostPage handleCreateGame={handleCreateGame} setGameState={setGameState} setPage={setPage} />;
     case PlayPages.BOARD_PAGE:
       return (
         <BoardPage setPage={setPage} oponentCardsLeft={oponentCardsLeft} />

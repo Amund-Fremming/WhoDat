@@ -10,17 +10,20 @@ import { HubConnection } from "@microsoft/signalr";
 interface HostPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
   setGameState: React.Dispatch<React.SetStateAction<GameState>>;
+  handleCreateGame: (gameState: GameState) => Promise<void>;
 }
 
-export default function HostPage({ setPage, setGameState }: HostPageProps) {
-  const handleBothChoosing = () => {
+export default function HostPage({ setPage, setGameState, handleCreateGame }: HostPageProps) {
+  const handleBothChoosing = async () => {
     setPage(PlayPages.WAITING_PAGE);
     setGameState(GameState.BOTH_CHOSING_CARDS);
+    await handleCreateGame(GameState.BOTH_CHOSING_CARDS);
   };
 
-  const handleHostChoosing = () => {
+  const handleHostChoosing = async () => {
     setPage(PlayPages.WAITING_PAGE);
     setGameState(GameState.ONLY_HOST_CHOSING_CARDS);
+    await handleCreateGame(GameState.ONLY_HOST_CHOSING_CARDS);
   };
 
   return (
