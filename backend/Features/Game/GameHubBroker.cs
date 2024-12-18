@@ -97,6 +97,22 @@ public class GameHubBroker(ILogger<GameHubBroker> logger, IGameService gameServi
         }
     }
 
+    public async Task SubscribeToGameAsHost(int gameId)
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            string groupName = gameId.ToString();
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(SubscribeToGameAsHost)");
+            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+        }
+    }
+
     public async Task UpdateGameState(int gameId, GameState state)
     {
         try
