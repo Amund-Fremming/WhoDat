@@ -37,12 +37,6 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-
-            // Read the content type from the request
-            string contentType = Request.ContentType ?? "application/octet-stream";
-
-            // Read the image data from the request body
             byte[] imageData;
             using (var memoryStream = new MemoryStream())
             {
@@ -52,8 +46,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
 
             // Retrieve the name from the headers
             string name = Request.Headers["X-Card-Name"].ToString();
-
-            // Create an IFormFile instance
+            string contentType = Request.ContentType ?? "application/octet-stream";
             var formFile = new FormFile(new MemoryStream(imageData), 0, imageData.Length, "Image", "image.jpg")
             {
                 Headers = new HeaderDictionary(),
@@ -66,6 +59,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
                 Image = formFile
             };
 
+            int playerId = ParsePlayerIdClaim();
             var result = await _cardService.CreateCard(playerId, cardDto);
             return result.Resolve(
                 suc => Ok(),

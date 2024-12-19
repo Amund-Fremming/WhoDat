@@ -9,44 +9,25 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerRepositor
     private readonly ILogger<PlayerController> _logger = logger;
     private readonly IPlayerRepository _playerRepository = playerRepository;
 
-    [HttpPut("players/update-username")]
+    [HttpPut("update")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdatePlayerUsername([FromBody] string newUsername)
+    public async Task<ActionResult> UpdatePlayer([FromBody] PlayerDto playerDto)
     {
         try
         {
             int playerId = ParsePlayerIdClaim();
-            string encodedNewUsername = EncodeForJsAndHtml(newUsername);
+            string encodedNewUsername = EncodeForJsAndHtml(playerDto.Username);
+            playerDto.PlayerID = playerId;
+            playerDto.Username = encodedNewUsername;
 
-            var result = await _playerRepository.UpdateUsername(playerId, encodedNewUsername);
+            var result = await _playerRepository.Update(playerDto);
             return result.Resolve(
-                suc => Ok(),
+                suc => Ok(suc.Data),
                 err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(UpdatePlayerUsername)");
-            return StatusCode(500);
-        }
-    }
-
-    [HttpPut("players/update-password")]
-    [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdatePlayerPassword([FromBody] string newPassword)
-    {
-        try
-        {
-            int playerId = ParsePlayerIdClaim();
-            string encodedNewPassword = EncodeForJsAndHtml(newPassword);
-
-            var result = await _playerRepository.UpdatePassword(playerId, encodedNewPassword);
-            return result.Resolve(
-                suc => Ok(),
-                err => BadRequest(err.Message));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "(UpdatePlayerPassword)");
             return StatusCode(500);
         }
     }

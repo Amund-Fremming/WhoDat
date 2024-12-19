@@ -9,7 +9,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
     : RepositoryBase<PlayerEntity, PlayerRepository>(logger, context), IPlayerRepository
 {
     private readonly AppDbContext _context = context;
-    private readonly ILogger<IPlayerRepository> _logger = logger;
+    private readonly ILogger<PlayerRepository> _logger = logger;
     private readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
 
     public async Task<Result> DeletePlayer(int playerId)
@@ -48,50 +48,52 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
     }
 
-    public async Task<Result> UpdateUsername(int playerId, string newUsername)
+    public async Task<Result<PlayerDto>> Update(PlayerDto playerDto)
     {
         try
         {
-            var result = await GetById(playerId);
+            var result = await GetById(playerDto.PlayerID);
             if (result.IsError)
                 return result.Error;
 
             var player = result.Data;
-            player.Username = newUsername;
-            _context.Player.Update(player);
 
-            await _context.SaveChangesAsync();
-            return Result.Ok();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "(PlayerRepository)");
-            return new Error(e, "Failed to update username.");
-        }
-    }
+            // updates username
+            if (playerDto.Username != "" && playerDto.Username != player.Username)
+            {
+                var usernameResult = await UsernameExist(playerDto.Username);
+                if (usernameResult.IsError)
+                    return usernameResult.Error;
 
-    public async Task<Result> UpdatePassword(int playerId, string newPassword)
-    {
-        try
-        {
-            var result = await GetById(playerId);
-            if (result.IsError)
-                return result.Error;
+                player.Username = playerDto.Username;
+            }
 
-            var player = result.Data;
-            player.PasswordHash = newPassword;
-            player.PasswordSalt = GenerateSalt();
+            // Updates password
+            if (playerDto.Password != "")
+            {
+                player = UpdatePassword(player, playerDto.Password);
+            }
 
             _context.Player.Update(player);
-
             await _context.SaveChangesAsync();
-            return Result.Ok();
+            return new PlayerDto(player.ID, player.Username, string.Empty, player.ImageUrl);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
             return new Error(e, "Failed to update password.");
         }
+    }
+
+    private PlayerEntity UpdatePassword(PlayerEntity player, string newPassword)
+    {
+        var salt = GenerateSalt();
+        var saltedPassword = newPassword + salt;
+        var hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
+        player.PasswordHash = hashedPassword;
+        player.PasswordSalt = salt;
+
+        return player;
     }
 
     public async Task<Result<IEnumerable<PlayerDto>>> GetAllPlayers()
@@ -109,7 +111,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
     }
 
-    public async Task<Result> DoesUsernameExist(string username)
+    public async Task<Result> UsernameExist(string username)
     {
         try
         {

@@ -4,17 +4,15 @@ import { PLAYER_ENDPOINT } from "../Shared/domain/URL_PATHS";
 
 export const updatePlayer = async (
   dto: IPlayerDto
-): Promise<Result<boolean>> => {
+): Promise<Result<IPlayerDto>> => {
   try {
-    const response = await fetch(`${PLAYER_ENDPOINT}/players/update`, {
+    const response = await fetch(`${PLAYER_ENDPOINT}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(dto),
     });
-
-    console.log(`${PLAYER_ENDPOINT}/players/update`);
 
     if (response.status >= 400 && response.status <= 500)
       return Result.failure("Invalid login, username or password was wrong.");
@@ -27,7 +25,8 @@ export const updatePlayer = async (
       return Result.failure(errorMessage);
     }
 
-    return Result.ok(true);
+    const data: IPlayerDto = await response.json();
+    return Result.ok(data);
   } catch (error) {
     console.error(error, "UpdatePlayer");
     console.log(error, "UpdatePlayer");

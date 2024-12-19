@@ -13,18 +13,11 @@ public interface IPlayerRepository : IRepository<PlayerEntity>
     Task<Result<PlayerEntity>> GetPlayerByUsername(string username);
 
     /// <summary>
-    /// Updates the username for a given Player.
+    /// Updates a player
     /// </summary>
-    /// <param name="playerId">The player to update its username.</param>
-    /// <param name="newUsername">The new username.</param>
-    Task<Result> UpdateUsername(int playerId, string newUsername);
-
-    /// <summary>
-    /// Updates the password and salt for a player.
-    /// </summary>
-    /// <param name="playerId">The player to update on.</param>
-    /// <param name="newPassword">The new hashed password.</param>
-    Task<Result> UpdatePassword(int playerId, string newPassword);
+    /// <param name="playerDto">Player to update</param>
+    /// <returns>Updated player</returns>
+    Task<Result<PlayerDto>> Update(PlayerDto playerDto);
 
     /// <summary>
     /// Fetches all Players.
@@ -33,9 +26,9 @@ public interface IPlayerRepository : IRepository<PlayerEntity>
     Task<Result<IEnumerable<PlayerDto>>> GetAllPlayers();
 
     /// <summary>
-    /// Tries to fint a username in the database, and throws if it exists.
+    /// Tries to find a username in the database, and throws if it exists.
     /// </summary>
-    /// <param name="username">The username to seach for.</param>
+    /// <param name="username">The username to search for.</param>
     /// <exception cref="ArgumentException">Throws if the username was found.</exception>
-    Task<Result> DoesUsernameExist(string username);
+    Task<Result> UsernameExist(string username);
 }
