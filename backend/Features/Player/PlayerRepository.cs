@@ -48,42 +48,36 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
     }
 
-    public async Task<Result> UpdateUsername(int playerId, string newUsername)
+    public async Task<Result> Update(PlayerDto playerDto)
     {
         try
         {
-            var result = await GetById(playerId);
+            // må laste opp og oppdatere bilde om det er lastet opp ett nytt
+            // username eller password er tomt, bare oppdater biled
+
+            var result = await GetById(playerDto.PlayerID);
             if (result.IsError)
                 return result.Error;
 
             var player = result.Data;
-            player.Username = newUsername;
-            _context.Player.Update(player);
 
-            await _context.SaveChangesAsync();
-            return Result.Ok();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "(PlayerRepository)");
-            return new Error(e, "Failed to update username.");
-        }
-    }
+            player.ImageUrl = playerDto.ImageUrl ?? player.ImageUrl;
+            if (playerDto.Username != player.Username)
+            {
+                var usernameResult = await UsernameExist(playerDto.Username);
+                if (usernameResult.IsError)
+                    return usernameResult.Error;
 
-    public async Task<Result> UpdatePassword(int playerId, string newPassword)
-    {
-        try
-        {
-            var result = await GetById(playerId);
-            if (result.IsError)
-                return result.Error;
+                player.Username = playerDto.Username;
+            }
 
-            var player = result.Data;
-            player.PasswordHash = newPassword;
-            player.PasswordSalt = GenerateSalt();
+            var salt = GenerateSalt();
+            var saltedPassword = playerDto.Password + salt;
+            var hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
+            player.PasswordHash = hashedPassword;
+            player.PasswordSalt = salt;
 
             _context.Player.Update(player);
-
             await _context.SaveChangesAsync();
             return Result.Ok();
         }
@@ -109,7 +103,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
     }
 
-    public async Task<Result> DoesUsernameExist(string username)
+    public async Task<Result> UsernameExist(string username)
     {
         try
         {
