@@ -2,16 +2,18 @@
 
 TODO
 
-- [ ] Error handling for Register player (Needs username exists alert)
-- [ ] Attach token to signal r request
-
+- If you first create a game, then leave, and join another you get the isHost = true, resulting in wrong screen loaded,
+- Error handling for Register player (Needs username exists alert)
+- Attach token to signal r request
+- Dont throw exception when trying to join a full game, the game you try to join fails
+- 
+ 
 General
 
 - [ ] Store token in local storage, invalidate if login auth fails? or use a timestamp?
 
 Profile
 
-- [ ] Design, style, implement
 - [ ] Update password funktionality implemented and tested
 - [ ] Update username funktionality implemented and tested
 - [ ] Logout functionality

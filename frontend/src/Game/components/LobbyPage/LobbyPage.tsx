@@ -11,7 +11,6 @@ interface LobbyPageProps {
 export default function LobbyPage({ setPage }: LobbyPageProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.id}>ID: 54234</Text>
       <Pressable
         style={styles.backIconWrapper}
         onPress={() => setPage(PlayPages.MAIN_PAGE)}

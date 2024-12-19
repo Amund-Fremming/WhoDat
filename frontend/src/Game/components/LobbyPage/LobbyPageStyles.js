@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
+    paddingTop: verticalScale(75),
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: Colors.Orange,
@@ -45,14 +46,5 @@ export const styles = StyleSheet.create({
 
   headerWrapper: {
     paddingTop: verticalScale(130),
-  },
-
-  id: {
-    paddingTop: verticalScale(15),
-    fontFamily: "Modak",
-    fontSize: moderateScale(30),
-    color: Colors.Green,
-    textAlign: "center",
-    lineHeight: moderateScale(100),
   },
 });

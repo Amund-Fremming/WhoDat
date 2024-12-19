@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { View } from "react-native";
 import { PlayPages } from "./GamePages";
 import MainPage from "./components/MainPage/MainPage";
 import JoinPage from "./components/JoinPage/JoinPage";
@@ -14,11 +15,11 @@ import {
   subscribeToGameAsHost,
   updateGameState,
 } from "@/src/Game/GameHubClient";
-import { HubConnection } from "@microsoft/signalr";
 import { GameState } from "./types/GameTypes";
 import { useAuthProvider } from "../Shared/state/AuthProvider";
 import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
 import { createGame } from "./GameClient";
+import {styles} from "./GameStyles";
 
 export default function Game() {
   const [page, setPage] = useState<PlayPages>(PlayPages.MAIN_PAGE);
@@ -31,14 +32,22 @@ export default function Game() {
   const [connection, setConnection] = useState<signalR.HubConnection>();
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isHost, setIsHost] = useState<boolean>(false);
+
+  const isHostRef = useRef(isHost);
   const { token, playerID } = useAuthProvider();
 
   useEffect(() => {
     connectToHub();
     return () => {
       if (connection) stopConnection(connection);
+      setIsHost(false);
     };
   }, []);
+
+  useEffect(() => {
+    isHostRef.current = isHost;
+  }, [isHost]);
 
   useEffect(() => {
     if (connection) updateGameState(connection, gameState);
@@ -51,14 +60,18 @@ export default function Game() {
     var result = await createGame(gameState, token);
     if(result.isError) {
       handleError(result.message)
+      setPage(PlayPages.MAIN_PAGE)
       return;
       }
       
       if(result.data && connection){
         setGameId(result.data);
+        setIsHost(true);
         await subscribeToGameAsHost(connection, result.data);
       }
-      else handleError("Failed to set incomming game id. Connection failed.");
+      else {
+        handleError("Failed to set incomming game id. Connection failed.");
+      }
   };
 
   const handleError = (message: string) => {
@@ -69,6 +82,7 @@ export default function Game() {
   const handleJoinGame = async () => {
     if (connection) {
       var result = await joinGame(connection, gameId);
+      setIsHost(false);
       if (result.isError) {
         handleError("Something went wrong, start over.");
       }
@@ -76,13 +90,22 @@ export default function Game() {
   };
 
   const connectToHub = async () => {
-    const con = createConnection();
+    const con = createConnection(token);
     setConnection(con);
     await startConnection(con);
 
     con.on("RECEIVE_STATE", (state: GameState) => {
       setGameState(state);
       // set page and render according to return types from backend
+      switch (state) {
+        case GameState.ONLY_HOST_CHOSING_CARDS:
+          {
+            isHostRef.current ? setPage(PlayPages.BOARD_PAGE) : setPage(PlayPages.LOBBY_PAGE);
+            break;
+          }
+        case GameState.BOTH_CHOSING_CARDS: setPage(PlayPages.BOARD_PAGE); break;
+
+      }
     });
 
     con.on("RECEIVE_MESSAGE", (message: string) => {
@@ -101,11 +124,13 @@ export default function Game() {
 
   if (errorModalVisible)
     return (
+      <View style={styles.container}>
       <ErrorModal
         errorModalVisible={errorModalVisible}
         setErrorModalVisible={setErrorModalVisible}
         message={errorMessage}
       />
+      </View>
     );
 
   switch (page) {

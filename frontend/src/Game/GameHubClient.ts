@@ -5,9 +5,11 @@ import Result from "../Shared/domain/Result";
 import { GameState } from "./types/GameTypes";
 import { IBoardCardUpdate } from "./types/BoardTypes";
 
-export const createConnection = (): signalR.HubConnection => {
+export const createConnection = (token: string): signalR.HubConnection => {
   return new signalR.HubConnectionBuilder()
-    .withUrl(`${HUB_ENDPOINT}`)
+    .withUrl(`${HUB_ENDPOINT}` ,{
+      accessTokenFactory: () => token
+    })
     .configureLogging(signalR.LogLevel.Information)
     .build();
 };

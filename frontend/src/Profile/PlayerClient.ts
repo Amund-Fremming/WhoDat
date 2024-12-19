@@ -6,7 +6,7 @@ export const updatePlayer = async (
   dto: IPlayerDto
 ): Promise<Result<boolean>> => {
   try {
-    const response = await fetch(`${PLAYER_ENDPOINT}/players/update`, {
+    const response = await fetch(`${PLAYER_ENDPOINT}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
