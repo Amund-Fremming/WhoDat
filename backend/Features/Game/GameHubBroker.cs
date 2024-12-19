@@ -78,7 +78,7 @@ public class GameHubBroker(ILogger<GameHubBroker> logger, IGameService gameServi
             var result = await _gameService.JoinGameById(playerId, gameId);
             if (result.IsError)
             {
-                await Clients.Group(groupName).SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
                 return;
             }
 
