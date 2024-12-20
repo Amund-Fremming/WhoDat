@@ -5,12 +5,11 @@ using System.Data;
 
 namespace Backend.Features.Player;
 
-public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> logger, IPasswordHasher<PlayerEntity> passwordHasher)
+public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> logger)
     : RepositoryBase<PlayerEntity, PlayerRepository>(logger, context), IPlayerRepository
 {
     private readonly AppDbContext _context = context;
     private readonly ILogger<PlayerRepository> _logger = logger;
-    private readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
 
     public async Task<Result> DeletePlayer(int playerId)
     {
@@ -48,52 +47,19 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
     }
 
-    public async Task<Result<PlayerDto>> Update(PlayerDto playerDto)
+    public async Task<Result> Update(PlayerEntity player)
     {
         try
         {
-            var result = await GetById(playerDto.PlayerID);
-            if (result.IsError)
-                return result.Error;
-
-            var player = result.Data;
-
-            // updates username
-            if (playerDto.Username != "" && playerDto.Username != player.Username)
-            {
-                var usernameResult = await UsernameExist(playerDto.Username);
-                if (usernameResult.IsError)
-                    return usernameResult.Error;
-
-                player.Username = playerDto.Username;
-            }
-
-            // Updates password
-            if (playerDto.Password != "")
-            {
-                player = UpdatePassword(player, playerDto.Password);
-            }
-
             _context.Player.Update(player);
             await _context.SaveChangesAsync();
-            return new PlayerDto(player.ID, player.Username, string.Empty, player.ImageUrl);
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(PlayerRepository)");
             return new Error(e, "Failed to update password.");
         }
-    }
-
-    private PlayerEntity UpdatePassword(PlayerEntity player, string newPassword)
-    {
-        var salt = GenerateSalt();
-        var saltedPassword = newPassword + salt;
-        var hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
-        player.PasswordHash = hashedPassword;
-        player.PasswordSalt = salt;
-
-        return player;
     }
 
     public async Task<Result<IEnumerable<PlayerDto>>> GetAllPlayers()
@@ -119,7 +85,7 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
                 .AnyAsync(p => p.Username == username);
 
             if (usernameExist)
-                return new Error(new DuplicateNameException("Username exists"), "Username alreay exists.");
+                return new Error(new DuplicateNameException("Username exists"), "Username already exists.");
 
             return Result.Ok();
         }
@@ -128,13 +94,5 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
             _logger.LogError(e, "(DoesUsernameExist)");
             return new Error(e, "System error. Please try again later.");
         }
-    }
-
-    public string GenerateSalt()
-    {
-        var buffer = new byte[16];
-        RandomNumberGenerator.Fill(buffer);
-
-        return Convert.ToBase64String(buffer);
     }
 }

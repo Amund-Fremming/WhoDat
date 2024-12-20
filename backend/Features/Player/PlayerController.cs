@@ -4,14 +4,14 @@ namespace Backend.Features.Player;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlayerController(ILogger<PlayerController> logger, IPlayerRepository playerRepository) : ControllerBase
+public class PlayerController(ILogger<PlayerController> logger, IPlayerService playerService) : ControllerBase
 {
     private readonly ILogger<PlayerController> _logger = logger;
-    private readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly IPlayerService _playerService = playerService;
 
     [HttpPut("update")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdatePlayer([FromBody] PlayerDto playerDto)
+    public async Task<ActionResult> Update([FromBody] PlayerDto playerDto)
     {
         try
         {
@@ -20,9 +20,40 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerRepositor
             playerDto.PlayerID = playerId;
             playerDto.Username = encodedNewUsername;
 
-            var result = await _playerRepository.Update(playerDto);
+            var result = await _playerService.Update(playerDto);
             return result.Resolve(
                 suc => Ok(suc.Data),
+                err => BadRequest(err.Message));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(UpdatePlayerUsername)");
+            return StatusCode(500);
+        }
+    }
+
+    [HttpPut("update-image")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult> UpdateImage()
+    {
+        try
+        {
+            int playerId = ParsePlayerIdClaim();
+            FormFile formFile = null;
+            using (var memoryStream = new MemoryStream())
+            {
+                await Request.Body.CopyToAsync(memoryStream);
+                formFile = new FormFile(memoryStream, 0, memoryStream.Length, "Image", "image.jpg");
+            }
+
+            if (formFile == null)
+            {
+                return Ok("There was no image to upload.");
+            }
+
+            var result = await _playerService.UpdateImage(playerId, formFile);
+            return result.Resolve(
+                suc => Ok(),
                 err => BadRequest(err.Message));
         }
         catch (Exception e)

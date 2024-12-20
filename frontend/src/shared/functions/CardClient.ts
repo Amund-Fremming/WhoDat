@@ -76,7 +76,6 @@ export const deleteCard = async (
 ): Promise<Result<boolean>> => {
   console.log(`${CARD_ENDPOINT}/delete/${cardId}`);
   try {
-    throw new Error("dummy error");
     const response = await fetch(`${CARD_ENDPOINT}/delete/${cardId}`, {
       method: "DELETE",
       headers: {

@@ -13,13 +13,6 @@ public interface IPlayerRepository : IRepository<PlayerEntity>
     Task<Result<PlayerEntity>> GetPlayerByUsername(string username);
 
     /// <summary>
-    /// Updates a player
-    /// </summary>
-    /// <param name="playerDto">Player to update</param>
-    /// <returns>Updated player</returns>
-    Task<Result<PlayerDto>> Update(PlayerDto playerDto);
-
-    /// <summary>
     /// Fetches all Players.
     /// </summary>
     /// <returns>An Enumerable of Players.</returns>
@@ -31,4 +24,6 @@ public interface IPlayerRepository : IRepository<PlayerEntity>
     /// <param name="username">The username to search for.</param>
     /// <exception cref="ArgumentException">Throws if the username was found.</exception>
     Task<Result> UsernameExist(string username);
+
+    Task<Result> Update(PlayerEntity player);
 }

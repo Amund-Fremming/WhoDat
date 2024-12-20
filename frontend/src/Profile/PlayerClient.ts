@@ -15,12 +15,12 @@ export const updatePlayer = async (
     });
 
     if (response.status >= 400 && response.status <= 500)
-      return Result.failure("Invalid login, username or password was wrong.");
+      return Result.failure("Cannot update player, you do not have access.");
 
     if (response.status === 500) return Result.failure("Internal server error");
 
     if (!response.ok) {
-      console.error(response.status, " registerPlayer: response was not 200.");
+      console.error(response.status, "updatePlayer: response was not 200.");
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
@@ -30,6 +30,41 @@ export const updatePlayer = async (
   } catch (error) {
     console.error(error, "UpdatePlayer");
     console.log(error, "UpdatePlayer");
+    return Result.failure("Something went wrong.");
+  }
+};
+
+export const updatePlayerImage = async (uri: any): Promise<Result<boolean>> => {
+  try {
+    const blobResponse = await fetch(uri);
+    const blob = await blobResponse.blob();
+
+    const response = await fetch(`${PLAYER_ENDPOINT}/update-image`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: blob,
+    });
+
+    if (response.status >= 400 && response.status <= 500)
+      return Result.failure("Cannot update image, you do not have access.");
+
+    if (response.status === 500) return Result.failure("Internal server error");
+
+    if (!response.ok) {
+      console.error(
+        response.status,
+        "updatePlayerImage: response was not 200."
+      );
+      const errorMessage = await response.json();
+      return Result.failure(errorMessage);
+    }
+
+    return Result.ok(true);
+  } catch (error) {
+    console.error(error, "UpdatePlayerImage");
+    console.log(error, "UpdatePlayerImage");
     return Result.failure("Something went wrong.");
   }
 };

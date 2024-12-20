@@ -9,7 +9,7 @@ import MediumButton from "../Shared/components/MediumButton/MediumButton";
 import BigButton from "../Shared/components/BigButton/BigButton";
 import { pickImage } from "../Shared/functions/ImagePicker";
 import { TouchableOpacity } from "react-native";
-import { updatePlayer } from "./PlayerClient";
+import { updatePlayer, updatePlayerImage } from "./PlayerClient";
 import { IPlayerDto } from "../Shared/domain/PlayerTypes";
 import { DevSettings } from "react-native";
 
@@ -39,7 +39,11 @@ export default function Profile() {
 
   const handleSelectImage = async () => {
     const uri = await pickImage();
-    if (uri !== "EXIT") setImageUri(uri);
+    if (uri !== "EXIT") {
+      setImageUri(uri);
+      const result = await updatePlayerImage(imageUri);
+      if (result.isError) handleError(result.message);
+    }
   };
 
   const handleUpdatePlayer = async () => {

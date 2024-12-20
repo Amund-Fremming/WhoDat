@@ -2,8 +2,7 @@
 
 TODO
 
-- ?? Profile: Error handling for Register player (Needs username exists alert)
-- Profile: Functionality for uploading/updating profile image
+- Profile: Test profile updates
 
 BUGS
 
