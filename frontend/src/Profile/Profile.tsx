@@ -20,11 +20,12 @@ export default function Profile() {
   const [newPassword, setNewPassword] = useState<string>("");
   const [newUsername, setNewUsername] = useState<string>("");
   const [imageUri, setImageUri] = useState<any>();
-  const { imageUrl, setImageUrl, username, setUsername, playerID, setToken } =
+  const { imageUrl, setImageUrl, username, setUsername, playerID, token, setToken } =
     useAuthProvider();
 
   useEffect(() => {
     if (imageUrl != null) setImageUri(imageUrl);
+    console.log("Image" + imageUrl)
   }, []);
 
   const toggleEditMode = () => {
@@ -41,8 +42,11 @@ export default function Profile() {
     const uri = await pickImage();
     if (uri !== "EXIT") {
       setImageUri(uri);
-      const result = await updatePlayerImage(imageUri);
-      if (result.isError) handleError(result.message);
+      const result = await updatePlayerImage(uri, token);
+      if (result.isError) {
+        handleError(result.message);
+        setImageUri(imageUrl)
+      }
     }
   };
 
@@ -53,13 +57,14 @@ export default function Profile() {
       password: newPassword,
       imageUrl: imageUri,
     };
-    const result = await updatePlayer(dto);
+    const result = await updatePlayer(dto, token);
     if (result.isError) {
       handleError(result.message);
       return;
     }
 
-    setImageUrl(result.data?.imageUrl!);
+    console.log(dto)
+
     setUsername(result.data?.username!);
     clearValues();
     setEditMode(false);
@@ -137,6 +142,7 @@ export default function Profile() {
                 <TextInput
                   style={styles.textInput}
                   placeholder="New username"
+                  onChangeText={input => setNewUsername(input)}
                   placeholderTextColor={"gray"}
                 />
               </View>

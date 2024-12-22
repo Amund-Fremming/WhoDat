@@ -23,7 +23,7 @@ public interface IAuthService
     /// This method does not return anything, but throws it the password is invalid.
     /// </summary>
     /// <param name="loginRequest">Object containing all data needed for a login.</param>
-    Task ValidatePasswordWithSalt(LoginRequest loginRequest);
+    Task<Result> ValidatePasswordWithSalt(LoginRequest loginRequest);
 
     /// <summary>
     /// Registers a new player by using the player service.

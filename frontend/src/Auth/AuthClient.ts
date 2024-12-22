@@ -29,6 +29,7 @@ export const loginPlayer = async (
     }
 
     const data: IAuthResponse = await response.json();
+    console.log("Image url from client " +data.imageUrl)
     return Result.ok(data);
   } catch (error) {
     console.error(error, " loginPlayer: request failed.");
@@ -49,6 +50,9 @@ export const registerPlayer = async (
     });
 
     if (response.status === 500) return Result.failure("Internal server error");
+
+    if (response.status >= 400 && response.status <= 500)
+      return Result.failure("Password needs to be more than 3 characters, and password needs this and a number.");
 
     if (!response.ok) {
       console.error(response.status, " registerPlayer: response was not 200.");

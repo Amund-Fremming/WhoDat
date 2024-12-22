@@ -3,19 +3,23 @@ import Result from "../Shared/domain/Result";
 import { PLAYER_ENDPOINT } from "../Shared/domain/URL_PATHS";
 
 export const updatePlayer = async (
-  dto: IPlayerDto
+  dto: IPlayerDto,
+  token: string
 ): Promise<Result<IPlayerDto>> => {
   try {
     const response = await fetch(`${PLAYER_ENDPOINT}/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(dto),
     });
 
-    if (response.status >= 400 && response.status <= 500)
-      return Result.failure("Cannot update player, you do not have access.");
+    if (response.status >= 400 && response.status < 500)
+    {
+      return Result.failure("Something went wrong. Username may already exist.");
+    }
 
     if (response.status === 500) return Result.failure("Internal server error");
 
@@ -34,7 +38,7 @@ export const updatePlayer = async (
   }
 };
 
-export const updatePlayerImage = async (uri: any): Promise<Result<boolean>> => {
+export const updatePlayerImage = async (uri: any, token: string): Promise<Result<boolean>> => {
   try {
     const blobResponse = await fetch(uri);
     const blob = await blobResponse.blob();
@@ -43,12 +47,13 @@ export const updatePlayerImage = async (uri: any): Promise<Result<boolean>> => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: blob,
     });
 
-    if (response.status >= 400 && response.status <= 500)
-      return Result.failure("Cannot update image, you do not have access.");
+    if (response.status >= 400 && response.status < 500)
+      return Result.failure("Cannot update image, you do not have access." + response.status);
 
     if (response.status === 500) return Result.failure("Internal server error");
 

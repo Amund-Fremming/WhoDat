@@ -58,13 +58,13 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
     /// </summary>
     /// <param name="request">Login request</param>
     /// <exception cref="UnauthorizedAccessException">If password is not valid</exception>
-    public async Task ValidatePasswordWithSalt(LoginRequest request)
+    public async Task<Result> ValidatePasswordWithSalt(LoginRequest request)
     {
         try
         {
             var result = await _playerRepository.GetPlayerByUsername(request.Username);
             if (result.IsError)
-                throw new UnauthorizedAccessException("Password or username is wrong.");
+                return new Error(new UnauthorizedAccessException("Password or username is wrong."), "Password or username is wrong.");
 
             var player = result.Data;
 
@@ -72,12 +72,14 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             PasswordVerificationResult verificationResult = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
 
             if (verificationResult != PasswordVerificationResult.Success)
-                throw new UnauthorizedAccessException("Password or username is wrong.");
+                return new Error(new UnauthorizedAccessException("Password or username is wrong."), "Password or username is wrong.");
+
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Error while validating password with salt. (AuthService)");
-            throw new UnauthorizedAccessException("Password or username is wrong.");
+            return new Error(new UnauthorizedAccessException("Password or username is wrong."), "Password or username is wrong.");
         }
     }
 

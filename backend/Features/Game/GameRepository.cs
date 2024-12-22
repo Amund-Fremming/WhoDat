@@ -68,7 +68,8 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         try
         {
             return await _context.Game
-                .Where(g => g.PlayerOneID == playerId || g.PlayerTwoID == playerId)
+                .Where(g => g.PlayerOneID != null && g.PlayerOneID == playerId)
+                .Where(g => g.PlayerTwoID != null && g.PlayerTwoID == playerId)
                 .MaxAsync(g => g.ID);
         }
         catch (Exception e)

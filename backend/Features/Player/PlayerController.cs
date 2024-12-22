@@ -27,7 +27,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "(UpdatePlayerUsername)");
+            _logger.LogError(e, "(UpdatePlayer)");
             return StatusCode(500);
         }
     }
@@ -40,11 +40,15 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         {
             int playerId = ParsePlayerIdClaim();
             FormFile formFile = null;
-            using (var memoryStream = new MemoryStream())
+
+            using var memoryStream = new MemoryStream();
+            await Request.Body.CopyToAsync(memoryStream);
+
+            formFile = new FormFile(memoryStream, 0, memoryStream.Length, "Image", "image.jpg")
             {
-                await Request.Body.CopyToAsync(memoryStream);
-                formFile = new FormFile(memoryStream, 0, memoryStream.Length, "Image", "image.jpg");
-            }
+                Headers = new HeaderDictionary(),
+                ContentType = Request.ContentType ?? "application/octet-stream"
+            };
 
             if (formFile == null)
             {
@@ -58,7 +62,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "(UpdatePlayerUsername)");
+            _logger.LogError(e, "(UpdateImage)");
             return StatusCode(500);
         }
     }
