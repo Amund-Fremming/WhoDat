@@ -1,6 +1,8 @@
 # TODO
 
 TODO
+
+- BUG: gamestate sendt from fe, gets defaulted in be for create game.
 - Choose boards component and func
 - Start on gameplay
 
