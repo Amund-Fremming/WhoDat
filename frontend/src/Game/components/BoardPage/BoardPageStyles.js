@@ -1,6 +1,7 @@
 import { Colors } from "@/src/Shared/assets/constants/Colors";
 import { moderateScale } from "@/src/Shared/assets/constants/Dimentions";
 import { StyleSheet } from "react-native";
+import { horizontalScale, verticalScale } from "@/src/Shared/assets/constants/Dimentions";
 
 export const styles = StyleSheet.create({
   container: {
@@ -17,5 +18,11 @@ export const styles = StyleSheet.create({
     color: Colors.Cream,
     textAlign: "center",
     lineHeight: moderateScale(90),
+  },
+
+  backIconWrapper: {
+    position: "absolute",
+    left: horizontalScale(20),
+    top: verticalScale(60),
   },
 });

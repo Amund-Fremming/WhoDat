@@ -77,6 +77,7 @@ export default function Game() {
   const handleError = (message: string) => {
     setErrorModalVisible(true);
     setErrorMessage(message);
+    setPage(PlayPages.MAIN_PAGE)
   };
 
   const handleJoinGame = async () => {
@@ -96,7 +97,7 @@ export default function Game() {
 
     con.on("RECEIVE_STATE", (state: GameState) => {
       setGameState(state);
-      // set page and render according to return types from backend
+      console.log("Incomming state: " + state)
       switch (state) {
         case GameState.ONLY_HOST_CHOSING_CARDS:
           {

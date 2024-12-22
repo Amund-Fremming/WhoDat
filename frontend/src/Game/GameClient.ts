@@ -8,13 +8,15 @@ export const createGame = async (
   token: string
 ): Promise<Result<number>> => {
   try {
+
+    console.error("Incomming game state " + game);
     const response = await fetch(`${GAME_ENDPOINT}/games`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(game),
+      body: game.toString(),
     });
 
     if (!response.ok) {

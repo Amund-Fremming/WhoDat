@@ -53,7 +53,6 @@ export const joinGame = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke("JoinGame", gameId);
-    console.log("Joined game:", gameId);
     return Result.ok(true);
   } catch (error) {
     return Result.failure("Falied to connect, check your wifi");
