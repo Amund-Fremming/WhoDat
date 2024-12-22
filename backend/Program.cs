@@ -128,6 +128,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<GameHubBroker>("/hub");
+app.MapHub<GameHub>("/hub");
 
 app.Run();

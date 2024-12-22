@@ -17,11 +17,12 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerRepositor
         {
             int playerId = ParsePlayerIdClaim();
             string encodedNewUsername = EncodeForJsAndHtml(playerDto.Username);
+            playerDto.PlayerID = playerId;
             playerDto.Username = encodedNewUsername;
 
             var result = await _playerRepository.Update(playerDto);
             return result.Resolve(
-                suc => Ok(),
+                suc => Ok(suc.Data),
                 err => BadRequest(err.Message));
         }
         catch (Exception e)

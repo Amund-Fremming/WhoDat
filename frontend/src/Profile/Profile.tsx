@@ -19,10 +19,9 @@ export default function Profile() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [newUsername, setNewUsername] = useState<string>("");
-  const [imageUri, setImageUri] = useState<any>(
-    "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
-  );
-  const { imageUrl, username, playerID, setToken } = useAuthProvider();
+  const [imageUri, setImageUri] = useState<any>();
+  const { imageUrl, setImageUrl, username, setUsername, playerID, setToken } =
+    useAuthProvider();
 
   useEffect(() => {
     if (imageUrl != null) setImageUri(imageUrl);
@@ -56,8 +55,9 @@ export default function Profile() {
       return;
     }
 
+    setImageUrl(result.data?.imageUrl!);
+    setUsername(result.data?.username!);
     clearValues();
-
     setEditMode(false);
   };
 

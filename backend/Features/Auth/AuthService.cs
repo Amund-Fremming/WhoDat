@@ -89,7 +89,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
             string saltedPassword = request.Password + salt;
             string hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
 
-            PlayerEntity player = new(request.Username, hashedPassword, salt, PlayerRole.USER);
+            PlayerEntity player = new(request.Username, hashedPassword, salt, PlayerRole.USER, "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg");
             var result = await _playerRepository.Create(player);
             if (result.IsError)
                 return result.ToResult<int, PlayerEntity>();

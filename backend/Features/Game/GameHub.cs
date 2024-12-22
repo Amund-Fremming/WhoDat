@@ -5,9 +5,9 @@ using Backend.Features.Shared.Enums;
 
 namespace Backend.Features.Game;
 
-public class GameHubBroker(ILogger<GameHubBroker> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService) : Hub
+public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardService boardService, IBoardCardService boardCardService, IMessageService messageService) : Hub
 {
-    private readonly ILogger<GameHubBroker> _logger = logger;
+    private readonly ILogger<GameHub> _logger = logger;
     private readonly IGameService _gameService = gameService;
     private readonly IBoardService _boardService = boardService;
     private readonly IBoardCardService _boardCardService = boardCardService;
@@ -79,7 +79,6 @@ public class GameHubBroker(ILogger<GameHubBroker> logger, IGameService gameServi
             if (result.IsError)
             {
                 await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
-                await Clients.Group(groupName).SendAsync(ERROR_IDENTIFIER, result.Message);
                 return;
             }
 

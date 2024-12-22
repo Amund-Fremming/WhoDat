@@ -70,7 +70,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
 
             var game = result.Data;
             if (game.PlayerTwoID != null)
-                throw new GameFullException($"Game with id {gameId} is full!");
+                return new Error(new GameFullException($"Game with id {gameId} is full!"), "The game is full.");
 
             var playerResult = await _playerRepository.GetById(playerId);
             if (playerResult.IsError)

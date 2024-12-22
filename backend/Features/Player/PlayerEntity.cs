@@ -13,7 +13,7 @@ public class PlayerEntity : IEntity
     public int ID { get; set; }
 
     public string Username { get; set; }
-    public string? ImageUrl { get; set; }
+    public string ImageUrl { get; set; }
     public string PasswordHash { get; set; }
     public string PasswordSalt { get; set; }
     public PlayerRole PlayerRole { get; set; }
@@ -30,12 +30,13 @@ public class PlayerEntity : IEntity
         PasswordSalt = string.Empty;
     }
 
-    public PlayerEntity(string username, string passwordHash, string passwordSalt, PlayerRole role)
+    public PlayerEntity(string username, string passwordHash, string passwordSalt, PlayerRole role, string imageUrl)
     {
         Username = username;
         PasswordHash = passwordHash;
         PasswordSalt = passwordSalt;
         PlayerRole = role;
+        ImageUrl = imageUrl;
     }
 
     public IEnumerable<GameEntity> GetAllGames()
