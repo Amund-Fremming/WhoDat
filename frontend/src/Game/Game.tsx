@@ -4,7 +4,7 @@ import { PlayPages } from "./GamePages";
 import MainPage from "./components/MainPage/MainPage";
 import JoinPage from "./components/JoinPage/JoinPage";
 import HostPage from "./components/HostPage/HostPage";
-import BoardPage from "./components/BoardPage/BoardPage";
+import ChooseBoardPage from "./components/ChooseBoardPage/ChooseBoardPage";
 import LobbyPage from "./components/LobbyPage/LobbyPage";
 import WaitingPage from "./components/WaitingPage/WaitingPage";
 import {
@@ -33,6 +33,7 @@ export default function Game() {
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isHost, setIsHost] = useState<boolean>(false);
+  const [cardsToChoose, setCardsToChoose] = useState<number>(40);
 
   const isHostRef = useRef(isHost);
   const { token, playerID } = useAuthProvider();
@@ -97,14 +98,19 @@ export default function Game() {
 
     con.on("RECEIVE_STATE", (state: GameState) => {
       setGameState(state);
-      console.log("Incomming state: " + state)
       switch (state) {
         case GameState.ONLY_HOST_CHOSING_CARDS:
           {
-            isHostRef.current ? setPage(PlayPages.BOARD_PAGE) : setPage(PlayPages.LOBBY_PAGE);
+            setCardsToChoose(40);
+            setPage(isHostRef.current ? PlayPages.CHOOSE_BOARD_PAGE : PlayPages.LOBBY_PAGE);
             break;
           }
-        case GameState.BOTH_CHOSING_CARDS: setPage(PlayPages.BOARD_PAGE); break;
+        case GameState.BOTH_CHOSING_CARDS:
+          {
+            setCardsToChoose(20);
+            setPage(PlayPages.CHOOSE_BOARD_PAGE);
+            break;
+        }
 
       }
     });
@@ -148,9 +154,9 @@ export default function Game() {
       );
     case PlayPages.HOST_PAGE:
       return <HostPage handleCreateGame={handleCreateGame} setGameState={setGameState} setPage={setPage} />;
-    case PlayPages.BOARD_PAGE:
+    case PlayPages.CHOOSE_BOARD_PAGE:
       return (
-        <BoardPage setPage={setPage} oponentCardsLeft={oponentCardsLeft} />
+        <ChooseBoardPage cardsToChoose={cardsToChoose} setPage={setPage} />
       );
     case PlayPages.LOBBY_PAGE:
       return <LobbyPage setPage={setPage} />;
