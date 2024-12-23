@@ -4,19 +4,16 @@ import Result from "../Shared/domain/Result";
 import { IBoard } from "./types/BoardTypes";
 
 export const createGame = async (
-  game: GameState,
+  gameState: GameState,
   token: string
 ): Promise<Result<number>> => {
   try {
-
-    console.error("Incomming game state " + game);
-    const response = await fetch(`${GAME_ENDPOINT}/games`, {
+    const response = await fetch(`${GAME_ENDPOINT}/games/${gameState}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: game.toString(),
     });
 
     if (!response.ok) {

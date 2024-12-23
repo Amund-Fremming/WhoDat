@@ -72,7 +72,6 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
         try
         {
             int playerId = ParsePlayerIdClaim();
-            _logger.LogInformation("Player " + playerId + ", joined the game " + gameId); // remove this
             string groupName = gameId.ToString();
 
             var result = await _gameService.JoinGameById(playerId, gameId);
@@ -84,6 +83,8 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
 
             var game = result.Data;
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+
+            _logger.LogError("Game state " + game.GameState);
 
             if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS)
                 await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameState.ONLY_HOST_CHOSING_CARDS);

@@ -17,7 +17,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     private readonly IBoardCardService _boardCardService = boardCardService;
     private readonly IMessageService _messageService = messageService;
 
-    [HttpPost("games")]
+    [HttpPost("games/{gameState}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult<int>> CreateGame(GameState gameState)
     {
