@@ -44,7 +44,6 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
                 imageData = memoryStream.ToArray();
             }
 
-            // Retrieve the name from the headers
             string name = Request.Headers["X-Card-Name"].ToString();
             string contentType = Request.ContentType ?? "application/octet-stream";
             var formFile = new FormFile(new MemoryStream(imageData), 0, imageData.Length, "Image", "image.jpg")
