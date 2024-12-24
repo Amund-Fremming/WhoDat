@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
   backIconWrapper: {
     position: "absolute",
     left: horizontalScale(20),
-    top: verticalScale(60),
+    top: verticalScale(48),
   },
 
     header: {

@@ -1,5 +1,5 @@
-export interface ICard {
-  cardID: number;
+export interface ICardDto {
+  id: number;
   name: string;
   url: string;
 }

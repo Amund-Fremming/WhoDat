@@ -7,44 +7,38 @@ import { useEffect, useState } from "react";
 import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
 import { getAllCards } from "@/src/Shared/functions/CardClient";
 import Result from "@/src/Shared/domain/Result";
-import { ICard } from "@/src/Shared/domain/CardTypes";
+import { ICardDto } from "@/src/Shared/domain/CardTypes";
 import MediumButton from "@/src/Shared/components/MediumButton/MediumButton";
 import Card from "./components/Card/Card";
 
 interface BoardPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
   cardsToChoose: number;
+  handleError: (message: string, redirect: boolean) => void;
 }
 
 export default function ChooseBoardPage({
   setPage,
-  cardsToChoose
+  cardsToChoose,
+  handleError
 }: BoardPageProps) {
 
-  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [allCards, setAllCards] = useState<ICard[]>([]);
+  const [allCards, setAllCards] = useState<ICardDto[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [cardsForThisPage, setCardsForThisPage] = useState<ICard[]>([]);
+  const [cardsForThisPage, setCardsForThisPage] = useState<ICardDto[]>([]);
   const [displayNext, setDisplayNext] = useState<boolean>(true);
   const [displayPrevious, setDisplayPrevious] = useState<boolean>(false);
-  const [cardsChosen, setCardsChosen] = useState<number>(0);
-  const [cardsPressed, setCardsPressed] = useState<Set<number>>(new Set());
+  const [cardsPressed, setCardsPressed] = useState<number[]>([]);
   const { token } = useAuthProvider();
-
-  const handleError = (message: string) => {
-    setErrorModalVisible(true);
-    setErrorMessage(message);
-  };
 
   useEffect(() => {
     fetchPlayerCards();
   }, []);
 
   const fetchPlayerCards = async () => {
-    const result: Result<Array<ICard>> = await getAllCards(token);
+    const result: Result<Array<ICardDto>> = await getAllCards(token);
     if (result.isError) {
-      handleError(result.message);
+      handleError(result.message, true);
     }
 
     const data = result.data;
@@ -85,9 +79,25 @@ export default function ChooseBoardPage({
     setPageNumber(pageNumber - 1);
   };
 
+  const handleCardPressed = (cardId: number) => {
+    if(cardsPressed.length == cardsToChoose) {
+      handleError(`You can only choose ${cardsToChoose} cards!`, false);
+      return;
+    }
+
+    const isActive = cardsPressed.filter((id: number) => id == cardId).length > 0;
+
+    if(!isActive) {
+      setCardsPressed(prev => [...prev, cardId]); 
+   } else {
+      setCardsPressed(prev => prev.filter(id => id != cardId
+      )); 
+   }
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Chosen {cardsChosen}/{cardsToChoose}</Text>
+      <Text style={styles.header}>Chosen {cardsPressed.length}/{cardsToChoose}</Text>
       <Pressable
         style={styles.backIconWrapper}
         onPress={() => setPage(PlayPages.MAIN_PAGE)}
@@ -96,12 +106,12 @@ export default function ChooseBoardPage({
       </Pressable>
       <View style={styles.creamContainer}>
       <View style={styles.boardContainer}>
-            {cardsForThisPage.map((card: ICard, index: number) => (
+            {cardsForThisPage.map((card: ICardDto, index: number) => (
               <Card
                 key={index}
-                setCardsChoosen={setCardsChosen}
                 card={card}
-                setCardsPressed={setCardsPressed}
+                handleCardPressed={() => handleCardPressed(card.id)}
+                isActive={cardsPressed.filter((id: number) => id == card.id).length > 0}
               />
             ))}
             {cardsForThisPage.length == 0 && (

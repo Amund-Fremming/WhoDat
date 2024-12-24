@@ -24,7 +24,6 @@ export const updatePlayer = async (
     if (response.status === 500) return Result.failure("Internal server error");
 
     if (!response.ok) {
-      console.error(response.status, "updatePlayer: response was not 200.");
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
@@ -33,7 +32,6 @@ export const updatePlayer = async (
     return Result.ok(data);
   } catch (error) {
     console.error(error, "UpdatePlayer");
-    console.log(error, "UpdatePlayer");
     return Result.failure("Something went wrong.");
   }
 };
@@ -69,7 +67,6 @@ export const updatePlayerImage = async (uri: any, token: string): Promise<Result
     return Result.ok(true);
   } catch (error) {
     console.error(error, "UpdatePlayerImage");
-    console.log(error, "UpdatePlayerImage");
     return Result.failure("Something went wrong.");
   }
 };

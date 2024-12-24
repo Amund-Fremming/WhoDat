@@ -10,7 +10,7 @@ interface JoinPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
   setGameId: React.Dispatch<React.SetStateAction<number>>;
   handleJoinGame: () => Promise<void>;
-  handleError: (message: string) => void;
+  handleError: (message: string, redirect: boolean) => void;
 }
 
 export default function JoinPage({
@@ -20,20 +20,24 @@ export default function JoinPage({
   handleError,
 }: JoinPageProps) {
   const handleJoinGamePressed = async () => {
-    setPage(PlayPages.WAITING_PAGE);
     await handleJoinGame();
   };
 
   const handleInput = (input: string) => {
     try {
       var val = Number.parseInt(input);
+      if(Number.isNaN(val)) {
+        handleError("Game id must be numeric.", false);
+      }
+
       if (val > 10000) {
-        handleError("Game ids has to be lower than 10 000.");
+        handleError("Game ids has to be lower than 10 000.", false);
         return;
       }
       setGameId(val);
     } catch (error) {
-      handleError("Only numeric values.");
+      console.log("Errorrrr")
+      handleError("Input provided is faulty brah", false);
     }
   };
 

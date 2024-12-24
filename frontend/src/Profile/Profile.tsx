@@ -25,7 +25,6 @@ export default function Profile() {
 
   useEffect(() => {
     if (imageUrl != null) setImageUri(imageUrl);
-    console.log("Image" + imageUrl)
   }, []);
 
   const toggleEditMode = () => {
@@ -62,8 +61,6 @@ export default function Profile() {
       handleError(result.message);
       return;
     }
-
-    console.log(dto)
 
     setUsername(result.data?.username!);
     clearValues();

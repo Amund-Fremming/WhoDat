@@ -1,7 +1,7 @@
 import { View, Text, Alert } from "react-native";
 import { useEffect, useState } from "react";
 import { Colors } from "@/src/Shared/assets/constants/Colors";
-import { ICard } from "@/src/Shared/domain/CardTypes";
+import { ICardDto } from "@/src/Shared/domain/CardTypes";
 import Card from "./components/Card/CardComponent";
 import CardModal from "./components/CardModal/CardModal";
 import { viewStyles, textStyles } from "./GalleryStyles";
@@ -13,8 +13,8 @@ import MediumButton from "@/src/Shared/components/MediumButton/MediumButton";
 import Result from "@/src/Shared/domain/Result";
 import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
 
-const defaultCard: ICard = {
-  cardID: -1,
+const defaultCard: ICardDto = {
+  id: -1,
   name: "Default",
   url: "None",
 };
@@ -23,28 +23,28 @@ export default function Gallery() {
   const [addCardModalVisible, setAddCardModalVisible] =
     useState<boolean>(false);
   const [cardModalVisible, setCardModalVisible] = useState<boolean>(false);
-  const [cardPressed, setCardPressed] = useState<ICard>(defaultCard);
-  const [allCards, setAllCards] = useState<ICard[]>([]);
-  const [cardsForThisPage, setCardsForThisPage] = useState<ICard[]>([]);
+  const [cardPressed, setCardPressed] = useState<ICardDto>(defaultCard);
+  const [allCards, setAllCards] = useState<ICardDto[]>([]);
+  const [cardsForThisPage, setCardsForThisPage] = useState<ICardDto[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [displayPrevious, setDisplayPrevious] = useState<boolean>(false);
-  const [displayNext, setDisplayNext] = useState<boolean>(true);
+  const [displayNext, setDisplayNext] = useState<boolean>(false);
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const { token } = useAuthProvider();
 
   const handleError = (message: string) => {
     setErrorModalVisible(true);
     setErrorMessage(message);
   };
 
-  const { token } = useAuthProvider();
 
   useEffect(() => {
     fetchPlayerCards();
   }, [addCardModalVisible]);
 
   const fetchPlayerCards = async () => {
-    const result: Result<Array<ICard>> = await getAllCards(token);
+    const result: Result<Array<ICardDto>> = await getAllCards(token);
     if (result.isError) {
       handleError(result.message);
     }
@@ -55,9 +55,10 @@ export default function Gallery() {
     const skip = (pageNumber - 1) * 20;
     const take = 20 * pageNumber;
     setCardsForThisPage(data!.slice(skip, take));
+    if(data!.length > 19) setDisplayNext(true);
   };
 
-  const handleCardPressed = (card: ICard) => {
+  const handleCardPressed = (card: ICardDto) => {
     setCardPressed(card);
     setCardModalVisible(true);
   };
@@ -87,7 +88,7 @@ export default function Gallery() {
     setPageNumber(pageNumber - 1);
   };
 
-  const handleDeleteCardPressed = async (card: ICard) => {
+  const handleDeleteCardPressed = async (card: ICardDto) => {
     Alert.alert("Are you sure?", `Do you want to delete ${card.name}`, [
       {
         text: "No",
@@ -97,17 +98,13 @@ export default function Gallery() {
         text: "Yes",
         onPress: async () => {
           setCardModalVisible(false);
-          setAllCards([
-            ...allCards.filter(
-              (prevCard: ICard) => prevCard.cardID != card.cardID
-            ),
-          ]);
-
-          try {
-            await deleteCard(card.cardID, token);
-          } catch (error) {
-            Alert.alert("Something went wrong.");
-          }
+            const result = await deleteCard(card.id, token);
+            if(result.isError) {
+              handleError(result.message);
+              return;
+            }
+            setAllCards(prev => prev.filter((prevCard: ICardDto) => prevCard.id != card.id))
+            setCardsForThisPage(prev => prev.filter((prevCard: ICardDto) => prevCard.id != card.id))
         },
       },
     ]);
@@ -131,6 +128,7 @@ export default function Gallery() {
       <AddCardModal
         modalVisible={addCardModalVisible}
         setModalVisible={setAddCardModalVisible}
+        handleError={handleError}
       />
 
       <View
@@ -142,7 +140,7 @@ export default function Gallery() {
         <Text style={textStyles.header}>Gallery</Text>
         <View style={viewStyles.creamContainer}>
           <View style={viewStyles.boardContainer}>
-            {cardsForThisPage.map((card: ICard, index: number) => (
+            {cardsForThisPage.map((card: ICardDto, index: number) => (
               <Card
                 key={index}
                 card={card}

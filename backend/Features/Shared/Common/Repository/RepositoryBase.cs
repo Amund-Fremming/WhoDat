@@ -50,7 +50,7 @@ namespace Backend.Features.Shared.Common.Repository
                 var entityName = typeof(T).Name.ToString().Replace("Entity", "");
                 var data = await _context.FindAsync(typeof(T), ID);
                 if (data == null)
-                    return new Error(new KeyNotFoundException($"{entityName} does not exist."), $"{entityName}");
+                    return new Error(new KeyNotFoundException($"{entityName} does not exist."), $"{entityName} does not exist");
 
                 var convertedData = (T)Convert.ChangeType(data, typeof(T));
                 return convertedData;

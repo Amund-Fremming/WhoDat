@@ -2,14 +2,15 @@
 
 TODO
 
-- Choose boards component and func
+- make it not possible to name two cards the same
+- Choose boardCards connection to api endpoint
 - Start on gameplay
 
-- Unsubscribe function for when host or the other player leaves the game or disconnects
-- May need a unsubscribe api to be used when an error occured or on leave or bitton back button out of game
-- make it not possible to name two cards the same
+- Player disconnected func, cast message, remove the player from the game so its possible to rejoin
+- May need a unsubscribe api to be used when an error occured or on leave or button back button out of game
 
 BUGS
 
 - Input boxes bug, text is shifted out left of view
 - GetRecentGamePlayed has some kind of bug when i close the app from running.
+- Error modal on ChooseBoardPage makes the BG all orange, change bg for modal to transparent??

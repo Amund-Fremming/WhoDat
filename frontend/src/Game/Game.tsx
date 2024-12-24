@@ -60,7 +60,7 @@ export default function Game() {
   const handleCreateGame = async (gameState: GameState) => {
     var result = await createGame(gameState, token);
     if(result.isError) {
-      handleError(result.message)
+      handleError(result.message, true)
       setPage(PlayPages.MAIN_PAGE)
       return;
       }
@@ -71,24 +71,21 @@ export default function Game() {
         await subscribeToGameAsHost(connection, result.data);
       }
       else {
-        handleError("Failed to set incomming game id. Connection failed.");
+        handleError("Failed to set incomming game id. Connection failed.", true);
       }
   };
 
-  const handleError = (message: string) => {
+  const handleError = (message: string, redirect: boolean) => {
     setErrorModalVisible(true);
     setErrorMessage(message);
-    setPage(PlayPages.MAIN_PAGE)
+    if(redirect)setPage(PlayPages.MAIN_PAGE)
   };
 
   const handleJoinGame = async () => {
     if (connection) {
-      var result = await joinGame(connection, gameId);
+      await joinGame(connection, gameId);
       setIsHost(false);
-      if (result.isError) {
-        handleError("Something went wrong, start over.");
-      }
-    } else handleError("Connection was broken.");
+    } else handleError("Connection was broken.", true);
   };
 
   const connectToHub = async () => {
@@ -101,13 +98,13 @@ export default function Game() {
       switch (state) {
         case GameState.ONLY_HOST_CHOSING_CARDS:
           {
-            setCardsToChoose(40);
+            setCardsToChoose(20);
             setPage(isHostRef.current ? PlayPages.CHOOSE_BOARD_PAGE : PlayPages.LOBBY_PAGE);
             break;
           }
         case GameState.BOTH_CHOSING_CARDS:
           {
-            setCardsToChoose(20);
+            setCardsToChoose(10);
             setPage(PlayPages.CHOOSE_BOARD_PAGE);
             break;
         }
@@ -117,7 +114,7 @@ export default function Game() {
 
     con.on("RECEIVE_MESSAGE", (message: string) => {
       setMessage(message);
-      // Display the message
+      // TODO: Display the message
     });
 
     con.on("RECEIVE_PLAYERS_LEFT", (num: number) => {
@@ -125,7 +122,8 @@ export default function Game() {
     });
 
     con.on("RECEIVE_ERROR", (message: string) => {
-      handleError(message);
+      console.log("Error msg "+ message)
+      handleError(message, true);
     });
   };
 
@@ -156,7 +154,7 @@ export default function Game() {
       return <HostPage handleCreateGame={handleCreateGame} setGameState={setGameState} setPage={setPage} />;
     case PlayPages.CHOOSE_BOARD_PAGE:
       return (
-        <ChooseBoardPage cardsToChoose={cardsToChoose} setPage={setPage} />
+        <ChooseBoardPage handleError={handleError} cardsToChoose={cardsToChoose} setPage={setPage} />
       );
     case PlayPages.LOBBY_PAGE:
       return <LobbyPage setPage={setPage} />;

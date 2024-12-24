@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
+    zIndex: 1
   },
 
   cardModal: {

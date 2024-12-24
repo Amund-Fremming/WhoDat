@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     backgroundColor: "transparent",
+    zIndex: 0,
   },
 
   modal: {

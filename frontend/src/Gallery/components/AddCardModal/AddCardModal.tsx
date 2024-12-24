@@ -8,30 +8,25 @@ import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
 import { addCard } from "@/src/Shared/functions/CardClient";
 import { validText } from "@/src/Shared/functions/InputValitator";
 import { pickImage } from "@/src/Shared/functions/ImagePicker";
-import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
 import Result from "@/src/Shared/domain/Result";
+import { moderateScale } from "@/src/Shared/assets/constants/Dimentions";
 
 interface AddCardModalProps {
   modalVisible: boolean;
   setModalVisible: (condition: boolean) => void;
+  handleError: (message: string) => void;
 }
 
 export default function AddCardModal({
   modalVisible,
   setModalVisible,
+  handleError
 }: AddCardModalProps) {
   const [nameInput, setNameInput] = useState<string>("");
   const [imageUri, setImageUri] = useState<any>(
     "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
   );
-  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const { token } = useAuthProvider();
-
-  const handleError = (message: string) => {
-    setErrorModalVisible(true);
-    setErrorMessage(message);
-  };
 
   const handleNameInput = (name: string): boolean => {
     if (name.length <= 0) {
@@ -40,6 +35,7 @@ export default function AddCardModal({
     }
 
     if (name.length > 9 || !validText(name)) {
+      setModalVisible(!modalVisible)
       handleError("Name must be text only and under 9 letters long");
       return false;
     }
@@ -52,7 +48,8 @@ export default function AddCardModal({
 
   const handleImageInput = async () => {
     try {
-      const result: any = await pickImage();
+      const result = await pickImage();
+      if(result === "EXIT") return;
       setImageUri(result);
     } catch (Exception) {
       handleError("Image picker failed.");
@@ -78,12 +75,6 @@ export default function AddCardModal({
 
   return (
     <>
-      <ErrorModal
-        errorModalVisible={errorModalVisible}
-        setErrorModalVisible={setErrorModalVisible}
-        message={errorMessage}
-      />
-
       <Modal visible={modalVisible} animationType="fade" transparent={true}>
         <View style={styles.container}>
           <View style={styles.cardModal}>

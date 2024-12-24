@@ -1,10 +1,10 @@
 import { CARD_ENDPOINT } from "../domain/URL_PATHS";
-import { ICard } from "@/src/Shared/domain/CardTypes";
+import { ICardDto } from "@/src/Shared/domain/CardTypes";
 import Result from "../domain/Result";
 
 export const getAllCards = async (
   token: string
-): Promise<Result<Array<ICard>>> => {
+): Promise<Result<Array<ICardDto>>> => {
   try {
     const response = await fetch(`${CARD_ENDPOINT}/getall`, {
       method: "GET",
@@ -25,7 +25,7 @@ export const getAllCards = async (
       return Result.failure(errorMessage);
     }
 
-    const data: ICard[] = await response.json();
+    const data: ICardDto[] = await response.json();
     return Result.ok(data);
   } catch (error) {
     console.error("(getAllCards)" + error);
@@ -74,7 +74,6 @@ export const deleteCard = async (
   cardId: number,
   token: string
 ): Promise<Result<boolean>> => {
-  console.log(`${CARD_ENDPOINT}/delete/${cardId}`);
   try {
     const response = await fetch(`${CARD_ENDPOINT}/delete/${cardId}`, {
       method: "DELETE",
@@ -90,9 +89,9 @@ export const deleteCard = async (
     if (response.status === 500) return Result.failure("Internal server error");
 
     if (!response.ok) {
-      throw new Error(
-        "Error in deleteCardFromGallery response " + response.status
-      );
+      console.error("addCard: response was not 200.");
+      const errorMessage = await response.json();
+      return Result.failure(errorMessage);
     }
 
     return Result.ok(true);
