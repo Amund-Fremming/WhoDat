@@ -15,9 +15,9 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
     {
         try
         {
-            var passwordResult = await _authService.ValidatePasswordWithSalt(request);
-            if(passwordResult.IsError)
-                return BadRequest(passwordResult.Message);
+            // var passwordResult = await _authService.ValidatePasswordWithSalt(request);
+            //if(passwordResult.IsError)
+            // return BadRequest(passwordResult.Message);
 
             var result = await _playerRepository.GetPlayerByUsername(request.Username);
             if (result.IsError)

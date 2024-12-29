@@ -21,7 +21,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
     {
         try
         {
-            var result = await _gameRepository.GetById(gameId);
+            var result = await _gameRepository.GetGameWithBoards(gameId);
             if (result.IsError)
                 return result.Error;
 
@@ -34,13 +34,6 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
                 return validation.Error;
 
             int boardId = game.Boards!.ElementAt(0).ID;
-            if (game.Boards!.ElementAt(0) == null)
-            {
-                BoardEntity board = new(playerId, gameId);
-                var boardResult = await _boardRepository.Create(board);
-                if (boardResult.IsError)
-                    return boardResult.Error;
-            }
 
             if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS)
                 cardIds = cardIds.Take(20);
@@ -51,7 +44,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
 
             bool isPlayerOne = game.PlayerOneID == playerId;
             if (game.GameState == GameState.P1_CHOOSING && !isPlayerOne || game.GameState == GameState.P2_CHOOSING && isPlayerOne)
-                throw new ArgumentException("Player cannot create more BoardCards!");
+                return new Error(new ArgumentException("Player cannot create more BoardCards!"), "Player cannot create more BoardCards!");
             else if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS || game.GameState == GameState.P1_CHOOSING && isPlayerOne || game.GameState == GameState.P2_CHOOSING && !isPlayerOne)
                 game.GameState = GameState.BOTH_PICKING_PLAYER;
             else if (game.GameState == GameState.BOTH_CHOSING_CARDS && isPlayerOne)

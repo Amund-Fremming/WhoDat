@@ -15,12 +15,14 @@ interface BoardPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
   cardsToChoose: number;
   handleError: (message: string, redirect: boolean) => void;
+  handleCreateBoardcards: (cardIds: number[]) => {}
 }
 
 export default function ChooseBoardPage({
   setPage,
   cardsToChoose,
-  handleError
+  handleError,
+  handleCreateBoardcards
 }: BoardPageProps) {
 
   const [allCards, setAllCards] = useState<ICardDto[]>([]);
@@ -79,6 +81,14 @@ export default function ChooseBoardPage({
     setPageNumber(pageNumber - 1);
   };
 
+  const handleDonePressed = () => {
+    if (cardsPressed.length != cardsToChoose) {
+      handleError(`Please choose  ${cardsToChoose} cards!`, false);
+      return;
+    }
+    handleCreateBoardcards(cardsPressed);
+  }
+
   const handleCardPressed = (cardId: number) => {
     if(cardsPressed.length == cardsToChoose) {
       handleError(`You can only choose ${cardsToChoose} cards!`, false);
@@ -119,6 +129,14 @@ export default function ChooseBoardPage({
             )}
           </View>
           <View style={styles.buttonWrapper}>
+            {pageNumber == 1 && (
+              <MediumButton
+                text={"Done"}
+                color={Colors.Green}
+                inverted={false}
+                onButtonPress={handleDonePressed}
+              />
+            )}
             {displayPrevious && (
               <MediumButton
                 text={"Prev"}

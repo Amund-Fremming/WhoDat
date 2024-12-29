@@ -84,8 +84,6 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
             var game = result.Data;
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
-            _logger.LogError("Game state " + game.GameState);
-
             if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS)
                 await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameState.ONLY_HOST_CHOSING_CARDS);
 
@@ -226,6 +224,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
                 return;
             }
 
+            _logger.LogError("Senign out new state! " + gameId);
             var state = result.Data;
             await Clients.Groups(groupName).SendAsync(IDENTIFIER, state);
         }

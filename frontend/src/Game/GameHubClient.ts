@@ -133,7 +133,6 @@ export const createBoardCards = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke("CreateBoardCards", gameId, cardIds);
-    console.log("CreateBoardCards:", gameId);
     return Result.ok(true);
   } catch (error) {
     return Result.failure("Falied to connect, check your wifi");

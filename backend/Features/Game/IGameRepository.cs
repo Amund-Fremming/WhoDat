@@ -7,6 +7,8 @@ namespace Backend.Features.Game;
 
 public interface IGameRepository : IRepository<GameEntity>
 {
+    Task<Result<GameEntity>> GetGameWithBoards(int gameId);
+
     /// <summary>
     /// Allows a player to join an existing game.
     /// </summary>

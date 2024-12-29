@@ -12,6 +12,21 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
     private readonly AppDbContext _context = context;
     private readonly ILogger<GameRepository> _logger = logger;
 
+    public async Task<Result<GameEntity>> GetGameWithBoards(int gameId)
+    {
+        try
+        {
+            return await _context.Game
+                .Include(g => g.Boards)
+                .FirstOrDefaultAsync(g => g.ID == gameId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(JoinGame)");
+            return new Error(e, "Failed to join game");
+        }
+    }
+
     public async Task<Result> JoinGame(GameEntity game, PlayerEntity player)
     {
         try

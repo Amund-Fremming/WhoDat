@@ -22,7 +22,7 @@ export const createGame = async (
       return Result.failure(errorMessage);
     }
 
-    const gameId = await response.text();
+    const gameId = await response.json();
     return Result.ok(parseInt(gameId));
   } catch (error) {
     console.error("(createGame)" + error);

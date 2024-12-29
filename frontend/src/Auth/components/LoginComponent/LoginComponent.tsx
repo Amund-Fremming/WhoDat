@@ -39,7 +39,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
   });
 
   const handleLogin = async () => {
-    if (
+    /*if (
       loginRequest.password.length <= 0 ||
       loginRequest.username.length <= 0
     ) {
@@ -52,7 +52,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
         "Username can only be letters and numbers, and user 9 characters."
       );
       return false;
-    }
+    }*/
 
     const result: Result<IAuthResponse> = await loginPlayer(loginRequest);
     if (result.isError) {

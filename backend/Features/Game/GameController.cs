@@ -31,7 +31,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
             var gameId = gameRes.Data;
             var boardRes = await _boardRepository.Create(new BoardEntity(playerId, gameId));
             return boardRes.Resolve(
-                suc => Ok(suc.Data),
+                suc => Ok(gameId),
                 err => BadRequest(err.Message));
         }
         catch (Exception e)

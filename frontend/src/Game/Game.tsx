@@ -8,6 +8,7 @@ import ChooseBoardPage from "./components/ChooseBoardPage/ChooseBoardPage";
 import LobbyPage from "./components/LobbyPage/LobbyPage";
 import WaitingPage from "./components/WaitingPage/WaitingPage";
 import {
+  createBoardCards,
   createConnection,
   joinGame,
   startConnection,
@@ -20,6 +21,7 @@ import { useAuthProvider } from "../Shared/state/AuthProvider";
 import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
 import { createGame } from "./GameClient";
 import {styles} from "./GameStyles";
+import ChooseCardPage from "./components/ChooseCardPage/ChooseCardPage";
 
 export default function Game() {
   const [page, setPage] = useState<PlayPages>(PlayPages.MAIN_PAGE);
@@ -50,11 +52,8 @@ export default function Game() {
     isHostRef.current = isHost;
   }, [isHost]);
 
-  useEffect(() => {
+  useEffect(() => { // kanskje buggy
     if (connection) updateGameState(connection, gameState);
-    return () => {
-      if (connection) stopConnection(connection);
-    };
   }, [gameState]);
 
   const handleCreateGame = async (gameState: GameState) => {
@@ -74,6 +73,10 @@ export default function Game() {
         handleError("Failed to set incomming game id. Connection failed.", true);
       }
   };
+
+  const handleCreateBoardcards = async (cardIds: number[]) => {
+    if(connection) await createBoardCards(connection, gameId, cardIds);
+  }
 
   const handleError = (message: string, redirect: boolean) => {
     setErrorModalVisible(true);
@@ -107,8 +110,12 @@ export default function Game() {
             setCardsToChoose(10);
             setPage(PlayPages.CHOOSE_BOARD_PAGE);
             break;
-        }
-
+          }
+        case GameState.BOTH_PICKING_PLAYER:
+          {
+            setPage(PlayPages.CHOOSE_CARD_PAGE);
+            break;
+          }
       }
     });
 
@@ -154,8 +161,10 @@ export default function Game() {
       return <HostPage handleCreateGame={handleCreateGame} setGameState={setGameState} setPage={setPage} />;
     case PlayPages.CHOOSE_BOARD_PAGE:
       return (
-        <ChooseBoardPage handleError={handleError} cardsToChoose={cardsToChoose} setPage={setPage} />
+        <ChooseBoardPage handleError={handleError} cardsToChoose={cardsToChoose} setPage={setPage} handleCreateBoardcards={handleCreateBoardcards} />
       );
+    case PlayPages.CHOOSE_CARD_PAGE:
+      return <ChooseCardPage setPage={setPage} handleError={handleError} />
     case PlayPages.LOBBY_PAGE:
       return <LobbyPage setPage={setPage} />;
     case PlayPages.WAITING_PAGE:
