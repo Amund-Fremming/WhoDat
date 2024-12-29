@@ -67,10 +67,18 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
     {
         try
         {
-            return await _context.Game
+            var data = _context.Game
                 .Where(g => g.PlayerOneID != null && g.PlayerOneID == playerId)
                 .Where(g => g.PlayerTwoID != null && g.PlayerTwoID == playerId)
-                .MaxAsync(g => g.ID);
+                .Select(g => g.ID)
+                .ToList();
+
+            if (data.Any())
+            {
+                return data.Max();
+            }
+
+            return new Error(new Exception("No recent games exists."), "No recent games exists.");
         }
         catch (Exception e)
         {
