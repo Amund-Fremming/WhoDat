@@ -1,30 +1,30 @@
-import { StyleSheet } from "react-native";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
+import { StyleSheet } from 'react-native';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
 import {
   horizontalScale,
   moderateScale,
   verticalScale,
-} from "@/src/Shared/assets/constants/Dimentions";
+} from '@/src/Shared/assets/constants/Dimentions';
 
 export const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
     backgroundColor: Colors.Orange,
   },
 
   header: {
     fontSize: moderateScale(80),
     color: Colors.Cream,
-    fontFamily: "Modak",
+    fontFamily: 'Modak',
   },
 
   card: {
     paddingTop: verticalScale(35),
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: Colors.Cream,
     borderRadius: moderateScale(20),
     width: horizontalScale(345),
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
 
   iconAndInput: {
     columnGap: horizontalScale(15),
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 
   icon: {
@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
 
   textInput: {
     fontSize: moderateScale(22),
-    fontFamily: "InikaBold",
+    fontFamily: 'InikaBold',
   },
 
   border: {
@@ -59,13 +59,13 @@ export const styles = StyleSheet.create({
 
   loginAndRegisterNew: {
     rowGap: verticalScale(10),
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   registerNewText: {
     color: Colors.BurgundyRed,
-    fontFamily: "InikaBold",
+    fontFamily: 'InikaBold',
     fontSize: moderateScale(14),
   },
 });

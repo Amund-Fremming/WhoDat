@@ -1,10 +1,10 @@
-import { View, Pressable, Text, TextInput } from "react-native";
-import { styles } from "./JoinPageStyles";
-import { PlayPages } from "../../GamePages";
-import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
-import BigButton from "@/src/Shared/components/BigButton/BigButton";
-import { joinGame } from "../../GameHubClient";
+import { View, Pressable, Text, TextInput } from 'react-native';
+import { styles } from './JoinPageStyles';
+import { PlayPages } from '../../GamePages';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
+import BigButton from '@/src/Shared/components/BigButton/BigButton';
+import { joinGame } from '../../GameHubClient';
 
 interface JoinPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
@@ -26,18 +26,18 @@ export default function JoinPage({
   const handleInput = (input: string) => {
     try {
       var val = Number.parseInt(input);
-      if(Number.isNaN(val)) {
-        handleError("Game id must be numeric.", false);
+      if (Number.isNaN(val)) {
+        handleError('Game id must be numeric.', false);
       }
 
       if (val > 10000) {
-        handleError("Game ids has to be lower than 10 000.", false);
+        handleError('Game ids has to be lower than 10 000.', false);
         return;
       }
       setGameId(val);
     } catch (error) {
-      console.log("Errorrrr")
-      handleError("Input provided is faulty brah", false);
+      console.log('Errorrrr');
+      handleError('Input provided is faulty brah', false);
     }
   };
 

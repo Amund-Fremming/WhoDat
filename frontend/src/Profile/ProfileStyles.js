@@ -1,10 +1,10 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 import {
   verticalScale,
   moderateScale,
   horizontalScale,
-} from "../Shared/assets/constants/Dimentions";
-import { Colors } from "../Shared/assets/constants/Colors";
+} from '../Shared/assets/constants/Dimentions';
+import { Colors } from '../Shared/assets/constants/Colors';
 
 export const styles = StyleSheet.create({
   inputContainer: {
@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
 
   iconAndInput: {
     columnGap: horizontalScale(15),
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 
   icon: {
@@ -33,49 +33,49 @@ export const styles = StyleSheet.create({
 
   textInput: {
     fontSize: moderateScale(22),
-    fontFamily: "InikaBold",
+    fontFamily: 'InikaBold',
   },
 
   editContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     gap: verticalScale(20),
-    height: "100%",
+    height: '100%',
   },
 
   buttonWrapper: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: horizontalScale(10),
     paddingTop: verticalScale(40),
   },
 
   nonEditContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     gap: verticalScale(20),
-    height: "100%",
+    height: '100%',
   },
 
   username: {
-    fontFamily: "InikaBold",
+    fontFamily: 'InikaBold',
     fontSize: moderateScale(40),
     paddingBottom: verticalScale(20),
   },
 
   container: {
-    height: "100%",
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "flex-end",
+    height: '100%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     backgroundColor: Colors.Orange,
     paddingTop: verticalScale(40),
   },
 
   creamContainer: {
-    width: "100%",
-    height: "85%",
-    alignItems: "center",
-    justifyContent: "space-between",
+    width: '100%',
+    height: '85%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: Colors.Cream,
     borderTopStartRadius: moderateScale(30),
     borderTopRightRadius: moderateScale(30),
@@ -83,7 +83,7 @@ export const styles = StyleSheet.create({
 
   header: {
     fontSize: moderateScale(45),
-    fontFamily: "Modak",
+    fontFamily: 'Modak',
     color: Colors.Cream,
   },
 
@@ -92,27 +92,27 @@ export const styles = StyleSheet.create({
     height: verticalScale(270),
     backgroundColor: Colors.DarkGray,
     borderRadius: moderateScale(400),
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: verticalScale(40),
   },
 
   uploadButton: {
-    position: "absolute",
+    position: 'absolute',
     borderRadius: moderateScale(10),
     paddingHorizontal: horizontalScale(20),
     paddingVertical: verticalScale(7),
     backgroundColor: Colors.DarkGray,
     right: horizontalScale(10),
     bottom: verticalScale(10),
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
 });
 
 export const imageStyles = StyleSheet.create({
   imageStyle: {
-    width: "96%",
-    height: "96%",
+    width: '96%',
+    height: '96%',
     borderRadius: moderateScale(400),
   },
 });

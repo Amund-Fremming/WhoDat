@@ -1,6 +1,6 @@
-import { Text, TouchableOpacity } from "react-native";
-import { styles } from "./BigButtonStyles";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
+import { Text, TouchableOpacity } from 'react-native';
+import { styles } from './BigButtonStyles';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
 
 interface BigButtonProps {
   text: string;

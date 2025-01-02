@@ -1,14 +1,17 @@
-import { ICardDto } from "@/src/Shared/domain/CardTypes";
-import { View, Image, Pressable } from "react-native";
-import { styles, imageStyles } from "./CardComponentStyles";
-import StrokedText from "@/src/Shared/components/StokedText/StrokedText";
+import { ICardDto } from '@/src/Shared/domain/CardTypes';
+import { View, Image, Pressable } from 'react-native';
+import { styles, imageStyles } from './CardComponentStyles';
+import StrokedText from '@/src/Shared/components/StokedText/StrokedText';
 
 interface CardComponentProps {
   card: ICardDto;
   onCardPress: () => void;
 }
 
-export default function CardComponent({ card, onCardPress }: CardComponentProps) {
+export default function CardComponent({
+  card,
+  onCardPress,
+}: CardComponentProps) {
   return (
     <Pressable style={styles.container} onPress={onCardPress}>
       <View style={styles.card}>

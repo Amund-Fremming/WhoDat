@@ -1,7 +1,7 @@
-import { Modal, Text, View } from "react-native";
-import { styles } from "./ErrorModalStyles";
-import MediumButton from "../MediumButton/MediumButton";
-import { Colors } from "../../assets/constants/Colors";
+import { Modal, Text, View } from 'react-native';
+import { styles } from './ErrorModalStyles';
+import MediumButton from '../MediumButton/MediumButton';
+import { Colors } from '../../assets/constants/Colors';
 
 interface ErrorModalProps {
   message: string;

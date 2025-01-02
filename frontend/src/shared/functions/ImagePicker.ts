@@ -1,4 +1,4 @@
-import * as ImagePicker from "expo-image-picker";
+import * as ImagePicker from 'expo-image-picker';
 
 export const pickImage = async () => {
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -11,6 +11,6 @@ export const pickImage = async () => {
   if (!result.canceled) {
     return result.assets[0].uri;
   } else {
-    return "EXIT";
+    return 'EXIT';
   }
 };

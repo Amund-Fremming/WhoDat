@@ -1,19 +1,23 @@
-import { StyleSheet } from "react-native";
-import { Colors } from "../../assets/constants/Colors";
-import { verticalScale, moderateScale, horizontalScale } from "../../assets/constants/Dimentions";
+import { StyleSheet } from 'react-native';
+import { Colors } from '../../assets/constants/Colors';
+import {
+  verticalScale,
+  moderateScale,
+  horizontalScale,
+} from '../../assets/constants/Dimentions';
 
 export const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     zIndex: 0,
   },
 
   modal: {
-    alignItems: "center",
-    width: "95%",
+    alignItems: 'center',
+    width: '95%',
     paddingBottom: verticalScale(105),
     backgroundColor: Colors.Cream,
     borderColor: Colors.Red,
@@ -31,23 +35,23 @@ export const styles = StyleSheet.create({
 
   message: {
     fontSize: moderateScale(24),
-    fontFamily: "Inika",
-    textAlign: "center",
-    fontWeight: "bold",
+    fontFamily: 'Inika',
+    textAlign: 'center',
+    fontWeight: 'bold',
     color: Colors.DarkGray,
     paddingHorizontal: horizontalScale(10),
   },
 
   header: {
     fontSize: moderateScale(84),
-    fontFamily: "Modak",
-    textAlign: "center",
-    fontWeight: "bold",
+    fontFamily: 'Modak',
+    textAlign: 'center',
+    fontWeight: 'bold',
     color: Colors.Red,
   },
 
   absoluteButton: {
-    position: "absolute",
-    bottom: verticalScale(20)
-  }
+    position: 'absolute',
+    bottom: verticalScale(20),
+  },
 });

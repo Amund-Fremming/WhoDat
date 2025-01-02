@@ -1,27 +1,34 @@
-import { View, Text, TextInput, Image } from "react-native";
-import { styles, imageStyles } from "./ProfileStyles";
-import { useEffect, useState } from "react";
-import { Feather } from "@expo/vector-icons";
-import { Colors } from "../Shared/assets/constants/Colors";
-import ErrorModal from "../Shared/components/ErrorModal/ErrorModal";
-import { useAuthProvider } from "../Shared/state/AuthProvider";
-import MediumButton from "../Shared/components/MediumButton/MediumButton";
-import BigButton from "../Shared/components/BigButton/BigButton";
-import { pickImage } from "../Shared/functions/ImagePicker";
-import { TouchableOpacity } from "react-native";
-import { updatePlayer, updatePlayerImage } from "./PlayerClient";
-import { IPlayerDto } from "../Shared/domain/PlayerTypes";
-import { DevSettings } from "react-native";
+import { View, Text, TextInput, Image } from 'react-native';
+import { styles, imageStyles } from './ProfileStyles';
+import { useEffect, useState } from 'react';
+import { Feather } from '@expo/vector-icons';
+import { Colors } from '../Shared/assets/constants/Colors';
+import ErrorModal from '../Shared/components/ErrorModal/ErrorModal';
+import { useAuthProvider } from '../Shared/state/AuthProvider';
+import MediumButton from '../Shared/components/MediumButton/MediumButton';
+import BigButton from '../Shared/components/BigButton/BigButton';
+import { pickImage } from '../Shared/functions/ImagePicker';
+import { TouchableOpacity } from 'react-native';
+import { updatePlayer, updatePlayerImage } from './PlayerClient';
+import { IPlayerDto } from '../Shared/domain/PlayerTypes';
+import { DevSettings } from 'react-native';
 
 export default function Profile() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [newPassword, setNewPassword] = useState<string>("");
-  const [newUsername, setNewUsername] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [newPassword, setNewPassword] = useState<string>('');
+  const [newUsername, setNewUsername] = useState<string>('');
   const [imageUri, setImageUri] = useState<any>();
-  const { imageUrl, setImageUrl, username, setUsername, playerID, token, setToken } =
-    useAuthProvider();
+  const {
+    imageUrl,
+    setImageUrl,
+    username,
+    setUsername,
+    playerID,
+    token,
+    setToken,
+  } = useAuthProvider();
 
   useEffect(() => {
     if (imageUrl != null) setImageUri(imageUrl);
@@ -39,12 +46,12 @@ export default function Profile() {
 
   const handleSelectImage = async () => {
     const uri = await pickImage();
-    if (uri !== "EXIT") {
+    if (uri !== 'EXIT') {
       setImageUri(uri);
       const result = await updatePlayerImage(uri, token);
       if (result.isError) {
         handleError(result.message);
-        setImageUri(imageUrl)
+        setImageUri(imageUrl);
       }
     }
   };
@@ -68,12 +75,12 @@ export default function Profile() {
   };
 
   const clearValues = () => {
-    setNewPassword("");
-    setNewUsername("");
+    setNewPassword('');
+    setNewUsername('');
   };
 
   const handleLogout = () => {
-    setToken("");
+    setToken('');
     DevSettings.reload();
   };
 
@@ -139,8 +146,8 @@ export default function Profile() {
                 <TextInput
                   style={styles.textInput}
                   placeholder="New username"
-                  onChangeText={input => setNewUsername(input)}
-                  placeholderTextColor={"gray"}
+                  onChangeText={(input) => setNewUsername(input)}
+                  placeholderTextColor={'gray'}
                 />
               </View>
               <View style={styles.border}></View>
@@ -159,7 +166,7 @@ export default function Profile() {
                   secureTextEntry={true}
                   style={styles.textInput}
                   placeholder="New password"
-                  placeholderTextColor={"gray"}
+                  placeholderTextColor={'gray'}
                 />
               </View>
               <View style={styles.border}></View>

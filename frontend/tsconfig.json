@@ -3,15 +3,14 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "src/Game/components/ChooseBoardPage/components/Card/CardStyles.js"  ]
+    "expo-env.d.ts",
+    "src/Game/components/ChooseBoardPage/components/Card/CardStyles.js"
+  ]
 }

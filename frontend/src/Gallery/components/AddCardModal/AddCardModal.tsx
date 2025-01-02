@@ -1,15 +1,15 @@
-import { Modal, View, Image, Pressable, TextInput, Text } from "react-native";
-import { styles, imageStyles } from "./AddCardModalStyles";
-import BigButton from "@/src/Shared/components/BigButton/BigButton";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useState } from "react";
-import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
-import { addCard } from "@/src/Shared/functions/CardClient";
-import { validText } from "@/src/Shared/functions/InputValitator";
-import { pickImage } from "@/src/Shared/functions/ImagePicker";
-import Result from "@/src/Shared/domain/Result";
-import { moderateScale } from "@/src/Shared/assets/constants/Dimentions";
+import { Modal, View, Image, Pressable, TextInput, Text } from 'react-native';
+import { styles, imageStyles } from './AddCardModalStyles';
+import BigButton from '@/src/Shared/components/BigButton/BigButton';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useState } from 'react';
+import { useAuthProvider } from '@/src/Shared/state/AuthProvider';
+import { addCard } from '@/src/Shared/functions/CardClient';
+import { validText } from '@/src/Shared/functions/InputValitator';
+import { pickImage } from '@/src/Shared/functions/ImagePicker';
+import Result from '@/src/Shared/domain/Result';
+import { moderateScale } from '@/src/Shared/assets/constants/Dimentions';
 
 interface AddCardModalProps {
   modalVisible: boolean;
@@ -20,23 +20,23 @@ interface AddCardModalProps {
 export default function AddCardModal({
   modalVisible,
   setModalVisible,
-  handleError
+  handleError,
 }: AddCardModalProps) {
-  const [nameInput, setNameInput] = useState<string>("");
+  const [nameInput, setNameInput] = useState<string>('');
   const [imageUri, setImageUri] = useState<any>(
-    "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+    'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'
   );
   const { token } = useAuthProvider();
 
   const handleNameInput = (name: string): boolean => {
     if (name.length <= 0) {
-      handleError("Name cannot be empty.");
+      handleError('Name cannot be empty.');
       return false;
     }
 
     if (name.length > 9 || !validText(name)) {
-      setModalVisible(!modalVisible)
-      handleError("Name must be text only and under 9 letters long");
+      setModalVisible(!modalVisible);
+      handleError('Name must be text only and under 9 letters long');
       return false;
     }
 
@@ -49,10 +49,10 @@ export default function AddCardModal({
   const handleImageInput = async () => {
     try {
       const result = await pickImage();
-      if(result === "EXIT") return;
+      if (result === 'EXIT') return;
       setImageUri(result);
     } catch (Exception) {
-      handleError("Image picker failed.");
+      handleError('Image picker failed.');
     }
   };
 
@@ -67,9 +67,9 @@ export default function AddCardModal({
     }
 
     setModalVisible(false);
-    setNameInput("");
+    setNameInput('');
     setImageUri(
-      "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+      'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'
     );
   };
 

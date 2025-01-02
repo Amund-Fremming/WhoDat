@@ -1,22 +1,22 @@
-import { View, Text, Alert } from "react-native";
-import { useEffect, useState } from "react";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
-import { ICardDto } from "@/src/Shared/domain/CardTypes";
-import Card from "./components/Card/CardComponent";
-import CardModal from "./components/CardModal/CardModal";
-import { viewStyles, textStyles } from "./GalleryStyles";
-import { AddCardComponent } from "./components/AddCard/AddCardComponent";
-import AddCardModal from "./components/AddCardModal/AddCardModal";
-import { deleteCard, getAllCards } from "@/src/Shared/functions/CardClient";
-import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
-import MediumButton from "@/src/Shared/components/MediumButton/MediumButton";
-import Result from "@/src/Shared/domain/Result";
-import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
+import { View, Text, Alert } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
+import { ICardDto } from '@/src/Shared/domain/CardTypes';
+import Card from './components/Card/CardComponent';
+import CardModal from './components/CardModal/CardModal';
+import { viewStyles, textStyles } from './GalleryStyles';
+import { AddCardComponent } from './components/AddCard/AddCardComponent';
+import AddCardModal from './components/AddCardModal/AddCardModal';
+import { deleteCard, getAllCards } from '@/src/Shared/functions/CardClient';
+import { useAuthProvider } from '@/src/Shared/state/AuthProvider';
+import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
+import Result from '@/src/Shared/domain/Result';
+import ErrorModal from '@/src/Shared/components/ErrorModal/ErrorModal';
 
 const defaultCard: ICardDto = {
   id: -1,
-  name: "Default",
-  url: "None",
+  name: 'Default',
+  url: 'None',
 };
 
 export default function Gallery() {
@@ -30,14 +30,13 @@ export default function Gallery() {
   const [displayPrevious, setDisplayPrevious] = useState<boolean>(false);
   const [displayNext, setDisplayNext] = useState<boolean>(false);
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const { token } = useAuthProvider();
 
   const handleError = (message: string) => {
     setErrorModalVisible(true);
     setErrorMessage(message);
   };
-
 
   useEffect(() => {
     fetchPlayerCards();
@@ -55,7 +54,7 @@ export default function Gallery() {
     const skip = (pageNumber - 1) * 20;
     const take = 20 * pageNumber;
     setCardsForThisPage(data!.slice(skip, take));
-    if(data!.length > 19) setDisplayNext(true);
+    if (data!.length > 19) setDisplayNext(true);
   };
 
   const handleCardPressed = (card: ICardDto) => {
@@ -89,22 +88,26 @@ export default function Gallery() {
   };
 
   const handleDeleteCardPressed = async (card: ICardDto) => {
-    Alert.alert("Are you sure?", `Do you want to delete ${card.name}`, [
+    Alert.alert('Are you sure?', `Do you want to delete ${card.name}`, [
       {
-        text: "No",
-        style: "cancel",
+        text: 'No',
+        style: 'cancel',
       },
       {
-        text: "Yes",
+        text: 'Yes',
         onPress: async () => {
           setCardModalVisible(false);
-            const result = await deleteCard(card.id, token);
-            if(result.isError) {
-              handleError(result.message);
-              return;
-            }
-            setAllCards(prev => prev.filter((prevCard: ICardDto) => prevCard.id != card.id))
-            setCardsForThisPage(prev => prev.filter((prevCard: ICardDto) => prevCard.id != card.id))
+          const result = await deleteCard(card.id, token);
+          if (result.isError) {
+            handleError(result.message);
+            return;
+          }
+          setAllCards((prev) =>
+            prev.filter((prevCard: ICardDto) => prevCard.id != card.id)
+          );
+          setCardsForThisPage((prev) =>
+            prev.filter((prevCard: ICardDto) => prevCard.id != card.id)
+          );
         },
       },
     ]);
@@ -156,7 +159,7 @@ export default function Gallery() {
           <View style={viewStyles.buttonWrapper}>
             {displayPrevious && (
               <MediumButton
-                text={"Prev"}
+                text={'Prev'}
                 color={Colors.BurgundyRed}
                 inverted={false}
                 onButtonPress={handlePreviousPressed}
@@ -164,7 +167,7 @@ export default function Gallery() {
             )}
             {displayNext && (
               <MediumButton
-                text={"Next"}
+                text={'Next'}
                 color={Colors.BurgundyRed}
                 inverted={false}
                 onButtonPress={handleNextPressed}

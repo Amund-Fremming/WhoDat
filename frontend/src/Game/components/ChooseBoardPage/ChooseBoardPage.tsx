@@ -1,30 +1,29 @@
-import { View, Text, Pressable } from "react-native";
-import { styles } from "./ChooseBoardPageStyles";
-import { PlayPages } from "../../GamePages";
-import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
-import { useEffect, useState } from "react";
-import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
-import { getAllCards } from "@/src/Shared/functions/CardClient";
-import Result from "@/src/Shared/domain/Result";
-import { ICardDto } from "@/src/Shared/domain/CardTypes";
-import MediumButton from "@/src/Shared/components/MediumButton/MediumButton";
-import Card from "./components/Card/Card";
+import { View, Text, Pressable } from 'react-native';
+import { styles } from './ChooseBoardPageStyles';
+import { PlayPages } from '../../GamePages';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
+import { useEffect, useState } from 'react';
+import { useAuthProvider } from '@/src/Shared/state/AuthProvider';
+import { getAllCards } from '@/src/Shared/functions/CardClient';
+import Result from '@/src/Shared/domain/Result';
+import { ICardDto } from '@/src/Shared/domain/CardTypes';
+import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
+import Card from './components/Card/Card';
 
 interface BoardPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
   cardsToChoose: number;
   handleError: (message: string, redirect: boolean) => void;
-  handleCreateBoardcards: (cardIds: number[]) => {}
+  handleCreateBoardcards: (cardIds: number[]) => {};
 }
 
 export default function ChooseBoardPage({
   setPage,
   cardsToChoose,
   handleError,
-  handleCreateBoardcards
+  handleCreateBoardcards,
 }: BoardPageProps) {
-
   const [allCards, setAllCards] = useState<ICardDto[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [cardsForThisPage, setCardsForThisPage] = useState<ICardDto[]>([]);
@@ -44,8 +43,8 @@ export default function ChooseBoardPage({
     }
 
     const data = result.data;
-    if(data!.length <= 20) {
-      setDisplayNext(false); 
+    if (data!.length <= 20) {
+      setDisplayNext(false);
     } else {
       setDisplayNext(true);
     }
@@ -87,27 +86,29 @@ export default function ChooseBoardPage({
       return;
     }
     handleCreateBoardcards(cardsPressed);
-  }
+  };
 
   const handleCardPressed = (cardId: number) => {
-    if(cardsPressed.length == cardsToChoose) {
+    if (cardsPressed.length == cardsToChoose) {
       handleError(`You can only choose ${cardsToChoose} cards!`, false);
       return;
     }
 
-    const isActive = cardsPressed.filter((id: number) => id == cardId).length > 0;
+    const isActive =
+      cardsPressed.filter((id: number) => id == cardId).length > 0;
 
-    if(!isActive) {
-      setCardsPressed(prev => [...prev, cardId]); 
-   } else {
-      setCardsPressed(prev => prev.filter(id => id != cardId
-      )); 
-   }
-  }
+    if (!isActive) {
+      setCardsPressed((prev) => [...prev, cardId]);
+    } else {
+      setCardsPressed((prev) => prev.filter((id) => id != cardId));
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Chosen {cardsPressed.length}/{cardsToChoose}</Text>
+      <Text style={styles.header}>
+        Chosen {cardsPressed.length}/{cardsToChoose}
+      </Text>
       <Pressable
         style={styles.backIconWrapper}
         onPress={() => setPage(PlayPages.MAIN_PAGE)}
@@ -115,45 +116,49 @@ export default function ChooseBoardPage({
         <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
       </Pressable>
       <View style={styles.creamContainer}>
-      <View style={styles.boardContainer}>
-            {cardsForThisPage.map((card: ICardDto, index: number) => (
-              <Card
-                key={index}
-                card={card}
-                handleCardPressed={() => handleCardPressed(card.id)}
-                isActive={cardsPressed.filter((id: number) => id == card.id).length > 0}
-              />
-            ))}
-            {cardsForThisPage.length == 0 && (
-              <Text style={styles.infoText}>You need to create cards in your gallery to be able to play!</Text>
-            )}
-          </View>
-          <View style={styles.buttonWrapper}>
-            {pageNumber == 1 && (
-              <MediumButton
-                text={"Done"}
-                color={Colors.Green}
-                inverted={false}
-                onButtonPress={handleDonePressed}
-              />
-            )}
-            {displayPrevious && (
-              <MediumButton
-                text={"Prev"}
-                color={Colors.BurgundyRed}
-                inverted={false}
-                onButtonPress={handlePreviousPressed}
-              />
-            )}
-            {displayNext && (
-              <MediumButton
-                text={"Next"}
-                color={Colors.BurgundyRed}
-                inverted={false}
-                onButtonPress={handleNextPressed}
-              />
-            )}
-          </View>
+        <View style={styles.boardContainer}>
+          {cardsForThisPage.map((card: ICardDto, index: number) => (
+            <Card
+              key={index}
+              card={card}
+              handleCardPressed={() => handleCardPressed(card.id)}
+              isActive={
+                cardsPressed.filter((id: number) => id == card.id).length > 0
+              }
+            />
+          ))}
+          {cardsForThisPage.length == 0 && (
+            <Text style={styles.infoText}>
+              You need to create cards in your gallery to be able to play!
+            </Text>
+          )}
+        </View>
+        <View style={styles.buttonWrapper}>
+          {pageNumber == 1 && (
+            <MediumButton
+              text={'Done'}
+              color={Colors.Green}
+              inverted={false}
+              onButtonPress={handleDonePressed}
+            />
+          )}
+          {displayPrevious && (
+            <MediumButton
+              text={'Prev'}
+              color={Colors.BurgundyRed}
+              inverted={false}
+              onButtonPress={handlePreviousPressed}
+            />
+          )}
+          {displayNext && (
+            <MediumButton
+              text={'Next'}
+              color={Colors.BurgundyRed}
+              inverted={false}
+              onButtonPress={handleNextPressed}
+            />
+          )}
+        </View>
       </View>
     </View>
   );

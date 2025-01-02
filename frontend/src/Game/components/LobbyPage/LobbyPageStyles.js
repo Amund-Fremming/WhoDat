@@ -1,26 +1,26 @@
-import { Colors } from "@/src/Shared/assets/constants/Colors";
-import { StyleSheet } from "react-native";
+import { Colors } from '@/src/Shared/assets/constants/Colors';
+import { StyleSheet } from 'react-native';
 import {
   moderateScale,
   verticalScale,
   horizontalScale,
-} from "@/src/Shared/assets/constants/Dimentions";
+} from '@/src/Shared/assets/constants/Dimentions';
 
 export const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    width: "100%",
+    height: '100%',
+    width: '100%',
     paddingTop: verticalScale(75),
-    justifyContent: "flex-start",
-    alignItems: "center",
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     backgroundColor: Colors.Orange,
   },
 
   header: {
-    fontFamily: "Modak",
+    fontFamily: 'Modak',
     fontSize: moderateScale(70),
     color: Colors.Cream,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: moderateScale(100),
     shadowRadius: 5,
     shadowOpacity: 0.2,
@@ -31,15 +31,15 @@ export const styles = StyleSheet.create({
   },
 
   header2: {
-    fontFamily: "Modak",
+    fontFamily: 'Modak',
     fontSize: moderateScale(60),
     color: Colors.Cream,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: moderateScale(90),
   },
 
   backIconWrapper: {
-    position: "absolute",
+    position: 'absolute',
     left: horizontalScale(20),
     top: verticalScale(60),
   },

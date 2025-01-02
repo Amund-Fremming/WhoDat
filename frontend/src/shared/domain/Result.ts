@@ -2,7 +2,7 @@ export default class Result<T> {
   data: T | null;
   message: string;
 
-  constructor(data: T | null, message: string = "") {
+  constructor(data: T | null, message: string = '') {
     this.data = data;
     this.message = message;
   }
@@ -12,7 +12,7 @@ export default class Result<T> {
   }
 
   public static ok<T>(data: T): Result<T> {
-    return new Result<T>(data, "");
+    return new Result<T>(data, '');
   }
 
   public static failure<T>(message: string) {

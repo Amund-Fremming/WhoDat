@@ -224,7 +224,6 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
                 return;
             }
 
-            _logger.LogError("Senign out new state! " + gameId);
             var state = result.Data;
             await Clients.Groups(groupName).SendAsync(IDENTIFIER, state);
         }

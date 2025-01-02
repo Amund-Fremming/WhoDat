@@ -1,8 +1,8 @@
-import { View, Text, Pressable } from "react-native";
-import { styles } from "./LobbyPageStyles";
-import { PlayPages } from "../../GamePages";
-import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
+import { View, Text, Pressable } from 'react-native';
+import { styles } from './LobbyPageStyles';
+import { PlayPages } from '../../GamePages';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
 
 interface LobbyPageProps {
   setPage: React.Dispatch<React.SetStateAction<PlayPages>>;

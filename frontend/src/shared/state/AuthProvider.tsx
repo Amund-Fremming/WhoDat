@@ -1,5 +1,5 @@
-import { ReactNode, createContext, useContext } from "react";
-import { useState } from "react";
+import { ReactNode, createContext, useContext } from 'react';
+import { useState } from 'react';
 
 interface IAuthContext {
   token: string;
@@ -13,13 +13,13 @@ interface IAuthContext {
 }
 
 const defaultContextValue: IAuthContext = {
-  token: "",
+  token: '',
   setToken: () => {},
   playerID: 0,
   setPlayerID: () => {},
-  username: "",
+  username: '',
   setUsername: () => {},
-  imageUrl: "",
+  imageUrl: '',
   setImageUrl: () => {},
 };
 
@@ -28,10 +28,10 @@ const AuthContext = createContext<IAuthContext>(defaultContextValue);
 export const useAuthProvider = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string>("");
+  const [token, setToken] = useState<string>('');
   const [playerID, setPlayerID] = useState<number>(0);
-  const [username, setUsername] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [username, setUsername] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>('');
 
   const value = {
     token,

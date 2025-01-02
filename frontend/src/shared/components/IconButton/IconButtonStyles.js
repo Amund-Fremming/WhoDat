@@ -1,17 +1,17 @@
-import { Colors } from "../../assets/constants/Colors";
+import { Colors } from '../../assets/constants/Colors';
 import {
   moderateScale,
   verticalScale,
   horizontalScale,
-} from "../../assets/constants/Dimentions";
-import { StyleSheet } from "react-native";
+} from '../../assets/constants/Dimentions';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
     height: verticalScale(70),
     width: horizontalScale(330),
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: Colors.Cream,
     borderRadius: moderateScale(25),
     shadowRadius: 5,
@@ -23,13 +23,13 @@ export const styles = StyleSheet.create({
   },
 
   wrapper: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   text: {
-    fontFamily: "InikaBold",
+    fontFamily: 'InikaBold',
     fontSize: moderateScale(40),
     color: Colors.BurgundyRed,
     width: horizontalScale(250),

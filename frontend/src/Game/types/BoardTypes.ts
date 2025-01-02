@@ -1,5 +1,5 @@
-import { IPlayer } from "@/src/Shared/domain/PlayerTypes";
-import { IBoardCard, IGame } from "./GameTypes";
+import { IPlayer } from '@/src/Shared/domain/PlayerTypes';
+import { IBoardCard, IGame } from './GameTypes';
 
 export interface IBoard {
   ID: number;

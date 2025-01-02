@@ -6,18 +6,18 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
-} from "react-native";
-import { styles } from "./LoginComponentStyles";
-import Feather from "@expo/vector-icons/Feather";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
-import BigButton from "@/src/Shared/components/BigButton/BigButton";
-import { IAuthResponse, ILoginRequest } from "@/src/Auth/AuthTypes";
-import { useState } from "react";
-import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
-import { loginPlayer } from "../../AuthClient";
-import Result from "@/src/Shared/domain/Result";
-import ErrorModal from "@/src/Shared/components/ErrorModal/ErrorModal";
-import { validUsername } from "@/src/Shared/functions/InputValitator";
+} from 'react-native';
+import { styles } from './LoginComponentStyles';
+import Feather from '@expo/vector-icons/Feather';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
+import BigButton from '@/src/Shared/components/BigButton/BigButton';
+import { IAuthResponse, ILoginRequest } from '@/src/Auth/AuthTypes';
+import { useState } from 'react';
+import { useAuthProvider } from '@/src/Shared/state/AuthProvider';
+import { loginPlayer } from '../../AuthClient';
+import Result from '@/src/Shared/domain/Result';
+import ErrorModal from '@/src/Shared/components/ErrorModal/ErrorModal';
+import { validUsername } from '@/src/Shared/functions/InputValitator';
 
 interface LoginComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
@@ -26,7 +26,7 @@ interface LoginComponentProps {
 export function LoginComponent({ setView }: LoginComponentProps) {
   const { setToken, setPlayerID, setUsername, setImageUrl } = useAuthProvider();
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleError = (message: string) => {
     setErrorModalVisible(true);
@@ -34,8 +34,8 @@ export function LoginComponent({ setView }: LoginComponentProps) {
   };
 
   const [loginRequest, setLoginRequest] = useState<ILoginRequest>({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
 
   const handleLogin = async () => {
@@ -69,7 +69,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
       <ErrorModal
@@ -91,7 +91,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
             <TextInput
               style={styles.textInput}
               placeholder="Username"
-              placeholderTextColor={"gray"}
+              placeholderTextColor={'gray'}
               onChangeText={(input: string) =>
                 setLoginRequest({ ...loginRequest, username: input })
               }
@@ -111,7 +111,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
               secureTextEntry={true}
               style={styles.textInput}
               placeholder="Password"
-              placeholderTextColor={"gray"}
+              placeholderTextColor={'gray'}
               onChangeText={(input: string) =>
                 setLoginRequest({ ...loginRequest, password: input })
               }
@@ -126,7 +126,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
             inverted={false}
             onButtonPress={handleLogin}
           />
-          <Pressable onPress={() => setView("REGISTER")}>
+          <Pressable onPress={() => setView('REGISTER')}>
             <Text style={styles.registerNewText}>Register new player</Text>
           </Pressable>
         </View>

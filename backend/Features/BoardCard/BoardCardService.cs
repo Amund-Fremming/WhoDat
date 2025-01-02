@@ -33,6 +33,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             if (validation.IsError)
                 return validation.Error;
 
+
             int boardId = game.Boards!.ElementAt(0).ID;
 
             if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS)

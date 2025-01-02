@@ -1,24 +1,24 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 import {
   moderateScale,
   verticalScale,
   horizontalScale,
-} from "@/src/Shared/assets/constants/Dimentions";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
+} from '@/src/Shared/assets/constants/Dimentions';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
 
 export const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
-    zIndex: 1
+    zIndex: 1,
   },
 
   cardModal: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "95%",
-    height: "73%",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '95%',
+    height: '73%',
     backgroundColor: Colors.Cream,
     borderColor: Colors.BorderGray,
     borderWidth: moderateScale(5),
@@ -34,12 +34,12 @@ export const styles = StyleSheet.create({
   },
 
   card: {
-    width: "70%",
-    height: "70%",
+    width: '70%',
+    height: '70%',
     backgroundColor: Colors.DarkGray,
     borderRadius: moderateScale(15),
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: verticalScale(-20),
   },
 
@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
   },
 
   closeButton: {
-    position: "absolute",
+    position: 'absolute',
     zIndex: 1,
     right: horizontalScale(16),
     top: verticalScale(12),
@@ -56,14 +56,14 @@ export const styles = StyleSheet.create({
 
   newNameInput: {
     fontSize: moderateScale(40),
-    fontFamily: "Inika",
-    textAlign: "center",
-    fontWeight: "bold",
+    fontFamily: 'Inika',
+    textAlign: 'center',
+    fontWeight: 'bold',
     color: Colors.DarkGray,
   },
 
   deleteButton: {
-    position: "absolute",
+    position: 'absolute',
     zIndex: 1,
     left: -15,
     top: -15,
@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
   inputText: {
     paddingTop: verticalScale(20),
     fontSize: moderateScale(30),
-    fontFamily: "InikaBold",
+    fontFamily: 'InikaBold',
   },
 
   border: {
@@ -87,13 +87,13 @@ export const styles = StyleSheet.create({
 
   uploadButton: {
     zIndex: 10,
-    position: "absolute",
+    position: 'absolute',
     width: horizontalScale(90),
     height: verticalScale(35),
     backgroundColor: Colors.DarkGray,
     borderRadius: moderateScale(10),
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     opacity: 0.8,
     bottom: verticalScale(18),
     left: horizontalScale(20),
@@ -101,15 +101,15 @@ export const styles = StyleSheet.create({
 
   uploadText: {
     color: Colors.Cream,
-    fontFamily: "InikaBold",
+    fontFamily: 'InikaBold',
     fontSize: moderateScale(20),
   },
 });
 
 export const imageStyles = StyleSheet.create({
   imageStyle: {
-    width: "91%",
-    height: "94%",
+    width: '91%',
+    height: '94%',
     borderRadius: moderateScale(6),
   },
 });
