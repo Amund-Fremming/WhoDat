@@ -4,6 +4,7 @@ using Backend.Features.Game;
 using Backend.Features.Message;
 using Backend.Features.Shared.Common.Entity;
 using Backend.Features.Shared.Enums;
+using System.Text.Json.Serialization;
 
 namespace Backend.Features.Player;
 
@@ -18,6 +19,7 @@ public class PlayerEntity : IEntity
     public string PasswordSalt { get; set; }
     public PlayerRole PlayerRole { get; set; }
     public IEnumerable<CardEntity>? Cards { get; set; }
+    [JsonIgnore]
     public IEnumerable<BoardEntity>? Boards { get; set; }
     public IEnumerable<MessageEntity>? Messages { get; set; }
     public IEnumerable<GameEntity>? GamesAsPlayerOne { get; set; }
