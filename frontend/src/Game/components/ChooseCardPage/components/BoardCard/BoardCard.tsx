@@ -1,17 +1,17 @@
 import { Image, Pressable, Text, View } from 'react-native';
-import { styles, imageStyles } from './CardStyles';
+import { styles, imageStyles } from './BoardCardStyles';
 import StrokedText from '@/src/Shared/components/StokedText/StrokedText';
-import { ICardDto } from '@/src/Shared/types/CardTypes';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
+import { IBoardCard } from '@/src/Game/types/BoardTypes';
 
 interface CardComponentProps {
-  card: ICardDto;
+  boardcard: IBoardCard;
   handleCardPressed: () => void;
   isActive: boolean;
 }
 
-export default function Card({
-  card,
+export default function BoardCard({
+  boardcard,
   handleCardPressed,
   isActive,
 }: CardComponentProps) {
@@ -26,11 +26,15 @@ export default function Card({
         <Image
           style={imageStyles.imageStyle}
           source={{
-            uri: card.url,
+            uri: boardcard.card.url,
           }}
         />
       </View>
-      <StrokedText text={card.name} fontBaseSize={14} smallBorder={true} />
+      <StrokedText
+        text={boardcard.card.name}
+        fontBaseSize={14}
+        smallBorder={true}
+      />
     </Pressable>
   );
 }

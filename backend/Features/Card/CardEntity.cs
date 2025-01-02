@@ -1,6 +1,7 @@
 using Backend.Features.BoardCard;
 using Backend.Features.Player;
 using Backend.Features.Shared.Common.Entity;
+using System.Text.Json.Serialization;
 
 namespace Backend.Features.Card;
 
@@ -20,7 +21,7 @@ public class CardEntity : IEntity
     [StringLength(1000, MinimumLength = 3)]
     [RegularExpression(@"^(https?://)([\w-]+(\.[\w-]+)+)(/[\w- ,./?%&=]*)?(\.(jpg|jpeg|png|gif))$", ErrorMessage = "Please enter a valid image URL.")]
     public string Url { get; set; }
-
+    [JsonIgnore]
     public IEnumerable<BoardCardEntity>? BoardCards { get; set; }
 
     public CardEntity()

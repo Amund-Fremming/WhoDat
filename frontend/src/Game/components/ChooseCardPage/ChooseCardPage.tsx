@@ -6,14 +6,15 @@ import { Colors } from '@/src/Shared/assets/constants/Colors';
 import { useEffect, useState } from 'react';
 import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 import { ICardDto } from '@/src/Shared/types/CardTypes';
-import Card from './components/Card/Card';
+import Card from './components/BoardCard/BoardCard';
 import { getBoardWithBoardCards } from '../../GameClient';
 import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
+import { IBoardCard } from '../../types/BoardTypes';
 
 export default function ChooseCardPage() {
   const [cardPressed, setCardPressed] = useState<number>(-1);
-  const [cards, setCards] = useState<ICardDto[]>([]);
+  const [cards, setCards] = useState<IBoardCard[]>([]);
   const { setPage, gameId } = useGameProvider();
   const { toggleInfoModal } = useInfoModalProvider();
   const { token } = useAuthProvider();
@@ -26,7 +27,10 @@ export default function ChooseCardPage() {
     var result = await getBoardWithBoardCards(gameId, token);
     if (result.isError) {
       toggleInfoModal(true, result.message);
+      return;
     }
+    console.log(result.data?.boardCards);
+    setCards(result.data?.boardCards!);
   };
 
   return (
@@ -40,12 +44,12 @@ export default function ChooseCardPage() {
       </Pressable>
       <View style={styles.creamContainer}>
         <View style={styles.boardContainer}>
-          {cards.map((card: ICardDto, index: number) => (
+          {cards.map((boardcard: IBoardCard, index: number) => (
             <Card
               key={index}
-              card={card}
-              handleCardPressed={() => setCardPressed(card.id)}
-              isActive={card.id === cardPressed}
+              boardcard={boardcard}
+              handleCardPressed={() => setCardPressed(boardcard.ID)}
+              isActive={boardcard.ID === cardPressed}
             />
           ))}
         </View>

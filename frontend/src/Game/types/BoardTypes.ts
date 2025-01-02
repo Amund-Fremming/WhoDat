@@ -24,5 +24,13 @@ export interface IBoardCard {
   ID: number;
   boardID: number;
   cardID: number;
+  card: ICard;
   active: boolean;
+}
+
+export interface ICard {
+  ID: number;
+  playerID: number;
+  name: string;
+  url: string;
 }
