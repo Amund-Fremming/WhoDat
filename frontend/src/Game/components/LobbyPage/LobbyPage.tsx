@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from 'react-native';
 import { styles } from './LobbyPageStyles';
-import { PlayPages } from '../../GamePages';
+import { PlayPages } from '../../types/GamePages';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 

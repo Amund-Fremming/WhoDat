@@ -1,5 +1,7 @@
+import { IBoard } from './BoardTypes';
+
 export interface IGame {
-  gameId?: number;
+  ID?: number;
   playerOneID?: number;
   // player obj
   playerTwoID?: number;
@@ -55,26 +57,4 @@ export interface IMessage {
   playerID: number;
   // player obj
   messageText?: string;
-}
-
-export interface IBoard {
-  boardID: number;
-  playerID: number;
-  // player obj
-  gameID: number;
-  // game obj
-  chosenCardID?: number;
-  // boardcard obj
-  playersLeft: number;
-  messages?: Array<IMessage>;
-  boardCards: Array<IBoardCard>;
-}
-
-export interface IBoardCard {
-  boardCardID: number;
-  boardID: number;
-  // board obj
-  cardID: number;
-  // card obj
-  active: boolean;
 }

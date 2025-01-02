@@ -14,9 +14,9 @@ import { useState } from 'react';
 import { validUsername } from '@/src/Shared/functions/InputValitator';
 import { IAuthResponse, IRegistrationRequest } from '@/src/Auth/AuthTypes';
 import { registerPlayer } from '../../AuthClient';
-import { useAuthProvider } from '@/src/Shared/state/AuthProvider';
-import Result from '@/src/Shared/domain/Result';
-import ErrorModal from '@/src/Shared/components/ErrorModal/ErrorModal';
+import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
+import Result from '@/src/Shared/objects/Result';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 
 interface RegisterComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
@@ -24,19 +24,13 @@ interface RegisterComponentProps {
 
 export function RegisterComponent({ setView }: RegisterComponentProps) {
   const { setToken, setPlayerID, setUsername } = useAuthProvider();
+  const { toggleInfoModal } = useInfoModalProvider();
   const [retypedPassword, setRetypedPassword] = useState<string>('');
   const [registrationRequest, setRegistrationRequest] =
     useState<IRegistrationRequest>({
       username: '',
       password: '',
     });
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-
-  const handleError = (message: string) => {
-    setErrorMessage(message);
-    setErrorModalVisible(true);
-  };
 
   const handleRegister = async () => {
     const validInput: boolean = handleInputValidationAndFeedback();
@@ -46,7 +40,7 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
       await registerPlayer(registrationRequest);
 
     if (result.isError) {
-      handleError(result.message);
+      toggleInfoModal(true, result.message);
       return;
     }
 
@@ -61,12 +55,12 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
       registrationRequest.username.length === 0 ||
       registrationRequest.password.length === 0
     ) {
-      handleError('Username and password cannot be empty.');
+      toggleInfoModal(true, 'Username and password cannot be empty.');
       return false;
     }
 
     if (registrationRequest.password !== retypedPassword) {
-      handleError('The passwords do not match.');
+      toggleInfoModal(true, 'The passwords do not match.');
       return false;
     }
 
@@ -74,7 +68,8 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
       !validUsername(registrationRequest.username) ||
       registrationRequest.username.length > 10
     ) {
-      handleError(
+      toggleInfoModal(
+        true,
         'Username can only consist of letters and numbers, with a max length of 10.'
       );
       return false;
@@ -88,12 +83,6 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <ErrorModal
-        errorModalVisible={errorModalVisible}
-        setErrorModalVisible={setErrorModalVisible}
-        message={errorMessage}
-      />
-
       <Text style={styles.header}>Register</Text>
       <View style={styles.card}>
         <View style={styles.inputContainer}>

@@ -1,13 +1,13 @@
 import { View, Text, Pressable } from 'react-native';
 import { styles } from './ChooseBoardPageStyles';
-import { PlayPages } from '../../GamePages';
+import { PlayPages } from '../../types/GamePages';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 import { useEffect, useState } from 'react';
-import { useAuthProvider } from '@/src/Shared/state/AuthProvider';
+import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 import { getAllCards } from '@/src/Shared/functions/CardClient';
-import Result from '@/src/Shared/domain/Result';
-import { ICardDto } from '@/src/Shared/domain/CardTypes';
+import Result from '@/src/Shared/objects/Result';
+import { ICardDto } from '@/src/Shared/types/CardTypes';
 import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
 import Card from './components/Card/Card';
 

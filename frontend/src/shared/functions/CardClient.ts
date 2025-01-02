@@ -1,6 +1,6 @@
-import { CARD_ENDPOINT } from '../domain/URL_PATHS';
-import { ICardDto } from '@/src/Shared/domain/CardTypes';
-import Result from '../domain/Result';
+import { CARD_ENDPOINT } from '../objects/URL_PATHS';
+import { ICardDto } from '@/src/Shared/types/CardTypes';
+import Result from '../objects/Result';
 
 export const getAllCards = async (
   token: string

@@ -3,7 +3,7 @@ import { styles, imageStyles } from './CardModalStyles';
 import BigButton from '@/src/Shared/components/BigButton/BigButton';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 import StrokedText from '@/src/Shared/components/StokedText/StrokedText';
-import { ICardDto } from '@/src/Shared/domain/CardTypes';
+import { ICardDto } from '@/src/Shared/types/CardTypes';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useEffect, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -63,7 +63,7 @@ export default function CardModal({
           </View>
 
           {!editMode && (
-            <>
+            <View>
               <StrokedText
                 text={card.name}
                 fontBaseSize={40}
@@ -77,10 +77,10 @@ export default function CardModal({
                   onButtonPress={() => setEditMode(true)}
                 />
               </View>
-            </>
+            </View>
           )}
           {editMode && (
-            <>
+            <View>
               <StrokedText
                 text={card.name}
                 fontBaseSize={40}
@@ -94,7 +94,7 @@ export default function CardModal({
                   onButtonPress={() => handleEditCardPressed()}
                 />
               </View>
-            </>
+            </View>
           )}
         </View>
       </View>

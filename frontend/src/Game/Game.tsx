@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { PlayPages } from './GamePages';
+import { PlayPages } from './types/GamePages';
 import MainPage from './components/MainPage/MainPage';
 import JoinPage from './components/JoinPage/JoinPage';
 import HostPage from './components/HostPage/HostPage';
@@ -17,28 +17,22 @@ import {
   updateGameState,
 } from '@/src/Game/GameHubClient';
 import { GameState } from './types/GameTypes';
-import { useAuthProvider } from '../Shared/state/AuthProvider';
-import ErrorModal from '../Shared/components/ErrorModal/ErrorModal';
-import { createGame } from './GameClient';
-import { styles } from './GameStyles';
+import { useAuthProvider } from '../Shared/providers/AuthProvider';
+import { createGame, getBoardWithBoardCards } from './GameClient';
 import ChooseCardPage from './components/ChooseCardPage/ChooseCardPage';
+import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
 
 export default function Game() {
-  const [page, setPage] = useState<PlayPages>(PlayPages.MAIN_PAGE);
-  const [gameState, setGameState] = useState<GameState>(
-    GameState.BOTH_CHOSING_CARDS
-  );
   const [message, setMessage] = useState<string>('');
   const [gameId, setGameId] = useState<number>(0);
   const [oponentCardsLeft, setOponentCardsLeft] = useState<number>(20);
   const [connection, setConnection] = useState<signalR.HubConnection>();
-  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
   const [isHost, setIsHost] = useState<boolean>(false);
   const [cardsToChoose, setCardsToChoose] = useState<number>(40);
 
   const isHostRef = useRef(isHost);
-  const { token, playerID } = useAuthProvider();
+  const { token } = useAuthProvider();
+  const { toggleInfoModal } = useInfoModalProvider();
 
   useEffect(() => {
     connectToHub();
@@ -75,13 +69,12 @@ export default function Game() {
   };
 
   const handleCreateBoardcards = async (cardIds: number[]) => {
-    if (connection) await createBoardCards(connection, gameId, cardIds);
-  };
-
-  const handleError = (message: string, redirect: boolean) => {
-    setErrorModalVisible(true);
-    setErrorMessage(message);
-    if (redirect) setPage(PlayPages.MAIN_PAGE);
+    if (connection) {
+      var result = await createBoardCards(connection, gameId, cardIds);
+      if (result.isError) {
+        handleError(result.message, false);
+      }
+    }
   };
 
   const handleJoinGame = async () => {
@@ -91,12 +84,21 @@ export default function Game() {
     } else handleError('Connection was broken.', true);
   };
 
+  const fetchBoard = async () => {
+    var result = await getBoardWithBoardCards(gameId, token);
+    if (result.isError) {
+      handleError(result.message, true);
+    }
+  };
+
   const connectToHub = async () => {
     const con = createConnection(token);
     setConnection(con);
     await startConnection(con);
 
     con.on('RECEIVE_STATE', (state: GameState) => {
+      console.log('State ' + state);
+
       setGameState(state);
       switch (state) {
         case GameState.ONLY_HOST_CHOSING_CARDS: {
@@ -117,6 +119,18 @@ export default function Game() {
           setPage(PlayPages.CHOOSE_CARD_PAGE);
           break;
         }
+        case GameState.P2_CHOOSING: {
+          if (isHostRef.current) {
+            setPage(PlayPages.WAITING_PAGE);
+          }
+          break;
+        }
+        case GameState.P1_CHOOSING: {
+          if (!isHostRef.current) {
+            setPage(PlayPages.WAITING_PAGE);
+          }
+          break;
+        }
       }
     });
 
@@ -131,20 +145,9 @@ export default function Game() {
 
     con.on('RECEIVE_ERROR', (message: string) => {
       console.log('Error msg ' + message);
-      handleError(message, true);
+      toggleInfoModal(true, message);
     });
   };
-
-  if (errorModalVisible)
-    return (
-      <View style={styles.container}>
-        <ErrorModal
-          errorModalVisible={errorModalVisible}
-          setErrorModalVisible={setErrorModalVisible}
-          message={errorMessage}
-        />
-      </View>
-    );
 
   switch (page) {
     case PlayPages.MAIN_PAGE:
@@ -155,7 +158,6 @@ export default function Game() {
           handleJoinGame={handleJoinGame}
           setGameId={setGameId}
           setPage={setPage}
-          handleError={handleError}
         />
       );
     case PlayPages.HOST_PAGE:
@@ -169,14 +171,13 @@ export default function Game() {
     case PlayPages.CHOOSE_BOARD_PAGE:
       return (
         <ChooseBoardPage
-          handleError={handleError}
           cardsToChoose={cardsToChoose}
           setPage={setPage}
           handleCreateBoardcards={handleCreateBoardcards}
         />
       );
     case PlayPages.CHOOSE_CARD_PAGE:
-      return <ChooseCardPage setPage={setPage} handleError={handleError} />;
+      return <ChooseCardPage setPage={setPage} fetchBoard={fetchBoard} />;
     case PlayPages.LOBBY_PAGE:
       return <LobbyPage setPage={setPage} />;
     case PlayPages.WAITING_PAGE:

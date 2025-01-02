@@ -1,17 +1,17 @@
 import { View, Text, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
-import { ICardDto } from '@/src/Shared/domain/CardTypes';
+import { ICardDto } from '@/src/Shared/types/CardTypes';
 import Card from './components/Card/CardComponent';
 import CardModal from './components/CardModal/CardModal';
 import { viewStyles, textStyles } from './GalleryStyles';
 import { AddCardComponent } from './components/AddCard/AddCardComponent';
 import AddCardModal from './components/AddCardModal/AddCardModal';
 import { deleteCard, getAllCards } from '@/src/Shared/functions/CardClient';
-import { useAuthProvider } from '@/src/Shared/state/AuthProvider';
+import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
-import Result from '@/src/Shared/domain/Result';
-import ErrorModal from '@/src/Shared/components/ErrorModal/ErrorModal';
+import Result from '@/src/Shared/objects/Result';
+import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
 
 const defaultCard: ICardDto = {
   id: -1,
@@ -29,14 +29,8 @@ export default function Gallery() {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [displayPrevious, setDisplayPrevious] = useState<boolean>(false);
   const [displayNext, setDisplayNext] = useState<boolean>(false);
-  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
   const { token } = useAuthProvider();
-
-  const handleError = (message: string) => {
-    setErrorModalVisible(true);
-    setErrorMessage(message);
-  };
+  const { toggleInfoModal } = useInfoModalProvider();
 
   useEffect(() => {
     fetchPlayerCards();
@@ -45,7 +39,7 @@ export default function Gallery() {
   const fetchPlayerCards = async () => {
     const result: Result<Array<ICardDto>> = await getAllCards(token);
     if (result.isError) {
-      handleError(result.message);
+      toggleInfoModal(true, result.message);
     }
 
     const data = result.data;
@@ -99,7 +93,7 @@ export default function Gallery() {
           setCardModalVisible(false);
           const result = await deleteCard(card.id, token);
           if (result.isError) {
-            handleError(result.message);
+            toggleInfoModal(true, result.message);
             return;
           }
           setAllCards((prev) =>
@@ -114,13 +108,7 @@ export default function Gallery() {
   };
 
   return (
-    <>
-      <ErrorModal
-        errorModalVisible={errorModalVisible}
-        setErrorModalVisible={setErrorModalVisible}
-        message={errorMessage}
-      />
-
+    <View>
       <CardModal
         modalVisible={cardModalVisible}
         setModalVisible={setCardModalVisible}
@@ -131,7 +119,6 @@ export default function Gallery() {
       <AddCardModal
         modalVisible={addCardModalVisible}
         setModalVisible={setAddCardModalVisible}
-        handleError={handleError}
       />
 
       <View
@@ -176,6 +163,6 @@ export default function Gallery() {
           </View>
         </View>
       </View>
-    </>
+    </View>
   );
 }

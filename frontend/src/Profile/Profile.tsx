@@ -4,22 +4,22 @@ import { useEffect, useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { Colors } from '../Shared/assets/constants/Colors';
 import ErrorModal from '../Shared/components/ErrorModal/ErrorModal';
-import { useAuthProvider } from '../Shared/state/AuthProvider';
+import { useAuthProvider } from '../Shared/providers/AuthProvider';
 import MediumButton from '../Shared/components/MediumButton/MediumButton';
 import BigButton from '../Shared/components/BigButton/BigButton';
 import { pickImage } from '../Shared/functions/ImagePicker';
 import { TouchableOpacity } from 'react-native';
 import { updatePlayer, updatePlayerImage } from './PlayerClient';
-import { IPlayerDto } from '../Shared/domain/PlayerTypes';
+import { IPlayerDto } from '../Shared/types/PlayerTypes';
 import { DevSettings } from 'react-native';
+import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
 
 export default function Profile() {
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
   const [newUsername, setNewUsername] = useState<string>('');
   const [imageUri, setImageUri] = useState<any>();
+  const { toggleInfoModal } = useInfoModalProvider();
   const {
     imageUrl,
     setImageUrl,
@@ -39,18 +39,13 @@ export default function Profile() {
     clearValues();
   };
 
-  const handleError = (message: string) => {
-    setErrorModalVisible(true);
-    setErrorMessage(message);
-  };
-
   const handleSelectImage = async () => {
     const uri = await pickImage();
     if (uri !== 'EXIT') {
       setImageUri(uri);
       const result = await updatePlayerImage(uri, token);
       if (result.isError) {
-        handleError(result.message);
+        toggleInfoModal(true, result.message);
         setImageUri(imageUrl);
       }
     }
@@ -65,7 +60,7 @@ export default function Profile() {
     };
     const result = await updatePlayer(dto, token);
     if (result.isError) {
-      handleError(result.message);
+      toggleInfoModal(true, result.message);
       return;
     }
 
@@ -86,11 +81,6 @@ export default function Profile() {
 
   return (
     <View style={styles.container}>
-      <ErrorModal
-        message={errorMessage}
-        setErrorModalVisible={setErrorModalVisible}
-        errorModalVisible={errorModalVisible}
-      />
       <Text style={styles.header}>Profile</Text>
       <View style={styles.creamContainer}>
         {!editMode && (

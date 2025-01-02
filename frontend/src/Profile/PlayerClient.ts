@@ -1,6 +1,6 @@
-import { IPlayerDto } from '../Shared/domain/PlayerTypes';
-import Result from '../Shared/domain/Result';
-import { PLAYER_ENDPOINT } from '../Shared/domain/URL_PATHS';
+import { IPlayerDto } from '../Shared/types/PlayerTypes';
+import Result from '../Shared/objects/Result';
+import { PLAYER_ENDPOINT } from '../Shared/objects/URL_PATHS';
 
 export const updatePlayer = async (
   dto: IPlayerDto,

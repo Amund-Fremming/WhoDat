@@ -1,10 +1,10 @@
-import { AUTH_ENDPOINT } from '@/src/Shared/domain/URL_PATHS';
+import { AUTH_ENDPOINT } from '@/src/Shared/objects/URL_PATHS';
 import {
   IRegistrationRequest,
   ILoginRequest,
   IAuthResponse,
 } from '@/src/Auth/AuthTypes';
-import Result from '../Shared/domain/Result';
+import Result from '../Shared/objects/Result';
 
 export const loginPlayer = async (
   request: ILoginRequest

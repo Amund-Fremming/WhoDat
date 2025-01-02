@@ -4,7 +4,7 @@ import { TabBarIcon } from '@/src/Shared/components/navigation/TabBarIcon';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 import Auth from '@/src/Auth/Auth';
 import { useEffect, useState } from 'react';
-import { useAuthProvider } from '@/src/Shared/state/AuthProvider';
+import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 
 export default function TabLayout() {
   const { token } = useAuthProvider();

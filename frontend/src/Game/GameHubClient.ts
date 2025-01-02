@@ -1,7 +1,7 @@
 import * as signalR from '@microsoft/signalr';
 
-import { HUB_ENDPOINT } from '@/src/Shared/domain/URL_PATHS';
-import Result from '../Shared/domain/Result';
+import { HUB_ENDPOINT } from '@/src/Shared/objects/URL_PATHS';
+import Result from '../Shared/objects/Result';
 import { GameState } from './types/GameTypes';
 import { IBoardCardUpdate } from './types/BoardTypes';
 
@@ -45,7 +45,9 @@ export const leaveGame = async (
   try {
     await connection.invoke('LeaveGame', gameId);
     console.log('Left game:', gameId);
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const joinGame = async (

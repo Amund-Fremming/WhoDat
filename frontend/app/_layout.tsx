@@ -3,7 +3,8 @@ import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { Splash } from '@/src/Splash/Splash';
-import { AuthProvider } from '@/src/Shared/state/AuthProvider';
+import { AuthProvider } from '@/src/Shared/providers/AuthProvider';
+import { InfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 
 export default function RootLayout() {
   const [loadSplash, setLoadSplash] = useState<boolean>(true);
@@ -31,9 +32,11 @@ export default function RootLayout() {
   if (loaded) {
     return (
       <AuthProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
+        <InfoModalProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+        </InfoModalProvider>
       </AuthProvider>
     );
   }

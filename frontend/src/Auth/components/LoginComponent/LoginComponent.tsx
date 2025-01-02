@@ -13,11 +13,12 @@ import { Colors } from '@/src/Shared/assets/constants/Colors';
 import BigButton from '@/src/Shared/components/BigButton/BigButton';
 import { IAuthResponse, ILoginRequest } from '@/src/Auth/AuthTypes';
 import { useState } from 'react';
-import { useAuthProvider } from '@/src/Shared/state/AuthProvider';
+import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 import { loginPlayer } from '../../AuthClient';
-import Result from '@/src/Shared/domain/Result';
+import Result from '@/src/Shared/objects/Result';
 import ErrorModal from '@/src/Shared/components/ErrorModal/ErrorModal';
 import { validUsername } from '@/src/Shared/functions/InputValitator';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 
 interface LoginComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
@@ -25,13 +26,7 @@ interface LoginComponentProps {
 
 export function LoginComponent({ setView }: LoginComponentProps) {
   const { setToken, setPlayerID, setUsername, setImageUrl } = useAuthProvider();
-  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
-  const handleError = (message: string) => {
-    setErrorModalVisible(true);
-    setErrorMessage(message);
-  };
+  const { toggleInfoModal } = useInfoModalProvider();
 
   const [loginRequest, setLoginRequest] = useState<ILoginRequest>({
     username: '',
@@ -56,7 +51,7 @@ export function LoginComponent({ setView }: LoginComponentProps) {
 
     const result: Result<IAuthResponse> = await loginPlayer(loginRequest);
     if (result.isError) {
-      handleError(result.message);
+      toggleInfoModal(true, result.message);
       return;
     }
 
@@ -72,12 +67,6 @@ export function LoginComponent({ setView }: LoginComponentProps) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <ErrorModal
-        errorModalVisible={errorModalVisible}
-        setErrorModalVisible={setErrorModalVisible}
-        message={errorMessage}
-      />
-
       <Text style={styles.header}>Login</Text>
       <View style={styles.card}>
         <View style={styles.inputContainer}>

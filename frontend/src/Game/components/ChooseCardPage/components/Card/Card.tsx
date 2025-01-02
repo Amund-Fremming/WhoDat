@@ -1,7 +1,7 @@
 import { Image, Pressable, Text, View } from 'react-native';
 import { styles, imageStyles } from './CardStyles';
 import StrokedText from '@/src/Shared/components/StokedText/StrokedText';
-import { ICardDto } from '@/src/Shared/domain/CardTypes';
+import { ICardDto } from '@/src/Shared/types/CardTypes';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 
 interface CardComponentProps {

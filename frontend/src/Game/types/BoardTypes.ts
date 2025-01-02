@@ -1,12 +1,13 @@
-import { IPlayer } from '@/src/Shared/domain/PlayerTypes';
-import { IBoardCard, IGame } from './GameTypes';
+import { IPlayer } from '@/src/Shared/types/PlayerTypes';
+import { IGame } from './GameTypes';
+import { ICardDto } from '@/src/Shared/types/CardTypes';
 
 export interface IBoard {
   ID: number;
   PlayerID: number;
-  Player?: IPlayer;
+  PlayerEntity?: IPlayer;
   gameID: number;
-  game?: IGame;
+  gameEntity?: IGame;
   chosenCardID?: number;
   chosenCard?: IBoardCard;
   playersLeft: number;
@@ -16,5 +17,14 @@ export interface IBoard {
 
 export interface IBoardCardUpdate {
   boardCardID: number;
+  active: boolean;
+}
+
+export interface IBoardCard {
+  ID: number;
+  boardID: number;
+  board?: IBoard;
+  cardID: number;
+  card?: ICardDto; // Here?
   active: boolean;
 }
