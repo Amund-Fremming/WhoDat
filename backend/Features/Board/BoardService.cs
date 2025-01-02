@@ -155,15 +155,19 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
             if (game.Boards!.Count() <= 1)
             {
-                var createBoardResult = await CreatePlayerTwoBoard(playerId, game);
+                var createBoardResult = await CreatePlayerTwoBoard(playerId, playerOneBoard);
                 if (createBoardResult.IsError)
                     return createBoardResult.Error;
 
                 return createBoardResult.Data;
             }
 
-            BoardEntity playerTwoBoard = game.Boards.ElementAt(1);
+            var playerTwoBoardId = game.Boards.ElementAt(1).ID;
+            var playerTwoBoardResult = await _boardRepository.GetBoardWithBoardCards(playerTwoBoardId);
+            if (playerTwoBoardResult.IsError)
+                return playerTwoBoardResult;
 
+            var playerTwoBoard = playerTwoBoardResult.Data;
             if (playerTwoBoard.PlayerID != playerId)
                 return new Error(new KeyNotFoundException("Board does not exist"), "You dont have permission to this board.");
 
@@ -224,27 +228,14 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
         }
     }
 
-    private async Task<Result<BoardEntity>> CreatePlayerTwoBoard(int playerId, GameEntity game)
+    private async Task<Result<BoardEntity>> CreatePlayerTwoBoard(int playerId, BoardEntity board)
     {
-        var result = await _playerRepository.GetById(playerId);
-        if (result.IsError)
-            return result.Error;
-
-        BoardEntity playerOneBoard = game.Boards!.ElementAt(0);
-        BoardEntity playerTwoBoard = new(playerId, game.ID);
-        List<BoardCardEntity> tempBoardCards = [];
-
-        foreach (BoardCardEntity boardCard in playerOneBoard.BoardCards!)
-        {
-            BoardCardEntity newBoardCard = new(boardCard.BoardID, boardCard.CardID);
-            tempBoardCards.Add(newBoardCard);
-        }
-
-        playerTwoBoard.BoardCards = tempBoardCards;
+        BoardEntity playerTwoBoard = new(playerId, board.GameID);
+        playerTwoBoard.BoardCards = board.BoardCards;
 
         var createResult = await _boardRepository.Create(playerTwoBoard);
         if (createResult.IsError)
-            return result.Error;
+            return createResult.Error;
 
         return playerTwoBoard;
     }
