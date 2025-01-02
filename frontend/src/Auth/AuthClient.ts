@@ -29,7 +29,6 @@ export const loginPlayer = async (
     }
 
     const data: IAuthResponse = await response.json();
-    console.log('Image url from client ' + data.imageUrl);
     return Result.ok(data);
   } catch (error) {
     console.error(error, ' loginPlayer: request failed.');

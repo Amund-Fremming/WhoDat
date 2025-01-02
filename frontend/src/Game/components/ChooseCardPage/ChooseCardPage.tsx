@@ -29,7 +29,6 @@ export default function ChooseCardPage() {
       toggleInfoModal(true, result.message);
       return;
     }
-    console.log(result.data?.boardCards);
     setCards(result.data?.boardCards!);
   };
 

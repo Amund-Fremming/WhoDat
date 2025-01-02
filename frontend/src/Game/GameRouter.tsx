@@ -47,7 +47,6 @@ export default function GameRouter() {
 
   useEffect(() => {
     isHostRef.current = isHost;
-    console.log('is this one host? ' + isHost + ' ref: ' + isHostRef.current);
   }, [isHost]);
 
   useEffect(() => {
@@ -60,7 +59,6 @@ export default function GameRouter() {
     await startConnection(con);
 
     con.on('RECEIVE_STATE', (state: GameState) => {
-      console.log('State ' + state + ' isHost: ' + isHost);
       setGameState(state);
       switch (state) {
         case GameState.ONLY_HOST_CHOSING_CARDS: {

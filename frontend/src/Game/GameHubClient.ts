@@ -19,8 +19,6 @@ export const startConnection = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.start();
-    console.log('Connection started');
-
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');
@@ -32,7 +30,6 @@ export const stopConnection = async (
 ): Promise<void> => {
   try {
     await connection.stop();
-    console.log('Connection stopped');
   } catch (error) {
     console.error('Error while stopping connection: ', error);
   }
@@ -44,7 +41,6 @@ export const leaveGame = async (
 ): Promise<void> => {
   try {
     await connection.invoke('LeaveGame', gameId);
-    console.log('Left game:', gameId);
   } catch (error) {
     console.error(error);
   }
@@ -68,7 +64,6 @@ export const subscribeToGameAsHost = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke('SubscribeToGameAsHost', gameId);
-    console.log('Host subscribed to game:', gameId);
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');
@@ -81,7 +76,6 @@ export const updateGameState = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke('UpdateGameState', gameState);
-    console.log('UpdateGameState:', gameState);
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');
@@ -94,7 +88,6 @@ export const sendMessage = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke('SendMessage', messageText);
-    console.log('SendMessage:', messageText);
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');
@@ -107,7 +100,6 @@ export const guessBoardCard = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke('GuessBoardCard', boardCardId);
-    console.log('GuessBoardCard:', boardCardId);
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');
@@ -122,7 +114,6 @@ export const updateBoardCardsActivity = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke('UpdateBoardCardsActivity');
-    console.log('UpdateBoardCardsActivity:', gameId, boardId, boardCardUpdates);
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');
@@ -150,7 +141,6 @@ export const chooseBoardCard = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke('ChooseBoardCard', gameId, boardId, boardCardId);
-    console.log('ChooseBoardCard:', gameId);
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');
@@ -163,7 +153,6 @@ export const startGame = async (
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke('StartGame', gameId);
-    console.log('Game started:', gameId);
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');
