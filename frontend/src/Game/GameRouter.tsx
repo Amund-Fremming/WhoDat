@@ -18,7 +18,7 @@ import ChooseCardPage from './components/ChooseCardPage/ChooseCardPage';
 import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
 import { useGameProvider } from '../Shared/providers/GameProvider';
 
-export default function Game() {
+export default function GameRouter() {
   const [message, setMessage] = useState<string>('');
   const [oponentCardsLeft, setOponentCardsLeft] = useState<number>(20);
   const [cardsToChoose, setCardsToChoose] = useState<number>(40);

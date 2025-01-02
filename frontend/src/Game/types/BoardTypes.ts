@@ -16,15 +16,13 @@ export interface IBoard {
 }
 
 export interface IBoardCardUpdate {
-  boardCardID: number;
+  ID: number;
   active: boolean;
 }
 
 export interface IBoardCard {
   ID: number;
   boardID: number;
-  board?: IBoard;
   cardID: number;
-  card?: ICardDto; // Here?
   active: boolean;
 }
