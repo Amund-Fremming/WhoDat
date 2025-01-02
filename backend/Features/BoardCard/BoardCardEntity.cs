@@ -11,8 +11,10 @@ public class BoardCardEntity : IEntity
     public int ID { get; set; }
 
     public int BoardID { get; set; }
+
     [JsonIgnore]
-    public BoardEntity? Board { get; set; }
+    public BoardEntity Board { get; set; }
+
     public int CardID { get; set; }
     public CardEntity? Card { get; set; }
     public bool Active { get; set; }

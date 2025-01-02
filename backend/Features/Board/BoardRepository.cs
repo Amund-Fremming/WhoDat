@@ -104,6 +104,7 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
         {
             var result = await _context.Board
                 .Include(b => b.BoardCards)
+                .ThenInclude(bc => bc.Card)
                 .FirstOrDefaultAsync(g => g.ID == boardId);
 
             if (result == null)

@@ -15,13 +15,15 @@ public class BoardEntity : IEntity
     public int PlayerID { get; set; }
     public PlayerEntity? Player { get; set; }
     public int GameID { get; set; }
+
     [JsonIgnore]
     public GameEntity? Game { get; set; }
+
     public int? ChosenCardID { get; set; }
     public BoardCardEntity? ChosenCard { get; set; }
     public int PlayersLeft { get; set; }
     public IEnumerable<MessageEntity>? Messages { get; set; }
-    public IEnumerable<BoardCardEntity>? BoardCards { get; set; }
+    public IEnumerable<BoardCardEntity> BoardCards { get; set; }
 
     public BoardEntity()
     { }
