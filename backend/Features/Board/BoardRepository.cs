@@ -97,4 +97,24 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
             return new Error(e, "Failed to update board cards left.");
         }
     }
+
+    public async Task<Result<BoardEntity>> GetBoardWithBoardCards(int boardId)
+    {
+        try
+        {
+            var result = await _context.Board
+                .Include(b => b.BoardCards)
+                .FirstOrDefaultAsync(g => g.ID == boardId);
+
+            if (result == null)
+                return new Error(new NullReferenceException(), "Board does not exist.");
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(UpdateBoardCardsLeft)");
+            return new Error(e, "Failed to update board cards left.");
+        }
+    }
 }

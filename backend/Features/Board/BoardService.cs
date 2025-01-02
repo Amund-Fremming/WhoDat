@@ -143,18 +143,23 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             if (validation.IsError)
                 return new Error(new Exception("Player does not have board permission."), "Player does not have board permission.");
 
-            BoardEntity playerOneBoard = game.Boards.ElementAt(0);
+            var playerOneBoardId = game.Boards.ElementAt(0).ID;
+            var boardResult = await _boardRepository.GetBoardWithBoardCards(playerOneBoardId);
 
+            if (boardResult.IsError)
+                return boardResult;
+
+            var playerOneBoard = boardResult.Data;
             if (playerOneBoard.PlayerID == playerId)
                 return playerOneBoard;
 
             if (game.Boards!.Count() <= 1)
             {
-                var boardResult = await CreatePlayerTwoBoard(playerId, game);
-                if (boardResult.IsError)
-                    return boardResult.Error;
+                var createBoardResult = await CreatePlayerTwoBoard(playerId, game);
+                if (createBoardResult.IsError)
+                    return createBoardResult.Error;
 
-                return boardResult.Data;
+                return createBoardResult.Data;
             }
 
             BoardEntity playerTwoBoard = game.Boards.ElementAt(1);

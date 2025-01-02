@@ -16,9 +16,14 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
     {
         try
         {
-            return await _context.Game
+            var result = await _context.Game
                 .Include(g => g.Boards)
                 .FirstOrDefaultAsync(g => g.ID == gameId);
+
+            if (result == null)
+                return new Error(new NullReferenceException(""), "Game does not exist.");
+
+            return result;
         }
         catch (Exception e)
         {

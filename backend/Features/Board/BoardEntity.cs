@@ -3,6 +3,7 @@ using Backend.Features.Game;
 using Backend.Features.Message;
 using Backend.Features.Player;
 using Backend.Features.Shared.Common.Entity;
+using System.Text.Json.Serialization;
 
 namespace Backend.Features.Board;
 
@@ -14,6 +15,7 @@ public class BoardEntity : IEntity
     public int PlayerID { get; set; }
     public PlayerEntity? Player { get; set; }
     public int GameID { get; set; }
+    [JsonIgnore]
     public GameEntity? Game { get; set; }
     public int? ChosenCardID { get; set; }
     public BoardCardEntity? ChosenCard { get; set; }

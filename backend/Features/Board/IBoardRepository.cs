@@ -19,4 +19,6 @@ public interface IBoardRepository : IRepository<BoardEntity>
     /// <param name="board">Board to be set cards left on.</param>
     /// <param name="playersLeft">Number of active BoardCards left.</param>
     Task<Result> UpdateBoardCardsLeft(BoardEntity board, int playersLeft);
+
+    Task<Result<BoardEntity>> GetBoardWithBoardCards(int boardId);
 }

@@ -1,6 +1,7 @@
 using Backend.Features.Board;
 using Backend.Features.Card;
 using Backend.Features.Shared.Common.Entity;
+using System.Text.Json.Serialization;
 
 namespace Backend.Features.BoardCard;
 
@@ -10,6 +11,7 @@ public class BoardCardEntity : IEntity
     public int ID { get; set; }
 
     public int BoardID { get; set; }
+    [JsonIgnore]
     public BoardEntity? Board { get; set; }
     public int CardID { get; set; }
     public CardEntity? Card { get; set; }
