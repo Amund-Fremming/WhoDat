@@ -5,30 +5,29 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 import { useEffect, useState } from 'react';
 import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
-import { getAllCards } from '@/src/Shared/functions/CardClient';
-import Result from '@/src/Shared/objects/Result';
 import { ICardDto } from '@/src/Shared/types/CardTypes';
-import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
 import Card from './components/Card/Card';
 import { getBoardWithBoardCards } from '../../GameClient';
+import { useGameProvider } from '@/src/Shared/providers/GameProvider';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 
-interface CardPageProps {
-  handleError: (message: string, redirect: boolean) => void;
-  setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
-  fetchBoard: () => {};
-}
-
-export default function ChooseCardPage({
-  handleError,
-  setPage,
-  fetchBoard,
-}: CardPageProps) {
+export default function ChooseCardPage() {
   const [cardPressed, setCardPressed] = useState<number>(-1);
   const [cards, setCards] = useState<ICardDto[]>([]);
+  const { setPage, gameId } = useGameProvider();
+  const { toggleInfoModal } = useInfoModalProvider();
+  const { token } = useAuthProvider();
 
   useEffect(() => {
     fetchBoard();
   }, []);
+
+  const fetchBoard = async () => {
+    var result = await getBoardWithBoardCards(gameId, token);
+    if (result.isError) {
+      toggleInfoModal(true, result.message);
+    }
+  };
 
   return (
     <View style={styles.container}>

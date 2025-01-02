@@ -5,39 +5,37 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 import BigButton from '@/src/Shared/components/BigButton/BigButton';
 import { joinGame } from '../../GameHubClient';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
+import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 
-interface JoinPageProps {
-  setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
-  setGameId: React.Dispatch<React.SetStateAction<number>>;
-  handleJoinGame: () => Promise<void>;
-  handleError: (message: string, redirect: boolean) => void;
-}
+export default function JoinPage() {
+  const { toggleInfoModal } = useInfoModalProvider();
+  const { setGameId, setPage, connection, gameId, setIsHost } =
+    useGameProvider();
 
-export default function JoinPage({
-  setPage,
-  handleJoinGame,
-  setGameId,
-  handleError,
-}: JoinPageProps) {
-  const handleJoinGamePressed = async () => {
-    await handleJoinGame();
+  const handleJoinGame = async () => {
+    if (connection) {
+      setIsHost(false);
+      await joinGame(connection, gameId);
+    } else {
+      toggleInfoModal(true, 'Connection was broken.');
+    }
   };
 
   const handleInput = (input: string) => {
     try {
       var val = Number.parseInt(input);
       if (Number.isNaN(val)) {
-        handleError('Game id must be numeric.', false);
+        toggleInfoModal(true, 'Game id must be numeric.');
       }
 
       if (val > 10000) {
-        handleError('Game ids has to be lower than 10 000.', false);
+        toggleInfoModal(true, 'Game ids has to be lower than 10 000.');
         return;
       }
       setGameId(val);
     } catch (error) {
-      console.log('Errorrrr');
-      handleError('Input provided is faulty brah', false);
+      toggleInfoModal(true, 'Input provided is faulty brah');
     }
   };
 
@@ -64,7 +62,7 @@ export default function JoinPage({
           text="Join"
           color={Colors.BurgundyRed}
           inverted={false}
-          onButtonPress={handleJoinGamePressed}
+          onButtonPress={handleJoinGame}
         />
       </View>
     </View>

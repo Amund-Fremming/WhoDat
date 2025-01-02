@@ -68,6 +68,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         {
             int playerId = ParsePlayerIdClaim();
             var result = await _boardService.GetBoardWithBoardCards(playerId, gameId);
+            _logger.LogError("Is success: " + !result.IsError);
             return result.Resolve(
                 suc => Ok(suc.Data),
                 err => BadRequest(err.Message));

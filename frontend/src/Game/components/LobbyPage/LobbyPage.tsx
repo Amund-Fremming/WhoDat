@@ -3,12 +3,11 @@ import { styles } from './LobbyPageStyles';
 import { PlayPages } from '../../types/GamePages';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
+import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 
-interface LobbyPageProps {
-  setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
-}
+export default function LobbyPage() {
+  const { setPage } = useGameProvider();
 
-export default function LobbyPage({ setPage }: LobbyPageProps) {
   return (
     <View style={styles.container}>
       <Pressable

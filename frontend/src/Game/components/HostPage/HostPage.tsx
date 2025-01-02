@@ -5,19 +5,38 @@ import IconButton from '@/src/Shared/components/IconButton/IconButton';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 import { GameState } from '../../types/GameTypes';
-import { HubConnection } from '@microsoft/signalr';
+import { useGameProvider } from '@/src/Shared/providers/GameProvider';
+import { createGame } from '../../GameClient';
+import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
+import { subscribeToGameAsHost } from '../../GameHubClient';
 
-interface HostPageProps {
-  setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
-  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
-  handleCreateGame: (gameState: GameState) => Promise<void>;
-}
+export default function HostPage() {
+  const { setPage, setGameState, connection, setGameId, setIsHost } =
+    useGameProvider();
+  const { token } = useAuthProvider();
+  const { toggleInfoModal } = useInfoModalProvider();
 
-export default function HostPage({
-  setPage,
-  setGameState,
-  handleCreateGame,
-}: HostPageProps) {
+  const handleCreateGame = async (gameState: GameState) => {
+    var result = await createGame(gameState, token);
+    if (result.isError) {
+      toggleInfoModal(true, result.message);
+      setPage(PlayPages.MAIN_PAGE);
+      return;
+    }
+
+    if (result.data && connection) {
+      setGameId(result.data);
+      setIsHost(true);
+      await subscribeToGameAsHost(connection, result.data);
+    } else {
+      toggleInfoModal(
+        true,
+        'Failed to set incomming game id. Connection failed.'
+      );
+    }
+  };
+
   const handleBothChoosing = async () => {
     setPage(PlayPages.WAITING_PAGE);
     setGameState(GameState.BOTH_CHOSING_CARDS);

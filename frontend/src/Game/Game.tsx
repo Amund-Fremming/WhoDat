@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
 import { PlayPages } from './types/GamePages';
 import MainPage from './components/MainPage/MainPage';
 import JoinPage from './components/JoinPage/JoinPage';
@@ -8,31 +7,35 @@ import ChooseBoardPage from './components/ChooseBoardPage/ChooseBoardPage';
 import LobbyPage from './components/LobbyPage/LobbyPage';
 import WaitingPage from './components/WaitingPage/WaitingPage';
 import {
-  createBoardCards,
   createConnection,
-  joinGame,
   startConnection,
   stopConnection,
-  subscribeToGameAsHost,
   updateGameState,
 } from '@/src/Game/GameHubClient';
 import { GameState } from './types/GameTypes';
 import { useAuthProvider } from '../Shared/providers/AuthProvider';
-import { createGame, getBoardWithBoardCards } from './GameClient';
 import ChooseCardPage from './components/ChooseCardPage/ChooseCardPage';
 import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
+import { useGameProvider } from '../Shared/providers/GameProvider';
 
 export default function Game() {
   const [message, setMessage] = useState<string>('');
-  const [gameId, setGameId] = useState<number>(0);
   const [oponentCardsLeft, setOponentCardsLeft] = useState<number>(20);
-  const [connection, setConnection] = useState<signalR.HubConnection>();
-  const [isHost, setIsHost] = useState<boolean>(false);
   const [cardsToChoose, setCardsToChoose] = useState<number>(40);
-
-  const isHostRef = useRef(isHost);
   const { token } = useAuthProvider();
   const { toggleInfoModal } = useInfoModalProvider();
+  const {
+    connection,
+    setConnection,
+    gameState,
+    page,
+    setIsHost,
+    setGameState,
+    setPage,
+    isHost,
+  } = useGameProvider();
+
+  const isHostRef = useRef(isHost);
 
   useEffect(() => {
     connectToHub();
@@ -44,52 +47,12 @@ export default function Game() {
 
   useEffect(() => {
     isHostRef.current = isHost;
+    console.log('is this one host? ' + isHost + ' ref: ' + isHostRef.current);
   }, [isHost]);
 
   useEffect(() => {
-    // kanskje buggy
     if (connection) updateGameState(connection, gameState);
   }, [gameState]);
-
-  const handleCreateGame = async (gameState: GameState) => {
-    var result = await createGame(gameState, token);
-    if (result.isError) {
-      handleError(result.message, true);
-      setPage(PlayPages.MAIN_PAGE);
-      return;
-    }
-
-    if (result.data && connection) {
-      setGameId(result.data);
-      setIsHost(true);
-      await subscribeToGameAsHost(connection, result.data);
-    } else {
-      handleError('Failed to set incomming game id. Connection failed.', true);
-    }
-  };
-
-  const handleCreateBoardcards = async (cardIds: number[]) => {
-    if (connection) {
-      var result = await createBoardCards(connection, gameId, cardIds);
-      if (result.isError) {
-        handleError(result.message, false);
-      }
-    }
-  };
-
-  const handleJoinGame = async () => {
-    if (connection) {
-      await joinGame(connection, gameId);
-      setIsHost(false);
-    } else handleError('Connection was broken.', true);
-  };
-
-  const fetchBoard = async () => {
-    var result = await getBoardWithBoardCards(gameId, token);
-    if (result.isError) {
-      handleError(result.message, true);
-    }
-  };
 
   const connectToHub = async () => {
     const con = createConnection(token);
@@ -97,8 +60,7 @@ export default function Game() {
     await startConnection(con);
 
     con.on('RECEIVE_STATE', (state: GameState) => {
-      console.log('State ' + state);
-
+      console.log('State ' + state + ' isHost: ' + isHost);
       setGameState(state);
       switch (state) {
         case GameState.ONLY_HOST_CHOSING_CARDS: {
@@ -151,36 +113,18 @@ export default function Game() {
 
   switch (page) {
     case PlayPages.MAIN_PAGE:
-      return <MainPage setPage={setPage} />;
+      return <MainPage />;
     case PlayPages.JOIN_PAGE:
-      return (
-        <JoinPage
-          handleJoinGame={handleJoinGame}
-          setGameId={setGameId}
-          setPage={setPage}
-        />
-      );
+      return <JoinPage />;
     case PlayPages.HOST_PAGE:
-      return (
-        <HostPage
-          handleCreateGame={handleCreateGame}
-          setGameState={setGameState}
-          setPage={setPage}
-        />
-      );
+      return <HostPage />;
     case PlayPages.CHOOSE_BOARD_PAGE:
-      return (
-        <ChooseBoardPage
-          cardsToChoose={cardsToChoose}
-          setPage={setPage}
-          handleCreateBoardcards={handleCreateBoardcards}
-        />
-      );
+      return <ChooseBoardPage cardsToChoose={cardsToChoose} />;
     case PlayPages.CHOOSE_CARD_PAGE:
-      return <ChooseCardPage setPage={setPage} fetchBoard={fetchBoard} />;
+      return <ChooseCardPage />;
     case PlayPages.LOBBY_PAGE:
-      return <LobbyPage setPage={setPage} />;
+      return <LobbyPage />;
     case PlayPages.WAITING_PAGE:
-      return <WaitingPage gameId={gameId} setPage={setPage} />;
+      return <WaitingPage />;
   }
 }

@@ -10,20 +10,15 @@ import Result from '@/src/Shared/objects/Result';
 import { ICardDto } from '@/src/Shared/types/CardTypes';
 import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
 import Card from './components/Card/Card';
+import { useGameProvider } from '@/src/Shared/providers/GameProvider';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
+import { createBoardCards } from '../../GameHubClient';
 
 interface BoardPageProps {
-  setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
   cardsToChoose: number;
-  handleError: (message: string, redirect: boolean) => void;
-  handleCreateBoardcards: (cardIds: number[]) => {};
 }
 
-export default function ChooseBoardPage({
-  setPage,
-  cardsToChoose,
-  handleError,
-  handleCreateBoardcards,
-}: BoardPageProps) {
+export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
   const [allCards, setAllCards] = useState<ICardDto[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [cardsForThisPage, setCardsForThisPage] = useState<ICardDto[]>([]);
@@ -31,15 +26,26 @@ export default function ChooseBoardPage({
   const [displayPrevious, setDisplayPrevious] = useState<boolean>(false);
   const [cardsPressed, setCardsPressed] = useState<number[]>([]);
   const { token } = useAuthProvider();
+  const { setPage, connection, gameId } = useGameProvider();
+  const { toggleInfoModal } = useInfoModalProvider();
 
   useEffect(() => {
     fetchPlayerCards();
   }, []);
 
+  const handleCreateBoardcards = async (cardIds: number[]) => {
+    if (connection) {
+      var result = await createBoardCards(connection, gameId, cardIds);
+      if (result.isError) {
+        toggleInfoModal(true, result.message);
+      }
+    }
+  };
+
   const fetchPlayerCards = async () => {
     const result: Result<Array<ICardDto>> = await getAllCards(token);
     if (result.isError) {
-      handleError(result.message, true);
+      toggleInfoModal(true, result.message);
     }
 
     const data = result.data;
@@ -82,15 +88,18 @@ export default function ChooseBoardPage({
 
   const handleDonePressed = () => {
     if (cardsPressed.length != cardsToChoose) {
-      handleError(`Please choose  ${cardsToChoose} cards!`, false);
+      toggleInfoModal(true, `Please choose  ${cardsToChoose} cards!`);
       return;
     }
     handleCreateBoardcards(cardsPressed);
   };
 
   const handleCardPressed = (cardId: number) => {
-    if (cardsPressed.length == cardsToChoose) {
-      handleError(`You can only choose ${cardsToChoose} cards!`, false);
+    if (
+      cardsPressed.length == cardsToChoose &&
+      cardsPressed.filter((item) => item == cardId).length == 0
+    ) {
+      toggleInfoModal(true, `You can only choose ${cardsToChoose} cards!`);
       return;
     }
 
