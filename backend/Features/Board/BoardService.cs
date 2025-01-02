@@ -131,14 +131,17 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     {
         try
         {
-            var result = await _gameRepository.GetById(gameId);
+            var result = await _gameRepository.GetGameWithBoards(gameId);
             if (result.IsError)
                 return result.Error;
 
             var game = result.Data;
-            var validation = BoardValidation.HasGamePermission(playerId, game);
             if (game.Boards == null)
                 return new Error(new NullReferenceException("Game does not have boards instanciated."), "Game boards have not been created.");
+
+            var validation = BoardValidation.HasGamePermission(playerId, game);
+            if (validation.IsError)
+                return new Error(new Exception("Player does not have board permission."), "Player does not have board permission.");
 
             BoardEntity playerOneBoard = game.Boards.ElementAt(0);
 
