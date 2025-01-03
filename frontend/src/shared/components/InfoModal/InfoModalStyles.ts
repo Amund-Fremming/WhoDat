@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
       width: horizontalScale(15),
       height: verticalScale(15),
     },
+    paddingHorizontal: horizontalScale(3),
   },
 
   errorContainer: {

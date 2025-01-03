@@ -61,6 +61,10 @@ export default function GameRouter() {
     con.on('RECEIVE_STATE', (state: GameState) => {
       setGameState(state);
       switch (state) {
+        case GameState.PLAYER_LEFT: {
+          toggleInfoModal(false, 'The other player left the game.');
+          break;
+        }
         case GameState.ONLY_HOST_CHOSING_CARDS: {
           setCardsToChoose(20);
           setPage(

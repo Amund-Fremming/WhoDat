@@ -5,6 +5,7 @@ import 'react-native-reanimated';
 import { Splash } from '@/src/Splash/Splash';
 import { AuthProvider } from '@/src/Shared/providers/AuthProvider';
 import { InfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
+import { TabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 export default function RootLayout() {
   const [loadSplash, setLoadSplash] = useState<boolean>(true);
@@ -33,9 +34,11 @@ export default function RootLayout() {
     return (
       <AuthProvider>
         <InfoModalProvider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
+          <TabBarProvider>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+          </TabBarProvider>
         </InfoModalProvider>
       </AuthProvider>
     );

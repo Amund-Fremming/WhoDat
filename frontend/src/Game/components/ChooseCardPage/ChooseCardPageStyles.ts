@@ -15,14 +15,6 @@ export const styles = StyleSheet.create({
     paddingTop: verticalScale(40),
   },
 
-  header: {
-    fontFamily: 'Modak',
-    fontSize: moderateScale(75),
-    color: Colors.Cream,
-    textAlign: 'center',
-    lineHeight: moderateScale(90),
-  },
-
   creamContainer: {
     width: '100%',
     height: '93%',
@@ -45,19 +37,22 @@ export const styles = StyleSheet.create({
   },
 
   backIconWrapper: {
+    color: Colors.Cream,
     position: 'absolute',
     left: horizontalScale(20),
     top: verticalScale(48),
   },
 
   header: {
-    fontSize: moderateScale(45),
     fontFamily: 'Modak',
+    textAlign: 'center',
+    lineHeight: moderateScale(70),
+    fontSize: moderateScale(45),
     color: Colors.Cream,
   },
 
   buttonWrapper: {
-    paddingBottom: verticalScale(30),
+    paddingBottom: verticalScale(60),
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -66,7 +61,7 @@ export const styles = StyleSheet.create({
   },
 
   infoText: {
-    font: 'Inika',
+    fontFamily: 'Inika',
     fontSize: moderateScale(20),
     color: Colors.DarkGray,
     paddingTop: '20%',

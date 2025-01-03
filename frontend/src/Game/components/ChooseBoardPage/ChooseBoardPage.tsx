@@ -12,7 +12,8 @@ import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
 import Card from './components/Card/Card';
 import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
-import { createBoardCards } from '../../GameHubClient';
+import { createBoardCards, leaveGame } from '../../GameHubClient';
+import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 interface BoardPageProps {
   cardsToChoose: number;
@@ -28,6 +29,7 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
   const { token } = useAuthProvider();
   const { setPage, connection, gameId } = useGameProvider();
   const { toggleInfoModal } = useInfoModalProvider();
+  const { setDisplayTabBar } = useTabBarProvider();
 
   useEffect(() => {
     fetchPlayerCards();
@@ -113,15 +115,18 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
     }
   };
 
+  const handleBackPressed = async () => {
+    setPage(PlayPages.MAIN_PAGE);
+    setDisplayTabBar('flex');
+    if (connection) await leaveGame(connection, gameId);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>
         Chosen {cardsPressed.length}/{cardsToChoose}
       </Text>
-      <Pressable
-        style={styles.backIconWrapper}
-        onPress={() => setPage(PlayPages.MAIN_PAGE)}
-      >
+      <Pressable style={styles.backIconWrapper} onPress={handleBackPressed}>
         <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
       </Pressable>
       <View style={styles.creamContainer}>

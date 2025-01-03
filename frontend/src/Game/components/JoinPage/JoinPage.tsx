@@ -7,15 +7,18 @@ import BigButton from '@/src/Shared/components/BigButton/BigButton';
 import { joinGame } from '../../GameHubClient';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import { useGameProvider } from '@/src/Shared/providers/GameProvider';
+import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 export default function JoinPage() {
   const { toggleInfoModal } = useInfoModalProvider();
   const { setGameId, setPage, connection, gameId, setIsHost } =
     useGameProvider();
+  const { setDisplayTabBar } = useTabBarProvider();
 
   const handleJoinGame = async () => {
     if (connection) {
       setIsHost(false);
+      setDisplayTabBar('none');
       await joinGame(connection, gameId);
     } else {
       toggleInfoModal(true, 'Connection was broken.');

@@ -83,12 +83,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
 
             var game = result.Data;
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-
-            if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS)
-                await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameState.ONLY_HOST_CHOSING_CARDS);
-
-            if (game.GameState == GameState.BOTH_CHOSING_CARDS)
-                await Clients.Groups(groupName).SendAsync(IDENTIFIER, GameState.BOTH_CHOSING_CARDS);
+            await Clients.Groups(groupName).SendAsync(IDENTIFIER, game.GameState);
         }
         catch (Exception e)
         {

@@ -5,11 +5,14 @@ import { Colors } from '@/src/Shared/assets/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 import { leaveGame } from '../../GameHubClient';
+import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 export default function WaitingPage() {
   const { gameId, setPage, connection } = useGameProvider();
+  const { setDisplayTabBar } = useTabBarProvider();
 
   const handleBackPressed = () => {
+    setDisplayTabBar('flex');
     setPage(PlayPages.MAIN_PAGE);
     if (connection) leaveGame(connection, gameId);
   };

@@ -10,12 +10,14 @@ import { createGame } from '../../GameClient';
 import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import { subscribeToGameAsHost } from '../../GameHubClient';
+import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 export default function HostPage() {
   const { setPage, setGameState, connection, setGameId, setIsHost } =
     useGameProvider();
   const { token } = useAuthProvider();
   const { toggleInfoModal } = useInfoModalProvider();
+  const { setDisplayTabBar } = useTabBarProvider();
 
   const handleCreateGame = async (gameState: GameState) => {
     var result = await createGame(gameState, token);
@@ -28,6 +30,7 @@ export default function HostPage() {
     if (result.data && connection) {
       setGameId(result.data);
       setIsHost(true);
+      setDisplayTabBar('none');
       await subscribeToGameAsHost(connection, result.data);
     } else {
       toggleInfoModal(

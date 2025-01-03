@@ -1,15 +1,17 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { useRef } from 'react';
 import { TabBarIcon } from '@/src/Shared/components/navigation/TabBarIcon';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 import Auth from '@/src/Auth/Auth';
 import { useEffect, useState } from 'react';
 import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
+import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 export default function TabLayout() {
   const { token } = useAuthProvider();
-
+  const { displayTabBar } = useTabBarProvider();
   const [playerLoggedIn, setPlayerLoggedIn] = useState<boolean>(false);
+
   useEffect(() => {
     if (token != '') setPlayerLoggedIn(true);
   }, [token]);
@@ -25,6 +27,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors.BurgundyRed,
         tabBarStyle: {
           backgroundColor: Colors.Cream,
+          display: displayTabBar,
         },
       }}
     >

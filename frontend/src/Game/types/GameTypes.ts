@@ -42,7 +42,6 @@ export enum GameState {
 
   // Finished
   P1_WON,
-
   P2_WON,
 
   // Someone left
