@@ -26,7 +26,7 @@ export default function GameRouter() {
   const {
     connection,
     setConnection,
-    gameState,
+    gameId,
     page,
     setIsHost,
     setGameState,
@@ -48,10 +48,6 @@ export default function GameRouter() {
   useEffect(() => {
     isHostRef.current = isHost;
   }, [isHost]);
-
-  useEffect(() => {
-    if (connection) updateGameState(connection, gameState);
-  }, [gameState]);
 
   const connectToHub = async () => {
     const con = createConnection(token);
@@ -116,6 +112,13 @@ export default function GameRouter() {
         case GameState.BOTH_PICKED_PLAYERS: {
           setWaitingMessage('Get ready!');
           setPage(PlayPages.WAITING_PAGE);
+          setTimeout(async () => {
+            await updateGameState(con, gameId, GameState.P1_TURN_STARTED);
+          }, 1500);
+          break;
+        }
+        case GameState.P1_TURN_STARTED: {
+          setPage(PlayPages.GAMEPLAY);
           break;
         }
       }

@@ -20,6 +20,10 @@ interface IGameContext {
   setBoard: React.Dispatch<React.SetStateAction<IBoard | undefined>>;
   waitingMessage: string;
   setWaitingMessage: React.Dispatch<React.SetStateAction<string>>;
+  message: string;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
+  oponentCardsLeft: number;
+  setOponentCardsLeft: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const defaultContextValue: IGameContext = {
@@ -37,6 +41,10 @@ const defaultContextValue: IGameContext = {
   setBoard: () => {},
   waitingMessage: '',
   setWaitingMessage: () => {},
+  message: '',
+  setMessage: () => {},
+  oponentCardsLeft: 20,
+  setOponentCardsLeft: () => {},
 };
 
 const GameContext = createContext<IGameContext>(defaultContextValue);
@@ -57,6 +65,8 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [isHost, setIsHost] = useState<boolean>(false);
   const [board, setBoard] = useState<IBoard | undefined>(undefined);
   const [waitingMessage, setWaitingMessage] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [oponentCardsLeft, setOponentCardsLeft] = useState<number>(20);
 
   const value = {
     page,
@@ -73,6 +83,10 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     setBoard,
     waitingMessage,
     setWaitingMessage,
+    message,
+    setMessage,
+    oponentCardsLeft,
+    setOponentCardsLeft,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

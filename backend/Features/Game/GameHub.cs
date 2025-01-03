@@ -113,8 +113,6 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
         try
         {
             int playerId = ParsePlayerIdClaim();
-
-            _logger.LogInformation("Player " + playerId + ", updated the the game " + gameId + ", to gamestate " + state); // remove this
             string groupName = gameId.ToString();
 
             var result = await _gameService.UpdateGameState(playerId, gameId, state);
@@ -253,6 +251,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
         }
     }
 
+    // remove this?
     public async Task StartGame(int gameId)
     {
         try

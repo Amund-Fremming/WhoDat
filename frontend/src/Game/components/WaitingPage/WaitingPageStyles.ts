@@ -13,14 +13,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: Colors.Orange,
+    paddingHorizontal: horizontalScale(10),
   },
 
   header: {
     fontFamily: 'Modak',
-    fontSize: moderateScale(75),
+    fontSize: moderateScale(60),
     color: Colors.Cream,
     textAlign: 'center',
-    lineHeight: moderateScale(100),
+    lineHeight: moderateScale(70),
   },
 
   backIconWrapper: {

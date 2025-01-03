@@ -5,4 +5,5 @@ export enum PlayPages {
   CHOOSE_BOARD_PAGE,
   WAITING_PAGE,
   CHOOSE_CARD_PAGE,
+  GAMEPLAY,
 }
