@@ -172,7 +172,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         try
         {
             var playerResult = await _playerRepository.GetById(playerId);
-            var gameResult = await _gameRepository.GetById(gameId);
+            var gameResult = await _gameRepository.GetGameWithBoards(gameId);
             if (playerResult.IsError)
                 return playerResult.Error;
 

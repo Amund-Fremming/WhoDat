@@ -8,6 +8,7 @@ import WaitingPage from './components/WaitingPage/WaitingPage';
 import {
   createConnection,
   startConnection,
+  startGame,
   stopConnection,
   updateGameState,
 } from '@/src/Game/GameHubClient';
@@ -16,6 +17,7 @@ import { useAuthProvider } from '../Shared/providers/AuthProvider';
 import ChooseCardPage from './components/ChooseCardPage/ChooseCardPage';
 import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
 import { useGameProvider } from '../Shared/providers/GameProvider';
+import Gameplay from './components/Gameplay/Gameplay';
 
 export default function GameRouter() {
   const [message, setMessage] = useState<string>('');
@@ -36,6 +38,7 @@ export default function GameRouter() {
   } = useGameProvider();
 
   const isHostRef = useRef(isHost);
+  const gameIdRef = useRef(gameId);
 
   useEffect(() => {
     connectToHub();
@@ -47,7 +50,8 @@ export default function GameRouter() {
 
   useEffect(() => {
     isHostRef.current = isHost;
-  }, [isHost]);
+    gameIdRef.current = gameId;
+  }, [isHost, gameId]);
 
   const connectToHub = async () => {
     const con = createConnection(token);
@@ -112,9 +116,11 @@ export default function GameRouter() {
         case GameState.BOTH_PICKED_PLAYERS: {
           setWaitingMessage('Get ready!');
           setPage(PlayPages.WAITING_PAGE);
-          setTimeout(async () => {
-            await updateGameState(con, gameId, GameState.P1_TURN_STARTED);
-          }, 1500);
+          if (isHostRef.current) {
+            setTimeout(async () => {
+              await startGame(con, gameIdRef.current);
+            }, 1500);
+          }
           break;
         }
         case GameState.P1_TURN_STARTED: {
@@ -152,5 +158,7 @@ export default function GameRouter() {
       return <ChooseCardPage />;
     case PlayPages.WAITING_PAGE:
       return <WaitingPage />;
+    case PlayPages.GAMEPLAY:
+      return <Gameplay />;
   }
 }
