@@ -4,7 +4,6 @@ import MainPage from './components/MainPage/MainPage';
 import JoinPage from './components/JoinPage/JoinPage';
 import HostPage from './components/HostPage/HostPage';
 import ChooseBoardPage from './components/ChooseBoardPage/ChooseBoardPage';
-import LobbyPage from './components/LobbyPage/LobbyPage';
 import WaitingPage from './components/WaitingPage/WaitingPage';
 import {
   createConnection,
@@ -33,6 +32,7 @@ export default function GameRouter() {
     setGameState,
     setPage,
     isHost,
+    setWaitingMessage,
   } = useGameProvider();
 
   const isHostRef = useRef(isHost);
@@ -59,6 +59,7 @@ export default function GameRouter() {
     await startConnection(con);
 
     con.on('RECEIVE_STATE', (state: GameState) => {
+      console.log('Incomming state: ' + state);
       setGameState(state);
       switch (state) {
         case GameState.PLAYER_LEFT: {
@@ -67,10 +68,11 @@ export default function GameRouter() {
         }
         case GameState.ONLY_HOST_CHOSING_CARDS: {
           setCardsToChoose(20);
+          setWaitingMessage('Host is choosing cards');
           setPage(
             isHostRef.current
               ? PlayPages.CHOOSE_BOARD_PAGE
-              : PlayPages.LOBBY_PAGE
+              : PlayPages.WAITING_PAGE
           );
           break;
         }
@@ -85,14 +87,35 @@ export default function GameRouter() {
         }
         case GameState.P2_CHOOSING: {
           if (isHostRef.current) {
+            setWaitingMessage('Oponent is choosing their cards');
             setPage(PlayPages.WAITING_PAGE);
           }
           break;
         }
         case GameState.P1_CHOOSING: {
           if (!isHostRef.current) {
+            setWaitingMessage('Oponent is choosing their cards');
             setPage(PlayPages.WAITING_PAGE);
           }
+          break;
+        }
+        case GameState.P1_PICKING_PLAYER: {
+          if (!isHostRef.current) {
+            setWaitingMessage('Oponent is choosing their warrior');
+            setPage(PlayPages.WAITING_PAGE);
+          }
+          break;
+        }
+        case GameState.P2_PICKING_PLAYER: {
+          if (isHostRef.current) {
+            setWaitingMessage('Oponent is choosing their warrior');
+            setPage(PlayPages.WAITING_PAGE);
+          }
+          break;
+        }
+        case GameState.BOTH_PICKED_PLAYERS: {
+          setWaitingMessage('Get ready!');
+          setPage(PlayPages.WAITING_PAGE);
           break;
         }
       }
@@ -124,8 +147,6 @@ export default function GameRouter() {
       return <ChooseBoardPage cardsToChoose={cardsToChoose} />;
     case PlayPages.CHOOSE_CARD_PAGE:
       return <ChooseCardPage />;
-    case PlayPages.LOBBY_PAGE:
-      return <LobbyPage />;
     case PlayPages.WAITING_PAGE:
       return <WaitingPage />;
   }

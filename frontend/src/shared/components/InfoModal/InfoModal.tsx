@@ -25,7 +25,14 @@ export default function InfoModal({
             isError ? styles.errorContainer : styles.messageContainer,
           ]}
         >
-          <Text style={styles.header}>{isError ? 'Ooops' : 'Hey'}</Text>
+          <Text
+            style={{
+              ...styles.header,
+              color: isError ? Colors.Red : Colors.Orange,
+            }}
+          >
+            {isError ? 'Ooops' : 'Hey'}
+          </Text>
           <Text style={styles.message}>{message}</Text>
           <View style={styles.absoluteButton}>
             <MediumButton

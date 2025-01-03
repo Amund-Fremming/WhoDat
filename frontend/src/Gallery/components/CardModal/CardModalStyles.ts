@@ -32,6 +32,8 @@ export const styles = StyleSheet.create({
     },
   },
 
+  editMode: {},
+
   card: {
     width: '70%',
     height: '70%',
@@ -39,7 +41,6 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(15),
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: verticalScale(-20),
   },
 
   buttonWrapper: {

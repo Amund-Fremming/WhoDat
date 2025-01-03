@@ -4,7 +4,6 @@ TODO
 
 - make it not possible to name two cards the same
 - Choose boardCards connection to api endpoint
-- Start on gameplay
 
 BUGS
 

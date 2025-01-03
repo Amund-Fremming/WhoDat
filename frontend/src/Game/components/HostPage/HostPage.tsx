@@ -13,8 +13,14 @@ import { subscribeToGameAsHost } from '../../GameHubClient';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 export default function HostPage() {
-  const { setPage, setGameState, connection, setGameId, setIsHost } =
-    useGameProvider();
+  const {
+    setPage,
+    setGameState,
+    connection,
+    setGameId,
+    setIsHost,
+    setWaitingMessage,
+  } = useGameProvider();
   const { token } = useAuthProvider();
   const { toggleInfoModal } = useInfoModalProvider();
   const { setDisplayTabBar } = useTabBarProvider();
@@ -31,6 +37,7 @@ export default function HostPage() {
       setGameId(result.data);
       setIsHost(true);
       setDisplayTabBar('none');
+      setWaitingMessage('Share the game id with a friend');
       await subscribeToGameAsHost(connection, result.data);
     } else {
       toggleInfoModal(

@@ -8,7 +8,7 @@ import { leaveGame } from '../../GameHubClient';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 export default function WaitingPage() {
-  const { gameId, setPage, connection } = useGameProvider();
+  const { gameId, setPage, connection, waitingMessage } = useGameProvider();
   const { setDisplayTabBar } = useTabBarProvider();
 
   const handleBackPressed = () => {
@@ -24,8 +24,7 @@ export default function WaitingPage() {
         <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
       </Pressable>
       <View style={styles.headerWrapper}>
-        <Text style={styles.header}>Waiting</Text>
-        <Text style={styles.header}>for bro...</Text>
+        <Text style={styles.header}>{waitingMessage}</Text>
       </View>
     </View>
   );

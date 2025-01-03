@@ -61,41 +61,15 @@ export default function CardModal({
               }}
             />
           </View>
-
-          {!editMode && (
-            <View>
-              <StrokedText
-                text={card.name}
-                fontBaseSize={40}
-                smallBorder={false}
-              />
-              <View style={styles.buttonWrapper}>
-                <BigButton
-                  text="Edit"
-                  color={Colors.BurgundyRed}
-                  inverted={false}
-                  onButtonPress={() => setEditMode(true)}
-                />
-              </View>
-            </View>
-          )}
-          {editMode && (
-            <View>
-              <StrokedText
-                text={card.name}
-                fontBaseSize={40}
-                smallBorder={false}
-              />
-              <View style={styles.buttonWrapper}>
-                <BigButton
-                  text="Cancel"
-                  color={Colors.BurgundyRed}
-                  inverted={true}
-                  onButtonPress={() => handleEditCardPressed()}
-                />
-              </View>
-            </View>
-          )}
+          <StrokedText text={card.name} fontBaseSize={40} smallBorder={false} />
+          <View style={styles.buttonWrapper}>
+            <BigButton
+              text={editMode ? 'Cancel' : 'Edit'}
+              color={Colors.BurgundyRed}
+              inverted={editMode}
+              onButtonPress={() => setEditMode(!editMode)}
+            />
+          </View>
         </View>
       </View>
     </Modal>

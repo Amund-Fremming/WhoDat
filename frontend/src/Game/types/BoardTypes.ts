@@ -1,9 +1,8 @@
 import { IPlayer } from '@/src/Shared/types/PlayerTypes';
 import { IGame } from './GameTypes';
-import { ICardDto } from '@/src/Shared/types/CardTypes';
 
 export interface IBoard {
-  ID: number;
+  id: number;
   PlayerID: number;
   PlayerEntity?: IPlayer;
   gameID: number;
@@ -16,12 +15,12 @@ export interface IBoard {
 }
 
 export interface IBoardCardUpdate {
-  ID: number;
+  id: number;
   active: boolean;
 }
 
 export interface IBoardCard {
-  ID: number;
+  id: number;
   boardID: number;
   cardID: number;
   card: ICard;
@@ -29,7 +28,7 @@ export interface IBoardCard {
 }
 
 export interface ICard {
-  ID: number;
+  id: number;
   playerID: number;
   name: string;
   url: string;

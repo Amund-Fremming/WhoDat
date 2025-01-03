@@ -12,12 +12,12 @@ import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import { IBoardCard } from '../../types/BoardTypes';
 import BigButton from '@/src/Shared/components/BigButton/BigButton';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
-import { leaveGame } from '../../GameHubClient';
+import { chooseBoardCard, leaveGame } from '../../GameHubClient';
 
 export default function ChooseCardPage() {
   const [cardPressed, setCardPressed] = useState<number>(-1);
   const [cards, setCards] = useState<IBoardCard[]>([]);
-  const { setPage, gameId, connection } = useGameProvider();
+  const { setPage, gameId, connection, setBoard, board } = useGameProvider();
   const { toggleInfoModal } = useInfoModalProvider();
   const { token } = useAuthProvider();
   const { setDisplayTabBar } = useTabBarProvider();
@@ -32,12 +32,18 @@ export default function ChooseCardPage() {
       toggleInfoModal(true, result.message);
       return;
     }
+    setBoard(result.data!);
     setCards(result.data?.boardCards!);
   };
 
-  const handleChooseCard = () => {
-    // TODO
-    console.log('choosed');
+  const handleChooseCard = async () => {
+    if (cardPressed === -1) {
+      toggleInfoModal(false, 'Please choose a card.');
+      return;
+    }
+
+    if (connection && board)
+      await chooseBoardCard(connection, gameId, board.id, cardPressed);
   };
 
   const handleBackPressed = async () => {
@@ -58,8 +64,8 @@ export default function ChooseCardPage() {
             <Card
               key={index}
               boardcard={boardcard}
-              handleCardPressed={() => setCardPressed(boardcard.cardID)}
-              isActive={boardcard.cardID === cardPressed}
+              handleCardPressed={() => setCardPressed(boardcard.id)}
+              isActive={boardcard.id === cardPressed}
             />
           ))}
         </View>

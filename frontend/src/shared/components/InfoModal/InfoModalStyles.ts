@@ -54,7 +54,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'Modak',
     textAlign: 'center',
     fontWeight: 'bold',
-    color: Colors.Red,
   },
 
   absoluteButton: {

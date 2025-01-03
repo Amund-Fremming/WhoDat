@@ -1,3 +1,4 @@
+import { IBoard } from '@/src/Game/types/BoardTypes';
 import { PlayPages } from '@/src/Game/types/GamePages';
 import { GameState } from '@/src/Game/types/GameTypes';
 import React, { createContext, ReactNode, useContext, useState } from 'react';
@@ -15,6 +16,10 @@ interface IGameContext {
   >;
   isHost: boolean;
   setIsHost: React.Dispatch<React.SetStateAction<boolean>>;
+  board: IBoard | undefined;
+  setBoard: React.Dispatch<React.SetStateAction<IBoard | undefined>>;
+  waitingMessage: string;
+  setWaitingMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const defaultContextValue: IGameContext = {
@@ -28,6 +33,10 @@ const defaultContextValue: IGameContext = {
   setConnection: () => {},
   isHost: false,
   setIsHost: () => {},
+  board: undefined,
+  setBoard: () => {},
+  waitingMessage: '',
+  setWaitingMessage: () => {},
 };
 
 const GameContext = createContext<IGameContext>(defaultContextValue);
@@ -46,6 +55,8 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [gameId, setGameId] = useState<number>(0);
   const [connection, setConnection] = useState<signalR.HubConnection>();
   const [isHost, setIsHost] = useState<boolean>(false);
+  const [board, setBoard] = useState<IBoard | undefined>(undefined);
+  const [waitingMessage, setWaitingMessage] = useState<string>('');
 
   const value = {
     page,
@@ -58,6 +69,10 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     setConnection,
     isHost,
     setIsHost,
+    board,
+    setBoard,
+    waitingMessage,
+    setWaitingMessage,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

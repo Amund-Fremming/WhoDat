@@ -3,7 +3,6 @@ export enum PlayPages {
   HOST_PAGE,
   JOIN_PAGE,
   CHOOSE_BOARD_PAGE,
-  LOBBY_PAGE,
   WAITING_PAGE,
   CHOOSE_CARD_PAGE,
 }
