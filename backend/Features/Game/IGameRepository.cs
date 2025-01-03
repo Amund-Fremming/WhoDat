@@ -34,7 +34,7 @@ public interface IGameRepository : IRepository<GameEntity>
     /// </summary>
     /// <param name="playerId">The ID of the player whose recent game is to be retrieved.</param>
     /// <returns>Returns the ID of the most recent game played by the player.</returns>
-    Task<Result<int>> GetRecentGamePlayed(int playerId);
+    Result<int> GetRecentGamePlayed(int playerId);
 
     /// <summary>
     /// Updates the details of the specified game.

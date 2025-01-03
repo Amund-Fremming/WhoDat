@@ -83,7 +83,7 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         }
     }
 
-    public async Task<Result<int>> GetRecentGamePlayed(int playerId)
+    public Result<int> GetRecentGamePlayed(int playerId)
     {
         try
         {

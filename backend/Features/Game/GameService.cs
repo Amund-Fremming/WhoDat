@@ -158,7 +158,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             if (result.IsError)
                 return result.Error;
 
-            return await _gameRepository.GetRecentGamePlayed(playerId);
+            return _gameRepository.GetRecentGamePlayed(playerId);
         }
         catch (Exception e)
         {
