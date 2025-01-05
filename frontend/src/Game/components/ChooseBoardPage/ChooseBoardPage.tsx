@@ -51,6 +51,9 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
     }
 
     const data = result.data;
+    // TODO: remove this
+    setCardsPressed(result.data!.slice(0, 20).map((dto) => dto.id));
+
     if (data!.length <= 20) {
       setDisplayNext(false);
     } else {

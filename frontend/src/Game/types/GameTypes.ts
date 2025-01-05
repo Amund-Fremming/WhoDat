@@ -28,7 +28,6 @@ export enum GameState {
 
   // Turns
   P1_TURN_STARTED,
-
   P1_WAITING_ASK_REPLY,
   P1_ASK_REPLIED,
   P1_WAITING_GUESS_REPLY,

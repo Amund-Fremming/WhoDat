@@ -2,8 +2,11 @@
 
 TODO
 
+- Backend needs to include choosen boardcard when getting board, needs a include
+
 - make it not possible to name two cards the same
 - Choose boardCards connection to api endpoint
+- Are you sure when trying to leave
 
 BUGS
 

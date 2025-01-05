@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '93%',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     backgroundColor: Colors.Cream,
     borderTopStartRadius: moderateScale(30),
     borderTopRightRadius: moderateScale(30),
@@ -28,12 +28,12 @@ export const styles = StyleSheet.create({
   boardContainer: {
     width: '100%',
     marginTop: '5%',
-    gap: moderateScale(7),
+    rowGap: moderateScale(-2),
+    columnGap: moderateScale(8),
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: verticalScale(30),
   },
 
   backIconWrapper: {
@@ -44,17 +44,62 @@ export const styles = StyleSheet.create({
   },
 
   header: {
+    paddingTop: verticalScale(40),
     fontFamily: 'Modak',
     textAlign: 'center',
-    lineHeight: moderateScale(70),
+    lineHeight: moderateScale(30),
     fontSize: moderateScale(45),
     color: Colors.Cream,
   },
 
   header2: {
+    marginTop: verticalScale(-10),
     fontFamily: 'Modak',
     textAlign: 'center',
-    lineHeight: moderateScale(70),
+    lineHeight: moderateScale(30),
     fontSize: moderateScale(25),
+  },
+
+  subHeaderWrapper: {
+    flexDirection: 'row',
+    gap: horizontalScale(10),
+  },
+
+  controlPanel: {
+    width: '100%',
+    height: '30%',
+    borderTopStartRadius: moderateScale(30),
+    borderTopRightRadius: moderateScale(30),
+    borderColor: Colors.DarkGray,
+    borderWidth: moderateScale(4),
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+    paddingTop: verticalScale(15),
+    flexDirection: 'row',
+  },
+
+  controlButtonWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    gap: verticalScale(8),
+    height: verticalScale(115),
+  },
+
+  chosenCardOuter: {
+    height: verticalScale(115),
+    width: horizontalScale(80),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    borderRadius: moderateScale(6),
+  },
+});
+
+export const imageStyles = StyleSheet.create({
+  chosenCardInner: {
+    width: horizontalScale(105),
+    height: verticalScale(80),
+    borderRadius: moderateScale(6),
   },
 });
