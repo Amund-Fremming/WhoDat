@@ -91,15 +91,15 @@ export const styles = StyleSheet.create({
     width: horizontalScale(80),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: Colors.BurgundyRed,
     borderRadius: moderateScale(6),
   },
 });
 
 export const imageStyles = StyleSheet.create({
   chosenCardInner: {
-    width: horizontalScale(105),
-    height: verticalScale(80),
+    height: '91%',
+    width: '88%',
     borderRadius: moderateScale(6),
   },
 });

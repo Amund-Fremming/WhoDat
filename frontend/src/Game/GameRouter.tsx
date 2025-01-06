@@ -140,7 +140,6 @@ export default function GameRouter() {
     });
 
     con.on('RECEIVE_ERROR', (message: string) => {
-      console.log('Error msg ' + message);
       toggleInfoModal(true, message);
     });
   };

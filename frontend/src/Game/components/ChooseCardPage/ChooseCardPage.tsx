@@ -9,13 +9,13 @@ import Card from './components/BoardCard/BoardCard';
 import { getBoardWithBoardCards } from '../../GameClient';
 import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
-import { IBoardCard } from '../../types/BoardTypes';
+import { IBoard, IBoardCard } from '../../types/BoardTypes';
 import BigButton from '@/src/Shared/components/BigButton/BigButton';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 import { chooseBoardCard, leaveGame } from '../../GameHubClient';
 
 export default function ChooseCardPage() {
-  const [cardPressed, setCardPressed] = useState<number>(-1);
+  const [cardPressed, setCardPressed] = useState<IBoardCard | undefined>();
   const [cards, setCards] = useState<IBoardCard[]>([]);
   const { setPage, gameId, connection, setBoard, board } = useGameProvider();
   const { toggleInfoModal } = useInfoModalProvider();
@@ -37,13 +37,23 @@ export default function ChooseCardPage() {
   };
 
   const handleChooseCard = async () => {
-    if (cardPressed === -1) {
+    if (!cardPressed) {
       toggleInfoModal(false, 'Please choose a card.');
       return;
     }
 
-    if (connection && board)
-      await chooseBoardCard(connection, gameId, board.id, cardPressed);
+    if (connection && board && cardPressed) {
+      setBoard((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          chosenCard: cardPressed,
+          chosenCardID: cardPressed.id,
+        };
+      });
+
+      await chooseBoardCard(connection, gameId, board.id, cardPressed.id);
+    }
   };
 
   const handleBackPressed = async () => {
@@ -64,8 +74,8 @@ export default function ChooseCardPage() {
             <Card
               key={index}
               boardcard={boardcard}
-              handleCardPressed={() => setCardPressed(boardcard.id)}
-              isActive={boardcard.id === cardPressed}
+              handleCardPressed={() => setCardPressed(boardcard)}
+              isActive={boardcard.id === cardPressed?.id}
             />
           ))}
         </View>

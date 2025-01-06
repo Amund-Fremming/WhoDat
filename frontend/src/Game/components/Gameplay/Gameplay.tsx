@@ -8,9 +8,7 @@ import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 import { leaveGame } from '../../GameHubClient';
 import { useEffect, useState } from 'react';
 import FlipCard from './components/FlipCard/FlipCard';
-import SmallButton from '@/src/Shared/components/SmallButton/SmallButton';
 import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
-import BoardCard from '../ChooseCardPage/components/BoardCard/BoardCard';
 
 export default function Gameplay() {
   const [header, setHeader] = useState<string>('');
@@ -38,8 +36,7 @@ export default function Gameplay() {
   };
 
   const handleCardPressed = () => {
-    console.log(board?.chosenCard);
-    console.log('Card pressed!');
+    //
   };
 
   const handleAskPressed = () => {
