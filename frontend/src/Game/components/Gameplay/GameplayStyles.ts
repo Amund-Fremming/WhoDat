@@ -91,7 +91,7 @@ export const styles = StyleSheet.create({
     width: horizontalScale(80),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.BurgundyRed,
+    backgroundColor: Colors.DarkGray,
     borderRadius: moderateScale(6),
   },
 });

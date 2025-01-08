@@ -98,10 +98,11 @@ export const sendMessage = async (
 
 export const guessBoardCard = async (
   connection: signalR.HubConnection,
+  gameId: number,
   boardCardId: number
 ): Promise<Result<boolean>> => {
   try {
-    await connection.invoke('GuessBoardCard', boardCardId);
+    await connection.invoke('GuessBoardCard', gameId, boardCardId);
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');

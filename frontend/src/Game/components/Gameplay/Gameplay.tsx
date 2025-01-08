@@ -5,16 +5,24 @@ import { Colors } from '@/src/Shared/assets/constants/Colors';
 import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 import { PlayPages } from '../../types/GamePages';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
-import { leaveGame } from '../../GameHubClient';
+import { guessBoardCard, leaveGame } from '../../GameHubClient';
 import { useEffect, useState } from 'react';
 import FlipCard from './components/FlipCard/FlipCard';
 import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
+import React from 'react';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 
 export default function Gameplay() {
-  const [header, setHeader] = useState<string>('');
   const { setPage, connection, gameId, gameState, isHost, board } =
     useGameProvider();
   const { setDisplayTabBar } = useTabBarProvider();
+  const { toggleInfoModal } = useInfoModalProvider();
+
+  const [header, setHeader] = useState<string>('');
+  const [thisPlayerTurn, setThisPlayerTurn] = useState<boolean>(isHost);
+  const [guessMode, setGuessMode] = useState<boolean>(false);
+  const [cardActive, setCardsActive] = useState<number[]>([]);
+  const [cardToGuess, setCardToGuess] = useState<number>(-1);
 
   useEffect(() => {
     var stateP1Turn = [2, 5, 8, 9, 10, 11, 12];
@@ -22,9 +30,11 @@ export default function Gameplay() {
 
     if (stateP1Turn.includes(gameState)) {
       setHeader(isHost ? 'Your turn' : 'Their turn');
+      setThisPlayerTurn(isHost ? true : false);
     }
     if (stateP2Turn.includes(gameState)) {
       setHeader(isHost ? 'Their turn' : 'Your turn');
+      setThisPlayerTurn(isHost ? false : true);
     }
   }, [gameState]);
 
@@ -35,16 +45,26 @@ export default function Gameplay() {
     if (connection) await leaveGame(connection, gameId);
   };
 
-  const handleCardPressed = () => {
-    //
+  const handleCardPressed = (boardcardId: number) => {
+    if (!guessMode) {
+      setCardsActive((prev) => [...prev, boardcardId]);
+      return;
+    }
+
+    setCardToGuess(boardcardId);
   };
 
   const handleAskPressed = () => {
     //
   };
 
-  const handleGuessPressed = () => {
-    //
+  const handleTakeGuessPressed = async () => {
+    if (connection) {
+      const result = await guessBoardCard(connection, gameId, cardToGuess);
+      if (result.isError) {
+        toggleInfoModal(true, result.message);
+      }
+    }
   };
 
   return (
@@ -63,8 +83,10 @@ export default function Gameplay() {
           {board?.boardCards?.map((bc) => (
             <FlipCard
               key={bc.id}
-              onCardPress={handleCardPressed}
+              onCardPress={() => handleCardPressed(bc.id)}
+              cardToGuess={cardToGuess}
               boardcard={bc}
+              guessMode={guessMode}
             />
           ))}
         </View>
@@ -78,18 +100,38 @@ export default function Gameplay() {
             />
           </View>
           <View style={styles.controlButtonWrapper}>
-            <MediumButton
-              text="Ask"
-              inverted={false}
-              color={Colors.BurgundyRed}
-              onButtonPress={handleAskPressed}
-            />
-            <MediumButton
-              text="Guess"
-              inverted={false}
-              color={Colors.BurgundyRed}
-              onButtonPress={handleGuessPressed}
-            />
+            {thisPlayerTurn && !guessMode && (
+              <>
+                <MediumButton
+                  text="Ask"
+                  inverted={false}
+                  color={Colors.BurgundyRed}
+                  onButtonPress={handleAskPressed}
+                />
+                <MediumButton
+                  text="Guess"
+                  inverted={false}
+                  color={Colors.BurgundyRed}
+                  onButtonPress={() => setGuessMode(true)}
+                />
+              </>
+            )}
+            {thisPlayerTurn && guessMode && (
+              <>
+                <MediumButton
+                  text="Cancel"
+                  inverted={true}
+                  color={Colors.BurgundyRed}
+                  onButtonPress={() => setGuessMode(false)}
+                />
+                <MediumButton
+                  text="Take guess"
+                  inverted={false}
+                  color={Colors.Green}
+                  onButtonPress={handleTakeGuessPressed}
+                />
+              </>
+            )}
           </View>
         </View>
       </View>

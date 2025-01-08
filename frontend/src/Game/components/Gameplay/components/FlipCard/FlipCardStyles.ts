@@ -44,6 +44,7 @@ export const styles = StyleSheet.create({
     height: '91%',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: verticalScale(5),
     backgroundColor: Colors.BorderGray,
     borderRadius: moderateScale(6),
   },

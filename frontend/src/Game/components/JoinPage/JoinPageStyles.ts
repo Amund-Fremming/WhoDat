@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.Cream,
     width: '88%',
-    height: '35%',
+    height: verticalScale(225),
     borderRadius: moderateScale(25),
     shadowRadius: 5,
     shadowOpacity: 0.3,

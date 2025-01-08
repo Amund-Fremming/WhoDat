@@ -119,7 +119,7 @@ export default function GameRouter() {
           if (isHostRef.current) {
             setTimeout(async () => {
               await startGame(con, gameIdRef.current);
-            }, 1500);
+            }, 700);
           }
           break;
         }
