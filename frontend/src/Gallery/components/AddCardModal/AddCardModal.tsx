@@ -1,4 +1,5 @@
-import { Modal, View, Image, Pressable, TextInput, Text } from 'react-native';
+import { Modal, View, Pressable, TextInput, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { styles, imageStyles } from './AddCardModalStyles';
 import BigButton from '@/src/Shared/components/BigButton/BigButton';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
@@ -15,6 +16,9 @@ interface AddCardModalProps {
   modalVisible: boolean;
   setModalVisible: (condition: boolean) => void;
 }
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function AddCardModal({
   modalVisible,
@@ -88,6 +92,8 @@ export default function AddCardModal({
                 <Text style={styles.uploadText}>upload</Text>
               </Pressable>
               <Image
+                transition={300}
+                placeholder={{ blurhash }}
                 style={imageStyles.imageStyle}
                 source={{
                   uri: imageUri,

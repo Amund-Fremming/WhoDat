@@ -6,14 +6,17 @@ interface StokedTextProps {
   text: string;
   fontBaseSize: number;
   smallBorder: boolean;
+  color: string;
+  font: string;
 }
 
 export default function StrokedText({
   text,
   fontBaseSize,
   smallBorder,
+  color,
+  font,
 }: StokedTextProps) {
-  if (text.length > 9) text = 'Kenneth';
   if ((text.match(/m/gi) || []).length > 3) text = 'Kenneth';
   if ((text.match(/w/gi) || []).length > 3) text = 'Kenneth';
 
@@ -36,7 +39,12 @@ export default function StrokedText({
     <View style={styles.container}>
       <Text
         style={[
-          { ...styles.text, fontSize: adjustFontSize(text) },
+          {
+            ...styles.text,
+            fontSize: adjustFontSize(text),
+            color: color,
+            fontFamily: font,
+          },
           smallBorder ? styles.smallShadowRight : styles.bigShadowRight,
         ]}
       >
@@ -44,7 +52,12 @@ export default function StrokedText({
       </Text>
       <Text
         style={[
-          { ...styles.text, fontSize: adjustFontSize(text) },
+          {
+            ...styles.text,
+            fontSize: adjustFontSize(text),
+            color: color,
+            fontFamily: font,
+          },
           smallBorder ? styles.smallShadowLeft : styles.bigShadowLeft,
         ]}
       >
@@ -52,7 +65,12 @@ export default function StrokedText({
       </Text>
       <Text
         style={[
-          { ...styles.text, fontSize: adjustFontSize(text) },
+          {
+            ...styles.text,
+            fontSize: adjustFontSize(text),
+            color: color,
+            fontFamily: font,
+          },
           smallBorder ? styles.smallShadowTop : styles.bigShadowTop,
         ]}
       >
@@ -60,13 +78,25 @@ export default function StrokedText({
       </Text>
       <Text
         style={[
-          { ...styles.text, fontSize: adjustFontSize(text) },
+          {
+            ...styles.text,
+            fontSize: adjustFontSize(text),
+            color: color,
+            fontFamily: font,
+          },
           smallBorder ? styles.smallShadowBottom : styles.bigShadowBottom,
         ]}
       >
         {text}
       </Text>
-      <Text style={{ ...styles.text, fontSize: adjustFontSize(text) }}>
+      <Text
+        style={{
+          ...styles.text,
+          fontSize: adjustFontSize(text),
+          color: color,
+          fontFamily: font,
+        }}
+      >
         {text}
       </Text>
     </View>

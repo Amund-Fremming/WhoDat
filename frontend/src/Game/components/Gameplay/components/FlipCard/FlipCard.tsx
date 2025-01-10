@@ -1,5 +1,6 @@
 import { IBoardCard } from '@/src/Game/types/BoardTypes';
-import { Pressable, View, Image, Text } from 'react-native';
+import { Pressable, View, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { styles, imageStyles } from './FlipCardStyles';
 import StrokedText from '@/src/Shared/components/StokedText/StrokedText';
 import { useEffect, useState } from 'react';
@@ -12,6 +13,9 @@ interface FlipCardProps {
   guessMode: boolean;
   cardToGuess: number;
 }
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function FlipCard({
   boardcard,
@@ -44,6 +48,8 @@ export default function FlipCard({
         <>
           <View style={{ ...styles.card, backgroundColor: rimColor }}>
             <Image
+              transition={300}
+              placeholder={{ blurhash }}
               style={imageStyles.imageStyle}
               source={{
                 uri: boardcard.card.url,
@@ -51,6 +57,8 @@ export default function FlipCard({
             />
           </View>
           <StrokedText
+            font="Inika"
+            color={Colors.Cream}
             text={boardcard.card.name}
             fontBaseSize={14}
             smallBorder={true}
