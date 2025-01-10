@@ -16,8 +16,6 @@ import { useState } from 'react';
 import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 import { loginPlayer } from '../../AuthClient';
 import Result from '@/src/Shared/objects/Result';
-import ErrorModal from '@/src/Shared/components/ErrorModal/ErrorModal';
-import { validUsername } from '@/src/Shared/functions/InputValitator';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 
 interface LoginComponentProps {

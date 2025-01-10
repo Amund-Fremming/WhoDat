@@ -1,4 +1,5 @@
-import { Image, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+import { Image } from 'expo-image';
 import { imageStyles, styles } from './GameplayStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
@@ -11,6 +12,10 @@ import FlipCard from './components/FlipCard/FlipCard';
 import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
 import React from 'react';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
+import ActionModal from './components/ActionModal/ActionModal';
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function Gameplay() {
   const { setPage, connection, gameId, gameState, isHost, board } =
@@ -21,12 +26,15 @@ export default function Gameplay() {
   const [header, setHeader] = useState<string>('');
   const [thisPlayerTurn, setThisPlayerTurn] = useState<boolean>(isHost);
   const [guessMode, setGuessMode] = useState<boolean>(false);
+  const [actionModalVisible, setActionModalVisible] = useState<boolean>(false);
+  const [gameFinsihed, setGameFinished] = useState<boolean>(false);
   const [cardActive, setCardsActive] = useState<number[]>([]);
   const [cardToGuess, setCardToGuess] = useState<number>(-1);
 
   useEffect(() => {
     var stateP1Turn = [2, 5, 8, 9, 10, 11, 12];
     var stateP2Turn = [3, 6, 13, 14, 15, 16, 17];
+    var finished = [18, 19];
 
     if (stateP1Turn.includes(gameState)) {
       setHeader(isHost ? 'Your turn' : 'Their turn');
@@ -35,6 +43,11 @@ export default function Gameplay() {
     if (stateP2Turn.includes(gameState)) {
       setHeader(isHost ? 'Their turn' : 'Your turn');
       setThisPlayerTurn(isHost ? false : true);
+    }
+    if (finished.includes(gameState)) {
+      setHeader('Finished');
+      setActionModalVisible(true);
+      setGameFinished(true);
     }
   }, [gameState]);
 
@@ -60,6 +73,7 @@ export default function Gameplay() {
 
   const handleTakeGuessPressed = async () => {
     if (connection) {
+      setGuessMode(false);
       const result = await guessBoardCard(connection, gameId, cardToGuess);
       if (result.isError) {
         toggleInfoModal(true, result.message);
@@ -67,74 +81,162 @@ export default function Gameplay() {
     }
   };
 
+  const onActionModalClose = () => {
+    setActionModalVisible(false);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>{header}</Text>
-      <View style={styles.subHeaderWrapper}>
-        <Text style={{ ...styles.header2, color: Colors.Green }}>20</Text>
-        <Text style={{ ...styles.header2, color: Colors.Cream }}>vs</Text>
-        <Text style={{ ...styles.header2, color: Colors.BurgundyRed }}>20</Text>
-      </View>
-      <Pressable style={styles.backIconWrapper} onPress={handleBackPressed}>
-        <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
-      </Pressable>
-      <View style={styles.creamContainer}>
-        <View style={styles.boardContainer}>
-          {board?.boardCards?.map((bc) => (
-            <FlipCard
-              key={bc.id}
-              onCardPress={() => handleCardPressed(bc.id)}
-              cardToGuess={cardToGuess}
-              boardcard={bc}
-              guessMode={guessMode}
-            />
-          ))}
+    <>
+      <ActionModal
+        modalVisible={actionModalVisible}
+        setModalVisible={setActionModalVisible}
+        gameFinished={gameFinsihed}
+      />
+
+      <View style={styles.container}>
+        <Text style={styles.header}>{header}</Text>
+        <View style={styles.subHeaderWrapper}>
+          <Text style={{ ...styles.header2, color: Colors.Green }}>20</Text>
+          <Text style={{ ...styles.header2, color: Colors.Cream }}>vs</Text>
+          <Text style={{ ...styles.header2, color: Colors.BurgundyRed }}>
+            20
+          </Text>
         </View>
-        <View style={styles.controlPanel}>
-          <View style={styles.chosenCardOuter}>
-            <Image
-              style={imageStyles.chosenCardInner}
-              source={{
-                uri: board?.chosenCard?.card.url,
-              }}
-            />
+        <Pressable style={styles.backIconWrapper} onPress={handleBackPressed}>
+          <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
+        </Pressable>
+        <View style={styles.creamContainer}>
+          <View style={styles.boardContainer}>
+            {board?.boardCards?.map((bc) => (
+              <FlipCard
+                key={bc.id}
+                onCardPress={() => handleCardPressed(bc.id)}
+                cardToGuess={cardToGuess}
+                boardcard={bc}
+                guessMode={guessMode}
+              />
+            ))}
           </View>
-          <View style={styles.controlButtonWrapper}>
-            {thisPlayerTurn && !guessMode && (
-              <>
-                <MediumButton
-                  text="Ask"
-                  inverted={false}
-                  color={Colors.BurgundyRed}
-                  onButtonPress={handleAskPressed}
-                />
-                <MediumButton
-                  text="Guess"
-                  inverted={false}
-                  color={Colors.BurgundyRed}
-                  onButtonPress={() => setGuessMode(true)}
-                />
-              </>
-            )}
-            {thisPlayerTurn && guessMode && (
-              <>
-                <MediumButton
-                  text="Cancel"
-                  inverted={true}
-                  color={Colors.BurgundyRed}
-                  onButtonPress={() => setGuessMode(false)}
-                />
-                <MediumButton
-                  text="Take guess"
-                  inverted={false}
-                  color={Colors.Green}
-                  onButtonPress={handleTakeGuessPressed}
-                />
-              </>
-            )}
+          <View style={styles.controlPanel}>
+            <View style={styles.chosenCardOuter}>
+              <Image
+                transition={300}
+                placeholder={{ blurhash }}
+                style={imageStyles.chosenCardInner}
+                source={{
+                  uri: board?.chosenCard?.card.url,
+                }}
+              />
+            </View>
+            <View style={styles.controlButtonWrapper}>
+              {thisPlayerTurn && !guessMode && (
+                <>
+                  <MediumButton
+                    text="Ask"
+                    inverted={false}
+                    color={Colors.BurgundyRed}
+                    onButtonPress={handleAskPressed}
+                  />
+                  <MediumButton
+                    text="Guess"
+                    inverted={false}
+                    color={Colors.BurgundyRed}
+                    onButtonPress={() => setGuessMode(true)}
+                  />
+                </>
+              )}
+              {thisPlayerTurn && guessMode && (
+                <>
+                  <MediumButton
+                    text="Cancel"
+                    inverted={true}
+                    color={Colors.BurgundyRed}
+                    onButtonPress={() => setGuessMode(false)}
+                  />
+                  <MediumButton
+                    text="Take guess"
+                    inverted={false}
+                    color={Colors.Green}
+                    onButtonPress={handleTakeGuessPressed}
+                  />
+                </>
+              )}
+            </View>
           </View>
         </View>
       </View>
-    </View>
+      <View style={styles.container}>
+        <Text style={styles.header}>{header}</Text>
+        <View style={styles.subHeaderWrapper}>
+          <Text style={{ ...styles.header2, color: Colors.Green }}>20</Text>
+          <Text style={{ ...styles.header2, color: Colors.Cream }}>vs</Text>
+          <Text style={{ ...styles.header2, color: Colors.BurgundyRed }}>
+            20
+          </Text>
+        </View>
+        <Pressable style={styles.backIconWrapper} onPress={handleBackPressed}>
+          <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
+        </Pressable>
+        <View style={styles.creamContainer}>
+          <View style={styles.boardContainer}>
+            {board?.boardCards?.map((bc) => (
+              <FlipCard
+                key={bc.id}
+                onCardPress={() => handleCardPressed(bc.id)}
+                cardToGuess={cardToGuess}
+                boardcard={bc}
+                guessMode={guessMode}
+              />
+            ))}
+          </View>
+          <View style={styles.controlPanel}>
+            <View style={styles.chosenCardOuter}>
+              <Image
+                transition={300}
+                placeholder={{ blurhash }}
+                style={imageStyles.chosenCardInner}
+                source={{
+                  uri: board?.chosenCard?.card.url,
+                }}
+              />
+            </View>
+            <View style={styles.controlButtonWrapper}>
+              {thisPlayerTurn && !guessMode && (
+                <>
+                  <MediumButton
+                    text="Ask"
+                    inverted={false}
+                    color={Colors.BurgundyRed}
+                    onButtonPress={handleAskPressed}
+                  />
+                  <MediumButton
+                    text="Guess"
+                    inverted={false}
+                    color={Colors.BurgundyRed}
+                    onButtonPress={() => setGuessMode(true)}
+                  />
+                </>
+              )}
+              {thisPlayerTurn && guessMode && (
+                <>
+                  <MediumButton
+                    text="Cancel"
+                    inverted={true}
+                    color={Colors.BurgundyRed}
+                    onButtonPress={() => setGuessMode(false)}
+                  />
+                  <MediumButton
+                    text="Take guess"
+                    inverted={false}
+                    color={Colors.Green}
+                    onButtonPress={handleTakeGuessPressed}
+                  />
+                </>
+              )}
+            </View>
+          </View>
+        </View>
+      </View>
+    </>
   );
 }

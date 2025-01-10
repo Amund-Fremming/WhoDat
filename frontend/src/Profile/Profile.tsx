@@ -1,9 +1,9 @@
-import { View, Text, TextInput, Image } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
+import { Image } from 'expo-image';
 import { styles, imageStyles } from './ProfileStyles';
 import { useEffect, useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { Colors } from '../Shared/assets/constants/Colors';
-import ErrorModal from '../Shared/components/ErrorModal/ErrorModal';
 import { useAuthProvider } from '../Shared/providers/AuthProvider';
 import MediumButton from '../Shared/components/MediumButton/MediumButton';
 import BigButton from '../Shared/components/BigButton/BigButton';
@@ -13,6 +13,9 @@ import { updatePlayer, updatePlayerImage } from './PlayerClient';
 import { IPlayerDto } from '../Shared/types/PlayerTypes';
 import { DevSettings } from 'react-native';
 import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function Profile() {
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -87,6 +90,8 @@ export default function Profile() {
           <View style={styles.nonEditContainer}>
             <View style={styles.imageContainer}>
               <Image
+                transition={300}
+                placeholder={{ blurhash }}
                 source={{
                   uri: imageUri,
                 }}
@@ -112,6 +117,7 @@ export default function Profile() {
           <View style={styles.editContainer}>
             <View style={styles.imageContainer}>
               <Image
+                transition={300}
                 source={{
                   uri: imageUri,
                 }}

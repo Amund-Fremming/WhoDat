@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
   },
 
   text: {
-    fontFamily: 'Inika',
     textAlign: 'center',
     fontWeight: 'bold',
     color: Colors.Cream,

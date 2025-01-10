@@ -1,4 +1,5 @@
-import { Modal, View, Image, Pressable } from 'react-native';
+import { Modal, View, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import { styles, imageStyles } from './CardModalStyles';
 import BigButton from '@/src/Shared/components/BigButton/BigButton';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
@@ -14,6 +15,9 @@ interface CardModalProps {
   card: ICardDto;
   onDeleteCardPressed: () => void;
 }
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function CardModal({
   modalVisible,
@@ -55,13 +59,21 @@ export default function CardModal({
               </Pressable>
             )}
             <Image
+              transition={300}
+              placeholder={{ blurhash }}
               style={imageStyles.imageStyle}
               source={{
                 uri: card.url,
               }}
             />
           </View>
-          <StrokedText text={card.name} fontBaseSize={40} smallBorder={false} />
+          <StrokedText
+            font="Inika"
+            color={Colors.Cream}
+            text={card.name}
+            fontBaseSize={40}
+            smallBorder={false}
+          />
           <View style={styles.buttonWrapper}>
             <BigButton
               text={editMode ? 'Cancel' : 'Edit'}
