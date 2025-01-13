@@ -44,7 +44,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
         }
     }
 
-    public async Task LeaveGame(int gameId)
+    public async Task LeaveGame(int gameId, bool doBroadcast)
     {
         try
         {
@@ -58,7 +58,10 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
             }
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-            await Clients.Group(groupName).SendAsync(IDENTIFIER, GameState.PLAYER_LEFT);
+            if(doBroadcast)
+            {
+                await Clients.Group(groupName).SendAsync(IDENTIFIER, GameState.PLAYER_LEFT);
+            }
         }
         catch (Exception e)
         {
@@ -196,7 +199,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
 
             var boardCardsLeft = result.Data;
             var cheapHotFixShouldNotBeUsed = boardCardUpdates.Where(_ => _.Active).Count();
-            await Clients.Groups(groupName).SendAsync(BOARDCARDS_LEFT_IDENTIFIER, cheapHotFixShouldNotBeUsed);
+            await Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(BOARDCARDS_LEFT_IDENTIFIER, cheapHotFixShouldNotBeUsed);
         }
         catch (Exception e)
         {

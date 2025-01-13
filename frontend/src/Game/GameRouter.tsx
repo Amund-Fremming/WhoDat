@@ -60,6 +60,7 @@ export default function GameRouter() {
     await startConnection(con);
 
     con.on('RECEIVE_STATE', (state: GameState) => {
+      setGameState(state);
       console.log('Incomming state: ' + state);
       switch (state) {
         case GameState.PLAYER_LEFT: {
@@ -127,17 +128,7 @@ export default function GameRouter() {
           setPage(PlayPages.GAMEPLAY);
           break;
         }
-        case GameState.P1_WON: {
-          setGameState(GameState.P1_WON);
-          break;
-        }
-        case GameState.P2_WON: {
-          setGameState(GameState.P2_WON);
-          break;
-        }
       }
-
-      setGameState(state);
     });
 
     con.on('RECEIVE_MESSAGE', (message: string) => {

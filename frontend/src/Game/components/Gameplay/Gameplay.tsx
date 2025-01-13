@@ -63,11 +63,10 @@ export default function Gameplay() {
     }
   }, [gameState]);
 
-  const handleBackPressed = async () => {
-    // TODO: are you sure modal
+  const handleBackPressed = async (doBroadcast: boolean) => {
     setPage(PlayPages.MAIN_PAGE);
     setDisplayTabBar('flex');
-    if (connection) await leaveGame(connection, gameId);
+    if (connection) await leaveGame(connection, gameId, doBroadcast);
   };
 
   const handleCardPressed = (boardcardId: number) => {
@@ -141,7 +140,10 @@ export default function Gameplay() {
             {oponentCardsLeft}
           </Text>
         </View>
-        <Pressable style={styles.backIconWrapper} onPress={handleBackPressed}>
+        <Pressable
+          style={styles.backIconWrapper}
+          onPress={() => handleBackPressed(true)}
+        >
           <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
         </Pressable>
         <View style={styles.creamContainer}>
@@ -213,7 +215,10 @@ export default function Gameplay() {
             20
           </Text>
         </View>
-        <Pressable style={styles.backIconWrapper} onPress={handleBackPressed}>
+        <Pressable
+          style={styles.backIconWrapper}
+          onPress={() => handleBackPressed(false)}
+        >
           <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
         </Pressable>
         <View style={styles.creamContainer}>

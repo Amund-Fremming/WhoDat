@@ -24,7 +24,6 @@ export default function ActionModal({
 }: ActionModalProps) {
   const { connection, gameId, setPage, isHost, gameState } = useGameProvider();
   const { setDisplayTabBar } = useTabBarProvider();
-  const { toggleInfoModal } = useInfoModalProvider();
   const [buttonText, setButtonText] = useState<string>('');
   const [headerText, setHeaderText] = useState<string>('');
   const [headerColor, setHeaderColor] = useState<string>('');
@@ -49,7 +48,7 @@ export default function ActionModal({
     if (gameFinished) {
       setDisplayTabBar('flex');
       setPage(PlayPages.MAIN_PAGE);
-      if (connection) await leaveGame(connection, gameId);
+      if (connection) await leaveGame(connection, gameId, false);
     }
   };
 

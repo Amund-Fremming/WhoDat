@@ -14,7 +14,7 @@ export default function WaitingPage() {
   const handleBackPressed = () => {
     setDisplayTabBar('flex');
     setPage(PlayPages.MAIN_PAGE);
-    if (connection) leaveGame(connection, gameId);
+    if (connection) leaveGame(connection, gameId, true);
   };
 
   return (

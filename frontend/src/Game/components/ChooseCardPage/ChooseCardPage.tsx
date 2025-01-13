@@ -59,7 +59,7 @@ export default function ChooseCardPage() {
   const handleBackPressed = async () => {
     setPage(PlayPages.MAIN_PAGE);
     setDisplayTabBar('flex');
-    if (connection) await leaveGame(connection, gameId);
+    if (connection) await leaveGame(connection, gameId, true);
   };
 
   return (

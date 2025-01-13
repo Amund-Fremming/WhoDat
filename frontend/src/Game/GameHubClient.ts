@@ -37,10 +37,11 @@ export const stopConnection = async (
 
 export const leaveGame = async (
   connection: signalR.HubConnection,
-  gameId: number
+  gameId: number,
+  doBroadcast: boolean
 ): Promise<void> => {
   try {
-    await connection.invoke('LeaveGame', gameId);
+    await connection.invoke('LeaveGame', gameId, doBroadcast);
   } catch (error) {
     console.error(error);
   }
