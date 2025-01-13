@@ -10,7 +10,6 @@ import {
   startConnection,
   startGame,
   stopConnection,
-  updateGameState,
 } from '@/src/Game/GameHubClient';
 import { GameState } from './types/GameTypes';
 import { useAuthProvider } from '../Shared/providers/AuthProvider';
@@ -21,7 +20,6 @@ import Gameplay from './components/Gameplay/Gameplay';
 
 export default function GameRouter() {
   const [message, setMessage] = useState<string>('');
-  const [oponentCardsLeft, setOponentCardsLeft] = useState<number>(20);
   const [cardsToChoose, setCardsToChoose] = useState<number>(40);
   const { token } = useAuthProvider();
   const { toggleInfoModal } = useInfoModalProvider();
@@ -34,13 +32,16 @@ export default function GameRouter() {
     setGameState,
     setPage,
     isHost,
+    gameState,
     setWaitingMessage,
+    setOponentCardsLeft,
   } = useGameProvider();
 
   const isHostRef = useRef(isHost);
   const gameIdRef = useRef(gameId);
 
   useEffect(() => {
+    console.log('Game state: ' + gameState);
     connectToHub();
     return () => {
       if (connection) stopConnection(connection);
@@ -60,7 +61,6 @@ export default function GameRouter() {
 
     con.on('RECEIVE_STATE', (state: GameState) => {
       console.log('Incomming state: ' + state);
-      setGameState(state);
       switch (state) {
         case GameState.PLAYER_LEFT: {
           toggleInfoModal(false, 'The other player left the game.');
@@ -127,7 +127,17 @@ export default function GameRouter() {
           setPage(PlayPages.GAMEPLAY);
           break;
         }
+        case GameState.P1_WON: {
+          setGameState(GameState.P1_WON);
+          break;
+        }
+        case GameState.P2_WON: {
+          setGameState(GameState.P2_WON);
+          break;
+        }
       }
+
+      setGameState(state);
     });
 
     con.on('RECEIVE_MESSAGE', (message: string) => {

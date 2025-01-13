@@ -116,7 +116,12 @@ export const updateBoardCardsActivity = async (
   boardCardUpdates: Array<IBoardCardUpdate>
 ): Promise<Result<boolean>> => {
   try {
-    await connection.invoke('UpdateBoardCardsActivity');
+    await connection.invoke(
+      'UpdateBoardCardsActivity',
+      gameId,
+      boardId,
+      boardCardUpdates
+    );
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');

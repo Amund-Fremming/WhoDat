@@ -195,7 +195,8 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
             }
 
             var boardCardsLeft = result.Data;
-            await Clients.Groups(groupName).SendAsync(BOARDCARDS_LEFT_IDENTIFIER, boardCardsLeft);
+            var cheapHotFixShouldNotBeUsed = boardCardUpdates.Where(_ => _.Active).Count();
+            await Clients.Groups(groupName).SendAsync(BOARDCARDS_LEFT_IDENTIFIER, cheapHotFixShouldNotBeUsed);
         }
         catch (Exception e)
         {

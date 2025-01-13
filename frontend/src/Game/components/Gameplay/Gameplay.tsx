@@ -6,20 +6,32 @@ import { Colors } from '@/src/Shared/assets/constants/Colors';
 import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 import { PlayPages } from '../../types/GamePages';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
-import { guessBoardCard, leaveGame } from '../../GameHubClient';
+import {
+  guessBoardCard,
+  leaveGame,
+  updateBoardCardsActivity,
+} from '../../GameHubClient';
 import { useEffect, useState } from 'react';
 import FlipCard from './components/FlipCard/FlipCard';
 import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
 import React from 'react';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import ActionModal from './components/ActionModal/ActionModal';
+import { IBoardCardUpdate } from '../../types/BoardTypes';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function Gameplay() {
-  const { setPage, connection, gameId, gameState, isHost, board } =
-    useGameProvider();
+  const {
+    setPage,
+    connection,
+    gameId,
+    gameState,
+    isHost,
+    board,
+    oponentCardsLeft,
+  } = useGameProvider();
   const { setDisplayTabBar } = useTabBarProvider();
   const { toggleInfoModal } = useInfoModalProvider();
 
@@ -28,7 +40,7 @@ export default function Gameplay() {
   const [guessMode, setGuessMode] = useState<boolean>(false);
   const [actionModalVisible, setActionModalVisible] = useState<boolean>(false);
   const [gameFinsihed, setGameFinished] = useState<boolean>(false);
-  const [cardActive, setCardsActive] = useState<number[]>([]);
+  const [cardsNotActive, setCardsNotActive] = useState<number[]>([]);
   const [cardToGuess, setCardToGuess] = useState<number>(-1);
 
   useEffect(() => {
@@ -60,7 +72,11 @@ export default function Gameplay() {
 
   const handleCardPressed = (boardcardId: number) => {
     if (!guessMode) {
-      setCardsActive((prev) => [...prev, boardcardId]);
+      if (cardsNotActive.includes(boardcardId)) {
+        setCardsNotActive((prev) => prev.filter((id) => boardcardId != id));
+        return;
+      }
+      setCardsNotActive((prev) => [...prev, boardcardId]);
       return;
     }
 
@@ -77,6 +93,27 @@ export default function Gameplay() {
       const result = await guessBoardCard(connection, gameId, cardToGuess);
       if (result.isError) {
         toggleInfoModal(true, result.message);
+      }
+
+      const boardCardUpdates: Array<IBoardCardUpdate> = board!.boardCards!.map(
+        (bc) => {
+          var update: IBoardCardUpdate = {
+            id: bc.id,
+            active: !cardsNotActive.includes(bc.id),
+          };
+          return update;
+        }
+      );
+
+      const playersLeftResult = await updateBoardCardsActivity(
+        connection,
+        gameId,
+        board!.id,
+        boardCardUpdates
+      );
+
+      if (playersLeftResult.isError) {
+        toggleInfoModal(true, playersLeftResult.message);
       }
     }
   };
@@ -96,10 +133,12 @@ export default function Gameplay() {
       <View style={styles.container}>
         <Text style={styles.header}>{header}</Text>
         <View style={styles.subHeaderWrapper}>
-          <Text style={{ ...styles.header2, color: Colors.Green }}>20</Text>
+          <Text style={{ ...styles.header2, color: Colors.Green }}>
+            {20 - cardsNotActive.length}
+          </Text>
           <Text style={{ ...styles.header2, color: Colors.Cream }}>vs</Text>
           <Text style={{ ...styles.header2, color: Colors.BurgundyRed }}>
-            20
+            {oponentCardsLeft}
           </Text>
         </View>
         <Pressable style={styles.backIconWrapper} onPress={handleBackPressed}>

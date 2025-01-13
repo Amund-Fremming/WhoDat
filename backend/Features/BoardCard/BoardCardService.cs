@@ -86,7 +86,7 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             var boardCards = bcResult.Data;
             int boardcardsLeft = boardCards.Count(bc => bc.Active);
 
-            IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.BoardCardID, update => update.Active);
+            IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.Id, update => update.Active);
             var combinedResult = await _boardcardRepository.UpdateBoardCardsActivity(updateMap, boardCards)
                 & await _boardRepository.UpdateBoardCardsLeft(board, boardcardsLeft);
 

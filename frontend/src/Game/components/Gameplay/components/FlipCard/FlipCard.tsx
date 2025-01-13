@@ -37,8 +37,8 @@ export default function FlipCard({
   const handleCardPressed = () => {
     if (!guessMode) {
       setFlipped(!flipped);
-      return;
     }
+
     onCardPress();
   };
 

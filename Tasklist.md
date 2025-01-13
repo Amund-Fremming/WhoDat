@@ -1,11 +1,12 @@
-# TODO
+# Tasklist
 
 TODO
+
+- Update BoardCards method is fucked, maybe just rewrite it better from scratch
 
 - Convert images to webP on upload
 - Are you sure when trying to leave
 
-BUGS
+BUG
 
-- After victory or loss one of the players home screen is locked for actions
-- Input boxes bug, text is shifted out left of view
+- when game finished, the last to leave gets locked on the screen because the info modal is open and blocking even though its not visible

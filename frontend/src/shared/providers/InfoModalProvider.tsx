@@ -25,7 +25,7 @@ export const InfoModalProvider = ({ children }: InfoModalProviderProps) => {
   const toggleInfoModal = (localIsError: boolean, localMesssage: string) => {
     setMessage(localMesssage);
     setIsError(localIsError);
-    setModalVisible(true);
+    setModalVisible(!modalVisible);
   };
 
   const value = {

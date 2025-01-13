@@ -9,6 +9,7 @@ import { leaveGame } from '@/src/Game/GameHubClient';
 import { PlayPages } from '@/src/Game/types/GamePages';
 import { GameState } from '@/src/Game/types/GameTypes';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 
 interface ActionModalProps {
   modalVisible: boolean;
@@ -23,6 +24,7 @@ export default function ActionModal({
 }: ActionModalProps) {
   const { connection, gameId, setPage, isHost, gameState } = useGameProvider();
   const { setDisplayTabBar } = useTabBarProvider();
+  const { toggleInfoModal } = useInfoModalProvider();
   const [buttonText, setButtonText] = useState<string>('');
   const [headerText, setHeaderText] = useState<string>('');
   const [headerColor, setHeaderColor] = useState<string>('');
@@ -45,8 +47,8 @@ export default function ActionModal({
   const handleClosePressed = async () => {
     setModalVisible(false);
     if (gameFinished) {
-      setPage(PlayPages.MAIN_PAGE);
       setDisplayTabBar('flex');
+      setPage(PlayPages.MAIN_PAGE);
       if (connection) await leaveGame(connection, gameId);
     }
   };
