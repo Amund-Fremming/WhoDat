@@ -18,6 +18,7 @@ import React from 'react';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import ActionModal from './components/ActionModal/ActionModal';
 import { IBoardCardUpdate } from '../../types/BoardTypes';
+import AskModal from './components/AskModal/AskModal';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -39,6 +40,7 @@ export default function Gameplay() {
   const [thisPlayerTurn, setThisPlayerTurn] = useState<boolean>(isHost);
   const [guessMode, setGuessMode] = useState<boolean>(false);
   const [actionModalVisible, setActionModalVisible] = useState<boolean>(false);
+  const [askModalVisible, setAskModalVisible] = useState<boolean>(false);
   const [gameFinsihed, setGameFinished] = useState<boolean>(false);
   const [cardsNotActive, setCardsNotActive] = useState<number[]>([]);
   const [cardToGuess, setCardToGuess] = useState<number>(-1);
@@ -82,10 +84,6 @@ export default function Gameplay() {
     setCardToGuess(boardcardId);
   };
 
-  const handleAskPressed = () => {
-    //
-  };
-
   const handleTakeGuessPressed = async () => {
     if (connection) {
       setGuessMode(false);
@@ -117,16 +115,17 @@ export default function Gameplay() {
     }
   };
 
-  const onActionModalClose = () => {
-    setActionModalVisible(false);
-  };
-
   return (
     <>
       <ActionModal
         modalVisible={actionModalVisible}
         setModalVisible={setActionModalVisible}
         gameFinished={gameFinsihed}
+      />
+
+      <AskModal
+        modalVisible={askModalVisible}
+        setModalVisible={setAskModalVisible}
       />
 
       <View style={styles.container}>
@@ -176,7 +175,7 @@ export default function Gameplay() {
                     text="Ask"
                     inverted={false}
                     color={Colors.BurgundyRed}
-                    onButtonPress={handleAskPressed}
+                    onButtonPress={() => setAskModalVisible(true)}
                   />
                   <MediumButton
                     text="Guess"
@@ -251,7 +250,7 @@ export default function Gameplay() {
                     text="Ask"
                     inverted={false}
                     color={Colors.BurgundyRed}
-                    onButtonPress={handleAskPressed}
+                    onButtonPress={() => setAskModalVisible(true)}
                   />
                   <MediumButton
                     text="Guess"

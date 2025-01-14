@@ -134,6 +134,7 @@ export default function GameRouter() {
     con.on('RECEIVE_MESSAGE', (message: string) => {
       setMessage(message);
       // TODO: Display the message
+      console.log('Host: ' + isHost + ', Received message: ' + message);
     });
 
     con.on('RECEIVE_PLAYERS_LEFT', (num: number) => {

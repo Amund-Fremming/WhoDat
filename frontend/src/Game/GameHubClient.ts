@@ -87,10 +87,11 @@ export const updateGameState = async (
 
 export const sendMessage = async (
   connection: signalR.HubConnection,
+  gameId: number,
   messageText: string
 ): Promise<Result<boolean>> => {
   try {
-    await connection.invoke('SendMessage', messageText);
+    await connection.invoke('SendMessage', gameId, messageText);
     return Result.ok(true);
   } catch (error) {
     return Result.failure('Falied to connect, check your wifi');

@@ -9,7 +9,6 @@ import { leaveGame } from '@/src/Game/GameHubClient';
 import { PlayPages } from '@/src/Game/types/GamePages';
 import { GameState } from '@/src/Game/types/GameTypes';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
-import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 
 interface ActionModalProps {
   modalVisible: boolean;
