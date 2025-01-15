@@ -4,6 +4,7 @@
 
 - BUG: Send message be throws an exception
 
+- Display oponent username/profile picture
 - Convert images to webP on upload
 - Are you sure when trying to leave
 
