@@ -1,3 +1,4 @@
+using Backend.Features.Shared.Enums;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Message;
@@ -11,5 +12,5 @@ public interface IMessageService
     /// <param name="gameId">The game to create the message in.</param>
     /// <param name="messageText">The message text to be sendt.</param>
     /// <returns>The id of the new message created.</returns>
-    Task<Result<int>> CreateMessage(int playerId, int gameId, string messageText);
+    Task<Result<GameState>> CreateMessage(int playerId, int gameId, string messageText);
 }

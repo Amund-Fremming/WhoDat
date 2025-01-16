@@ -10,4 +10,5 @@ export const Colors = {
   Black: '#111111',
   Green: '#00AE49',
   Red: '#FB2946',
+  Placeholder: '00000033',
 };

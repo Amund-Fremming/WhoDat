@@ -6,11 +6,11 @@ namespace Backend.Features.Message;
 
 public class MessageService(ILogger<IMessageService> logger, IMessageRepository messageRepository, IGameRepository gameRepository) : IMessageService
 {
-    public readonly ILogger<IMessageService> _logger = logger;
-    public readonly IMessageRepository _messageRepository = messageRepository;
-    public readonly IGameRepository _gameRepository = gameRepository;
+    private readonly ILogger<IMessageService> _logger = logger;
+    private readonly IMessageRepository _messageRepository = messageRepository;
+    private readonly IGameRepository _gameRepository = gameRepository;
 
-    public async Task<Result<int>> CreateMessage(int playerId, int gameId, string messageText)
+    public async Task<Result<GameState>> CreateMessage(int playerId, int gameId, string messageText)
     {
         try
         {
@@ -19,11 +19,20 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
                 return result.Error;
 
             var game = result.Data;
-            bool canSendMessage = CanSendMessage(playerId, game);
+            var canSendMessage = CanSendMessage(playerId, game);
             if (!canSendMessage)
                 return new Error(new InvalidOperationException("Player cannot send message in current context"), "Cannot send message in current state.");
 
-            return await _messageRepository.Create(new MessageEntity(playerId, gameId, messageText));
+            var messageResult = await _messageRepository.Create(new MessageEntity(gameId, playerId, messageText));
+            if (messageResult.IsError)
+                return messageResult.Error;
+
+            game.GameState = game.PlayerOneID == playerId ? GameState.P1_WAITING_ASK_REPLY : GameState.P2_WAITING_ASK_REPLY;
+            var stateResult = await _gameRepository.UpdateGame(game);
+            if(stateResult.IsError)
+                return stateResult.Error;
+
+            return game.GameState;
         }
         catch (Exception e)
         {

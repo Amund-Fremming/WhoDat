@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
   modal: {
     alignItems: 'center',
     width: '95%',
-    height: verticalScale(260),
+    minHeight: verticalScale(250),
     paddingBottom: verticalScale(105),
     backgroundColor: Colors.Cream,
     borderWidth: moderateScale(5),
@@ -62,5 +62,18 @@ export const styles = StyleSheet.create({
     width: horizontalScale(300),
     borderRadius: moderateScale(20),
     marginTop: verticalScale(20),
+  },
+
+  answeringContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  absoluteDoubleButton: {
+    position: 'absolute',
+    bottom: verticalScale(20),
+    color: Colors.DarkGray,
+    flexDirection: 'row',
+    columnGap: horizontalScale(15),
   },
 });

@@ -150,7 +150,9 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
                 return;
             }
 
-            await Clients.Groups(groupName).SendAsync(MESSAGE_IDENTIFIER, messageText);
+            var gameState = result.Data;
+            await Clients.Groups(groupName).SendAsync(IDENTIFIER, gameState);
+            await Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(MESSAGE_IDENTIFIER, messageText);
         }
         catch (Exception e)
         {

@@ -17,12 +17,16 @@ import ChooseCardPage from './components/ChooseCardPage/ChooseCardPage';
 import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
 import { useGameProvider } from '../Shared/providers/GameProvider';
 import Gameplay from './components/Gameplay/Gameplay';
+import { useGameplayProvider } from '../Shared/providers/GameplayProvider';
+import { AskState } from '../Shared/types/AskState';
 
 export default function GameRouter() {
   const [message, setMessage] = useState<string>('');
   const [cardsToChoose, setCardsToChoose] = useState<number>(40);
   const { token } = useAuthProvider();
   const { toggleInfoModal } = useInfoModalProvider();
+  const { setAskModalVisible, setQuestionReceived, setAskState } =
+    useGameplayProvider();
   const {
     connection,
     setConnection,
@@ -125,17 +129,39 @@ export default function GameRouter() {
           break;
         }
         case GameState.P1_TURN_STARTED: {
+          setAskState(AskState.Asking);
           setPage(PlayPages.GAMEPLAY);
+          break;
+        }
+        case GameState.P2_TURN_STARTED: {
+          setAskState(AskState.Asking);
+          break;
+        }
+        case GameState.P1_WAITING_ASK_REPLY: {
+          setAskModalVisible(true);
+          console.log(isHostRef.current + ' <-- host?');
+          setAskState(
+            isHostRef.current ? AskState.Waiting : AskState.Answering
+          );
+          break;
+        }
+        case GameState.P2_WAITING_ASK_REPLY: {
+          setAskModalVisible(true);
+          setAskState(
+            isHostRef.current ? AskState.Answering : AskState.Waiting
+          );
+          break;
+        }
+        case GameState.P2_WAITING_ASK_REPLY: {
+          setAskState(AskState.Answered);
           break;
         }
       }
     });
 
-    con.on('RECEIVE_MESSAGE', (message: string) => {
-      setMessage(message);
-      // TODO: Display the message
-      console.log('Host: ' + isHost + ', Received message: ' + message);
-    });
+    con.on('RECEIVE_MESSAGE', (message: string) =>
+      setQuestionReceived(message)
+    );
 
     con.on('RECEIVE_PLAYERS_LEFT', (num: number) => {
       setOponentCardsLeft(num);
