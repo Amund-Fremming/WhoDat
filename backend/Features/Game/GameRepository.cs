@@ -17,7 +17,7 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         try
         {
             var result = await _context.Game
-                .Include(g => g.Boards)
+                .Include(g => g.Boards!)
                 .ThenInclude(b => b.ChosenCard)
                 .FirstOrDefaultAsync(g => g.ID == gameId);
 

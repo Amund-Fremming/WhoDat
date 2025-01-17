@@ -1,8 +1,6 @@
 import * as signalR from '@microsoft/signalr';
-
 import { HUB_ENDPOINT } from '@/src/Shared/objects/URL_PATHS';
 import Result from '../Shared/objects/Result';
-import { GameState } from './types/GameTypes';
 import { IBoardCardUpdate } from './types/BoardTypes';
 
 export const createConnection = (token: string): signalR.HubConnection => {
@@ -27,11 +25,12 @@ export const startConnection = async (
 
 export const stopConnection = async (
   connection: signalR.HubConnection
-): Promise<void> => {
+): Promise<Result<boolean>> => {
   try {
     await connection.stop();
+    return Result.ok(true);
   } catch (error) {
-    console.error('Error while stopping connection: ', error);
+    return Result.failure("Failed to connect, check your wifi");
   }
 };
 
@@ -39,11 +38,12 @@ export const leaveGame = async (
   connection: signalR.HubConnection,
   gameId: number,
   doBroadcast: boolean
-): Promise<void> => {
+): Promise<Result<boolean>> => {
   try {
     await connection.invoke('LeaveGame', gameId, doBroadcast);
+    return Result.ok(true);
   } catch (error) {
-    console.error(error);
+    return Result.failure("Failed to connect, check your wifi");
   }
 };
 
@@ -71,16 +71,14 @@ export const subscribeToGameAsHost = async (
   }
 };
 
-export const updateGameState = async (
+export const finishTurn = async (
   connection: signalR.HubConnection,
   gameId: number,
-  gameState: GameState
 ): Promise<Result<boolean>> => {
   try {
-    await connection.invoke('UpdateGameState', gameId, gameState);
+    await connection.invoke('FinishGame', gameId);
     return Result.ok(true);
   } catch (error) {
-    console.error('errrrroooor' + error);
     return Result.failure('Falied to connect, check your wifi');
   }
 };

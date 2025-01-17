@@ -11,10 +11,6 @@ export const styles = StyleSheet.create({
     rowGap: verticalScale(5),
   },
 
-  inputContainer: {
-    rowGap: verticalScale(5),
-  },
-
   iconAndInput: {
     columnGap: horizontalScale(15),
     flexDirection: 'row',
@@ -102,7 +98,6 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     paddingHorizontal: horizontalScale(20),
     paddingVertical: verticalScale(7),
-    backgroundColor: Colors.DarkGray,
     right: horizontalScale(10),
     bottom: verticalScale(10),
     backgroundColor: 'rgba(0, 0, 0, 0.8)',

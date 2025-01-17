@@ -58,7 +58,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
             }
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-            if(doBroadcast)
+            if (doBroadcast)
             {
                 await Clients.Group(groupName).SendAsync(IDENTIFIER, GameState.PLAYER_LEFT);
             }
@@ -111,21 +111,21 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
         }
     }
 
-    public async Task UpdateGameState(int gameId, GameState state)
+    public async Task FinishTurn(int gameId)
     {
         try
         {
-            _logger.LogError(state.ToString());
             int playerId = ParsePlayerIdClaim();
             string groupName = gameId.ToString();
 
-            var result = await _gameService.UpdateGameState(playerId, gameId, state);
+            var result = await _gameService.FinishTurn(playerId, gameId);
             if (result.IsError)
             {
                 await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
                 return;
             }
 
+            var state = result.Data;
             await Clients.Groups(groupName).SendAsync(IDENTIFIER, state);
         }
         catch (Exception e)

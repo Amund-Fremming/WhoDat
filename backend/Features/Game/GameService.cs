@@ -199,4 +199,25 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             return new Error(e, "Failed to start game.");
         }
     }
+
+    public async Task<Result<GameState>> FinishTurn(int playerId, int gameId)
+    {
+        try
+        {
+            var result = await _gameRepository.GetById(gameId);
+            if (result.IsError)
+                return result.Error;
+
+            var game = result.Data;
+            game.GameState = playerId == game.PlayerOneID ? GameState.P2_TURN_STARTED : GameState.P1_TURN_STARTED;
+
+            await _gameRepository.UpdateGame(game);
+            return game.GameState;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(StartGame)");
+            return new Error(e, "Failed to start game.");
+        }
+    }
 }

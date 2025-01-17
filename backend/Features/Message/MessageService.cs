@@ -27,9 +27,10 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
             if (messageResult.IsError)
                 return messageResult.Error;
 
-            game.GameState = game.PlayerOneID == playerId ? GameState.P1_WAITING_ASK_REPLY : GameState.P2_WAITING_ASK_REPLY;
+            game.GameState = GetNextGameState(playerId == game.PlayerOneID, game.GameState);
+
             var stateResult = await _gameRepository.UpdateGame(game);
-            if(stateResult.IsError)
+            if (stateResult.IsError)
                 return stateResult.Error;
 
             return game.GameState;
@@ -39,6 +40,18 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
             _logger.LogError(e, "(CreateMessage)");
             return new Error(e, "Failed to create message.");
         }
+    }
+
+    private static GameState GetNextGameState(bool isPlayerOne, GameState gameState)
+    {
+        return gameState switch
+        {
+            GameState.P1_TURN_STARTED when isPlayerOne => GameState.P1_WAITING_ASK_REPLY,
+            GameState.P2_ASK_REPLIED when isPlayerOne => GameState.P1_TURN_FINISHED,
+            GameState.P2_TURN_STARTED when isPlayerOne => GameState.P2_WAITING_ASK_REPLY,
+            GameState.P1_ASK_REPLIED when isPlayerOne => GameState.P2_TURN_FINISHED,
+            _ => gameState
+        };
     }
 
     private static bool CanSendMessage(int playerId, GameEntity game)
