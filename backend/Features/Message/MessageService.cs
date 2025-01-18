@@ -47,9 +47,9 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
         return gameState switch
         {
             GameState.P1_TURN_STARTED when isPlayerOne => GameState.P1_WAITING_ASK_REPLY,
-            GameState.P2_ASK_REPLIED when isPlayerOne => GameState.P1_TURN_FINISHED,
-            GameState.P2_TURN_STARTED when isPlayerOne => GameState.P2_WAITING_ASK_REPLY,
-            GameState.P1_ASK_REPLIED when isPlayerOne => GameState.P2_TURN_FINISHED,
+            GameState.P1_WAITING_ASK_REPLY when !isPlayerOne => GameState.P2_ASK_REPLIED,
+            GameState.P2_TURN_STARTED when !isPlayerOne => GameState.P2_WAITING_ASK_REPLY,
+            GameState.P2_WAITING_ASK_REPLY when isPlayerOne => GameState.P1_ASK_REPLIED,
             _ => gameState
         };
     }
@@ -60,10 +60,10 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
         bool playerIsP1 = playerId == game.PlayerOneID;
 
         if (playerIsP1)
-            return state == GameState.P1_TURN_STARTED || state == GameState.P2_WAITING_ASK_REPLY || state == GameState.P2_WAITING_GUESS_REPLY;
+            return state == GameState.P1_TURN_STARTED || state == GameState.P2_WAITING_ASK_REPLY;
 
         if (!playerIsP1)
-            return state == GameState.P2_TURN_STARTED || state == GameState.P1_WAITING_ASK_REPLY || state == GameState.P1_WAITING_GUESS_REPLY;
+            return state == GameState.P2_TURN_STARTED || state == GameState.P1_WAITING_ASK_REPLY;
 
         return false;
     }

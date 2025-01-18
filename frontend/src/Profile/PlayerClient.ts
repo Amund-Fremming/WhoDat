@@ -32,7 +32,6 @@ export const updatePlayer = async (
     const data: IPlayerDto = await response.json();
     return Result.ok(data);
   } catch (error) {
-    console.error(error, 'UpdatePlayer');
     return Result.failure('Something went wrong.');
   }
 };
@@ -62,17 +61,12 @@ export const updatePlayerImage = async (
     if (response.status === 500) return Result.failure('Internal server error');
 
     if (!response.ok) {
-      console.error(
-        response.status,
-        'updatePlayerImage: response was not 200.'
-      );
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
 
     return Result.ok(true);
   } catch (error) {
-    console.error(error, 'UpdatePlayerImage');
     return Result.failure('Something went wrong.');
   }
 };

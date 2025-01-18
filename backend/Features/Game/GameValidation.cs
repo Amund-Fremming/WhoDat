@@ -39,8 +39,8 @@ namespace Backend.Features.Game
         public static Result CanUpdateGame(int playerId, GameEntity game)
         {
             bool isPlayerOne = game.PlayerOneID == playerId;
-            if (isPlayerOne && game.GameState != GameState.P1_ASK_REPLIED && game.GameState != GameState.P1_TURN_STARTED && game.GameState != GameState.P1_GUESS_REPLIED ||
-                !isPlayerOne && game.GameState != GameState.P2_ASK_REPLIED && game.GameState != GameState.P2_TURN_STARTED && game.GameState != GameState.P2_GUESS_REPLIED)
+            if (isPlayerOne && game.GameState != GameState.P1_ASK_REPLIED && game.GameState != GameState.P1_TURN_STARTED  ||
+                !isPlayerOne && game.GameState != GameState.P2_ASK_REPLIED && game.GameState != GameState.P2_TURN_STARTED)
                 return new Error(new UnauthorizedAccessException($"Player with id {playerId} does not have permission to update the state (GameService)"), "You dont have permission for this action.");
 
             return Result.Ok();

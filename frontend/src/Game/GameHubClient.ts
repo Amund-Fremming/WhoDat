@@ -30,7 +30,7 @@ export const stopConnection = async (
     await connection.stop();
     return Result.ok(true);
   } catch (error) {
-    return Result.failure("Failed to connect, check your wifi");
+    return Result.failure('Failed to connect, check your wifi');
   }
 };
 
@@ -43,7 +43,7 @@ export const leaveGame = async (
     await connection.invoke('LeaveGame', gameId, doBroadcast);
     return Result.ok(true);
   } catch (error) {
-    return Result.failure("Failed to connect, check your wifi");
+    return Result.failure('Failed to connect, check your wifi');
   }
 };
 
@@ -73,12 +73,13 @@ export const subscribeToGameAsHost = async (
 
 export const finishTurn = async (
   connection: signalR.HubConnection,
-  gameId: number,
+  gameId: number
 ): Promise<Result<boolean>> => {
   try {
-    await connection.invoke('FinishGame', gameId);
+    await connection.invoke('FinishTurn', gameId);
     return Result.ok(true);
   } catch (error) {
+    console.error(error);
     return Result.failure('Falied to connect, check your wifi');
   }
 };

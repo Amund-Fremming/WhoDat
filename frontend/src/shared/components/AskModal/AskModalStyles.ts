@@ -76,4 +76,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     columnGap: horizontalScale(15),
   },
+
+  waitingContainer: {
+    paddingTop: verticalScale(35),
+    height: verticalScale(70),
+  },
 });

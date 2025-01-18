@@ -20,7 +20,6 @@ export const getAllCards = async (
     if (response.status === 500) return Result.failure('Internal server error');
 
     if (!response.ok) {
-      console.error('getAllCards: response was not 200.');
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
@@ -28,7 +27,6 @@ export const getAllCards = async (
     const data: ICardDto[] = await response.json();
     return Result.ok(data);
   } catch (error) {
-    console.error('(getAllCards)' + error);
     return Result.failure('Something went wrong.');
   }
 };
@@ -58,14 +56,12 @@ export const addCard = async (
     if (response.status === 500) return Result.failure('Internal server error');
 
     if (!response.ok) {
-      console.error('addCard: response was not 200.');
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
 
     return Result.ok(true);
   } catch (error) {
-    console.error('(addCard)' + error);
     return Result.failure('Something went wrong.');
   }
 };
@@ -89,14 +85,12 @@ export const deleteCard = async (
     if (response.status === 500) return Result.failure('Internal server error');
 
     if (!response.ok) {
-      console.error('addCard: response was not 200.');
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
 
     return Result.ok(true);
   } catch (error) {
-    console.error('(deleteCard)' + error);
     return Result.failure('Something went wrong.');
   }
 };

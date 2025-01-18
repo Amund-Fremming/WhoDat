@@ -31,7 +31,6 @@ export const loginPlayer = async (
     const data: IAuthResponse = await response.json();
     return Result.ok(data);
   } catch (error) {
-    console.error(error, ' loginPlayer: request failed.');
     return Result.failure('Something went wrong.');
   }
 };
@@ -56,7 +55,6 @@ export const registerPlayer = async (
       );
 
     if (!response.ok) {
-      console.error(response.status, ' registerPlayer: response was not 200.');
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
@@ -64,7 +62,6 @@ export const registerPlayer = async (
     const data: IAuthResponse = await response.json();
     return Result.ok(data);
   } catch (error) {
-    console.error(error, ' registerPlayer: request failed');
     return Result.failure('Something went wrong.');
   }
 };

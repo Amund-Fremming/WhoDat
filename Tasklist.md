@@ -2,9 +2,7 @@
 
 ## TODO
 
-- BUG? : SendMessage needs a bool, is reply for updating to the right state. now a reply wil change the state to the p2 asked
-
-- Display oponent username/profile picture
+- Handle error messages when GameHub does not work, many methods just call and forget, making the fe possible to stay frozen or dont reply
 - Convert images to webP on upload
 - Are you sure when trying to leave
 

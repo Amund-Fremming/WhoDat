@@ -45,7 +45,6 @@ export default function GameRouter() {
   const gameIdRef = useRef(gameId);
 
   useEffect(() => {
-    console.log('Game state: ' + gameState);
     connectToHub();
     return () => {
       if (connection) stopConnection(connection);
@@ -65,7 +64,6 @@ export default function GameRouter() {
 
     con.on('RECEIVE_STATE', (state: GameState) => {
       setGameState(state);
-      console.log('Incomming state: ' + state);
       switch (state) {
         case GameState.PLAYER_LEFT: {
           toggleInfoModal(false, 'The other player left the game.');
@@ -128,6 +126,8 @@ export default function GameRouter() {
           }
           break;
         }
+
+        // Gameplay states
         case GameState.P1_TURN_STARTED: {
           setAskState(AskState.Asking);
           setPage(PlayPages.GAMEPLAY);
@@ -139,7 +139,6 @@ export default function GameRouter() {
         }
         case GameState.P1_WAITING_ASK_REPLY: {
           setAskModalVisible(true);
-          console.log(isHostRef.current + ' <-- host?');
           setAskState(
             isHostRef.current ? AskState.Waiting : AskState.Answering
           );
@@ -152,8 +151,18 @@ export default function GameRouter() {
           );
           break;
         }
-        case GameState.P2_WAITING_ASK_REPLY: {
-          setAskState(AskState.Answered);
+        case GameState.P2_ASK_REPLIED: {
+          setAskModalVisible(true);
+          setAskState(
+            isHostRef.current ? AskState.Answered : AskState.Finished
+          );
+          break;
+        }
+        case GameState.P1_ASK_REPLIED: {
+          setAskModalVisible(true);
+          setAskState(
+            isHostRef.current ? AskState.Finished : AskState.Answered
+          );
           break;
         }
       }

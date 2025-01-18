@@ -3,4 +3,5 @@ export enum AskState {
   Waiting,
   Answering,
   Answered,
+  Finished,
 }

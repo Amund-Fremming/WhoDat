@@ -7,6 +7,7 @@ import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 import { PlayPages } from '../../types/GamePages';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 import {
+  finishTurn,
   guessBoardCard,
   leaveGame,
   updateBoardCardsActivity,
@@ -19,6 +20,7 @@ import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import ActionModal from './components/ActionModal/ActionModal';
 import { IBoardCardUpdate } from '../../types/BoardTypes';
 import { useGameplayProvider } from '@/src/Shared/providers/GameplayProvider';
+import { GameState } from '../../types/GameTypes';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -39,6 +41,7 @@ export default function Gameplay() {
 
   const [header, setHeader] = useState<string>('');
   const [thisPlayerTurn, setThisPlayerTurn] = useState<boolean>(isHost);
+  const [playerTurnFinished, setPlayerTurnFinished] = useState<boolean>(false);
   const [guessMode, setGuessMode] = useState<boolean>(false);
   const [actionModalVisible, setActionModalVisible] = useState<boolean>(false);
   const [gameFinsihed, setGameFinished] = useState<boolean>(false);
@@ -46,15 +49,26 @@ export default function Gameplay() {
   const [cardToGuess, setCardToGuess] = useState<number>(-1);
 
   useEffect(() => {
-    var stateP1Turn = [2, 5, 8, 9, 10, 11, 12];
-    var stateP2Turn = [3, 6, 13, 14, 15, 16, 17];
-    var finished = [18, 19];
+    var p1TurnStates = [
+      GameState.P1_TURN_STARTED,
+      GameState.P1_WAITING_ASK_REPLY,
+    ];
+    var p2TurnStates = [
+      GameState.P2_TURN_STARTED,
+      GameState.P2_WAITING_ASK_REPLY,
+    ];
+    var finishedTurnStates = [
+      GameState.P1_ASK_REPLIED,
+      GameState.P2_ASK_REPLIED,
+    ];
+    var finished = [GameState.P1_WON, GameState.P2_WON];
 
-    if (stateP1Turn.includes(gameState)) {
+    setPlayerTurnFinished(finishedTurnStates.includes(gameState));
+    if (p1TurnStates.includes(gameState)) {
       setHeader(isHost ? 'Your turn' : 'Their turn');
       setThisPlayerTurn(isHost ? true : false);
     }
-    if (stateP2Turn.includes(gameState)) {
+    if (p2TurnStates.includes(gameState)) {
       setHeader(isHost ? 'Their turn' : 'Your turn');
       setThisPlayerTurn(isHost ? false : true);
     }
@@ -115,6 +129,15 @@ export default function Gameplay() {
     }
   };
 
+  const handleFinishTurn = async () => {
+    if (connection) {
+      var result = await finishTurn(connection, gameId);
+      if (result.isError) {
+        console.error(result.message);
+      }
+    }
+  };
+
   return (
     <>
       <ActionModal
@@ -164,7 +187,7 @@ export default function Gameplay() {
               />
             </View>
             <View style={styles.controlButtonWrapper}>
-              {thisPlayerTurn && !guessMode && (
+              {thisPlayerTurn && !guessMode && !playerTurnFinished && (
                 <>
                   <MediumButton
                     text="Ask"
@@ -180,7 +203,7 @@ export default function Gameplay() {
                   />
                 </>
               )}
-              {thisPlayerTurn && guessMode && (
+              {thisPlayerTurn && guessMode && !playerTurnFinished && (
                 <>
                   <MediumButton
                     text="Cancel"
@@ -196,78 +219,13 @@ export default function Gameplay() {
                   />
                 </>
               )}
-            </View>
-          </View>
-        </View>
-      </View>
-      <View style={styles.container}>
-        <Text style={styles.header}>{header}</Text>
-        <View style={styles.subHeaderWrapper}>
-          <Text style={{ ...styles.header2, color: Colors.Green }}>20</Text>
-          <Text style={{ ...styles.header2, color: Colors.Cream }}>vs</Text>
-          <Text style={{ ...styles.header2, color: Colors.BurgundyRed }}>
-            20
-          </Text>
-        </View>
-        <Pressable
-          style={styles.backIconWrapper}
-          onPress={() => handleBackPressed(false)}
-        >
-          <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
-        </Pressable>
-        <View style={styles.creamContainer}>
-          <View style={styles.boardContainer}>
-            {board?.boardCards?.map((bc) => (
-              <FlipCard
-                key={bc.id}
-                onCardPress={() => handleCardPressed(bc.id)}
-                cardToGuess={cardToGuess}
-                boardcard={bc}
-                guessMode={guessMode}
-              />
-            ))}
-          </View>
-          <View style={styles.controlPanel}>
-            <View style={styles.chosenCardOuter}>
-              <Image
-                transition={300}
-                placeholder={{ blurhash }}
-                style={imageStyles.chosenCardInner}
-                source={{
-                  uri: board?.chosenCard?.card.url,
-                }}
-              />
-            </View>
-            <View style={styles.controlButtonWrapper}>
-              {thisPlayerTurn && !guessMode && (
+              {thisPlayerTurn && playerTurnFinished && (
                 <>
                   <MediumButton
-                    text="Ask"
-                    inverted={false}
-                    color={Colors.BurgundyRed}
-                    onButtonPress={() => setAskModalVisible(true)}
-                  />
-                  <MediumButton
-                    text="Guess"
-                    inverted={false}
-                    color={Colors.BurgundyRed}
-                    onButtonPress={() => setGuessMode(true)}
-                  />
-                </>
-              )}
-              {thisPlayerTurn && guessMode && (
-                <>
-                  <MediumButton
-                    text="Cancel"
-                    inverted={true}
-                    color={Colors.BurgundyRed}
-                    onButtonPress={() => setGuessMode(false)}
-                  />
-                  <MediumButton
-                    text="Take guess"
+                    text="Finish turn"
                     inverted={false}
                     color={Colors.Green}
-                    onButtonPress={handleTakeGuessPressed}
+                    onButtonPress={handleFinishTurn}
                   />
                 </>
               )}

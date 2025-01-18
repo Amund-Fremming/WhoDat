@@ -125,6 +125,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
                 return;
             }
 
+            _logger.LogError("Game state: " + result.Data);
             var state = result.Data;
             await Clients.Groups(groupName).SendAsync(IDENTIFIER, state);
         }

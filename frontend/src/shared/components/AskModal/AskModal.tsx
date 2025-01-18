@@ -30,12 +30,13 @@ export default function AskModal({
     Colors.Placeholder
   );
   const { connection, gameId, isHost, gameState } = useGameProvider();
-  const { questionReceived, askState } = useGameplayProvider();
+  const { questionReceived, askState, setAskModalVisible } =
+    useGameplayProvider();
   const { toggleInfoModal } = useInfoModalProvider();
 
   useEffect(() => {
-    console.log('Host: ' + isHost + ' , AskState: ' + askState);
-  }, [askState]);
+    setQuestion('');
+  }, [modalVisible]);
 
   const handleAskPressed = async () => {
     if (!validText(question)) {
@@ -57,9 +58,9 @@ export default function AskModal({
     setPlaceholderText('Ask a yes or no question');
   };
 
-  const handleQuestionAnswerPressed = (answer: string) => {
+  const handleQuestionAnswerPressed = async (answer: string) => {
     if (connection) {
-      sendMessage(connection, gameId, answer);
+      var result = await sendMessage(connection, gameId, answer);
     }
   };
 
@@ -67,14 +68,14 @@ export default function AskModal({
     <Modal animationType="fade" visible={modalVisible} transparent={true}>
       <View style={styles.container}>
         <View style={styles.modal}>
-          <Pressable
-            style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
-          >
-            <FontAwesome name="close" size={36} color={Colors.DarkGray} />
-          </Pressable>
           {askState === AskState.Asking && (
             <>
+              <Pressable
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <FontAwesome name="close" size={36} color={Colors.DarkGray} />
+              </Pressable>
               <TextInput
                 multiline={true}
                 placeholder={placeholderText}
@@ -120,15 +121,17 @@ export default function AskModal({
             </>
           )}
           {askState === AskState.Waiting && (
-            <StrokedText
-              text="Waiting"
-              color={Colors.Cream}
-              font="Modak"
-              fontBaseSize={40}
-              smallBorder={false}
-            />
+            <View style={styles.waitingContainer}>
+              <StrokedText
+                text="Waiting"
+                color={Colors.Cream}
+                font="Modak"
+                fontBaseSize={60}
+                smallBorder={false}
+              />
+            </View>
           )}
-          {askState === AskState.Answered && (
+          {askState === AskState.Finished && (
             <>
               <StrokedText
                 text={'Oponent is flipping cards'}
@@ -142,7 +145,26 @@ export default function AskModal({
                   text="Close"
                   color={Colors.BurgundyRed}
                   inverted={false}
-                  onButtonPress={handleAskPressed}
+                  onButtonPress={() => setAskModalVisible(false)}
+                />
+              </View>
+            </>
+          )}
+          {askState === AskState.Answered && (
+            <>
+              <StrokedText
+                text={questionReceived}
+                color={Colors.Cream}
+                font="Modak"
+                fontBaseSize={40}
+                smallBorder={false}
+              />
+              <View style={styles.absoluteButton}>
+                <BigButton
+                  text="Close"
+                  color={Colors.BurgundyRed}
+                  inverted={false}
+                  onButtonPress={() => setAskModalVisible(false)}
                 />
               </View>
             </>
