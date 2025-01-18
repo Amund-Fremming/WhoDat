@@ -5,9 +5,8 @@ using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Game;
 
-public class GameService(AppDbContext context, ILogger<IGameService> logger, IGameRepository gameRepository, IPlayerRepository playerRepository) : IGameService
+public class GameService(ILogger<IGameService> logger, IGameRepository gameRepository, IPlayerRepository playerRepository) : IGameService
 {
-    private readonly AppDbContext _context = context;
     private readonly ILogger<IGameService> _logger = logger;
     private readonly IGameRepository _gameRepository = gameRepository;
     private readonly IPlayerRepository _playerRepository = playerRepository;
@@ -47,11 +46,8 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             if (validation.IsError)
                 return validation.Error;
 
-            var gameResult = await _gameRepository.Delete(game);
-            if (game.PlayerTwoID != null)
-                return result.Error;
-
-            return Result.Ok();
+            _ = await _gameRepository.Delete(game);
+            return game.PlayerTwoID != null ? result.Error : Result.Ok();
         }
         catch (Exception e)
         {
@@ -74,7 +70,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
 
             var playerResult = await _playerRepository.GetById(playerId);
             if (playerResult.IsError)
-                result = playerResult.Error;
+                return playerResult.Error;
 
             var player = playerResult.Data;
             var joinResult = await _gameRepository.JoinGame(game, player);
@@ -110,10 +106,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
                 game.PlayerTwoID = null;
 
             var leaveResult = await _gameRepository.LeaveGame(game);
-            if (leaveResult.IsError)
-                return result.Error;
-
-            return Result.Ok();
+            return leaveResult.IsError ? result.Error : Result.Ok();
         }
         catch (Exception e)
         {
@@ -138,10 +131,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
                 return validation.Error;
 
             var gameResult = await _gameRepository.UpdateGameState(game, state);
-            if (gameResult.IsError)
-                return gameResult.Error;
-
-            return Result.Ok();
+            return gameResult.IsError ? gameResult.Error : Result.Ok();
         }
         catch (Exception e)
         {
@@ -155,10 +145,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         try
         {
             var result = await _playerRepository.GetById(playerId);
-            if (result.IsError)
-                return result.Error;
-
-            return _gameRepository.GetRecentGamePlayed(playerId);
+            return result.IsError ? result.Error : _gameRepository.GetRecentGamePlayed(playerId);
         }
         catch (Exception e)
         {
@@ -179,7 +166,6 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             if (gameResult.IsError)
                 return gameResult.Error;
 
-            var player = playerResult.Data;
             var game = gameResult.Data;
             var validation = GameValidation.HasPermission(playerId, game)
                 & GameValidation.ValidState(game);

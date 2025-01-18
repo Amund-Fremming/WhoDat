@@ -13,34 +13,34 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     private readonly IBoardCardService _boardCardService = boardCardService;
     private readonly IMessageService _messageService = messageService;
 
-    private readonly string IDENTIFIER = "RECEIVE_STATE";
-    private readonly string MESSAGE_IDENTIFIER = "RECEIVE_MESSAGE";
-    private readonly string ERROR_IDENTIFIER = "RECEIVE_ERROR";
-    private readonly string BOARDCARDS_LEFT_IDENTIFIER = "RECEIVE_PLAYERS_LEFT";
-    private readonly string _genericErrorMsg = "Something went wrong.";
+    private const string StateIdentifier = "RECEIVE_STATE";
+    private const string MessageIdentifier = "RECEIVE_MESSAGE";
+    private const string ErrorIdentifier = "RECEIVE_ERROR";
+    private const string BoardCardsLeftIdentifier = "RECEIVE_PLAYERS_LEFT";
+    private const string GenericErrorMsg = "Something went wrong.";
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
+            var playerId = ParsePlayerIdClaim();
             var result = await _gameService.GetRecentGamePlayed(playerId);
             if (result.IsError)
             {
-                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
             var recentGamePlayedId = result.Data;
-            string groupName = recentGamePlayedId.ToString();
+            var groupName = recentGamePlayedId.ToString();
 
-            await Clients.Group(groupName).SendAsync(IDENTIFIER, GameState.DISCONNECTED);
+            await Clients.Group(groupName).SendAsync(StateIdentifier, GameState.DISCONNECTED);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(OnDisconnectAsync)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -48,25 +48,25 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
+            var playerId = ParsePlayerIdClaim();
+            var groupName = gameId.ToString();
 
             var result = await _gameService.LeaveGameById(playerId, gameId);
             if (result.IsError)
             {
-                await Clients.Group(groupName).SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Group(groupName).SendAsync(ErrorIdentifier, result.Message);
             }
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
             if (doBroadcast)
             {
-                await Clients.Group(groupName).SendAsync(IDENTIFIER, GameState.PLAYER_LEFT);
+                await Clients.Group(groupName).SendAsync(StateIdentifier, GameState.PLAYER_LEFT);
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(LeaveGame)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -74,24 +74,24 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
+            var playerId = ParsePlayerIdClaim();
+            var groupName = gameId.ToString();
 
             var result = await _gameService.JoinGameById(playerId, gameId);
             if (result.IsError)
             {
-                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
             var game = result.Data;
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-            await Clients.Groups(groupName).SendAsync(IDENTIFIER, game.GameState);
+            await Clients.Groups(groupName).SendAsync(StateIdentifier, game.GameState);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(JoinGame)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -99,15 +99,13 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
-
+            var groupName = gameId.ToString();
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(SubscribeToGameAsHost)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -115,24 +113,23 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
+            var playerId = ParsePlayerIdClaim();
+            var groupName = gameId.ToString();
 
             var result = await _gameService.FinishTurn(playerId, gameId);
             if (result.IsError)
             {
-                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
-            _logger.LogError("Game state: " + result.Data);
             var state = result.Data;
-            await Clients.Groups(groupName).SendAsync(IDENTIFIER, state);
+            await Clients.Groups(groupName).SendAsync(StateIdentifier, state);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(UpdateGameState)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -140,25 +137,25 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
-            string encodedMessageText = EncodeForJsAndHtml(messageText);
+            var playerId = ParsePlayerIdClaim();
+            var groupName = gameId.ToString();
+            var encodedMessageText = EncodeForJsAndHtml(messageText);
 
-            var result = await _messageService.CreateMessage(playerId, gameId, messageText);
+            var result = await _messageService.CreateMessage(playerId, gameId, encodedMessageText);
             if (result.IsError)
             {
-                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
             var gameState = result.Data;
-            await Clients.Groups(groupName).SendAsync(IDENTIFIER, gameState);
-            await Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(MESSAGE_IDENTIFIER, messageText);
+            await Clients.Groups(groupName).SendAsync(StateIdentifier, gameState);
+            await Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(MessageIdentifier, messageText);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(SendMessage)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -166,23 +163,23 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
+            var playerId = ParsePlayerIdClaim();
+            var groupName = gameId.ToString();
 
             var result = await _boardService.GuessBoardCard(playerId, gameId, boardCardId);
             if (result.IsError)
             {
-                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
             var state = result.Data;
-            await Clients.Groups(groupName).SendAsync(IDENTIFIER, state);
+            await Clients.Groups(groupName).SendAsync(StateIdentifier, state);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(GuessBoardCard)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -190,24 +187,24 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
+            var playerId = ParsePlayerIdClaim();
+            var groupName = gameId.ToString();
 
             var result = await _boardCardService.UpdateBoardCardsActivity(playerId, boardId, boardCardUpdates);
             if (result.IsError)
             {
-                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
             var boardCardsLeft = result.Data;
             var cheapHotFixShouldNotBeUsed = boardCardUpdates.Where(_ => _.Active).Count();
-            await Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(BOARDCARDS_LEFT_IDENTIFIER, cheapHotFixShouldNotBeUsed);
+            await Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(BoardCardsLeftIdentifier, cheapHotFixShouldNotBeUsed);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(UpdateBoardCardsActivity)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -215,23 +212,23 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
+            var playerId = ParsePlayerIdClaim();
+            var groupName = gameId.ToString();
 
             var result = await _boardCardService.CreateBoardCards(playerId, gameId, cardIds);
             if (result.IsError)
             {
-                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
             var state = result.Data;
-            await Clients.Groups(groupName).SendAsync(IDENTIFIER, state);
+            await Clients.Groups(groupName).SendAsync(StateIdentifier, state);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "(CreateBoardCards)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            _logger.LogError(e, "(CreateBoardCards)");
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -239,23 +236,23 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
+            var playerId = ParsePlayerIdClaim();
+            var groupName = gameId.ToString();
 
             var result = await _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId);
             if (result.IsError)
             {
-                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
             var state = result.Data;
-            await Clients.Groups(groupName).SendAsync(IDENTIFIER, state);
+            await Clients.Groups(groupName).SendAsync(StateIdentifier, state);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "(ChooseBoardCard)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            _logger.LogError(e, "(ChooseBoardCard)");
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 
@@ -263,23 +260,23 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string groupName = gameId.ToString();
+            var playerId = ParsePlayerIdClaim();
+            var groupName = gameId.ToString();
 
             var result = await _gameService.StartGame(playerId, gameId);
             if (result.IsError)
             {
-                await Clients.Caller.SendAsync(ERROR_IDENTIFIER, result.Message);
+                await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
             var state = result.Data;
-            await Clients.Groups(groupName).SendAsync(IDENTIFIER, state);
+            await Clients.Groups(groupName).SendAsync(StateIdentifier, state);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "(StartGame)");
-            await Clients.Caller.SendAsync(ERROR_IDENTIFIER, _genericErrorMsg);
+            _logger.LogError(e, "(StartGame)");
+            await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
 

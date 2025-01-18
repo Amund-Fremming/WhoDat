@@ -94,7 +94,7 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
                 .Select(g => g.ID)
                 .ToList();
 
-            if (data.Any())
+            if (data.Count != 0)
             {
                 return data.Max();
             }

@@ -9,21 +9,22 @@ namespace Backend.Features.Game
         public static Result ValidState(GameEntity game)
         {
             if (game.GameState != GameState.BOTH_PICKED_PLAYERS)
-                return new Error(new ArgumentOutOfRangeException("Game cannot start at this state!"), "Cannot do this action in this game state.");
+                return new Error(new InvalidOperationException("Game cannot start at this state!"), "Cannot do this action in this game state.");
 
             if (game.PlayerOneID == null || game.PlayerTwoID == null)
-                return new Error(new ArgumentOutOfRangeException("Game is missing one player"), "You need two players in a game.");
+                return new Error(new InvalidOperationException("Game is missing one player"), "You need two players in a game.");
 
             if (game.Boards == null || game.Boards.Count() < 2)
-                return new Error(new ArgumentNullException("Missing one or two boards"), "One or both of the boards have not been created.");
+                return new Error(new InvalidOperationException("Missing one or two boards"), "One or both of the boards have not been created.");
 
-            BoardEntity playerOneBoard = game.Boards.ElementAt(0);
-            BoardEntity playerTwoBoard = game.Boards.ElementAt(1);
-            if (playerTwoBoard == null)
-                return new Error(new ArgumentOutOfRangeException("One player two has not a board created."), "Player two is missing a board.");
+            if (game.Boards.Count() < 2)
+                return new Error(new InvalidOperationException("One player two has not a board created."), "Player two is missing a board.");
+            
+            var playerOneBoard = game.Boards.ElementAt(0);
+            var playerTwoBoard = game.Boards.ElementAt(1);
 
             if (playerOneBoard.ChosenCardID == null || playerTwoBoard.ChosenCardID == null)
-                return new Error(new ArgumentOutOfRangeException("Both players have not choosen their playing card."), "Both players have not choosen their playing card.");
+                return new Error(new InvalidOperationException("Both players have not choosen their playing card."), "Both players have not choosen their playing card.");
 
             return Result.Ok();
         }

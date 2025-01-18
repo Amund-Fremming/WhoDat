@@ -3,7 +3,7 @@ using Backend.Features.Player;
 namespace Backend.Features.Auth;
 
 [ApiController]
-[Route("api/auth")]
+[Route("api/[controller]")]
 public class AuthController(ILogger<AuthController> logger, IAuthService authService, IPlayerRepository playerRepository) : ControllerBase
 {
     private readonly ILogger<AuthController> _logger = logger;
@@ -33,7 +33,7 @@ public class AuthController(ILogger<AuthController> logger, IAuthService authSer
         }
         catch (UnauthorizedAccessException e)
         {
-            _logger.LogError(e, "(Login) - Unauthorized, problem lies under ValidatePasswordWithSalt.");
+            _logger.LogError(e, "(Login)");
             return Unauthorized(e.Message);
         }
         catch (Exception e)

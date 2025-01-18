@@ -23,7 +23,7 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
+            var playerId = ParsePlayerIdClaim();
             var gameRes = await _gameService.CreateGame(playerId, gameState);
             if (gameRes.IsError)
                 return BadRequest(gameRes.Message);
@@ -41,13 +41,13 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-    [HttpDelete("games/{gameId}")]
+    [HttpDelete("games/{gameId:int}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> DeleteGame(int gameId)
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
+            var playerId = ParsePlayerIdClaim();
             var result = await _gameService.DeleteGame(playerId, gameId);
             return result.Resolve(
                 suc => Ok(),
@@ -60,13 +60,13 @@ public class GameController(ILogger<GameController> logger, IGameService gameSer
         }
     }
 
-    [HttpGet("games/{gameId}")]
+    [HttpGet("games/{gameId:int}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> GetBoardWithBoardCards(int gameId)
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
+            var playerId = ParsePlayerIdClaim();
             var result = await _boardService.GetBoardWithBoardCards(playerId, gameId);
             return result.Resolve(
                 suc => Ok(suc.Data),

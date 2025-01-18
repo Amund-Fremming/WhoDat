@@ -33,17 +33,12 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
             if (validation.IsError)
                 return validation.Error;
 
-
-            int boardId = game.Boards!.ElementAt(0).ID;
-
-            if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS)
-                cardIds = cardIds.Take(20);
-            else
-                cardIds = cardIds.Take(10);
+            var boardId = game.Boards!.ElementAt(0).ID;
+            cardIds = cardIds.Take(game.GameState == GameState.ONLY_HOST_CHOSING_CARDS ? 20 : 10);
 
             IEnumerable<BoardCardEntity> newBoardCards = cardIds.Select(cardId => new BoardCardEntity(boardId, cardId)).ToList();
 
-            bool isPlayerOne = game.PlayerOneID == playerId;
+            var isPlayerOne = game.PlayerOneID == playerId;
             if (game.GameState == GameState.P1_CHOOSING && !isPlayerOne || game.GameState == GameState.P2_CHOOSING && isPlayerOne)
                 return new Error(new ArgumentException("Player cannot create more BoardCards!"), "Player cannot create more BoardCards!");
             else if (game.GameState == GameState.ONLY_HOST_CHOSING_CARDS || game.GameState == GameState.P1_CHOOSING && isPlayerOne || game.GameState == GameState.P2_CHOOSING && !isPlayerOne)
@@ -65,9 +60,9 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
         }
     }
 
-    public async Task<Result<int>> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
+    public async Task<Result<int>> UpdateBoardCardsActivity(int playerId, int boardId, IEnumerable<int> activeBoardCardIds)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        await using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
             var result = await _boardRepository.GetById(boardId);
@@ -84,20 +79,23 @@ public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> l
                 return bcResult.Error;
 
             var boardCards = bcResult.Data;
-            int boardcardsLeft = boardCards.Count(bc => bc.Active);
+            
+            var activeBoardCardLookup = activeBoardCardIds.ToHashSet();
 
-            IDictionary<int, bool> updateMap = boardCardUpdates.ToDictionary(update => update.Id, update => update.Active);
-            var combinedResult = await _boardcardRepository.UpdateBoardCardsActivity(updateMap, boardCards)
-                & await _boardRepository.UpdateBoardCardsLeft(board, boardcardsLeft);
-
-            if (combinedResult.IsError)
+            var boardCardsLeft = 0;
+            foreach (var boardCard in boardCards)
             {
-                await transaction.RollbackAsync();
-                return combinedResult.Error;
+                boardCard.Active = activeBoardCardLookup.Contains(boardCard.ID);
+                if(boardCard.Active)
+                    boardCardsLeft++;   
             }
+            
+            var boardUpdateResult = await _boardRepository.UpdateBoardCardsLeft(board, boardCardsLeft);
+            if(boardUpdateResult.IsError)
+                return boardUpdateResult.Error; 
 
             await transaction.CommitAsync();
-            return boardcardsLeft;
+            return boardCardsLeft;
         }
         catch (Exception e)
         {

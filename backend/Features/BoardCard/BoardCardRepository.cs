@@ -26,16 +26,11 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
         }
     }
 
-    public async Task<Result> UpdateBoardCardsActivity(IDictionary<int, bool> updateMap, IEnumerable<BoardCardEntity> boardCards)
+    public async Task<Result> UpdateBoardCards(IEnumerable<BoardCardEntity> boardCards)
     {
         try
         {
-            foreach (var boardCard in boardCards)
-            {
-                if (updateMap.TryGetValue(boardCard.ID, out bool update))
-                    boardCard.Active = update;
-            }
-
+            // TODO: Needs to update all cards, make a bulk update
             await _context.SaveChangesAsync();
             return Result.Ok();
         }
