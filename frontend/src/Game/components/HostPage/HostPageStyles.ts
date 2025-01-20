@@ -21,9 +21,9 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(75),
     color: Colors.Cream,
     textAlign: 'center',
-    lineHeight: moderateScale(100),
     shadowRadius: 5,
     shadowOpacity: 0.2,
+    lineHeight: verticalScale(90),
     shadowOffset: {
       height: verticalScale(3),
       width: horizontalScale(3),

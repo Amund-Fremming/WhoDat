@@ -183,23 +183,21 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
         }
     }
 
-    public async Task UpdateBoardCardsActivity(int gameId, int boardId, IEnumerable<BoardCardUpdate> boardCardUpdates)
+    public async Task UpdateBoardCardsActivity(int gameId, int boardId, IEnumerable<int> activeBoardCardIds)
     {
         try
         {
             var playerId = ParsePlayerIdClaim();
             var groupName = gameId.ToString();
 
-            var result = await _boardCardService.UpdateBoardCardsActivity(playerId, boardId, boardCardUpdates);
+            var result = await _boardCardService.UpdateBoardCardsActivity(playerId, boardId, activeBoardCardIds);
             if (result.IsError)
             {
                 await Clients.Caller.SendAsync(ErrorIdentifier, result.Message);
                 return;
             }
 
-            var boardCardsLeft = result.Data;
-            var cheapHotFixShouldNotBeUsed = boardCardUpdates.Where(_ => _.Active).Count();
-            await Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(BoardCardsLeftIdentifier, cheapHotFixShouldNotBeUsed);
+            await Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(BoardCardsLeftIdentifier, activeBoardCardIds.Count());
         }
         catch (Exception e)
         {

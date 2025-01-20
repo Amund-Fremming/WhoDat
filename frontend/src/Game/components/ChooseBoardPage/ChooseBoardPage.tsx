@@ -23,6 +23,7 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
   const [allCards, setAllCards] = useState<ICardDto[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [cardsForThisPage, setCardsForThisPage] = useState<ICardDto[]>([]);
+  const [displayUserMessage, setDisplayUserMessage] = useState<boolean>(false);
   const [displayNext, setDisplayNext] = useState<boolean>(true);
   const [displayPrevious, setDisplayPrevious] = useState<boolean>(false);
   const [cardsPressed, setCardsPressed] = useState<number[]>([]);
@@ -51,6 +52,9 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
     }
 
     const data = result.data;
+    if (data!.length < 20) {
+      setDisplayUserMessage(true);
+    }
     // TODO: remove this
     setCardsPressed(result.data!.slice(0, 20).map((dto) => dto.id));
 
@@ -144,7 +148,7 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
               }
             />
           ))}
-          {cardsForThisPage.length == 0 && (
+          {cardsForThisPage.length == 0 && displayUserMessage && (
             <Text style={styles.infoText}>
               You need to create cards in your gallery to be able to play!
             </Text>

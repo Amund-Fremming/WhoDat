@@ -68,16 +68,16 @@ export default function HostPage() {
         <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
       </Pressable>
       <View style={styles.textWrapper}>
-        <Text style={styles.header}>Choose</Text>
-        <Text style={styles.header}>the cards</Text>
+        <Text style={styles.header}>Select</Text>
+        <Text style={styles.header}>playing cards</Text>
       </View>
       <IconButton
-        text="Your cards"
+        text="You choose"
         icon="user"
         onButtonPress={handleHostChoosing}
       />
       <IconButton
-        text="Split 50/50"
+        text="Both choose"
         icon="users"
         onButtonPress={handleBothChoosing}
       />

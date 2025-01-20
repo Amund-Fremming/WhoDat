@@ -18,8 +18,9 @@ export const loginPlayer = async (
       body: JSON.stringify(request),
     });
 
-    if (response.status >= 400 && response.status <= 500)
+    if (response.status >= 400 && response.status <= 500) {
       return Result.failure('Invalid login, username or password was wrong.');
+    }
 
     if (response.status === 500) return Result.failure('Internal server error');
 
@@ -31,6 +32,7 @@ export const loginPlayer = async (
     const data: IAuthResponse = await response.json();
     return Result.ok(data);
   } catch (error) {
+    console.log('Login?');
     return Result.failure('Something went wrong.');
   }
 };

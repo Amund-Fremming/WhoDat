@@ -114,7 +114,7 @@ export const updateBoardCardsActivity = async (
   connection: signalR.HubConnection,
   gameId: number,
   boardId: number,
-  boardCardUpdates: Array<IBoardCardUpdate>
+  boardCardUpdates: Array<number>
 ): Promise<Result<boolean>> => {
   try {
     await connection.invoke(

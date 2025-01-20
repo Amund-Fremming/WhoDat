@@ -21,7 +21,6 @@ import { useGameplayProvider } from '../Shared/providers/GameplayProvider';
 import { AskState } from '../Shared/types/AskState';
 
 export default function GameRouter() {
-  const [message, setMessage] = useState<string>('');
   const [cardsToChoose, setCardsToChoose] = useState<number>(40);
   const { token } = useAuthProvider();
   const { toggleInfoModal } = useInfoModalProvider();
@@ -36,7 +35,6 @@ export default function GameRouter() {
     setGameState,
     setPage,
     isHost,
-    gameState,
     setWaitingMessage,
     setOponentCardsLeft,
   } = useGameProvider();

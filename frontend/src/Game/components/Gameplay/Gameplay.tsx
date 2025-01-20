@@ -37,7 +37,7 @@ export default function Gameplay() {
   } = useGameProvider();
   const { setDisplayTabBar } = useTabBarProvider();
   const { toggleInfoModal } = useInfoModalProvider();
-  const { askModalVisible, setAskModalVisible } = useGameplayProvider();
+  const { setAskModalVisible } = useGameplayProvider();
 
   const [header, setHeader] = useState<string>('');
   const [thisPlayerTurn, setThisPlayerTurn] = useState<boolean>(isHost);
@@ -45,8 +45,14 @@ export default function Gameplay() {
   const [guessMode, setGuessMode] = useState<boolean>(false);
   const [actionModalVisible, setActionModalVisible] = useState<boolean>(false);
   const [gameFinsihed, setGameFinished] = useState<boolean>(false);
-  const [cardsNotActive, setCardsNotActive] = useState<number[]>([]);
+  const [activeCards, setActiveCards] = useState<number[]>([]);
   const [cardToGuess, setCardToGuess] = useState<number>(-1);
+
+  useEffect(() => {
+    if (board && board.boardCards)
+      setActiveCards(board.boardCards.map((bc) => bc.id));
+    console.log('hsd');
+  }, []);
 
   useEffect(() => {
     var p1TurnStates = [
@@ -87,11 +93,11 @@ export default function Gameplay() {
 
   const handleCardPressed = (boardcardId: number) => {
     if (!guessMode) {
-      if (cardsNotActive.includes(boardcardId)) {
-        setCardsNotActive((prev) => prev.filter((id) => boardcardId != id));
+      if (activeCards.includes(boardcardId)) {
+        setActiveCards((prev) => prev.filter((id) => boardcardId != id));
         return;
       }
-      setCardsNotActive((prev) => [...prev, boardcardId]);
+      setActiveCards((prev) => [...prev, boardcardId]);
       return;
     }
 
@@ -106,21 +112,11 @@ export default function Gameplay() {
         toggleInfoModal(true, result.message);
       }
 
-      const boardCardUpdates: Array<IBoardCardUpdate> = board!.boardCards!.map(
-        (bc) => {
-          var update: IBoardCardUpdate = {
-            id: bc.id,
-            active: !cardsNotActive.includes(bc.id),
-          };
-          return update;
-        }
-      );
-
       const playersLeftResult = await updateBoardCardsActivity(
         connection,
         gameId,
         board!.id,
-        boardCardUpdates
+        activeCards
       );
 
       if (playersLeftResult.isError) {
@@ -131,10 +127,14 @@ export default function Gameplay() {
 
   const handleFinishTurn = async () => {
     if (connection) {
-      var result = await finishTurn(connection, gameId);
-      if (result.isError) {
-        console.error(result.message);
-      }
+      await finishTurn(connection, gameId);
+
+      await updateBoardCardsActivity(
+        connection,
+        gameId,
+        board!.id,
+        activeCards
+      );
     }
   };
 
@@ -150,7 +150,7 @@ export default function Gameplay() {
         <Text style={styles.header}>{header}</Text>
         <View style={styles.subHeaderWrapper}>
           <Text style={{ ...styles.header2, color: Colors.Green }}>
-            {20 - cardsNotActive.length}
+            {activeCards.length}
           </Text>
           <Text style={{ ...styles.header2, color: Colors.Cream }}>vs</Text>
           <Text style={{ ...styles.header2, color: Colors.BurgundyRed }}>

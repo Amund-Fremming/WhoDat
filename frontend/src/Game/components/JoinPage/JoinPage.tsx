@@ -26,6 +26,7 @@ export default function JoinPage() {
   };
 
   const handleInput = (input: string) => {
+    if (input === '') return;
     try {
       var val = Number.parseInt(input);
       if (Number.isNaN(val)) {
