@@ -30,7 +30,6 @@ public class ImageClient : IImageClient
         string secretKey = Environment.GetEnvironmentVariable("CLOUDFLARE_SECRET_KEY") ?? throw new KeyNotFoundException("(ImageClient) Secret Key not present.");
         string accountId = Environment.GetEnvironmentVariable("CLOUDFLARE_ACCOUNT_ID") ?? throw new KeyNotFoundException("(ImageClient) Account Key not present.");
 
-
         var credentials = new BasicAWSCredentials(accessKey, secretKey);
         _s3Client = new AmazonS3Client(credentials, new AmazonS3Config
         {
