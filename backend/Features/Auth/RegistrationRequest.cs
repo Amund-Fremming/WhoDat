@@ -8,7 +8,7 @@ public class RegistrationRequest(string username, string password)
     public string Username { get; set; } = username;
 
     [Required]
-    [StringLength(15, MinimumLength = 5)]
-    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{3,}$", ErrorMessage = "Password must be at least 5 characters long and contain at least one lowercase letter, one uppercase letter, and one digit.")]
+    //[StringLength(15, MinimumLength = 5)]
+    //[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{3,}$", ErrorMessage = "Password must be at least 5 characters long and contain at least one lowercase letter, one uppercase letter, and one digit.")]
     public string Password { get; set; } = password;
 }

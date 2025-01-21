@@ -64,17 +64,6 @@ export function RegisterComponent({ setView }: RegisterComponentProps) {
       return false;
     }
 
-    if (
-      !validUsername(registrationRequest.username) ||
-      registrationRequest.username.length > 10
-    ) {
-      toggleInfoModal(
-        true,
-        'Username can only consist of letters and numbers, with a max length of 10.'
-      );
-      return false;
-    }
-
     return true;
   };
 
