@@ -3,13 +3,7 @@
 ## TODO
 
 - Convert images to webP on upload
-- Are you sure when trying to leave
-
-### Backlog
-
-Auth
-
-- [ ] Apple autofill password causes failed login
+- Apple autofill password causes failed login
 
 Gallery
 

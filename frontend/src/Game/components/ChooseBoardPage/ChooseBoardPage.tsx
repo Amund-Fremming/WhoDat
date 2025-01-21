@@ -51,8 +51,6 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
     if (allGalleryCards.length < 20) {
       setDisplayUserMessage(true);
     }
-    // TODO: remove this
-    setCardsPressed(allGalleryCards.slice(0, 20).map((dto) => dto.id));
 
     if (allGalleryCards.length <= 20) {
       setDisplayNext(false);
