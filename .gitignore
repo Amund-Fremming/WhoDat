@@ -25,8 +25,8 @@ expo-env.d.ts
 #/Backend/appsettings.Development.json
 
 # Build Results
-#backend/bin/
-#backend/obj/
+backend/bin/
+backend/obj/
 #*obj/
 #*Debug/
 #backend/obj/
