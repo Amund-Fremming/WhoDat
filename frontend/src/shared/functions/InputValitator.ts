@@ -1,4 +1,4 @@
-const textRegex = /^[A-Za-z]+$/;
+const textRegex = /^[A-Za-z\s]+$/;
 const numberRegex = /^[0-9]+$/;
 const usernameRegex = /^[A-Za-z0-9]+$/;
 
@@ -11,5 +11,6 @@ export const validNumber = (input: string): boolean => {
 };
 
 export const validUsername = (input: string): boolean => {
+  if (input.length > 9) return false;
   return usernameRegex.test(input);
 };

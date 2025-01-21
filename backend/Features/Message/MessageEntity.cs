@@ -1,6 +1,6 @@
 using Backend.Features.Game;
 using Backend.Features.Player;
-using Backend.Features.Shared.Common.Entity;
+using Backend.Features.Shared.Common;
 
 namespace Backend.Features.Message;
 
@@ -11,18 +11,18 @@ public class MessageEntity : IEntity
     public int ID { get; set; }
 
     [Range(1, 10000000)]
-    public int GameID { get; set; }
+    public int GameID { get; init; }
 
-    public GameEntity? Game { get; set; }
+    public GameEntity? Game { get; init; }
 
     [Range(1, 10000000)]
-    public int PlayerID { get; set; }
+    public int PlayerID { get; init; }
 
-    public PlayerEntity? Player { get; set; }
+    public PlayerEntity? Player { get; init; }
 
     [StringLength(30, MinimumLength = 5)]
     [RegularExpression(@"^[a-zA-Z0-9 ,./?:;=()""'-]*$", ErrorMessage = "Invalid characters in message.")]
-    public string? MessageText { get; set; }
+    public string? MessageText { get; init; }
 
     public MessageEntity()
     { }

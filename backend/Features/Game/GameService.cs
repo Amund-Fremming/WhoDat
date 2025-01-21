@@ -5,14 +5,13 @@ using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Game;
 
-public class GameService(AppDbContext context, ILogger<IGameService> logger, IGameRepository gameRepository, IPlayerRepository playerRepository) : IGameService
+public class GameService(ILogger<IGameService> logger, IGameRepository gameRepository, IPlayerRepository playerRepository) : IGameService
 {
-    private readonly AppDbContext _context = context;
     private readonly ILogger<IGameService> _logger = logger;
     private readonly IGameRepository _gameRepository = gameRepository;
     private readonly IPlayerRepository _playerRepository = playerRepository;
 
-    public async Task<Result<int>> CreateGame(int playerId, CreateGameRequest gameRequest)
+    public async Task<Result<int>> CreateGame(int playerId, GameState gameState)
     {
         try
         {
@@ -21,7 +20,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
                 return result.Error;
 
             var player = result.Data;
-            var game = new GameEntity(gameRequest.PlayerOneID, gameRequest.GameState)
+            var game = new GameEntity(playerId, gameState)
             {
                 PlayerOne = player
             };
@@ -47,11 +46,8 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
             if (validation.IsError)
                 return validation.Error;
 
-            var gameResult = await _gameRepository.Delete(game);
-            if (game.PlayerTwoID != null)
-                return result.Error;
-
-            return Result.Ok();
+            _ = await _gameRepository.Delete(game);
+            return game.PlayerTwoID != null ? result.Error : Result.Ok();
         }
         catch (Exception e)
         {
@@ -70,11 +66,11 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
 
             var game = result.Data;
             if (game.PlayerTwoID != null)
-                throw new GameFullException($"Game with id {gameId} is full!");
+                return new Error(new GameFullException($"Game with id {gameId} is full!"), "The game is full.");
 
             var playerResult = await _playerRepository.GetById(playerId);
             if (playerResult.IsError)
-                result = playerResult.Error;
+                return playerResult.Error;
 
             var player = playerResult.Data;
             var joinResult = await _gameRepository.JoinGame(game, player);
@@ -110,10 +106,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
                 game.PlayerTwoID = null;
 
             var leaveResult = await _gameRepository.LeaveGame(game);
-            if (leaveResult.IsError)
-                return result.Error;
-
-            return Result.Ok();
+            return leaveResult.IsError ? result.Error : Result.Ok();
         }
         catch (Exception e)
         {
@@ -138,10 +131,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
                 return validation.Error;
 
             var gameResult = await _gameRepository.UpdateGameState(game, state);
-            if (gameResult.IsError)
-                return gameResult.Error;
-
-            return Result.Ok();
+            return gameResult.IsError ? gameResult.Error : Result.Ok();
         }
         catch (Exception e)
         {
@@ -155,10 +145,7 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         try
         {
             var result = await _playerRepository.GetById(playerId);
-            if (result.IsError)
-                return result.Error;
-
-            return await _gameRepository.GetRecentGamePlayed(playerId);
+            return result.IsError ? result.Error : _gameRepository.GetRecentGamePlayed(playerId);
         }
         catch (Exception e)
         {
@@ -172,14 +159,13 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
         try
         {
             var playerResult = await _playerRepository.GetById(playerId);
-            var gameResult = await _gameRepository.GetById(gameId);
+            var gameResult = await _gameRepository.GetGameWithBoards(gameId);
             if (playerResult.IsError)
                 return playerResult.Error;
 
             if (gameResult.IsError)
                 return gameResult.Error;
 
-            var player = playerResult.Data;
             var game = gameResult.Data;
             var validation = GameValidation.HasPermission(playerId, game)
                 & GameValidation.ValidState(game);
@@ -192,6 +178,27 @@ public class GameService(AppDbContext context, ILogger<IGameService> logger, IGa
                 return updateResult.Error;
 
             return GameState.P1_TURN_STARTED;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(StartGame)");
+            return new Error(e, "Failed to start game.");
+        }
+    }
+
+    public async Task<Result<GameState>> FinishTurn(int playerId, int gameId)
+    {
+        try
+        {
+            var result = await _gameRepository.GetById(gameId);
+            if (result.IsError)
+                return result.Error;
+
+            var game = result.Data;
+            game.GameState = playerId == game.PlayerOneID ? GameState.P2_TURN_STARTED : GameState.P1_TURN_STARTED;
+
+            await _gameRepository.UpdateGame(game);
+            return game.GameState;
         }
         catch (Exception e)
         {

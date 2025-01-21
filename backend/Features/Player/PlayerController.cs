@@ -1,38 +1,72 @@
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Player;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlayerController(ILogger<PlayerController> logger, IPlayerRepository playerRepository) : ControllerBase
+public class PlayerController(ILogger<PlayerController> logger, IPlayerService playerService) : ControllerBase
 {
     private readonly ILogger<PlayerController> _logger = logger;
-    private readonly IPlayerRepository _playerRepository = playerRepository;
+    private readonly IPlayerService _playerService = playerService;
 
-    [HttpPut("players/update")]
+    [HttpPut("update")]
     [Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult> UpdatePlayer([FromBody] PlayerDto playerDto)
+    public async Task<ActionResult> Update([FromBody] PlayerDto playerDto)
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string encodedNewUsername = EncodeForJsAndHtml(playerDto.Username);
+            var playerId = TokenExtractor.ParsePlayerIdClaim(User);
+            var encodedNewUsername = EncodeForJsAndHtml(playerDto.Username);
+            playerDto.PlayerID = playerId;
             playerDto.Username = encodedNewUsername;
 
-            var result = await _playerRepository.Update(playerDto);
+            var result = await _playerService.Update(playerDto);
+            return result.Resolve(
+                suc => Ok(suc.Data),
+                err => BadRequest(err.Message));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(UpdatePlayer)");
+            return StatusCode(500);
+        }
+    }
+
+    [HttpPut("update-image")]
+    [Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult> UpdateImage()
+    {
+        try
+        {
+            var playerId = TokenExtractor.ParsePlayerIdClaim(User);
+            FormFile formFile = null;
+
+            using var memoryStream = new MemoryStream();
+            await Request.Body.CopyToAsync(memoryStream);
+
+            formFile = new FormFile(memoryStream, 0, memoryStream.Length, "Image", "image.jpg")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = Request.ContentType ?? "application/octet-stream"
+            };
+
+            if (formFile == null)
+            {
+                return Ok("There was no image to upload.");
+            }
+
+            var result = await _playerService.UpdateImage(playerId, formFile);
             return result.Resolve(
                 suc => Ok(),
                 err => BadRequest(err.Message));
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "(UpdatePlayerUsername)");
+            _logger.LogError(e, "(UpdateImage)");
             return StatusCode(500);
         }
     }
-
-    [NonAction]
-    private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 
     [NonAction]
     private static string EncodeForJsAndHtml(string input) => JavaScriptEncoder.Default.Encode(HtmlEncoder.Default.Encode(input));

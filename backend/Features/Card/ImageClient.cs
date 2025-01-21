@@ -7,19 +7,16 @@ namespace Backend.Features.Card;
 
 public interface IImageClient
 {
-    /// <summary>
-    /// Uploads a image to CloudFlare Bucket and returns the URL for the image.
-    /// </summary>
     Task<Result<string>> Upload(IFormFile form);
 }
 
 public class ImageClient : IImageClient
 {
-    public readonly IAmazonS3 _s3Client;
-    public readonly IConfiguration _configuration;
-    public readonly ILogger<ImageClient> _logger;
-    public readonly string BucketName = "whodat-image-container";
-    public readonly string PublicUrlBase;
+    private readonly IAmazonS3 _s3Client;
+    private readonly IConfiguration _configuration;
+    private readonly ILogger<ImageClient> _logger;
+    private readonly string BucketName;
+    private readonly string PublicUrlBase;
 
     public ImageClient(IConfiguration configuration, ILogger<ImageClient> logger)
     {
@@ -44,7 +41,7 @@ public class ImageClient : IImageClient
     {
         try
         {
-            string imageKey = Guid.NewGuid().ToString();
+            var imageKey = Guid.NewGuid().ToString();
 
             var request = new PutObjectRequest
             {
@@ -55,11 +52,8 @@ public class ImageClient : IImageClient
                 DisablePayloadSigning = true
             };
 
-            var response = await _s3Client.PutObjectAsync(request);
-
-            string imageUrl = $"{PublicUrlBase}/{imageKey}";
-            Console.WriteLine($"Image uploaded successfully. Access URL: {imageUrl}");
-
+            _ = await _s3Client.PutObjectAsync(request);
+            var imageUrl = $"{PublicUrlBase}/{imageKey}";
             return imageUrl;
         }
         catch (Exception e)
@@ -68,27 +62,4 @@ public class ImageClient : IImageClient
             return new Error(e, "Failed to upload image, try again.");
         }
     }
-
-    /*
-    public async Task<string> Upload(IFormFile file)
-    {
-        string imageKey = Guid.NewGuid().ToString();
-
-        var request = new PutObjectRequest
-        {
-            BucketName = BucketName,
-            Key = imageKey,
-            InputStream = file.OpenReadStream(),
-            ContentType = file.ContentType,
-            DisablePayloadSigning = true
-        };
-
-        var response = await _s3Client.PutObjectAsync(request);
-
-        string imageUrl = $"{PublicUrlBase}/{imageKey}";
-        Console.WriteLine($"Image uploaded successfully. Access URL: {imageUrl}");
-
-        return imageUrl;
-    }
-    */
 }

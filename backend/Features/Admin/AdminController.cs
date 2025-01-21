@@ -10,7 +10,7 @@ public class AdminController(ILogger<AdminController> logger, IPlayerRepository 
     private readonly IPlayerRepository _playerRepository = playerRepository;
     private readonly ILogger<AdminController> _logger = logger;
 
-    [HttpDelete("players/delete/{playerId}")]
+    [HttpDelete("players/delete/{playerId:int}")]
     [Authorize(Roles = "ADMIN")]
     public async Task<ActionResult> DeletePlayer(int playerId)
     {

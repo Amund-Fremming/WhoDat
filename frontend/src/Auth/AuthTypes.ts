@@ -12,4 +12,5 @@ export interface IAuthResponse {
   playerID: number;
   username: string;
   token: string;
+  imageUrl: string;
 }

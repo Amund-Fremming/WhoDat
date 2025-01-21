@@ -5,10 +5,9 @@ using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Auth;
 
-public class AuthService(AppDbContext context, IConfiguration configuration, ILogger<IAuthService> logger,
+public class AuthService(IConfiguration configuration, ILogger<IAuthService> logger,
         IPasswordHasher<PlayerEntity> passwordHasher, IPlayerRepository playerRepository) : IAuthService
 {
-    private readonly AppDbContext _context = context;
     private readonly IConfiguration _configuration = configuration;
     private readonly ILogger<IAuthService> _logger = logger;
     private readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
@@ -45,7 +44,7 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         }
     }
 
-    public string GenerateSalt()
+    private static string GenerateSalt()
     {
         var buffer = new byte[16];
         RandomNumberGenerator.Fill(buffer);
@@ -53,31 +52,27 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
         return Convert.ToBase64String(buffer);
     }
 
-    /// <summary>
-    /// Does not return anything, but throws if password is not valid.
-    /// </summary>
-    /// <param name="request">Login request</param>
-    /// <exception cref="UnauthorizedAccessException">If password is not valid</exception>
-    public async Task ValidatePasswordWithSalt(LoginRequest request)
+    private async Task<Result> ValidatePasswordWithSalt(LoginRequest request)
     {
         try
         {
             var result = await _playerRepository.GetPlayerByUsername(request.Username);
             if (result.IsError)
-                throw new UnauthorizedAccessException("Password or username is wrong.");
+                return new Error(new UnauthorizedAccessException("Password or username is wrong."), "Password or username is wrong.");
 
             var player = result.Data;
-
             var saltedPassword = request.Password + player.PasswordSalt;
-            PasswordVerificationResult verificationResult = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
+            var verificationResult = _passwordHasher.VerifyHashedPassword(player, player.PasswordHash, saltedPassword);
 
             if (verificationResult != PasswordVerificationResult.Success)
-                throw new UnauthorizedAccessException("Password or username is wrong.");
+                return new Error(new UnauthorizedAccessException("Password or username is wrong."), "Password or username is wrong.");
+
+            return Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Error while validating password with salt. (AuthService)");
-            throw new UnauthorizedAccessException("Password or username is wrong.");
+            return new Error(new UnauthorizedAccessException("Password or username is wrong."), "Password or username is wrong.");
         }
     }
 
@@ -85,16 +80,14 @@ public class AuthService(AppDbContext context, IConfiguration configuration, ILo
     {
         try
         {
-            string salt = GenerateSalt();
-            string saltedPassword = request.Password + salt;
-            string hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
+            var salt = GenerateSalt();
+            var saltedPassword = request.Password + salt;
+            var hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
 
-            PlayerEntity player = new(request.Username, hashedPassword, salt, PlayerRole.USER);
+            PlayerEntity player = new(request.Username, hashedPassword, salt, PlayerRole.USER, "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg");
             var result = await _playerRepository.Create(player);
-            if (result.IsError)
-                return result.ToResult<int, PlayerEntity>();
-
-            return player;
+            
+            return result.IsError ? result.ToResult<int, PlayerEntity>() : player;
         }
         catch (Exception e)
         {

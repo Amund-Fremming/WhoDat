@@ -1,44 +1,48 @@
-import {
-  Modal,
-  View,
-  Image,
-  Pressable,
-  TextInput,
-  Alert,
-  Text,
-} from "react-native";
-import { styles, imageStyles } from "./AddCardModalStyles";
-import BigButton from "@/src/Shared/components/BigButton/BigButton";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useState } from "react";
-import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
-import { addCard } from "@/src/Shared/functions/CardClient";
-import { validText } from "@/src/Shared/functions/InputValitator";
-//import { pickImage } from "@/src/services/GalleryService/ImagePicker";
+import { Modal, View, Pressable, TextInput, Text } from 'react-native';
+import { Image } from 'expo-image';
+import { styles, imageStyles } from './AddCardModalStyles';
+import BigButton from '@/src/Shared/components/BigButton/BigButton';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useState } from 'react';
+import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
+import { addCard } from '@/src/Shared/functions/CardClient';
+import { validText } from '@/src/Shared/functions/InputValitator';
+import { pickImage } from '@/src/Shared/functions/ImagePicker';
+import Result from '@/src/Shared/objects/Result';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
+import { ICardDto } from '@/src/Shared/types/CardTypes';
 
 interface AddCardModalProps {
   modalVisible: boolean;
   setModalVisible: (condition: boolean) => void;
+  setJustAddedCard: React.Dispatch<React.SetStateAction<ICardDto | undefined>>;
 }
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function AddCardModal({
   modalVisible,
   setModalVisible,
+  setJustAddedCard,
 }: AddCardModalProps) {
-  const [nameInput, setNameInput] = useState<string>("");
+  const [nameInput, setNameInput] = useState<string>('');
   const [imageUri, setImageUri] = useState<any>(
-    "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+    'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'
   );
-
   const { token } = useAuthProvider();
+  const { toggleInfoModal } = useInfoModalProvider();
 
   const handleNameInput = (name: string): boolean => {
+    if (name.length <= 0) {
+      toggleInfoModal(true, 'Name cannot be empty.');
+      return false;
+    }
+
     if (name.length > 9 || !validText(name)) {
-      Alert.alert(
-        "Input not valid",
-        "Name can only be letters and 8 characters long"
-      );
+      setModalVisible(!modalVisible);
+      toggleInfoModal(true, 'Name must be text only and under 9 letters long');
       return false;
     }
 
@@ -47,75 +51,79 @@ export default function AddCardModal({
     );
     return true;
   };
-  /*
-                const handleImageInput = async () => {
-                  try {
-                    const result: any = await pickImage();
-                    setImageUri(result);
-                  } catch (Exception) {
-                    console.error("Image picker failed");
-                  }
-                };
-                */
 
-  const uploadCard = async () => {
+  const handleImageInput = async () => {
     try {
-      const namePresent = handleNameInput(nameInput);
-      if (!namePresent) return;
-
-      await addCard(imageUri, nameInput, token);
-      setModalVisible(false);
-      setNameInput("");
-      setImageUri(
-        "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
-      );
+      const result = await pickImage();
+      if (result === 'EXIT') return;
+      setImageUri(result);
     } catch (Exception) {
-      // TODO
-      console.error("Adding card failed");
+      toggleInfoModal(true, 'Image picker failed.');
     }
   };
 
+  const uploadCard = async () => {
+    const namePresent = handleNameInput(nameInput);
+    if (!namePresent) return;
+
+    var result: Result<ICardDto> = await addCard(imageUri, nameInput, token);
+    if (result.isError) {
+      setModalVisible(false);
+      toggleInfoModal(false, result.message);
+      return;
+    }
+
+    setJustAddedCard(result.data!);
+    setModalVisible(false);
+    setNameInput('');
+    setImageUri(
+      'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'
+    );
+  };
+
   return (
-    <Modal visible={modalVisible} animationType="fade" transparent={true}>
-      <View style={styles.container}>
-        <View style={styles.cardModal}>
-          <Pressable
-            style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
-          >
-            <FontAwesome name="close" size={36} color={Colors.DarkGray} />
-          </Pressable>
-          <View style={styles.card}>
+    <View>
+      <Modal visible={modalVisible} animationType="fade" transparent={true}>
+        <View style={styles.container}>
+          <View style={styles.cardModal}>
             <Pressable
-              style={styles.uploadButton} /*onPress={handleImageInput}*/
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.uploadText}>upload</Text>
+              <FontAwesome name="close" size={36} color={Colors.DarkGray} />
             </Pressable>
-            <Image
-              style={imageStyles.imageStyle}
-              source={{
-                uri: imageUri,
-              }}
+            <View style={styles.card}>
+              <Pressable style={styles.uploadButton} onPress={handleImageInput}>
+                <Text style={styles.uploadText}>upload</Text>
+              </Pressable>
+              <Image
+                transition={300}
+                placeholder={{ blurhash }}
+                style={imageStyles.imageStyle}
+                source={{
+                  uri: imageUri,
+                }}
+              />
+            </View>
+            <TextInput
+              value={nameInput}
+              onChangeText={(input: string) => setNameInput(input)}
+              style={styles.inputText}
+              placeholder="Name ..."
+              placeholderTextColor={Colors.Gray}
             />
-          </View>
-          <TextInput
-            value={nameInput}
-            onChangeText={(input: string) => setNameInput(input)}
-            style={styles.inputText}
-            placeholder="Name ..."
-            placeholderTextColor={Colors.Gray}
-          />
-          <View style={styles.border} />
-          <View style={styles.buttonWrapper}>
-            <BigButton
-              text="Add Card"
-              color={Colors.BurgundyRed}
-              inverted={false}
-              onButtonPress={uploadCard}
-            />
+            <View style={styles.border} />
+            <View style={styles.buttonWrapper}>
+              <BigButton
+                text="Add Card"
+                color={Colors.BurgundyRed}
+                inverted={false}
+                onButtonPress={uploadCard}
+              />
+            </View>
           </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </View>
   );
 }

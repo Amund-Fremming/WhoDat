@@ -1,32 +1,32 @@
-import { GAME_ENDPOINT } from "../Shared/domain/URL_PATHS";
-import { IGame } from "@/src/Game/types/GameTypes";
-import Result from "../Shared/domain/Result";
+import { GAME_ENDPOINT } from '../Shared/assets/constants/URL_PATHS';
+import { GameState, IGame } from '@/src/Game/types/GameTypes';
+import Result from '../Shared/objects/Result';
+import { IBoard } from './types/BoardTypes';
 
 export const createGame = async (
-  game: IGame,
+  gameState: GameState,
   token: string
 ): Promise<Result<number>> => {
   try {
-    const response = await fetch(`${GAME_ENDPOINT}/games`, {
-      method: "POST",
+    const response = await fetch(`${GAME_ENDPOINT}/games/${gameState}`, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(game),
     });
 
     if (!response.ok) {
-      console.error("createGame: response was not 200.");
+      console.error('createGame: response was not 200.');
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
 
-    const gameId = await response.text();
+    const gameId = await response.json();
     return Result.ok(parseInt(gameId));
   } catch (error) {
-    console.error("(createGame)" + error);
-    return Result.failure("Something went wrong.");
+    console.error('(createGame)' + error);
+    return Result.failure('Something went wrong.');
   }
 };
 
@@ -36,15 +36,15 @@ export const getBoardWithBoardCards = async (
 ): Promise<Result<IBoard>> => {
   try {
     const response = await fetch(`${GAME_ENDPOINT}/games/${gameId}`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
-      console.error("getBoardWithBoardCards: response was not 200.");
+      console.error('getBoardWithBoardCards: response was not 200.');
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
@@ -52,7 +52,7 @@ export const getBoardWithBoardCards = async (
     const boardData = await response.json();
     return Result.ok(boardData);
   } catch (error) {
-    console.error("(getBoardWithBoardCards)" + error);
-    return Result.failure("Something went wrong.");
+    console.error('(getBoardWithBoardCards)' + error);
+    return Result.failure('Something went wrong.');
   }
 };

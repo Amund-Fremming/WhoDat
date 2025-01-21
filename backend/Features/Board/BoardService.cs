@@ -28,10 +28,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             BoardValidation.HasBoardPermission(playerId, board);
 
             var boardResult = await _boardRepository.Delete(board);
-            if (boardResult.IsError)
-                return result.Error;
-
-            return Result.Ok();
+            return boardResult.IsError ? result.Error : Result.Ok();
         }
         catch (Exception e)
         {
@@ -42,8 +39,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
     public async Task<Result<GameState>> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
-
+        await using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
             var boardResult = await _boardRepository.GetById(boardId);
@@ -76,7 +72,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
                 return chooseResult.Error;
             }
 
-            bool isPlayerOne = game.PlayerOneID == playerId;
+            var isPlayerOne = game.PlayerOneID == playerId;
             if (isPlayerOne && game.GameState == GameState.BOTH_PICKING_PLAYER)
                 game.GameState = GameState.P2_PICKING_PLAYER;
 
@@ -115,10 +111,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
                 return result.Error;
 
             var boardResult = await _boardRepository.UpdateBoardCardsLeft(board, activePlayers);
-            if (boardResult.IsError)
-                return boardResult;
-
-            return Result.Ok();
+            return boardResult.IsError ? boardResult : Result.Ok();
         }
         catch (Exception e)
         {
@@ -131,31 +124,43 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     {
         try
         {
-            var result = await _gameRepository.GetById(gameId);
+            var result = await _gameRepository.GetGameWithBoards(gameId);
             if (result.IsError)
                 return result.Error;
 
             var game = result.Data;
-            var validation = BoardValidation.HasGamePermission(playerId, game);
             if (game.Boards == null)
                 return new Error(new NullReferenceException("Game does not have boards instanciated."), "Game boards have not been created.");
 
-            BoardEntity playerOneBoard = game.Boards.ElementAt(0);
+            var validation = BoardValidation.HasGamePermission(playerId, game);
+            if (validation.IsError)
+                return new Error(new Exception("Player does not have board permission."), "Player does not have board permission.");
 
+            var playerOneBoardId = game.Boards.ElementAt(0).ID;
+            var boardResult = await _boardRepository.GetBoardWithBoardCards(playerOneBoardId);
+
+            if (boardResult.IsError)
+                return boardResult;
+
+            var playerOneBoard = boardResult.Data;
             if (playerOneBoard.PlayerID == playerId)
                 return playerOneBoard;
 
             if (game.Boards!.Count() <= 1)
             {
-                var boardResult = await CreatePlayerTwoBoard(playerId, game);
-                if (boardResult.IsError)
-                    return boardResult.Error;
+                var createBoardResult = await CreatePlayerTwoBoard(playerId, playerOneBoard);
+                if (createBoardResult.IsError)
+                    return createBoardResult.Error;
 
-                return boardResult.Data;
+                return createBoardResult.Data;
             }
 
-            BoardEntity playerTwoBoard = game.Boards.ElementAt(1);
+            var playerTwoBoardId = game.Boards.ElementAt(1).ID;
+            var playerTwoBoardResult = await _boardRepository.GetBoardWithBoardCards(playerTwoBoardId);
+            if (playerTwoBoardResult.IsError)
+                return playerTwoBoardResult;
 
+            var playerTwoBoard = playerTwoBoardResult.Data;
             if (playerTwoBoard.PlayerID != playerId)
                 return new Error(new KeyNotFoundException("Board does not exist"), "You dont have permission to this board.");
 
@@ -172,7 +177,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
     {
         try
         {
-            var result = await _gameRepository.GetById(gameId);
+            var result = await _gameRepository.GetGameWithBoards(gameId);
             if (result.IsError)
                 return result.Error;
 
@@ -197,13 +202,13 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
                 return guessResult.Error;
 
             var guessedCard = guessResult.Data;
-            if (guessedCard.ID == otherPlayersBoard.ChosenCard!.ID && playerId == game.PlayerOneID)
+            if (guessedCard.ID == otherPlayersBoard.ChosenCardID && playerId == game.PlayerOneID)
                 game.GameState = GameState.P1_WON;
-            if (guessedCard.ID == otherPlayersBoard.ChosenCard!.ID && playerId == game.PlayerTwoID)
+            if (guessedCard.ID == otherPlayersBoard.ChosenCardID && playerId == game.PlayerTwoID)
                 game.GameState = GameState.P2_WON;
-            if (guessedCard.ID != otherPlayersBoard.ChosenCard!.ID && playerId == game.PlayerTwoID)
+            if (guessedCard.ID != otherPlayersBoard.ChosenCardID && playerId == game.PlayerTwoID)
                 game.GameState = GameState.P1_TURN_STARTED;
-            if (guessedCard.ID != otherPlayersBoard.ChosenCard!.ID && playerId == game.PlayerOneID)
+            if (guessedCard.ID != otherPlayersBoard.ChosenCardID && playerId == game.PlayerOneID)
                 game.GameState = GameState.P2_TURN_STARTED;
 
             await _gameRepository.UpdateGame(game);
@@ -216,27 +221,14 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
         }
     }
 
-    private async Task<Result<BoardEntity>> CreatePlayerTwoBoard(int playerId, GameEntity game)
+    private async Task<Result<BoardEntity>> CreatePlayerTwoBoard(int playerId, BoardEntity board)
     {
-        var result = await _playerRepository.GetById(playerId);
-        if (result.IsError)
-            return result.Error;
-
-        BoardEntity playerOneBoard = game.Boards!.ElementAt(0);
-        BoardEntity playerTwoBoard = new(playerId, game.ID);
-        List<BoardCardEntity> tempBoardCards = [];
-
-        foreach (BoardCardEntity boardCard in playerOneBoard.BoardCards!)
-        {
-            BoardCardEntity newBoardCard = new(boardCard.BoardID, boardCard.CardID);
-            tempBoardCards.Add(newBoardCard);
-        }
-
-        playerTwoBoard.BoardCards = tempBoardCards;
+        BoardEntity playerTwoBoard = new(playerId, board.GameID);
+        playerTwoBoard.BoardCards = board.BoardCards;
 
         var createResult = await _boardRepository.Create(playerTwoBoard);
         if (createResult.IsError)
-            return result.Error;
+            return createResult.Error;
 
         return playerTwoBoard;
     }

@@ -1,0 +1,9 @@
+export enum PlayPages {
+  MAIN_PAGE,
+  HOST_PAGE,
+  JOIN_PAGE,
+  CHOOSE_BOARD_PAGE,
+  WAITING_PAGE,
+  CHOOSE_CARD_PAGE,
+  GAMEPLAY,
+}

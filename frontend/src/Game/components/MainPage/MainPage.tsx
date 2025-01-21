@@ -1,13 +1,12 @@
-import { View, Text } from "react-native";
-import styles from "./MainPageStyles";
-import { PlayPages } from "../../GamePages";
-import IconButton from "@/src/Shared/components/IconButton/IconButton";
+import { View, Text } from 'react-native';
+import { styles } from './MainPageStyles';
+import { PlayPages } from '../../types/GamePages';
+import IconButton from '@/src/Shared/components/IconButton/IconButton';
+import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 
-interface MainPageProps {
-  setPage: React.Dispatch<React.SetStateAction<PlayPages>>;
-}
+export default function MainPage() {
+  const { setPage } = useGameProvider();
 
-export default function MainPage({ setPage }: MainPageProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Time to cook!</Text>

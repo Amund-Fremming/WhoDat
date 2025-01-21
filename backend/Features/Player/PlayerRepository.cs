@@ -1,16 +1,15 @@
 using Backend.Features.Database;
-using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.ResultPattern;
 using System.Data;
 
 namespace Backend.Features.Player;
 
-public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> logger, IPasswordHasher<PlayerEntity> passwordHasher)
+public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> logger)
     : RepositoryBase<PlayerEntity, PlayerRepository>(logger, context), IPlayerRepository
 {
     private readonly AppDbContext _context = context;
-    private readonly ILogger<IPlayerRepository> _logger = logger;
-    private readonly IPasswordHasher<PlayerEntity> _passwordHasher = passwordHasher;
+    private readonly ILogger<PlayerRepository> _logger = logger;
 
     public async Task<Result> DeletePlayer(int playerId)
     {
@@ -48,32 +47,10 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
         }
     }
 
-    public async Task<Result> Update(PlayerDto playerDto)
+    public async Task<Result> Update(PlayerEntity player)
     {
         try
         {
-            var result = await GetById(playerDto.PlayerID);
-            if (result.IsError)
-                return result.Error;
-
-            var player = result.Data;
-
-            player.ImageUrl = playerDto.ImageUrl ?? player.ImageUrl;
-            if (playerDto.Username != player.Username)
-            {
-                var usernameResult = await UsernameExist(playerDto.Username);
-                if (usernameResult.IsError)
-                    return usernameResult.Error;
-
-                player.Username = playerDto.Username;
-            }
-
-            var salt = GenerateSalt();
-            var saltedPassword = playerDto.Password + salt;
-            var hashedPassword = _passwordHasher.HashPassword(null!, saltedPassword);
-            player.PasswordHash = hashedPassword;
-            player.PasswordSalt = salt;
-
             _context.Player.Update(player);
             await _context.SaveChangesAsync();
             return Result.Ok();
@@ -104,26 +81,15 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
     {
         try
         {
-            bool usernameExist = await _context.Player
+            var usernameExist = await _context.Player
                 .AnyAsync(p => p.Username == username);
 
-            if (usernameExist)
-                return new Error(new DuplicateNameException("Username exists"), "Username alreay exists.");
-
-            return Result.Ok();
+            return usernameExist ? new Error(new DuplicateNameException("Username exists"), "Username already exists.") : Result.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "(DoesUsernameExist)");
             return new Error(e, "System error. Please try again later.");
         }
-    }
-
-    public string GenerateSalt()
-    {
-        var buffer = new byte[16];
-        RandomNumberGenerator.Fill(buffer);
-
-        return Convert.ToBase64String(buffer);
     }
 }

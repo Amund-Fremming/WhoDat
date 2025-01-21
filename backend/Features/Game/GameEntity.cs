@@ -1,7 +1,7 @@
 using Backend.Features.Board;
 using Backend.Features.Message;
 using Backend.Features.Player;
-using Backend.Features.Shared.Common.Entity;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.Enums;
 
 namespace Backend.Features.Game;
@@ -15,7 +15,7 @@ public class GameEntity : IEntity
     [Range(1, 10000000)]
     public int? PlayerOneID { get; set; }
 
-    public PlayerEntity? PlayerOne { get; set; }
+    public PlayerEntity? PlayerOne { get; init; }
 
     [Range(1, 10000000)]
     public int? PlayerTwoID { get; set; }
@@ -24,8 +24,8 @@ public class GameEntity : IEntity
 
     public GameState GameState { get; set; }
 
-    public IEnumerable<MessageEntity>? Messages { get; set; }
-    public IEnumerable<BoardEntity>? Boards { get; set; }
+    public IEnumerable<MessageEntity>? Messages { get; init; }
+    public IEnumerable<BoardEntity>? Boards { get; init; }
 
     public GameEntity()
     { }

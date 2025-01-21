@@ -1,8 +1,0 @@
-export enum PlayPages {
-  MAIN_PAGE,
-  HOST_PAGE,
-  JOIN_PAGE,
-  BOARD_PAGE,
-  LOBBY_PAGE,
-  WAITING_PAGE,
-}

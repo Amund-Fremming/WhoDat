@@ -1,14 +1,14 @@
 using Backend.Features.Player;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Card;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CardController(ILogger<PlayerController> logger, IPlayerRepository playerRepository, ICardRepository cardRepository, ICardService cardService) : ControllerBase
+public class CardController(ILogger<PlayerController> logger,  ICardRepository cardRepository, ICardService cardService) : ControllerBase
 {
     private readonly ILogger<PlayerController> _logger = logger;
-    private readonly IPlayerRepository _playerRepository = playerRepository;
     private readonly ICardRepository _cardRepository = cardRepository;
     private readonly ICardService _cardService = cardService;
 
@@ -18,7 +18,7 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(User);
             var result = await _cardRepository.GetAllCards(playerId);
             return result.Resolve(
                 suc => Ok(suc.Data),
@@ -37,12 +37,6 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-
-            // Read the content type from the request
-            string contentType = Request.ContentType ?? "application/octet-stream";
-
-            // Read the image data from the request body
             byte[] imageData;
             using (var memoryStream = new MemoryStream())
             {
@@ -50,10 +44,8 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
                 imageData = memoryStream.ToArray();
             }
 
-            // Retrieve the name from the headers
-            string name = Request.Headers["X-Card-Name"].ToString();
-
-            // Create an IFormFile instance
+            var name = Request.Headers["X-Card-Name"].ToString();
+            var contentType = Request.ContentType ?? "application/octet-stream";
             var formFile = new FormFile(new MemoryStream(imageData), 0, imageData.Length, "Image", "image.jpg")
             {
                 Headers = new HeaderDictionary(),
@@ -66,9 +58,10 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
                 Image = formFile
             };
 
+            var playerId = TokenExtractor.ParsePlayerIdClaim(User);
             var result = await _cardService.CreateCard(playerId, cardDto);
             return result.Resolve(
-                suc => Ok(),
+                suc => Ok(result.Data),
                 err => BadRequest(err.Message));
         }
         catch (Exception e)
@@ -78,13 +71,13 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
         }
     }
 
-    [HttpDelete("delete/{cardId}")]
+    [HttpDelete("delete/{cardId:int}")]
     [Authorize(Roles = "ADMIN,USER")]
     public async Task<ActionResult> Delete(int cardId)
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(User);
             var result = await _cardService.DeleteCard(playerId, cardId);
             return result.Resolve(
                 suc => Ok(),
@@ -96,7 +89,4 @@ public class CardController(ILogger<PlayerController> logger, IPlayerRepository 
             return StatusCode(500);
         }
     }
-
-    [NonAction]
-    private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 }

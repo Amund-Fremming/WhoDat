@@ -1,6 +1,6 @@
 using Backend.Features.Database;
 using Backend.Features.Player;
-using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.Enums;
 using Backend.Features.Shared.ResultPattern;
 
@@ -11,6 +11,27 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
 {
     private readonly AppDbContext _context = context;
     private readonly ILogger<GameRepository> _logger = logger;
+
+    public async Task<Result<GameEntity>> GetGameWithBoards(int gameId)
+    {
+        try
+        {
+            var result = await _context.Game
+                .Include(g => g.Boards!)
+                .ThenInclude(b => b.ChosenCard)
+                .FirstOrDefaultAsync(g => g.ID == gameId);
+
+            if (result == null)
+                return new Error(new NullReferenceException(""), "Game does not exist.");
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(JoinGame)");
+            return new Error(e, "Failed to join game");
+        }
+    }
 
     public async Task<Result> JoinGame(GameEntity game, PlayerEntity player)
     {
@@ -63,13 +84,22 @@ public class GameRepository(AppDbContext context, ILogger<GameRepository> logger
         }
     }
 
-    public async Task<Result<int>> GetRecentGamePlayed(int playerId)
+    public Result<int> GetRecentGamePlayed(int playerId)
     {
         try
         {
-            return await _context.Game
-                .Where(g => g.PlayerOneID == playerId || g.PlayerTwoID == playerId)
-                .MaxAsync(g => g.ID);
+            var data = _context.Game
+                .Where(g => g.PlayerOneID != null && g.PlayerOneID == playerId)
+                .Where(g => g.PlayerTwoID != null && g.PlayerTwoID == playerId)
+                .Select(g => g.ID)
+                .ToList();
+
+            if (data.Count != 0)
+            {
+                return data.Max();
+            }
+
+            return new Error(new Exception("No recent games exists."), "No recent games exists.");
         }
         catch (Exception e)
         {

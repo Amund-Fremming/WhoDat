@@ -1,5 +1,5 @@
-import { View, Text, Pressable } from "react-native";
-import { styles } from "./AddCardComponentStyles";
+import { View, Text, Pressable } from 'react-native';
+import { styles } from './AddCardComponentStyles';
 
 interface AddCardComponentProps {
   onAddCardPress: () => void;

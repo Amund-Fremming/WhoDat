@@ -1,17 +1,19 @@
-import { Tabs } from "expo-router";
-import React from "react";
-import { TabBarIcon } from "@/src/Shared/components/navigation/TabBarIcon";
-import { Colors } from "@/src/Shared/assets/constants/Colors";
-import Auth from "@/src/Auth/Auth";
-import { useEffect, useState } from "react";
-import { useAuthProvider } from "@/src/Shared/state/AuthProvider";
+import { Tabs } from 'expo-router';
+import React, { useRef } from 'react';
+import { TabBarIcon } from '@/src/Shared/components/navigation/TabBarIcon';
+import { Colors } from '@/src/Shared/assets/constants/Colors';
+import Auth from '@/src/Auth/Auth';
+import { useEffect, useState } from 'react';
+import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
+import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 export default function TabLayout() {
   const { token } = useAuthProvider();
-
+  const { displayTabBar } = useTabBarProvider();
   const [playerLoggedIn, setPlayerLoggedIn] = useState<boolean>(false);
+
   useEffect(() => {
-    if (token != "") setPlayerLoggedIn(true);
+    if (token != '') setPlayerLoggedIn(true);
   }, [token]);
 
   if (!playerLoggedIn) {
@@ -25,16 +27,17 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors.BurgundyRed,
         tabBarStyle: {
           backgroundColor: Colors.Cream,
+          display: displayTabBar,
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Play",
+          title: 'Play',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "game-controller" : "game-controller-outline"}
+              name={focused ? 'game-controller' : 'game-controller-outline'}
               color={color}
             />
           ),
@@ -43,10 +46,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="gallery"
         options={{
-          title: "Gallery",
+          title: 'Gallery',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "images" : "images-outline"}
+              name={focused ? 'images' : 'images-outline'}
               color={color}
             />
           ),
@@ -55,9 +58,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? "man" : "man-outline"} color={color} />
+            <TabBarIcon name={focused ? 'man' : 'man-outline'} color={color} />
           ),
         }}
       />

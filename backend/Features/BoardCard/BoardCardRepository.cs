@@ -1,5 +1,5 @@
 using Backend.Features.Database;
-using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.BoardCard;
@@ -26,14 +26,13 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
         }
     }
 
-    public async Task<Result> UpdateBoardCardsActivity(IDictionary<int, bool> updateMap, IEnumerable<BoardCardEntity> boardCards)
+    public async Task<Result> UpdateBoardCards(IEnumerable<BoardCardEntity> boardCards)
     {
         try
         {
-            foreach (var boardCard in boardCards)
+            foreach (var card in boardCards)
             {
-                if (updateMap.TryGetValue(boardCard.ID, out bool update))
-                    boardCard.Active = update;
+                _context.BoardCard.Update(card); 
             }
 
             await _context.SaveChangesAsync();

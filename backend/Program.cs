@@ -22,6 +22,7 @@ builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IBoardCardRepository, BoardCardRepository>();
 
+builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IBoardService, BoardService>();
@@ -31,6 +32,12 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IImageClient, ImageClient>();
 
 builder.Services.AddScoped<IPasswordHasher<PlayerEntity>, PasswordHasher<PlayerEntity>>();
+
+// Load the base configuration (appsettings.json) and environment-specific config
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 builder.Services.AddResponseCompression(options =>
 {
@@ -83,7 +90,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new KeyNotFoundException("(Program) Jwt Issuer not present.(Program)"),
                     ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new KeyNotFoundException("(Program) Jwt Audience not present."),
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY") ?? throw new KeyNotFoundException("(Program) Jwt key not present."))),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY"))),
                     ClockSkew = TimeSpan.Zero
                 };
 
@@ -110,17 +117,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
+if (app.Environment.IsDevelopment())
+{
 app.UseSwagger();
-app.UseSwaggerUI();
-//}
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<GameHubBroker>("/hub");
+app.MapHub<GameHub>("/hub");
 
 app.Run();

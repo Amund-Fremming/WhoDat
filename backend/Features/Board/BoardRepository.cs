@@ -1,6 +1,6 @@
 using Backend.Features.BoardCard;
 using Backend.Features.Database;
-using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Board;
@@ -90,6 +90,27 @@ public class BoardRepository(AppDbContext context, ILogger<BoardRepository> logg
             await _context.SaveChangesAsync();
 
             return Result.Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "(UpdateBoardCardsLeft)");
+            return new Error(e, "Failed to update board cards left.");
+        }
+    }
+
+    public async Task<Result<BoardEntity>> GetBoardWithBoardCards(int boardId)
+    {
+        try
+        {
+            var result = await _context.Board
+                .Include(b => b.BoardCards)
+                .ThenInclude(bc => bc.Card)
+                .FirstOrDefaultAsync(g => g.ID == boardId);
+
+            if (result == null)
+                return new Error(new NullReferenceException(), "Board does not exist.");
+
+            return result;
         }
         catch (Exception e)
         {
