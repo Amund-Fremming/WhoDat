@@ -1,4 +1,4 @@
-﻿namespace Backend.Features.Shared.Common.Entity
+﻿namespace Backend.Features.Shared.Common
 {
     public interface IEntity
     {

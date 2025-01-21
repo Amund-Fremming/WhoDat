@@ -8,13 +8,12 @@ using Backend.Features.Shared.ResultPattern;
 namespace Backend.Features.BoardCard;
 
 public class BoardCardService(AppDbContext context, ILogger<IBoardCardService> logger,
-        IBoardCardRepository boardcardRepository, IBoardRepository boardRepository, ICardRepository cardRepository, IGameRepository gameRepository) : IBoardCardService
+        IBoardCardRepository boardcardRepository, IBoardRepository boardRepository, IGameRepository gameRepository) : IBoardCardService
 {
     private readonly AppDbContext _context = context;
     private readonly ILogger<IBoardCardService> _logger = logger;
     private readonly IBoardCardRepository _boardcardRepository = boardcardRepository;
     private readonly IBoardRepository _boardRepository = boardRepository;
-    private readonly ICardRepository _cardRepository = cardRepository;
     private readonly IGameRepository _gameRepository = gameRepository;
 
     public async Task<Result<GameState>> CreateBoardCards(int playerId, int gameId, IEnumerable<int> cardIds)

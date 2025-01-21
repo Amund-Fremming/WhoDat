@@ -56,15 +56,13 @@ public class MessageService(ILogger<IMessageService> logger, IMessageRepository 
 
     private static bool CanSendMessage(int playerId, GameEntity game)
     {
-        GameState state = game.GameState;
-        bool playerIsP1 = playerId == game.PlayerOneID;
+        var state = game.GameState;
+        var playerIsP1 = playerId == game.PlayerOneID;
 
-        if (playerIsP1)
-            return state == GameState.P1_TURN_STARTED || state == GameState.P2_WAITING_ASK_REPLY;
-
-        if (!playerIsP1)
-            return state == GameState.P2_TURN_STARTED || state == GameState.P1_WAITING_ASK_REPLY;
-
-        return false;
+        return playerIsP1 switch
+        {
+            true => state is GameState.P1_TURN_STARTED or GameState.P2_WAITING_ASK_REPLY,
+            false => state is GameState.P2_TURN_STARTED or GameState.P1_WAITING_ASK_REPLY,
+        };
     }
 }

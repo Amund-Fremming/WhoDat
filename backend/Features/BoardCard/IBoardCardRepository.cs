@@ -1,4 +1,4 @@
-using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.BoardCard;

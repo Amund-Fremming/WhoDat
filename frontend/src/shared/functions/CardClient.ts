@@ -1,4 +1,4 @@
-import { CARD_ENDPOINT } from '../objects/URL_PATHS';
+import { CARD_ENDPOINT } from '../assets/constants/URL_PATHS';
 import { ICardDto } from '@/src/Shared/types/CardTypes';
 import Result from '../objects/Result';
 
@@ -35,7 +35,7 @@ export const addCard = async (
   uri: string,
   name: string,
   token: string
-): Promise<Result<boolean>> => {
+): Promise<Result<ICardDto>> => {
   try {
     const blobResponse = await fetch(uri);
     const blob = await blobResponse.blob();
@@ -60,7 +60,8 @@ export const addCard = async (
       return Result.failure(errorMessage);
     }
 
-    return Result.ok(true);
+    const data: ICardDto = await response.json();
+    return Result.ok(data);
   } catch (error) {
     return Result.failure('Something went wrong.');
   }

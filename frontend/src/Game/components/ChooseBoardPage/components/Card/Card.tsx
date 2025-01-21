@@ -27,7 +27,6 @@ export default function Card({
         }}
       >
         <Image
-          transition={300}
           placeholder={{ blurhash }}
           style={imageStyles.imageStyle}
           source={{

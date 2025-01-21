@@ -21,7 +21,6 @@ export default function CardComponent({
     <Pressable style={styles.container} onPress={onCardPress}>
       <View style={styles.card}>
         <Image
-          transition={300}
           placeholder={{ blurhash }}
           style={imageStyles.imageStyle}
           source={{

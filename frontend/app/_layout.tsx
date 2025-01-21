@@ -6,6 +6,7 @@ import { Splash } from '@/src/Splash/Splash';
 import { AuthProvider } from '@/src/Shared/providers/AuthProvider';
 import { InfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import { TabBarProvider } from '@/src/Shared/providers/TabBarProvider';
+import { PreloadProvider } from '@/src/Shared/providers/PreloadProvider';
 
 export default function RootLayout() {
   const [loadSplash, setLoadSplash] = useState<boolean>(true);
@@ -34,11 +35,13 @@ export default function RootLayout() {
     return (
       <AuthProvider>
         <InfoModalProvider>
-          <TabBarProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-          </TabBarProvider>
+          <PreloadProvider>
+            <TabBarProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              </Stack>
+            </TabBarProvider>
+          </PreloadProvider>
         </InfoModalProvider>
       </AuthProvider>
     );

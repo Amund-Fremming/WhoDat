@@ -28,10 +28,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
             BoardValidation.HasBoardPermission(playerId, board);
 
             var boardResult = await _boardRepository.Delete(board);
-            if (boardResult.IsError)
-                return result.Error;
-
-            return Result.Ok();
+            return boardResult.IsError ? result.Error : Result.Ok();
         }
         catch (Exception e)
         {
@@ -42,8 +39,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
 
     public async Task<Result<GameState>> ChooseBoardCard(int playerId, int gameId, int boardId, int boardCardId)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
-
+        await using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
             var boardResult = await _boardRepository.GetById(boardId);
@@ -76,7 +72,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
                 return chooseResult.Error;
             }
 
-            bool isPlayerOne = game.PlayerOneID == playerId;
+            var isPlayerOne = game.PlayerOneID == playerId;
             if (isPlayerOne && game.GameState == GameState.BOTH_PICKING_PLAYER)
                 game.GameState = GameState.P2_PICKING_PLAYER;
 
@@ -115,10 +111,7 @@ public class BoardService(ILogger<IBoardService> logger, AppDbContext context, I
                 return result.Error;
 
             var boardResult = await _boardRepository.UpdateBoardCardsLeft(board, activePlayers);
-            if (boardResult.IsError)
-                return boardResult;
-
-            return Result.Ok();
+            return boardResult.IsError ? boardResult : Result.Ok();
         }
         catch (Exception e)
         {

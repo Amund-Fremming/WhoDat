@@ -1,3 +1,4 @@
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.Player;
@@ -15,8 +16,8 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
-            string encodedNewUsername = EncodeForJsAndHtml(playerDto.Username);
+            var playerId = TokenExtractor.ParsePlayerIdClaim(User);
+            var encodedNewUsername = EncodeForJsAndHtml(playerDto.Username);
             playerDto.PlayerID = playerId;
             playerDto.Username = encodedNewUsername;
 
@@ -38,7 +39,7 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
     {
         try
         {
-            int playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(User);
             FormFile formFile = null;
 
             using var memoryStream = new MemoryStream();
@@ -66,9 +67,6 @@ public class PlayerController(ILogger<PlayerController> logger, IPlayerService p
             return StatusCode(500);
         }
     }
-
-    [NonAction]
-    private int ParsePlayerIdClaim() => int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 
     [NonAction]
     private static string EncodeForJsAndHtml(string input) => JavaScriptEncoder.Default.Encode(HtmlEncoder.Default.Encode(input));

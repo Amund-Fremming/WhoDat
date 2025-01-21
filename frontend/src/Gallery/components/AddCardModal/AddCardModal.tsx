@@ -11,10 +11,12 @@ import { validText } from '@/src/Shared/functions/InputValitator';
 import { pickImage } from '@/src/Shared/functions/ImagePicker';
 import Result from '@/src/Shared/objects/Result';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
+import { ICardDto } from '@/src/Shared/types/CardTypes';
 
 interface AddCardModalProps {
   modalVisible: boolean;
   setModalVisible: (condition: boolean) => void;
+  setJustAddedCard: React.Dispatch<React.SetStateAction<ICardDto | undefined>>;
 }
 
 const blurhash =
@@ -23,6 +25,7 @@ const blurhash =
 export default function AddCardModal({
   modalVisible,
   setModalVisible,
+  setJustAddedCard,
 }: AddCardModalProps) {
   const [nameInput, setNameInput] = useState<string>('');
   const [imageUri, setImageUri] = useState<any>(
@@ -63,12 +66,14 @@ export default function AddCardModal({
     const namePresent = handleNameInput(nameInput);
     if (!namePresent) return;
 
-    var result: Result<boolean> = await addCard(imageUri, nameInput, token);
+    var result: Result<ICardDto> = await addCard(imageUri, nameInput, token);
     if (result.isError) {
-      toggleInfoModal(true, result.message);
+      setModalVisible(false);
+      toggleInfoModal(false, result.message);
       return;
     }
 
+    setJustAddedCard(result.data!);
     setModalVisible(false);
     setNameInput('');
     setImageUri(

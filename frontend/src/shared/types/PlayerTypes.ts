@@ -1,5 +1,6 @@
-import { ICard } from './CardTypes';
-import { IBoard, IGame } from '@/src/Game/types/GameTypes';
+import { ICard } from '@/src/Game/types/BoardTypes';
+import { IGame } from '@/src/Game/types/GameTypes';
+import { IBoard } from '@/src/Game/types/BoardTypes';
 
 export interface IPlayer {
   playerID?: number;

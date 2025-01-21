@@ -1,5 +1,5 @@
 using Backend.Features.Database;
-using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.ResultPattern;
 using System.Data;
 
@@ -81,13 +81,10 @@ public class PlayerRepository(AppDbContext context, ILogger<PlayerRepository> lo
     {
         try
         {
-            bool usernameExist = await _context.Player
+            var usernameExist = await _context.Player
                 .AnyAsync(p => p.Username == username);
 
-            if (usernameExist)
-                return new Error(new DuplicateNameException("Username exists"), "Username already exists.");
-
-            return Result.Ok();
+            return usernameExist ? new Error(new DuplicateNameException("Username exists"), "Username already exists.") : Result.Ok();
         }
         catch (Exception e)
         {

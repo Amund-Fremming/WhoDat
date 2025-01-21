@@ -1,7 +1,6 @@
-﻿using Backend.Features.Shared.Common.Entity;
-using Backend.Features.Shared.ResultPattern;
+﻿using Backend.Features.Shared.ResultPattern;
 
-namespace Backend.Features.Shared.Common.Repository
+namespace Backend.Features.Shared.Common
 {
     public interface IRepository<T> where T : IEntity
     {

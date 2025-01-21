@@ -1,6 +1,7 @@
 using Backend.Features.Board;
 using Backend.Features.BoardCard;
 using Backend.Features.Message;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.Enums;
 
 namespace Backend.Features.Game;
@@ -23,7 +24,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var result = await _gameService.GetRecentGamePlayed(playerId);
             if (result.IsError)
             {
@@ -48,7 +49,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var groupName = gameId.ToString();
 
             var result = await _gameService.LeaveGameById(playerId, gameId);
@@ -74,7 +75,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var groupName = gameId.ToString();
 
             var result = await _gameService.JoinGameById(playerId, gameId);
@@ -113,7 +114,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var groupName = gameId.ToString();
 
             var result = await _gameService.FinishTurn(playerId, gameId);
@@ -137,7 +138,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var groupName = gameId.ToString();
             var encodedMessageText = EncodeForJsAndHtml(messageText);
 
@@ -163,7 +164,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var groupName = gameId.ToString();
 
             var result = await _boardService.GuessBoardCard(playerId, gameId, boardCardId);
@@ -187,7 +188,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var groupName = gameId.ToString();
 
             var result = await _boardCardService.UpdateBoardCardsActivity(playerId, boardId, activeBoardCardIds);
@@ -210,7 +211,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var groupName = gameId.ToString();
 
             var result = await _boardCardService.CreateBoardCards(playerId, gameId, cardIds);
@@ -234,7 +235,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var groupName = gameId.ToString();
 
             var result = await _boardService.ChooseBoardCard(playerId, gameId, boardId, boardCardId);
@@ -258,7 +259,7 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
     {
         try
         {
-            var playerId = ParsePlayerIdClaim();
+            var playerId = TokenExtractor.ParsePlayerIdClaim(Context.User);
             var groupName = gameId.ToString();
 
             var result = await _gameService.StartGame(playerId, gameId);
@@ -277,8 +278,6 @@ public class GameHub(ILogger<GameHub> logger, IGameService gameService, IBoardSe
             await Clients.Caller.SendAsync(ErrorIdentifier, GenericErrorMsg);
         }
     }
-
-    public int ParsePlayerIdClaim() => int.Parse(Context.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!);
 
     private static string EncodeForJsAndHtml(string input) => JavaScriptEncoder.Default.Encode(HtmlEncoder.Default.Encode(input));
 }

@@ -1,7 +1,7 @@
 using Backend.Features.Board;
 using Backend.Features.Message;
 using Backend.Features.Player;
-using Backend.Features.Shared.Common.Entity;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.Enums;
 
 namespace Backend.Features.Game;

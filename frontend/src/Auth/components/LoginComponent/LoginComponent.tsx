@@ -5,7 +5,6 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
-  Alert,
 } from 'react-native';
 import { styles } from './LoginComponentStyles';
 import Feather from '@expo/vector-icons/Feather';
@@ -17,14 +16,19 @@ import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 import { loginPlayer } from '../../AuthClient';
 import Result from '@/src/Shared/objects/Result';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
+import { getAllCards } from '@/src/Shared/functions/CardClient';
+import { usePreloadProvider } from '@/src/Shared/providers/PreloadProvider';
+import { Splash } from '@/src/Splash/Splash';
 
 interface LoginComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function LoginComponent({ setView }: LoginComponentProps) {
+  const [isPreloading, setIsPreloading] = useState<boolean>(false);
   const { setToken, setPlayerID, setUsername, setImageUrl } = useAuthProvider();
   const { toggleInfoModal } = useInfoModalProvider();
+  const { setAllGalleryCards } = usePreloadProvider();
 
   const [loginRequest, setLoginRequest] = useState<ILoginRequest>({
     username: '',
@@ -53,12 +57,27 @@ export function LoginComponent({ setView }: LoginComponentProps) {
       return;
     }
 
+    setIsPreloading(true);
     const response: IAuthResponse | null = result.data;
     setToken(response!.token);
     setPlayerID(response!.playerID);
     setUsername(response!.username);
     setImageUrl(response!.imageUrl);
+
+    if (response) {
+      var galleryResult = await getAllCards(response.token);
+      if (galleryResult.isError) {
+        toggleInfoModal(false, galleryResult.message);
+        return;
+      }
+
+      setAllGalleryCards(galleryResult.data == null ? [] : galleryResult.data);
+    }
   };
+
+  if (isPreloading) {
+    return <Splash />;
+  }
 
   return (
     <KeyboardAvoidingView

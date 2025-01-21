@@ -1,4 +1,4 @@
-import { AUTH_ENDPOINT } from '@/src/Shared/objects/URL_PATHS';
+import { AUTH_ENDPOINT } from '@/src/Shared/assets/constants/URL_PATHS';
 import {
   IRegistrationRequest,
   ILoginRequest,

@@ -14,6 +14,7 @@ import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import { createBoardCards, leaveGame } from '../../GameHubClient';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
+import { usePreloadProvider } from '@/src/Shared/providers/PreloadProvider';
 
 interface BoardPageProps {
   cardsToChoose: number;
@@ -31,6 +32,7 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
   const { setPage, connection, gameId } = useGameProvider();
   const { toggleInfoModal } = useInfoModalProvider();
   const { setDisplayTabBar } = useTabBarProvider();
+  const { allGalleryCards } = usePreloadProvider();
 
   useEffect(() => {
     fetchPlayerCards();
@@ -46,28 +48,22 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
   };
 
   const fetchPlayerCards = async () => {
-    const result: Result<Array<ICardDto>> = await getAllCards(token);
-    if (result.isError) {
-      toggleInfoModal(true, result.message);
-    }
-
-    const data = result.data;
-    if (data!.length < 20) {
+    if (allGalleryCards.length < 20) {
       setDisplayUserMessage(true);
     }
     // TODO: remove this
-    setCardsPressed(result.data!.slice(0, 20).map((dto) => dto.id));
+    setCardsPressed(allGalleryCards.slice(0, 20).map((dto) => dto.id));
 
-    if (data!.length <= 20) {
+    if (allGalleryCards.length <= 20) {
       setDisplayNext(false);
     } else {
       setDisplayNext(true);
     }
-    setAllCards(data!);
+    setAllCards(allGalleryCards!);
 
     const skip = (pageNumber - 1) * 20;
     const take = 20 * pageNumber;
-    setCardsForThisPage(data!.slice(skip, take));
+    setCardsForThisPage(allGalleryCards!.slice(skip, take));
   };
 
   const handleNextPressed = () => {

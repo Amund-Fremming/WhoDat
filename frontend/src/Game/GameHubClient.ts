@@ -1,5 +1,5 @@
 import * as signalR from '@microsoft/signalr';
-import { HUB_ENDPOINT } from '@/src/Shared/objects/URL_PATHS';
+import { HUB_ENDPOINT } from '@/src/Shared/assets/constants/URL_PATHS';
 import Result from '../Shared/objects/Result';
 import { IBoardCardUpdate } from './types/BoardTypes';
 

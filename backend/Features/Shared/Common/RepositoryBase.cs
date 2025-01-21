@@ -1,8 +1,7 @@
 ﻿using Backend.Features.Database;
-using Backend.Features.Shared.Common.Entity;
 using Backend.Features.Shared.ResultPattern;
 
-namespace Backend.Features.Shared.Common.Repository
+namespace Backend.Features.Shared.Common
 {
     public abstract class RepositoryBase<T, U>(ILogger<U> logger, AppDbContext context) : IRepository<T> where T : class, IEntity
     {

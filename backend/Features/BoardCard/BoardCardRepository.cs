@@ -1,5 +1,5 @@
 using Backend.Features.Database;
-using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.ResultPattern;
 
 namespace Backend.Features.BoardCard;
@@ -30,7 +30,11 @@ public class BoardCardRepository(AppDbContext context, ILogger<BoardCardReposito
     {
         try
         {
-            // TODO: Needs to update all cards, make a bulk update
+            foreach (var card in boardCards)
+            {
+                _context.BoardCard.Update(card); 
+            }
+
             await _context.SaveChangesAsync();
             return Result.Ok();
         }

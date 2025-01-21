@@ -72,7 +72,7 @@ namespace Backend.Features.Player
             return player;
         }
 
-        public string GenerateSalt()
+        private static string GenerateSalt()
         {
             var buffer = new byte[16];
             RandomNumberGenerator.Fill(buffer);

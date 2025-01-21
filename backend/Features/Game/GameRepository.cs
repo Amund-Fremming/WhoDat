@@ -1,6 +1,6 @@
 using Backend.Features.Database;
 using Backend.Features.Player;
-using Backend.Features.Shared.Common.Repository;
+using Backend.Features.Shared.Common;
 using Backend.Features.Shared.Enums;
 using Backend.Features.Shared.ResultPattern;
 

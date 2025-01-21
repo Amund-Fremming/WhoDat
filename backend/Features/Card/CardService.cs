@@ -8,12 +8,12 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
     private readonly ICardRepository _cardRepository = cardRepository;
     private readonly IImageClient _imageClient = imageClient;
 
-    public async Task<Result> CreateCard(int playerId, CreateCardDto cardDto)
+    public async Task<Result<CardDto>> CreateCard(int playerId, CreateCardDto cardDto)
     {
         try
         {
-            string name = cardDto.Name!;
-            IFormFile? file = cardDto.Image;
+            var name = cardDto.Name!;
+            var file = cardDto.Image;
 
             if (file == null || file.Length == 0)
                 return new Error(new ArgumentNullException("No image present."), "No image present to be uploaded.");
@@ -32,8 +32,8 @@ public class CardService(ILogger<ICardService> logger, ICardRepository cardRepos
             var cardResult = await _cardRepository.Create(card);
             if (cardResult.IsError)
                 return cardResult.Error;
-
-            return Result.Ok();
+            
+            return new CardDto(card.ID, card.Name, imageUrl);
         }
         catch (Exception e)
         {

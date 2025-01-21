@@ -1,6 +1,6 @@
 import { IPlayerDto } from '../Shared/types/PlayerTypes';
 import Result from '../Shared/objects/Result';
-import { PLAYER_ENDPOINT } from '../Shared/objects/URL_PATHS';
+import { PLAYER_ENDPOINT } from '../Shared/assets/constants/URL_PATHS';
 
 export const updatePlayer = async (
   dto: IPlayerDto,

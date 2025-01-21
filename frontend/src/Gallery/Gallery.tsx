@@ -10,8 +10,8 @@ import AddCardModal from './components/AddCardModal/AddCardModal';
 import { deleteCard, getAllCards } from '@/src/Shared/functions/CardClient';
 import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
-import Result from '@/src/Shared/objects/Result';
 import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
+import { usePreloadProvider } from '../Shared/providers/PreloadProvider';
 
 const defaultCard: ICardDto = {
   id: -1,
@@ -24,26 +24,33 @@ export default function Gallery() {
     useState<boolean>(false);
   const [cardModalVisible, setCardModalVisible] = useState<boolean>(false);
   const [cardPressed, setCardPressed] = useState<ICardDto>(defaultCard);
-  const [allCards, setAllCards] = useState<ICardDto[]>([]);
   const [cardsForThisPage, setCardsForThisPage] = useState<ICardDto[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [displayPrevious, setDisplayPrevious] = useState<boolean>(false);
   const [displayNext, setDisplayNext] = useState<boolean>(false);
+  const [justAddedCard, setJustAddedCard] = useState<ICardDto | undefined>(
+    undefined
+  );
   const { token } = useAuthProvider();
   const { toggleInfoModal } = useInfoModalProvider();
+  const { allGalleryCards, setAllGalleryCards } = usePreloadProvider();
 
   useEffect(() => {
     fetchPlayerCards();
-  }, [addCardModalVisible]);
+  }, []);
+
+  useEffect(() => {
+    if (justAddedCard) {
+      setAllGalleryCards((prev) => [...prev, justAddedCard]);
+      if (cardsForThisPage.length < 20) {
+        setCardsForThisPage((prev) => [...prev, justAddedCard]);
+      }
+      setJustAddedCard(undefined);
+    }
+  }, [justAddedCard]);
 
   const fetchPlayerCards = async () => {
-    const result: Result<Array<ICardDto>> = await getAllCards(token);
-    if (result.isError) {
-      toggleInfoModal(true, result.message);
-    }
-
-    const data = result.data;
-    setAllCards(data!);
+    var data = allGalleryCards;
 
     const skip = (pageNumber - 1) * 20;
     const take = 20 * pageNumber;
@@ -59,7 +66,7 @@ export default function Gallery() {
   const handleNextPressed = () => {
     const skip = pageNumber * 20;
     const take = 20 * (pageNumber + 1);
-    const cardsToDisplay = allCards.slice(skip, take);
+    const cardsToDisplay = allGalleryCards.slice(skip, take);
 
     if (cardsToDisplay.length < 20) {
       setDisplayNext(false);
@@ -74,7 +81,7 @@ export default function Gallery() {
     setDisplayNext(true);
     const skip = (pageNumber - 2) * 20;
     const take = 20 * (pageNumber - 1);
-    const cardsToDisplay = allCards.slice(skip, take);
+    const cardsToDisplay = allGalleryCards.slice(skip, take);
 
     setCardsForThisPage(cardsToDisplay);
     setDisplayPrevious(pageNumber - 2 >= 1);
@@ -96,7 +103,7 @@ export default function Gallery() {
             toggleInfoModal(true, result.message);
             return;
           }
-          setAllCards((prev) =>
+          setAllGalleryCards((prev) =>
             prev.filter((prevCard: ICardDto) => prevCard.id != card.id)
           );
           setCardsForThisPage((prev) =>
@@ -119,6 +126,7 @@ export default function Gallery() {
       <AddCardModal
         modalVisible={addCardModalVisible}
         setModalVisible={setAddCardModalVisible}
+        setJustAddedCard={setJustAddedCard}
       />
 
       <View

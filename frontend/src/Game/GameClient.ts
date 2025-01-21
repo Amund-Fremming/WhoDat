@@ -1,4 +1,4 @@
-import { GAME_ENDPOINT } from '../Shared/objects/URL_PATHS';
+import { GAME_ENDPOINT } from '../Shared/assets/constants/URL_PATHS';
 import { GameState, IGame } from '@/src/Game/types/GameTypes';
 import Result from '../Shared/objects/Result';
 import { IBoard } from './types/BoardTypes';
