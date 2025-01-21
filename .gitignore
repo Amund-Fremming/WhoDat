@@ -26,6 +26,7 @@ Backend/appsettings.Development.json
 
 # Build Results
 backend/bin/
+backend/obj/
 *obj/
 *Debug/
 backend/obj/
