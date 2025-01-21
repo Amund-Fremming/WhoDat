@@ -19,19 +19,19 @@ web-build/
 expo-env.d.ts
 # @end expo-cli
 
-/backend/appsettings.Development.json
-backend/appsettings.Development.json
-Backend/appsettings.Development.json
-/Backend/appsettings.Development.json
+#/backend/appsettings.Development.json
+#backend/appsettings.Development.json
+#Backend/appsettings.Development.json
+#/Backend/appsettings.Development.json
 
 # Build Results
-backend/bin/
-backend/obj/
-*obj/
-*Debug/
-backend/obj/
-backend/.vs/
-backend/Debug/
+#backend/bin/
+#backend/obj/
+#*obj/
+#*Debug/
+#backend/obj/
+#backend/.vs/
+#backend/Debug/
 
 # User-Specific Files
 *.user
@@ -60,5 +60,5 @@ backend/Debug/
 .nuget/
 
 # Visual Studio and Rider Specific Folders
-backend/.vs/
+# backend/.vs/
 backend/.idea/
