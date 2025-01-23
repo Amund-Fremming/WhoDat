@@ -51,10 +51,9 @@ export const registerPlayer = async (
 
     if (response.status === 500) return Result.failure('Internal server error');
 
-    if (response.status >= 400 && response.status <= 500)
-      return Result.failure(
-        'Password needs to be more than 3 characters, and password needs this and a number.'
-      );
+    if (response.status >= 400 && response.status <= 500) {
+      return Result.failure(await response.text());
+    }
 
     if (!response.ok) {
       const errorMessage = await response.json();
