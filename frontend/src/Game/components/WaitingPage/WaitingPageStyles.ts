@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
   },
 
   id: {
-    paddingTop: verticalScale(15),
+    paddingTop: verticalScale(25),
     fontFamily: 'Modak',
     fontSize: moderateScale(30),
     color: Colors.Green,

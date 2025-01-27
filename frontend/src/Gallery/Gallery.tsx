@@ -1,4 +1,10 @@
-import { View, Text, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { useEffect, useState } from 'react';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 import { ICardDto } from '@/src/Shared/types/CardTypes';
@@ -7,7 +13,7 @@ import CardModal from './components/CardModal/CardModal';
 import { viewStyles, textStyles } from './GalleryStyles';
 import { AddCardComponent } from './components/AddCard/AddCardComponent';
 import AddCardModal from './components/AddCardModal/AddCardModal';
-import { deleteCard, getAllCards } from '@/src/Shared/functions/CardClient';
+import { deleteCard } from '@/src/Shared/functions/CardClient';
 import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
 import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
 import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
@@ -129,7 +135,8 @@ export default function Gallery() {
         setJustAddedCard={setJustAddedCard}
       />
 
-      <View
+      <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         style={{
           ...viewStyles.container,
           opacity: cardModalVisible ? 0.6 : 1,
@@ -170,7 +177,7 @@ export default function Gallery() {
             )}
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 }

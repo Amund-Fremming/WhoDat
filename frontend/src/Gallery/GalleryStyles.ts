@@ -17,7 +17,7 @@ export const viewStyles = StyleSheet.create({
 
   creamContainer: {
     width: '100%',
-    height: '93%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: Colors.Cream,
@@ -43,6 +43,8 @@ export const viewStyles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     gap: horizontalScale(20),
+    position: 'absolute',
+    bottom: verticalScale(50),
   },
 });
 

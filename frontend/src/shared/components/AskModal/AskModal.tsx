@@ -39,9 +39,9 @@ export default function AskModal({
   }, [modalVisible]);
 
   const handleAskPressed = async () => {
-    if (!validText(question)) {
+    if (question.length > 25) {
       setPlaceholderColor(Colors.Red);
-      setPlaceholderText('Only letters allowed!');
+      setPlaceholderText('To many characters!');
       setQuestion('');
       return;
     }

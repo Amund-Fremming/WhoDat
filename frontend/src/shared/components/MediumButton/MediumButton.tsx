@@ -7,6 +7,7 @@ interface MediumButtonProps {
   color: string;
   inverted: boolean;
   onButtonPress: () => void;
+  disabled?: boolean;
 }
 
 export default function MediumButton({
@@ -14,6 +15,7 @@ export default function MediumButton({
   color,
   inverted,
   onButtonPress,
+  disabled = true,
 }: MediumButtonProps) {
   const getStyles = () => {
     if (inverted) {
@@ -33,7 +35,7 @@ export default function MediumButton({
 
   return (
     <TouchableOpacity
-      activeOpacity={0.5}
+      activeOpacity={disabled ? 1 : 0.5}
       onPress={onButtonPress}
       style={getStyles()}
     >

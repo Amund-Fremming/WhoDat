@@ -55,7 +55,7 @@ export const joinGame = async (
     await connection.invoke('JoinGame', gameId);
     return Result.ok(true);
   } catch (error) {
-    return Result.failure('Falied to connect, check your wifi');
+    return Result.failure('Invalid game id');
   }
 };
 

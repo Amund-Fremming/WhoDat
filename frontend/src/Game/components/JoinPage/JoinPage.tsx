@@ -19,9 +19,14 @@ export default function JoinPage() {
     if (connection) {
       setIsHost(false);
       setDisplayTabBar('none');
-      await joinGame(connection, gameId);
+      var result = await joinGame(connection, gameId);
+      if (result.isError) {
+        toggleInfoModal(false, result.message);
+        setDisplayTabBar('flex');
+      }
     } else {
       toggleInfoModal(true, 'Connection was broken.');
+      setDisplayTabBar('flex');
     }
   };
 
@@ -43,12 +48,14 @@ export default function JoinPage() {
     }
   };
 
+  const handleBackPressed = () => {
+    setDisplayTabBar('flex');
+    setPage(PlayPages.MAIN_PAGE);
+  };
+
   return (
     <View style={styles.container}>
-      <Pressable
-        style={styles.backIconWrapper}
-        onPress={() => setPage(PlayPages.MAIN_PAGE)}
-      >
+      <Pressable style={styles.backIconWrapper} onPress={handleBackPressed}>
         <Ionicons name="arrow-back" size={50} color={Colors.Cream} />
       </Pressable>
       <Text style={styles.header}>Type a friends id</Text>
@@ -58,6 +65,7 @@ export default function JoinPage() {
             onChangeText={(input) => handleInput(input)}
             keyboardType="numeric"
             style={styles.textInput}
+            placeholderTextColor={Colors.DarkGray}
             placeholder="37293 ..."
           />
           <View style={styles.underline} />

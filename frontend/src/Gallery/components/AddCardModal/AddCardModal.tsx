@@ -1,4 +1,12 @@
-import { Modal, View, Pressable, TextInput, Text } from 'react-native';
+import {
+  Modal,
+  View,
+  Pressable,
+  TextInput,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { styles, imageStyles } from './AddCardModalStyles';
 import BigButton from '@/src/Shared/components/BigButton/BigButton';
@@ -42,7 +50,9 @@ export default function AddCardModal({
 
     if (name.length > 9 || !validText(name)) {
       setModalVisible(!modalVisible);
+      // TODO: bug, hvis denne blir triggered så fpår ikke bruker opp feilen, ting bare henger seg opp
       toggleInfoModal(true, 'Name must be text only and under 9 letters long');
+      setNameInput('');
       return false;
     }
 
@@ -63,13 +73,14 @@ export default function AddCardModal({
   };
 
   const uploadCard = async () => {
+    setModalVisible(false);
     const namePresent = handleNameInput(nameInput);
     if (!namePresent) return;
 
     var result: Result<ICardDto> = await addCard(imageUri, nameInput, token);
     if (result.isError) {
-      setModalVisible(false);
-      toggleInfoModal(false, result.message);
+      toggleInfoModal(true, result.message);
+      setNameInput('');
       return;
     }
 
@@ -84,7 +95,10 @@ export default function AddCardModal({
   return (
     <View>
       <Modal visible={modalVisible} animationType="fade" transparent={true}>
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+          style={styles.container}
+        >
           <View style={styles.cardModal}>
             <Pressable
               style={styles.closeButton}
@@ -122,7 +136,7 @@ export default function AddCardModal({
               />
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );

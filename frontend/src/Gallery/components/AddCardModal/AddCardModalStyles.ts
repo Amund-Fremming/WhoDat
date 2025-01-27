@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '95%',
-    height: '73%',
+    height: verticalScale(600),
     backgroundColor: Colors.Cream,
     borderColor: Colors.BorderGray,
     borderWidth: moderateScale(5),

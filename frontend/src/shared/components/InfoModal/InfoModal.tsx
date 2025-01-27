@@ -28,7 +28,7 @@ export default function InfoModal({
           <Text
             style={{
               ...styles.header,
-              color: isError ? Colors.Red : Colors.Orange,
+              color: isError ? Colors.Red : Colors.Green,
             }}
           >
             {isError ? 'Ooops' : 'Hey'}

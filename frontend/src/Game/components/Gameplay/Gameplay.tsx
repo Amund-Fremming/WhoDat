@@ -51,7 +51,8 @@ export default function Gameplay() {
   useEffect(() => {
     if (board && board.boardCards)
       setActiveCards(board.boardCards.map((bc) => bc.id));
-    console.log('hsd');
+
+    if (!isHost) toggleInfoModal(false, 'The oponent is starting');
   }, []);
 
   useEffect(() => {
@@ -226,6 +227,24 @@ export default function Gameplay() {
                     inverted={false}
                     color={Colors.Green}
                     onButtonPress={handleFinishTurn}
+                  />
+                </>
+              )}
+              {!thisPlayerTurn && (
+                <>
+                  <MediumButton
+                    text="Ask"
+                    inverted={false}
+                    color={Colors.Gray}
+                    onButtonPress={() => console.log('')}
+                    disabled
+                  />
+                  <MediumButton
+                    text="Guess"
+                    inverted={false}
+                    color={Colors.Gray}
+                    onButtonPress={() => console.log('')}
+                    disabled
                   />
                 </>
               )}

@@ -11,8 +11,9 @@ import { pickImage } from '../Shared/functions/ImagePicker';
 import { TouchableOpacity } from 'react-native';
 import { updatePlayer, updatePlayerImage } from './PlayerClient';
 import { IPlayerDto } from '../Shared/types/PlayerTypes';
-import { DevSettings } from 'react-native';
 import { useInfoModalProvider } from '../Shared/providers/InfoModalProvider';
+import RNRestart from 'react-native-restart';
+import { joinGame } from '../Game/GameHubClient';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -79,7 +80,6 @@ export default function Profile() {
 
   const handleLogout = () => {
     setToken('');
-    DevSettings.reload();
   };
 
   return (
