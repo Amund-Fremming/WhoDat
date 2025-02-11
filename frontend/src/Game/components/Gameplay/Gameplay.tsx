@@ -89,6 +89,7 @@ export default function Gameplay() {
     setPage(PlayPages.MAIN_PAGE);
     setDisplayTabBar('flex');
     if (connection) await leaveGame(connection, gameId, doBroadcast);
+    if (!connection) toggleInfoModal(true, 'Connection was lost');
   };
 
   const handleCardPressed = (boardcardId: number) => {
@@ -122,6 +123,8 @@ export default function Gameplay() {
       if (playersLeftResult.isError) {
         toggleInfoModal(true, playersLeftResult.message);
       }
+    } else {
+      toggleInfoModal(true, 'Connection was lost');
     }
   };
 
@@ -135,6 +138,8 @@ export default function Gameplay() {
         board!.id,
         activeCards
       );
+    } else {
+      toggleInfoModal(true, 'Connection was lost');
     }
   };
 

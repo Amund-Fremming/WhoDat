@@ -64,12 +64,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     backgroundColor: Colors.Orange,
-    paddingTop: verticalScale(40),
+    paddingTop: verticalScale(160),
   },
 
   creamContainer: {
     width: '100%',
-    height: '85%',
+    height: '105%',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: Colors.Cream,

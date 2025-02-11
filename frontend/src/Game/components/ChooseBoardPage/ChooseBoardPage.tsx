@@ -44,6 +44,8 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
       if (result.isError) {
         toggleInfoModal(true, result.message);
       }
+    } else {
+      toggleInfoModal(true, 'Connection was lost');
     }
   };
 
@@ -122,6 +124,7 @@ export default function ChooseBoardPage({ cardsToChoose }: BoardPageProps) {
     setPage(PlayPages.MAIN_PAGE);
     setDisplayTabBar('flex');
     if (connection) await leaveGame(connection, gameId, true);
+    if (!connection) toggleInfoModal(true, 'Connection was lost');
   };
 
   return (

@@ -46,9 +46,20 @@ export default function GameRouter() {
     connectToHub();
     return () => {
       if (connection) stopConnection(connection);
+      if (!connection) toggleInfoModal(true, 'Connection was lost');
       setIsHost(false);
     };
   }, []);
+
+  useEffect(() => {
+    if (PlayPages.HOST_PAGE === page || PlayPages.JOIN_PAGE === page)
+      connectToHub();
+    return () => {
+      if (connection) stopConnection(connection);
+      if (!connection) toggleInfoModal(true, 'Connection was lost');
+      setIsHost(false);
+    };
+  }, [PlayPages.HOST_PAGE, PlayPages.JOIN_PAGE]);
 
   useEffect(() => {
     isHostRef.current = isHost;

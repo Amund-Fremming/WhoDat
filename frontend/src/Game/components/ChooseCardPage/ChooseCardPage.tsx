@@ -53,6 +53,8 @@ export default function ChooseCardPage() {
       });
 
       await chooseBoardCard(connection, gameId, board.id, cardPressed.id);
+    } else {
+      toggleInfoModal(true, 'Connection was lost');
     }
   };
 
@@ -60,6 +62,7 @@ export default function ChooseCardPage() {
     setPage(PlayPages.MAIN_PAGE);
     setDisplayTabBar('flex');
     if (connection) await leaveGame(connection, gameId, true);
+    if (!connection) toggleInfoModal(true, 'Connection was lost');
   };
 
   return (

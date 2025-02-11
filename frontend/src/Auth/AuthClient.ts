@@ -33,6 +33,7 @@ export const loginPlayer = async (
     return Result.ok(data);
   } catch (error) {
     console.log('Login?');
+    console.error(error);
     return Result.failure('Something went wrong.');
   }
 };

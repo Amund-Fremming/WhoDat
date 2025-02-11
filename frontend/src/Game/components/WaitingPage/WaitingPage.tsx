@@ -6,15 +6,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { useGameProvider } from '@/src/Shared/providers/GameProvider';
 import { leaveGame } from '../../GameHubClient';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
+import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 
 export default function WaitingPage() {
   const { gameId, setPage, connection, waitingMessage } = useGameProvider();
   const { setDisplayTabBar } = useTabBarProvider();
+  const { toggleInfoModal } = useInfoModalProvider();
 
   const handleBackPressed = () => {
     setDisplayTabBar('flex');
     setPage(PlayPages.MAIN_PAGE);
     if (connection) leaveGame(connection, gameId, true);
+    if (!connection) toggleInfoModal(true, 'Connection was lost');
   };
 
   return (

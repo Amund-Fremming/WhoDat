@@ -49,6 +49,8 @@ export default function AskModal({
     if (connection) {
       const result = await sendMessage(connection, gameId, question);
       if (result.isError) toggleInfoModal(false, result.message);
+    } else {
+      toggleInfoModal(true, 'Connection was lost');
     }
   };
 
@@ -61,6 +63,8 @@ export default function AskModal({
   const handleQuestionAnswerPressed = async (answer: string) => {
     if (connection) {
       var result = await sendMessage(connection, gameId, answer);
+    } else {
+      toggleInfoModal(true, 'Connection was lost');
     }
   };
 

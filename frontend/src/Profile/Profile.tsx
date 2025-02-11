@@ -1,4 +1,10 @@
-import { View, Text, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { styles, imageStyles } from './ProfileStyles';
 import { useEffect, useState } from 'react';
@@ -23,15 +29,8 @@ export default function Profile() {
   const [newUsername, setNewUsername] = useState<string>('');
   const [imageUri, setImageUri] = useState<any>();
   const { toggleInfoModal } = useInfoModalProvider();
-  const {
-    imageUrl,
-    setImageUrl,
-    username,
-    setUsername,
-    playerID,
-    token,
-    setToken,
-  } = useAuthProvider();
+  const { imageUrl, username, setUsername, playerID, token, setToken } =
+    useAuthProvider();
 
   useEffect(() => {
     if (imageUrl != null) setImageUri(imageUrl);
@@ -83,7 +82,10 @@ export default function Profile() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
       <Text style={styles.header}>Profile</Text>
       <View style={styles.creamContainer}>
         {!editMode && (
@@ -184,6 +186,6 @@ export default function Profile() {
           </View>
         )}
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
