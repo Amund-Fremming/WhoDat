@@ -8,4 +8,6 @@ public interface IAuthService
     Result<string> GenerateToken(PlayerEntity player);
 
     Task<Result<PlayerEntity>> RegisterNewPlayer(RegistrationRequest request);
+
+    Task<Result> ValidatePasswordWithSalt(LoginRequest request);
 }

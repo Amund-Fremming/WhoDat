@@ -52,7 +52,7 @@ public class AuthService(IConfiguration configuration, ILogger<IAuthService> log
         return Convert.ToBase64String(buffer);
     }
 
-    private async Task<Result> ValidatePasswordWithSalt(LoginRequest request)
+    public async Task<Result> ValidatePasswordWithSalt(LoginRequest request)
     {
         try
         {
