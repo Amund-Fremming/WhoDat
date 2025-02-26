@@ -28,7 +28,7 @@ public class AuthService(IConfiguration configuration, ILogger<IAuthService> log
                     new Claim(ClaimTypes.Role, player.PlayerRole.ToString()),
                     new Claim(ClaimTypes.Name, player.Username),
                 ]),
-                Expires = DateTime.UtcNow.AddDays(1),       // TODO - JUSTER DENNE!!!
+                Expires = DateTime.UtcNow.AddDays(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? throw new KeyNotFoundException("(AuthService) Jwt Issuer not present."),
                 Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? throw new KeyNotFoundException("(AuthService) Jwt Audience not present.")

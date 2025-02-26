@@ -64,7 +64,7 @@ export default function GameRouter() {
       setGameState(state);
       switch (state) {
         case GameState.PLAYER_LEFT: {
-          toggleInfoModal(false, 'The other player left the game.');
+          toggleInfoModal(true, 'The other player left the game.');
           break;
         }
         case GameState.ONLY_HOST_CHOSING_CARDS: {

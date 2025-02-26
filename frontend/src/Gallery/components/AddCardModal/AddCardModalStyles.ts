@@ -104,6 +104,36 @@ export const styles = StyleSheet.create({
     fontFamily: 'InikaBold',
     fontSize: moderateScale(20),
   },
+
+  message: {
+    fontSize: moderateScale(24),
+    fontFamily: 'Inika',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: Colors.DarkGray,
+    paddingHorizontal: horizontalScale(10),
+  },
+
+  header: {
+    fontSize: moderateScale(84),
+    fontFamily: 'Modak',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: Colors.BorderGray,
+  },
+
+  absoluteButton: {
+    position: 'absolute',
+    bottom: verticalScale(40),
+  },
+
+  errorContainer: {
+    borderColor: Colors.Red,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    height: '100%',
+  },
 });
 
 export const imageStyles = StyleSheet.create({

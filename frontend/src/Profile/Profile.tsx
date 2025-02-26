@@ -24,15 +24,8 @@ export default function Profile() {
   const [newUsername, setNewUsername] = useState<string>('');
   const [imageUri, setImageUri] = useState<any>();
   const { toggleInfoModal } = useInfoModalProvider();
-  const {
-    imageUrl,
-    setImageUrl,
-    username,
-    setUsername,
-    playerID,
-    token,
-    setToken,
-  } = useAuthProvider();
+  const { imageUrl, username, setUsername, playerID, token, setToken } =
+    useAuthProvider();
 
   useEffect(() => {
     if (imageUrl != null) setImageUri(imageUrl);

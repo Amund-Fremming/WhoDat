@@ -73,12 +73,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: Colors.Cream,
-    borderTopStartRadius: moderateScale(30),
-    borderTopRightRadius: moderateScale(30),
+    borderTopStartRadius: moderateScale(40),
+    borderTopRightRadius: moderateScale(40),
+    paddingBottom: verticalScale(20),
   },
 
   header: {
-    fontSize: moderateScale(45),
+    fontSize: moderateScale(65),
     fontFamily: 'Modak',
     color: Colors.Cream,
   },

@@ -8,7 +8,7 @@ import { StyleSheet } from 'react-native';
 
 export const viewStyles = StyleSheet.create({
   container: {
-    height: '100%',
+    height: '110%',
     width: '100%',
     alignItems: 'center',
     backgroundColor: Colors.Orange,
@@ -17,7 +17,7 @@ export const viewStyles = StyleSheet.create({
 
   creamContainer: {
     width: '100%',
-    height: '100%',
+    height: '110%',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: Colors.Cream,
@@ -44,7 +44,7 @@ export const viewStyles = StyleSheet.create({
     flexDirection: 'row',
     gap: horizontalScale(20),
     position: 'absolute',
-    bottom: verticalScale(50),
+    bottom: verticalScale(300),
   },
 });
 
