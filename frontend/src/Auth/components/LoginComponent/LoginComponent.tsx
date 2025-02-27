@@ -19,6 +19,7 @@ import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import { getAllCards } from '@/src/Shared/functions/CardClient';
 import { usePreloadProvider } from '@/src/Shared/providers/PreloadProvider';
 import { Splash } from '@/src/Splash/Splash';
+import { validUsername } from '@/src/Shared/functions/InputValitator';
 
 interface LoginComponentProps {
   setView: React.Dispatch<React.SetStateAction<string>>;
@@ -36,20 +37,21 @@ export function LoginComponent({ setView }: LoginComponentProps) {
   });
 
   const handleLogin = async () => {
-    /*if (
+    if (
       loginRequest.password.length <= 0 ||
       loginRequest.username.length <= 0
     ) {
-      handleError("Username and password cannot be empty.");
+      toggleInfoModal(true, 'Username and password cannot be empty.');
       return;
     }
 
     if (!validUsername(loginRequest.username)) {
-      handleError(
-        "Username can only be letters and numbers, and user 9 characters."
+      toggleInfoModal(
+        true,
+        'Username can only be letters and numbers, and user 9 characters.'
       );
       return false;
-    }*/
+    }
 
     const result: Result<IAuthResponse> = await loginPlayer(loginRequest);
     if (result.isError) {

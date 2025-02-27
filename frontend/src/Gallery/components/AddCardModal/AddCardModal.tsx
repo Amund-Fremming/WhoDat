@@ -21,7 +21,6 @@ import { pickImage } from '@/src/Shared/functions/ImagePicker';
 import Result from '@/src/Shared/objects/Result';
 import { useInfoModalProvider } from '@/src/Shared/providers/InfoModalProvider';
 import { ICardDto } from '@/src/Shared/types/CardTypes';
-import MediumButton from '@/src/Shared/components/MediumButton/MediumButton';
 
 interface AddCardModalProps {
   modalVisible: boolean;
@@ -54,7 +53,9 @@ export default function AddCardModal({
     }
 
     if (name.length > 9 || !validText(name)) {
-      setErrorMessage('Name must be text only and under 9 letters long');
+      setErrorMessage(
+        'Name must be text only, no æøå and under 9 letters long'
+      );
       setIsErrorView(true);
       setNameInput('');
       return false;

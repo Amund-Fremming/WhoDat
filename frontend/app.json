@@ -2,7 +2,7 @@
   "expo": {
     "name": "WhoDat",
     "slug": "WhoDat",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./src/Shared/assets/images/icon.png",
     "scheme": "myapp",
@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.amundfremming.whodat",
-      "buildNumber": "1.0.3"
+      "buildNumber": "1.0.4"
     },
     "plugins": ["expo-router", "expo-font"],
     "experiments": {

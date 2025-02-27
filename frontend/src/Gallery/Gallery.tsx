@@ -158,26 +158,26 @@ export default function Gallery() {
               />
             )}
           </View>
-          <View style={viewStyles.buttonWrapper}>
-            {displayPrevious && (
-              <MediumButton
-                text={'Prev'}
-                color={Colors.BurgundyRed}
-                inverted={false}
-                onButtonPress={handlePreviousPressed}
-              />
-            )}
-            {displayNext && (
-              <MediumButton
-                text={'Next'}
-                color={Colors.BurgundyRed}
-                inverted={false}
-                onButtonPress={handleNextPressed}
-              />
-            )}
-          </View>
         </View>
       </KeyboardAvoidingView>
+      <View style={viewStyles.buttonWrapper}>
+        {displayPrevious && (
+          <MediumButton
+            text={'Prev'}
+            color={Colors.BurgundyRed}
+            inverted={false}
+            onButtonPress={handlePreviousPressed}
+          />
+        )}
+        {displayNext && (
+          <MediumButton
+            text={'Next'}
+            color={Colors.BurgundyRed}
+            inverted={false}
+            onButtonPress={handleNextPressed}
+          />
+        )}
+      </View>
     </View>
   );
 }

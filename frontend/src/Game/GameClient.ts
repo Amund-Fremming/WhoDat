@@ -18,6 +18,7 @@ export const createGame = async (
 
     if (!response.ok) {
       console.error('createGame: response was not 200.');
+      console.log(response);
       const errorMessage = await response.json();
       return Result.failure(errorMessage);
     }
@@ -25,7 +26,7 @@ export const createGame = async (
     const gameId = await response.json();
     return Result.ok(parseInt(gameId));
   } catch (error) {
-    console.error('(createGame)' + error);
+    console.error('(createGame fe)' + error);
     return Result.failure('Something went wrong.');
   }
 };

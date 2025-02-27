@@ -51,6 +51,12 @@ export default function GameRouter() {
   }, []);
 
   useEffect(() => {
+    if (!connection) {
+      connectToHub();
+    }
+  }, [page]);
+
+  useEffect(() => {
     isHostRef.current = isHost;
     gameIdRef.current = gameId;
   }, [isHost, gameId]);

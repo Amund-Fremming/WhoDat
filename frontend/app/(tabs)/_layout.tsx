@@ -4,7 +4,10 @@ import { TabBarIcon } from '@/src/Shared/components/navigation/TabBarIcon';
 import { Colors } from '@/src/Shared/assets/constants/Colors';
 import Auth from '@/src/Auth/Auth';
 import { useEffect, useState } from 'react';
-import { useAuthProvider } from '@/src/Shared/providers/AuthProvider';
+import {
+  AuthProvider,
+  useAuthProvider,
+} from '@/src/Shared/providers/AuthProvider';
 import { useTabBarProvider } from '@/src/Shared/providers/TabBarProvider';
 
 export default function TabLayout() {
@@ -13,6 +16,7 @@ export default function TabLayout() {
   const [playerLoggedIn, setPlayerLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log('Trigegred');
     if (token != '') setPlayerLoggedIn(true);
   }, [token]);
 

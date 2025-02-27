@@ -32,7 +32,6 @@ export const loginPlayer = async (
     const data: IAuthResponse = await response.json();
     return Result.ok(data);
   } catch (error) {
-    console.log('Login?');
     return Result.failure('Something went wrong.');
   }
 };

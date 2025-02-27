@@ -44,7 +44,7 @@ export const viewStyles = StyleSheet.create({
     flexDirection: 'row',
     gap: horizontalScale(20),
     position: 'absolute',
-    bottom: verticalScale(300),
+    bottom: verticalScale(60),
   },
 });
 
